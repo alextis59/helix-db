@@ -22,6 +22,7 @@ The process is governed by [Specification and Change Control](../governance/chan
 | [0003](0003-utc-microseconds-and-injected-clocks.md) | Use UTC microseconds and injected clock capabilities | Accepted | Query semantics owner | `P01-005`, `G01` |
 | [0004](0004-preserve-utf8-and-use-binary-collation.md) | Preserve UTF-8 and use one binary v1 collation | Accepted | Query semantics owner | `P01-006`, `G01` |
 | [0005](0005-explicit-array-matching.md) | Use explicit whole-array and element matching | Accepted | Query semantics owner | `P01-008`, `G01` |
+| [0006](0006-default-to-uuidv7-identifiers.md) | Default native generated identifiers to UUIDv7 | Accepted | Query semantics owner | `P01-009`, `G01` |
 
 ## Naming and file rules
 
