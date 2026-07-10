@@ -1,0 +1,82 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-002",
+  "requirements": ["PLAT-001", "PLAT-002", "PLAT-003", "INV-004", "INV-007", "CORE-001"],
+  "accepted_adrs": ["0001"],
+  "commit": "02dad4b8f80f19b436420843e7f8e66dd70d5882",
+  "recorded_at": "2026-07-10T23:13:52Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "rustfmt": "1.9.0-stable (31fca3adb2 2026-06-26)",
+      "clippy": "0.1.96 (31fca3adb2 2026-06-26)",
+      "rustdoc": "1.96.1 (31fca3adb 2026-06-26)",
+      "rustup": "1.29.0 (28d1352db 2026-03-05)"
+    },
+    "network_mode": "CARGO_NET_OFFLINE=true after rustup provisioned pinned components and targets"
+  },
+  "commands": [
+    { "command": "git diff --check 02dad4b8f80f19b436420843e7f8e66dd70d5882^ 02dad4b8f80f19b436420843e7f8e66dd70d5882", "exit_code": 0 },
+    { "command": "rustup show active-toolchain", "exit_code": 0 },
+    { "command": "rustup component list --installed --toolchain 1.96.1", "exit_code": 0 },
+    { "command": "rustup target list --installed --toolchain 1.96.1", "exit_code": 0 },
+    { "command": "cargo metadata --frozen --format-version 1 --no-deps", "exit_code": 0 },
+    { "command": "cargo fmt --all -- --check", "exit_code": 0 },
+    { "command": "cargo check --frozen --workspace --all-targets --all-features", "exit_code": 0 },
+    { "command": "cargo test --frozen --workspace --all-features", "exit_code": 0 },
+    { "command": "cargo clippy --frozen --workspace --all-targets --all-features -- -D warnings", "exit_code": 0 },
+    { "command": "RUSTDOCFLAGS='-D warnings' cargo doc --frozen --workspace --no-deps --all-features", "exit_code": 0 },
+    { "command": "cargo check --frozen --target wasm32-unknown-unknown -p helix-core", "exit_code": 0 },
+    { "command": "cargo check --frozen --target wasm32-wasip2 -p helix-core", "exit_code": 0 },
+    { "command": "node evidence/phase-02/P02-002/verify.mjs 02dad4b8f80f19b436420843e7f8e66dd70d5882", "exit_code": 0 }
+  ],
+  "verification": {
+    "artifact_files": 16,
+    "toolchain": "1.96.1",
+    "msrv": "1.96.1",
+    "profile": "minimal",
+    "additional_components": ["clippy", "rust-docs", "rust-src", "rustfmt"],
+    "required_wasm_targets": ["wasm32-unknown-unknown", "wasm32-wasip2"],
+    "wasip3_destination": "wasm32-wasip3",
+    "wasip3_rustc_specification": true,
+    "wasip3_rustup_component": false,
+    "wasip3_support_claim": false,
+    "workspace_packages": 8,
+    "packages_at_msrv": 8,
+    "native_tests": 9,
+    "clippy_warnings": 0,
+    "rustdoc_warnings": 0,
+    "markdown_files": 91,
+    "local_links": 718,
+    "failed": 0,
+    "skipped": 0
+  },
+  "artifacts": [
+    { "path": ".github/CODEOWNERS", "media_type": "text/plain", "bytes": 379, "sha256": "d47f07da18d3b3184f7fe30b4d32e27c891095a97fdc132e51121b54bcf40007" },
+    { "path": "Cargo.toml", "media_type": "application/toml", "bytes": 1140, "sha256": "714546694f3f5a46885e281fe1553a6475cf55dc2ef3b51a2ce32673df22cce5" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 2066, "sha256": "333aa66951d30e062aef472700b146cd21ceb977522012e6cd6b9bd322683a52" },
+    { "path": "crates/helix-columnar/Cargo.toml", "media_type": "application/toml", "bytes": 444, "sha256": "2c5fc6b2bab588548653d90fee06da1207dbf739dbe1000fcdb033c0b78f92ea" },
+    { "path": "crates/helix-core/Cargo.toml", "media_type": "application/toml", "bytes": 492, "sha256": "e27580933f689455a9a57c253b234a54c83fb76339580026233ba27b8e6e52c1" },
+    { "path": "crates/helix-doc/Cargo.toml", "media_type": "application/toml", "bytes": 361, "sha256": "3075542e8f041162f63ab875048893875615cfc6b338020b15eb216ae523b12a" },
+    { "path": "crates/helix-gpu/Cargo.toml", "media_type": "application/toml", "bytes": 475, "sha256": "7d53a36482e7aa4ebedff0d4bb20b3afd5d5bd1ce887d10d8eec6883d7061620" },
+    { "path": "crates/helix-host-native/Cargo.toml", "media_type": "application/toml", "bytes": 524, "sha256": "05a7bb028bfa2d9b5b531a6f0b2d0f028e81856600e050e1319c8ddda7bd356c" },
+    { "path": "crates/helix-query/Cargo.toml", "media_type": "application/toml", "bytes": 421, "sha256": "eb4362f51e2ace84787ff496f1d92705360d0b1eb918a768932abf7e04779297" },
+    { "path": "crates/helix-server/Cargo.toml", "media_type": "application/toml", "bytes": 474, "sha256": "88ea8cfbafad6ab83d9773fd6aeac99a584e201e6ce0331ea485f30761c88566" },
+    { "path": "crates/helix-storage/Cargo.toml", "media_type": "application/toml", "bytes": 408, "sha256": "eb79575bdeff7cea1e45eb0a0ac93fce64b1f078b5cabc8766309aebfb8e8175" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 6572, "sha256": "e2b7726bfff1d227ff12970a2b596c9a7497f73629ff5b79b8994381ff640f99" },
+    { "path": "docs/architecture/rust-toolchain-policy.md", "media_type": "text/markdown", "bytes": 9021, "sha256": "f9fe1b8a25c2cd70162f13f84a719026a90950ef55d27ce5ab80b929876b035d" },
+    { "path": "docs/architecture/workspace-boundaries.md", "media_type": "text/markdown", "bytes": 5899, "sha256": "81ce7cd721114d21b5539fdb6c011eb84ecbd36a39f00d6cc5e7a99c7255320a" },
+    { "path": "rust-toolchain.toml", "media_type": "application/toml", "bytes": 165, "sha256": "202364c6088f6ce5f6489ea12dff1af1b30f2853016ff0ee8d4110677dd3ee26" },
+    { "path": "rustfmt.toml", "media_type": "application/toml", "bytes": 191, "sha256": "950cbd2c175de793b62268f3d0f2ad6a9f2f904c0d9866dc0fed79a0402c8b4a" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-002/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 12724,
+    "sha256": "2fe296c0194189cdb7c8a0a34bb322657d3ed18910bf8b850fee096b28d70763"
+  },
+  "verdict": "pass"
+}

@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 42
-- Open checklist items: 480
+- Completed checklist items: 43
+- Open checklist items: 479
 - Total checklist items: 522
 - Current phase: Phase 2 — Workspace, toolchain, and continuous integration
 - Next release gate: `G02`
@@ -183,7 +183,7 @@ Objective: create reproducible native, Wasm, browser, shader, test, benchmark, a
 Dependencies: `G00`; may proceed in parallel with Phase 1.
 
 - [x] **P02-001** Create the Rust workspace and initial crate boundaries consistent with the study's proposed dependency direction.
-- [ ] **P02-002** Select and pin the Rust toolchain, minimum supported version, Wasm targets, formatter, linter, and documentation tools.
+- [x] **P02-002** Select and pin the Rust toolchain, minimum supported version, Wasm targets, formatter, linter, and documentation tools.
 - [ ] **P02-003** Select the JavaScript/TypeScript package manager, lockfile policy, Node.js support window, bundler, test runner, and browser harness.
 - [ ] **P02-004** Create directories for crates, shaders, packages, conformance fixtures, benchmarks, tests, documentation, examples, and release evidence.
 - [ ] **P02-005** Configure native debug, native release, Wasm, browser, sanitizer, coverage, and benchmark build profiles.
