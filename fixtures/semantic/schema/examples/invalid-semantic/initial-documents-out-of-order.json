@@ -1,0 +1,57 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "semantic-negative.initial-documents-out-of-order",
+  "title": "Initial canonical collection state must use default order",
+  "requirements": ["QUERY-001"],
+  "plan_items": ["P01-018"],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": ["default-order", "invalid-semantic"],
+  "initial_state": {
+    "collections": [
+      {
+        "name": "items",
+        "document_order": "default_order_v1",
+        "documents": [
+          {
+            "t": "object",
+            "fields": [
+              { "name": "_id", "value": { "t": "int32", "value": "2" } }
+            ]
+          },
+          {
+            "t": "object",
+            "fields": [
+              { "name": "_id", "value": { "t": "int32", "value": "1" } }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "observe-state",
+      "action": {
+        "kind": "command",
+        "command": { "find": "items", "filter": {} }
+      },
+      "expect": {
+        "kind": "success",
+        "value": { "t": "array", "values": [] },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": { "mode": "unchanged" }
+      }
+    }
+  ]
+}

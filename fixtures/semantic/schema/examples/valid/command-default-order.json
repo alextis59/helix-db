@@ -1,0 +1,138 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "schema-smoke.command-default-order",
+  "title": "Command result carries exact default ordering",
+  "description": "A minimal command fixture with typed source documents, an ordered result, exact order keys, and unchanged state.",
+  "requirements": ["QUERY-001"],
+  "plan_items": ["P01-018"],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": ["command", "default-order", "schema-smoke"],
+  "initial_state": {
+    "collections": [
+      {
+        "name": "items",
+        "document_order": "default_order_v1",
+        "documents": [
+          {
+            "t": "object",
+            "fields": [
+              {
+                "name": "_id",
+                "value": { "t": "int32", "value": "1" }
+              },
+              {
+                "name": "name",
+                "value": { "t": "string", "value": "first" }
+              }
+            ]
+          },
+          {
+            "t": "object",
+            "fields": [
+              {
+                "name": "_id",
+                "value": { "t": "int32", "value": "2" }
+              },
+              {
+                "name": "name",
+                "value": { "t": "string", "value": "second" }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "find-all",
+      "description": "Return both documents in ascending semantic ID order.",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "items",
+          "filter": {
+            "_id": {
+              "$gte": { "$value": { "t": "int32", "value": "1" } }
+            }
+          },
+          "projection": { "_id": 1, "name": 1 }
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": { "t": "int32", "value": "1" }
+                      },
+                      {
+                        "name": "name",
+                        "value": { "t": "string", "value": "first" }
+                      }
+                    ]
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": { "t": "int32", "value": "2" }
+                      },
+                      {
+                        "name": "name",
+                        "value": { "t": "string", "value": "second" }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": { "t": "int32", "value": "1" }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": { "t": "int32", "value": "2" }
+                }
+              ]
+            }
+          ]
+        },
+        "state": { "mode": "unchanged" }
+      }
+    }
+  ]
+}

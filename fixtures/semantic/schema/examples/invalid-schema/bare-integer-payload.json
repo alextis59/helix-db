@@ -1,0 +1,37 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "schema-negative.bare-integer-payload",
+  "title": "Logical integer payload cannot use a JSON number",
+  "requirements": ["DATA-001"],
+  "plan_items": ["P01-018"],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": ["invalid-schema", "numeric"],
+  "initial_state": { "collections": [] },
+  "steps": [
+    {
+      "id": "invalid-number",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.validate-values",
+        "arguments": [{ "t": "int64", "value": 9223372036854775807 }]
+      },
+      "expect": {
+        "kind": "success",
+        "value": { "t": "bool", "value": true },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": { "mode": "unchanged" }
+      }
+    }
+  ]
+}

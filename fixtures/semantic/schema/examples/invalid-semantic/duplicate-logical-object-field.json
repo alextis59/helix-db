@@ -1,0 +1,45 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "semantic-negative.duplicate-logical-object-field",
+  "title": "Typed object fields must be unique",
+  "requirements": ["DATA-001"],
+  "plan_items": ["P01-018"],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": ["duplicate-field", "invalid-semantic"],
+  "initial_state": { "collections": [] },
+  "steps": [
+    {
+      "id": "duplicate-field",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.validate-values",
+        "arguments": [
+          {
+            "t": "object",
+            "fields": [
+              { "name": "same", "value": { "t": "int32", "value": "1" } },
+              { "name": "same", "value": { "t": "int32", "value": "2" } }
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": { "t": "bool", "value": true },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": { "mode": "unchanged" }
+      }
+    }
+  ]
+}

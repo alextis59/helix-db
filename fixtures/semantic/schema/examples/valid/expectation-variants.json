@@ -1,0 +1,153 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "schema-smoke.expectation-variants",
+  "title": "Expectation order, state, error detail, cause, and outcome variants",
+  "requirements": ["QUERY-001", "QUERY-002", "STORE-001"],
+  "plan_items": ["P01-018"],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": ["error", "ordering", "schema-smoke", "state"],
+  "initial_state": { "collections": [] },
+  "steps": [
+    {
+      "id": "singleton-exact-state",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo",
+        "arguments": [{ "t": "null" }]
+      },
+      "expect": {
+        "kind": "success",
+        "value": { "t": "null" },
+        "order": {
+          "mode": "exact",
+          "basis": "singleton",
+          "row_count": 1,
+          "keys": [
+            {
+              "components": [
+                { "kind": "singleton", "value": "fixture-result" }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "exact",
+          "scope": "all",
+          "collections": []
+        }
+      }
+    },
+    {
+      "id": "explicit-set-shape",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo-set",
+        "arguments": [
+          {
+            "t": "array",
+            "values": [
+              { "t": "int32", "value": "1" },
+              { "t": "int32", "value": "2" }
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "array",
+          "values": [
+            { "t": "int32", "value": "1" },
+            { "t": "int32", "value": "2" }
+          ]
+        },
+        "order": {
+          "mode": "set",
+          "basis": "set_semantics",
+          "row_count": 2,
+          "keys": []
+        },
+        "state": { "mode": "not_observed" }
+      }
+    },
+    {
+      "id": "unknown-acknowledgement",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": []
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_ACK_UNKNOWN",
+        "phase": "acknowledge",
+        "outcome": "unknown",
+        "retry": {
+          "retryable": true,
+          "scope": "same_idempotency_key",
+          "max_attempts_hint": 3,
+          "token": "present"
+        },
+        "details_match": "exact",
+        "details": {
+          "concern": "durable",
+          "outcome": "unknown"
+        },
+        "causes": [
+          {
+            "category": "durability",
+            "code": "DUR_SYNC",
+            "phase": "commit",
+            "details_match": "absent"
+          }
+        ],
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": { "mode": "unknown" }
+      }
+    },
+    {
+      "id": "committed-response-failure",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": []
+      },
+      "expect": {
+        "kind": "error",
+        "category": "internal",
+        "code": "INT_SERIALIZATION",
+        "phase": "acknowledge",
+        "outcome": "committed",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "exact",
+          "scope": "all",
+          "collections": []
+        }
+      }
+    }
+  ]
+}

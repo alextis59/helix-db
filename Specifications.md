@@ -1924,6 +1924,16 @@ Before production v1, distributed consistency should be validated using Jepsen-s
 - Duplicate write prevention.
 - Range movement correctness.
 
+### 20.6 Language-neutral semantic corpus
+
+The portable semantic corpus MUST use the versioned [Language-Neutral Semantic Fixture and Corpus Format](docs/quality/semantic-fixture-format.md), adopted by [ADR 0011](docs/adr/0011-use-tagged-json-semantic-fixtures.md). Fixture schema `helix.semantic-fixture/1` represents deterministic setup/capabilities, structured or raw actions, every exact logical type/payload, ordered outputs, `errors-v1` metadata, and post-state without host-language inference.
+
+Fixture source MUST be strict UTF-8 I-JSON, validate against the pinned Draft 2020-12 schema, pass cross-field semantic lint, and hash both exact source bytes and RFC 8785 canonical UTF-8 with SHA-256. Helix logical numbers and bit-oriented values MUST use canonical strings/hex fields rather than unsafe bare JSON numbers.
+
+Corpus manifest `helix.semantic-corpus/1` MUST inventory every accepted case with profile, path, byte size, source/canonical hashes, step counts, tags, and exact requirement coverage. Schema examples/negative cases are not normative corpus members. Unknown schema/profile/action behavior, malformed fixtures, unlisted files, hash/count/coverage drift, skipped cases, and set-comparison of ordered results MUST fail the harness explicitly.
+
+Expected values originate from the independent semantic oracle, never an optimized/backend/runtime implementation. Every later host, engine, protocol, SDK, GPU, persistence, and advertised adapter conformance run MUST identify the exact corpus manifest hash and record values, order, errors, state, failures, and skips.
+
 ---
 
 ## 21. Performance targets

@@ -1,0 +1,49 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "schema-smoke.raw-error",
+  "title": "Raw truncated JSON produces a structured error",
+  "requirements": ["QUERY-002"],
+  "plan_items": ["P01-018"],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": ["error", "raw-input", "schema-smoke"],
+  "initial_state": { "collections": [] },
+  "steps": [
+    {
+      "id": "decode-truncated-object",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_TRUNCATED_INPUT",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "subset",
+        "details": { "byte_offset": 1, "format": "json" },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": { "mode": "unchanged" }
+      }
+    }
+  ]
+}

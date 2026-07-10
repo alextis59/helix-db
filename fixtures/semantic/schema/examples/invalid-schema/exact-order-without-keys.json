@@ -1,0 +1,36 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "schema-negative.exact-order-without-keys",
+  "title": "Exact ordering must carry expected key tuples",
+  "requirements": ["QUERY-001"],
+  "plan_items": ["P01-018"],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": ["invalid-schema", "ordering"],
+  "initial_state": { "collections": [] },
+  "steps": [
+    {
+      "id": "missing-order-keys",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo",
+        "arguments": [{ "t": "int32", "value": "1" }]
+      },
+      "expect": {
+        "kind": "success",
+        "value": { "t": "int32", "value": "1" },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 1
+        },
+        "state": { "mode": "unchanged" }
+      }
+    }
+  ]
+}
