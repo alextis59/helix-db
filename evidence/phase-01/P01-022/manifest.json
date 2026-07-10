@@ -1,0 +1,119 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-022",
+  "requirements": ["INV-010", "DATA-001", "DATA-002", "QUERY-001", "QUERY-002", "COMPAT-001"],
+  "accepted_adrs": ["0002", "0004", "0005", "0008", "0009", "0010", "0011"],
+  "commit": "1d9abd1291eb8dfd1441785235c0906c6b032808",
+  "recorded_at": "2026-07-10T22:40:39Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "node": "22.19.0",
+      "python": "3.10.12",
+      "python_jsonschema": "4.23.0",
+      "docker_server": "29.3.1",
+      "mongosh": "1.8.0",
+      "mongodb_server": "6.0.5",
+      "mongodb_harness": "1.0.1"
+    },
+    "determinism_profiles": [
+      { "TZ": "Pacific/Kiritimati", "LANG": "C", "LC_ALL": "C" },
+      { "TZ": "America/Los_Angeles", "LANG": "tr_TR.UTF-8", "LC_ALL": "C" }
+    ]
+  },
+  "commands": [
+    {
+      "command": "git diff --check 1d9abd1291eb8dfd1441785235c0906c6b032808^ 1d9abd1291eb8dfd1441785235c0906c6b032808",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff-tree --no-commit-id --name-status -r 1d9abd1291eb8dfd1441785235c0906c6b032808",
+      "exit_code": 0
+    },
+    { "command": "node --check evidence/phase-01/P01-022/verify.mjs", "exit_code": 0 },
+    {
+      "command": "node evidence/phase-01/P01-022/verify.mjs 1d9abd1291eb8dfd1441785235c0906c6b032808",
+      "exit_code": 0
+    },
+    { "command": "node compatibility/v1/generate-matrix.mjs --check", "exit_code": 0 },
+    { "command": "node compatibility/v1/check-matrix.mjs", "exit_code": 0 },
+    { "command": "node differential/mongodb/check-artifacts.mjs", "exit_code": 0 },
+    { "command": "node differential/mongodb/run.mjs --check-report", "exit_code": 0 },
+    { "command": "node reference/semantic-oracle/test-oracle.mjs", "exit_code": 0 },
+    { "command": "node reference/semantic-oracle/cli.mjs --check-report", "exit_code": 0 },
+    { "command": "node fixtures/semantic/generate-corpus.mjs --check", "exit_code": 0 },
+    { "command": "node fixtures/semantic/check-corpus.mjs", "exit_code": 0 }
+  ],
+  "verification": {
+    "artifact_files": 16,
+    "matrix_schema": "helix.semantic-compatibility-matrix/1",
+    "matrix_version": "1.0.0",
+    "semantic_profile": "helix-native-v1",
+    "draft_2020_12_schemas": 1,
+    "input_artifacts": 9,
+    "native_rows": 263,
+    "native_by_status": {
+      "contract_only": 56,
+      "deferred_post_v1": 12,
+      "explicitly_unsupported_v1": 39,
+      "oracle_boundary": 23,
+      "oracle_command": 17,
+      "oracle_executable": 41,
+      "oracle_primitive": 1,
+      "oracle_registry": 74
+    },
+    "value_tags": 16,
+    "primitives": 17,
+    "order_bases": 8,
+    "limits": 23,
+    "errors": 74,
+    "mongodb_experimental_cases": 16,
+    "mongodb_exact": 12,
+    "mongodb_different": 4,
+    "mongodb_adapter_supported": 0,
+    "mongodb_unsupported_rows": 56,
+    "redis_reference_tested": false,
+    "redis_adapter_supported": 0,
+    "redis_unsupported_rows": 33,
+    "closed_world_rules": 3,
+    "mutation_canaries": 7,
+    "alternate_environment_profiles": 2,
+    "oracle_assertions": 382,
+    "oracle_steps": 313,
+    "failed": 0,
+    "skipped": 0,
+    "matrix_source_sha256": "1f116e0e6702526854d22c4e473530817139ca36f7423653ecc76c8324916a60",
+    "matrix_bytes": 217132,
+    "document_source_sha256": "c64d0421eac5a1d678dd5c716cc6f791f3774af13ba93b1f10a199cb1c7ae1d2",
+    "document_bytes": 103065,
+    "byte_reproducible": true,
+    "residual_containers": 0
+  },
+  "artifacts": [
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 1741, "sha256": "2e0a20b53d8a9f855152b5e75ef02f80815e89fd22a995d11247440b2d78e81b" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 74908, "sha256": "ad9b6a2fa6d1c27517544da9ede8be5021c60a8f7268269b997fec81b9c56b6f" },
+    { "path": "Study.md", "media_type": "text/markdown", "bytes": 61380, "sha256": "c47ae22f950c52718e42ae19bda17973ef2132aeea400d1bdb2fd75b56c302f7" },
+    { "path": "compatibility/v1/README.md", "media_type": "text/markdown", "bytes": 2463, "sha256": "cd6a13a13adad587547f5ed33b761d1bbf8d5ea2489a682004099808f6c6c2bb" },
+    { "path": "compatibility/v1/check-matrix.mjs", "media_type": "text/javascript", "bytes": 22659, "sha256": "c2fa8f63399acd1fa4d8a4df1d9419ca8b0c14f266a9cf6b4b446dddf833996c" },
+    { "path": "compatibility/v1/generate-matrix.mjs", "media_type": "text/javascript", "bytes": 36340, "sha256": "4044af5c2b7a5e5d26d49db1d8c16634ab31d6fa6bdf29d318b9980a7df3cbd0" },
+    { "path": "compatibility/v1/matrix-v1.json", "media_type": "application/json", "bytes": 217132, "sha256": "1f116e0e6702526854d22c4e473530817139ca36f7423653ecc76c8324916a60" },
+    { "path": "compatibility/v1/schema/matrix-v1.schema.json", "media_type": "application/schema+json", "bytes": 14214, "sha256": "47405b28826ec62a93b603ebaaf6a41078de6cb902a998ce74ed906bef1d421e" },
+    { "path": "differential/mongodb/README.md", "media_type": "text/markdown", "bytes": 12284, "sha256": "1bc64c31c030e05fddd81e6635551ad6a6145cd8fcb2480f20399d0a0ca63543" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 6248, "sha256": "c6e45dbb849943b8c110f00f7fc5a978214e5a2794f6682be74ef1b5f099f224" },
+    { "path": "docs/architecture/operator-semantics.md", "media_type": "text/markdown", "bytes": 20607, "sha256": "525611e327c75bbddce73361bc1f0a4382b42d27fab9d112207b82a90db8224b" },
+    { "path": "docs/compatibility/mongodb-initial-differential.md", "media_type": "text/markdown", "bytes": 5206, "sha256": "b78ae7912757e5dda01ee5db0f0129fbe32af239670dd26af83f00942f13adcb" },
+    { "path": "docs/compatibility/v1-semantic-compatibility-matrix.md", "media_type": "text/markdown", "bytes": 103065, "sha256": "c64d0421eac5a1d678dd5c716cc6f791f3774af13ba93b1f10a199cb1c7ae1d2" },
+    { "path": "docs/governance/requirements.md", "media_type": "text/markdown", "bytes": 13975, "sha256": "2e71f288be51d1c4b4c2aa42f985738c4cc44857e8ce11572d18f4d027132c22" },
+    { "path": "docs/governance/scope.md", "media_type": "text/markdown", "bytes": 6229, "sha256": "41a89a3dcde92a6a00896bbfe638c5376ca36facd593e2847543a035ff33adaf" },
+    { "path": "fixtures/semantic/COVERAGE.md", "media_type": "text/markdown", "bytes": 8555, "sha256": "609fd932870205eb740de9dfb3fedf1007290793ba574f052b93add5c9d04198" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-01/P01-022/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 14971,
+    "sha256": "a4c17890b7877f1ffa04b8c02ceae8ed52778646ca9eb08fb5a7f4e2e0b9e4de"
+  },
+  "verdict": "pass"
+}
