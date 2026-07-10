@@ -1,0 +1,86 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-001",
+  "requirements": ["INV-003", "INV-004", "CORE-001", "CORE-003"],
+  "accepted_adrs": ["0001"],
+  "commit": "0537431900eb934b2bc260b492d16a3a4f8f4b43",
+  "recorded_at": "2026-07-10T23:03:50Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "rustup": "1.29.0 (28d1352db 2026-03-05)"
+    },
+    "network_mode": "CARGO_NET_OFFLINE=true"
+  },
+  "commands": [
+    { "command": "git diff --check 0537431900eb934b2bc260b492d16a3a4f8f4b43^ 0537431900eb934b2bc260b492d16a3a4f8f4b43", "exit_code": 0 },
+    { "command": "cargo metadata --frozen --format-version 1 --no-deps", "exit_code": 0 },
+    { "command": "cargo fmt --all -- --check", "exit_code": 0 },
+    { "command": "cargo check --frozen --workspace --all-targets", "exit_code": 0 },
+    { "command": "cargo check --frozen --workspace --all-targets --all-features", "exit_code": 0 },
+    { "command": "cargo test --frozen --workspace", "exit_code": 0 },
+    { "command": "cargo test --frozen --workspace --all-features", "exit_code": 0 },
+    { "command": "RUSTDOCFLAGS='-D warnings' cargo doc --frozen --workspace --no-deps --all-features", "exit_code": 0 },
+    { "command": "node evidence/phase-02/P02-001/verify.mjs 0537431900eb934b2bc260b492d16a3a4f8f4b43", "exit_code": 0 }
+  ],
+  "diagnostic_attempts": [
+    {
+      "command": "cargo clippy --locked --workspace --all-targets --all-features -- -D warnings",
+      "exit_code": 1,
+      "result": "cargo-clippy is not installed for the active unpinned toolchain; component selection and installation are owned by P02-002"
+    }
+  ],
+  "verification": {
+    "artifact_files": 23,
+    "workspace_packages": 8,
+    "package_version": "0.0.0",
+    "package_edition": "2024",
+    "publishable_packages": 0,
+    "external_dependencies": 0,
+    "direct_internal_edges": 14,
+    "optional_internal_edges": 1,
+    "dependency_cycles": 0,
+    "default_feature_tests": 8,
+    "all_feature_tests": 9,
+    "markdown_files": 89,
+    "local_links": 705,
+    "rustfmt": "pass",
+    "rustdoc_warnings": 0,
+    "database_functionality": false
+  },
+  "artifacts": [
+    { "path": ".github/CODEOWNERS", "media_type": "text/plain", "bytes": 322, "sha256": "456a706af33f82e16270383b939619add2c786f40eafc2ae9e02177a823b5a54" },
+    { "path": ".gitignore", "media_type": "text/plain", "bytes": 2199, "sha256": "639027300163b0d968bef81f4affa17e5185d1d0ef2aadeaa62b71eb4dcc9bf6" },
+    { "path": "Cargo.lock", "media_type": "text/plain", "bytes": 884, "sha256": "402998e8435a81159574c2bd063de4efc74e47730a57396349fb23dee5fd99c6" },
+    { "path": "Cargo.toml", "media_type": "application/toml", "bytes": 890, "sha256": "6446c3beaa3c96c8b5267981e98ba484e83fb2e735ca1405b8a8660f9c4f8659" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 1917, "sha256": "aec3f8ec93388ba27679bd0c8a03ee48c331594811307a07b6f82a3726123eac" },
+    { "path": "crates/helix-columnar/Cargo.toml", "media_type": "application/toml", "bytes": 414, "sha256": "93425d13760760aee2caf10b2c006613e580302818774c6f7585db20548be3d4" },
+    { "path": "crates/helix-columnar/src/lib.rs", "media_type": "text/rust", "bytes": 817, "sha256": "5409216713918f8525ad18c6970790e92b997604ab84df2ed183ae605495dac0" },
+    { "path": "crates/helix-core/Cargo.toml", "media_type": "application/toml", "bytes": 462, "sha256": "e8086660bd3bfe29208a465d38dd2c680fbba73f330dddb5b7c0ee0a6cad21e2" },
+    { "path": "crates/helix-core/src/lib.rs", "media_type": "text/rust", "bytes": 1085, "sha256": "daaabb2fffcdd95c7319c622d3d521a4d21421b7d0c2019dff755ea181c616e3" },
+    { "path": "crates/helix-doc/Cargo.toml", "media_type": "application/toml", "bytes": 331, "sha256": "36fbb1b1e532f64b44521dc6320014603b17f083f172255e86c3e2506062c714" },
+    { "path": "crates/helix-doc/src/lib.rs", "media_type": "text/rust", "bytes": 764, "sha256": "4725c13c00edf9f2a2a4c3ee4f3fe37375281a95ae9a5fa8e9d671a4eda0d61e" },
+    { "path": "crates/helix-gpu/Cargo.toml", "media_type": "application/toml", "bytes": 445, "sha256": "999667866cc2c430c1111b905278d630638429899ec195bae1c31ce615d0d646" },
+    { "path": "crates/helix-gpu/src/lib.rs", "media_type": "text/rust", "bytes": 941, "sha256": "f479bd1724df2c49f34d645a6ea69a99e0ba1b4a704f7a47fce303b35037be7d" },
+    { "path": "crates/helix-host-native/Cargo.toml", "media_type": "application/toml", "bytes": 494, "sha256": "607605a466854f830606b7beebeb252a5f7b5b2b14e046932c7e30944e2cb5e3" },
+    { "path": "crates/helix-host-native/src/lib.rs", "media_type": "text/rust", "bytes": 1145, "sha256": "cf64c0e5ef92054058708dab36a6b4e0f9f16b46185cae775677c2ebf38b5ea5" },
+    { "path": "crates/helix-query/Cargo.toml", "media_type": "application/toml", "bytes": 391, "sha256": "de4fc4fc9aeb0afd7ba1c24519564530841e113150d526b1ad74f5d532f6e596" },
+    { "path": "crates/helix-query/src/lib.rs", "media_type": "text/rust", "bytes": 756, "sha256": "6dab450895365cb752098e7fa783ea285c61b8586aef6ed4a1ef8f42e67a1e9c" },
+    { "path": "crates/helix-server/Cargo.toml", "media_type": "application/toml", "bytes": 444, "sha256": "fa75f496c9c40f69c2f549a6444361a4637245245576a738953fec90e270bc41" },
+    { "path": "crates/helix-server/src/lib.rs", "media_type": "text/rust", "bytes": 773, "sha256": "7803178ee150c38a13e218abc18e5eefa49cc5b70f2ba03971683248866b659f" },
+    { "path": "crates/helix-storage/Cargo.toml", "media_type": "application/toml", "bytes": 378, "sha256": "e4bbbc4f2d55edff3d70896c819d053a6748954bcae522a9b0159f2fee4c4ae3" },
+    { "path": "crates/helix-storage/src/lib.rs", "media_type": "text/rust", "bytes": 759, "sha256": "3e3297e2aba20ce46628db04ac30c4ebe51ddb2bddff868728f2e4746c8b3962" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 6411, "sha256": "24bca5dcbf5d0045d22cb8d1dd2c6cfe093a0d61a8ea69d94f5b2aed1861f762" },
+    { "path": "docs/architecture/workspace-boundaries.md", "media_type": "text/markdown", "bytes": 5771, "sha256": "84aa202e262a88b8610d531de149094ca0035c639b85ae59ad8139c036c68a8c" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-001/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 12670,
+    "sha256": "984d5e0a513d68daab8e0e33de6e899ea1bc751e47729aaea91cc421e5ebf5e5"
+  },
+  "verdict": "pass"
+}
