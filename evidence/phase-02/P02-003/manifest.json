@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-003",
+  "requirements": ["PLAT-001", "PLAT-002", "CORE-003", "INV-007"],
+  "accepted_adrs": ["0001"],
+  "commit": "f6a0aeb4c1aff07d68d66416bcb6ce2d897e767e",
+  "recorded_at": "2026-07-10T23:26:08Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "node_lanes": [
+      { "node": "22.23.1", "bundled_npm": "10.9.8", "corepack": "0.34.6" },
+      { "node": "24.18.0", "bundled_npm": "11.16.0", "corepack": "0.35.0" }
+    ],
+    "package_manager": "npm 11.18.0 via integrity-pinned Corepack field",
+    "registry": "https://registry.npmjs.org/",
+    "playwright_browser_download": false
+  },
+  "commands": [
+    { "command": "git diff --check f6a0aeb4c1aff07d68d66416bcb6ce2d897e767e^ f6a0aeb4c1aff07d68d66416bcb6ce2d897e767e", "exit_code": 0 },
+    { "command": "corepack npm --version", "exit_code": 0 },
+    { "command": "PLAYWRIGHT_SKIP_BROWSER_DOWNLOAD=1 corepack npm ci --ignore-scripts", "exit_code": 0 },
+    { "command": "corepack npm exec -- tsc --version", "exit_code": 0 },
+    { "command": "corepack npm exec -- vite --version", "exit_code": 0 },
+    { "command": "corepack npm exec -- vitest --version", "exit_code": 0 },
+    { "command": "corepack npm exec -- playwright --version", "exit_code": 0 },
+    { "command": "corepack npm run toolchain:types", "exit_code": 0 },
+    { "command": "corepack npm run toolchain:test-runner", "exit_code": 0 },
+    { "command": "corepack npm run toolchain:browser-harness", "exit_code": 0 },
+    { "command": "repeat clean install and smoke commands through nvm exec 22.23.1 and 24.18.0", "exit_code": 0 },
+    { "command": "node evidence/phase-02/P02-003/verify.mjs f6a0aeb4c1aff07d68d66416bcb6ce2d897e767e", "exit_code": 0 }
+  ],
+  "verification": {
+    "artifact_files": 11,
+    "supported_node_lanes": 2,
+    "npm_version": "11.18.0",
+    "lockfile_version": 3,
+    "lock_entries": 83,
+    "registry_integrities": 82,
+    "exact_direct_dependencies": 5,
+    "optional_install_scripts": 2,
+    "executed_install_scripts": 0,
+    "alternate_lockfiles": 0,
+    "nested_package_locks": 0,
+    "typescript": "6.0.3",
+    "vite": "8.1.4",
+    "vitest": "4.1.10",
+    "playwright": "1.61.1",
+    "playwright_browsers_downloaded": 0,
+    "real_tests": 0,
+    "real_bundles": 0,
+    "markdown_files": 93,
+    "local_links": 731,
+    "failed": 0,
+    "skipped": 0
+  },
+  "artifacts": [
+    { "path": ".github/CODEOWNERS", "media_type": "text/plain", "bytes": 499, "sha256": "b6fd7b07c507a2d518569cf874e30dcff8ccea6d893d450fd1965c23816725d3" },
+    { "path": ".gitignore", "media_type": "text/plain", "bytes": 2288, "sha256": "cdef3dab4c3ceb990c40847ac3a0936ee0239733968bfe7d59afbcf933b80af3" },
+    { "path": ".npmrc", "media_type": "text/plain", "bytes": 95, "sha256": "6bd015255c3c9a68b18b36cecf857f119732dc4ff75fe8cbe340002e9c5d1635" },
+    { "path": ".nvmrc", "media_type": "text/plain", "bytes": 8, "sha256": "7d2df647f25529bd87500319c41564e032e2be642e565350fa6136d7a1ec4d10" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 2243, "sha256": "8bc38be35f4ef47709478e8b8383ca2ca13c4daa5279d2df7dd189005671d339" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 6751, "sha256": "347eec7fa209394a1f7fc7a25e6eb13c1ae01efc206720df0539ba25d9bb7804" },
+    { "path": "docs/architecture/javascript-toolchain-policy.md", "media_type": "text/markdown", "bytes": 9511, "sha256": "bbb82e26c3af4e5a29de03ef45e668e7c9f87804e80d7117ad0c5cf931545531" },
+    { "path": "package-lock.json", "media_type": "application/json", "bytes": 45440, "sha256": "caeb8602859d826ba9c5f9d7de4e715b6079a4447cb0ab9ca1098fbfdf050085" },
+    { "path": "package.json", "media_type": "application/json", "bytes": 1150, "sha256": "a9679d226fc7e6fb61c72963ccfd33b12c44a4d612025d8d486adebd2cbe2372" },
+    { "path": "tsconfig.base.json", "media_type": "application/json", "bytes": 472, "sha256": "d752e57d3858d73b7834851d79413fbb53001cb26bc2cb138d0a594c13666610" },
+    { "path": "tsconfig.json", "media_type": "application/json", "bytes": 75, "sha256": "b8e9936504ceca31a6f53e0e98c26b436c78c215ab5781c64dfa05722138f466" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-003/verify.mjs",
+    "media_type": "text/javascript",
+      "bytes": 15212,
+      "sha256": "f19e286c9e450ac27f633a848ea90e898d5527f116bb269e3b4948d4fdbbb862"
+  },
+  "verdict": "pass"
+}
