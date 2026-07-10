@@ -568,6 +568,8 @@ Example:
 
 ### 8.2 CRUD API
 
+Native command lifecycle, atomic write units, target selection, ID/upsert behavior, result counts, projection, stable sort/ties, skip/limit, idempotency, and snapshot cursor semantics are defined by [V1 CRUD, Projection, Sort, Pagination, and Cursor Semantics](docs/architecture/crud-query-semantics.md). That document is a normative refinement of this API contract.
+
 Required commands:
 
 ```json
