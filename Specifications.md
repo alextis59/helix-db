@@ -680,6 +680,8 @@ The vector array in this compact example is illustrative SDK rendering. Native J
 
 ### 8.4 Aggregation pipeline
 
+Sequential stage behavior, the versioned expression/accumulator subset, hidden stable ordinals, missing/null grouping, deterministic reductions/group order, and unwind shape are defined by [V1 Aggregation Pipeline Semantics](docs/architecture/aggregation-semantics.md). That document is a normative refinement of this aggregation contract.
+
 Required v1 stages:
 
 ```text
