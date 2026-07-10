@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "P00-000",
+  "commit": "0000000000000000000000000000000000000000",
+  "recorded_at": "2026-07-10T00:00:00Z",
+  "environment": {
+    "os": "example",
+    "architecture": "example",
+    "tool_versions": {}
+  },
+  "commands": [
+    {
+      "command": "example --version",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "relative/path-or-immutable-locator",
+      "media_type": "application/octet-stream",
+      "bytes": 0,
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000000"
+    }
+  ],
+  "verdict": "example-only"
+}
