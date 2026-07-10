@@ -412,7 +412,7 @@ Required v1 types:
 
 The canonical document format should preserve enough type information to avoid JSON ambiguity between integers, floating-point values, dates, binary values, and strings.
 
-Integer width, literal inference, coercion, checked overflow/underflow, decimal promotion, explicit conversion, and exact mixed finite-number comparison are defined by [Integer, Decimal, and Mixed Numeric Semantics](docs/architecture/numeric-semantics.md) and [ADR 0002](docs/adr/0002-exact-numeric-semantics.md). Those documents are normative refinements of this value-type contract.
+Integer width, literal inference, coercion, checked overflow/underflow, decimal promotion, explicit conversion, exact mixed numeric comparison, special values, numeric hashing, deterministic aggregation, and CPU/GPU tolerance are defined by [Integer, Decimal, and Mixed Numeric Semantics](docs/architecture/numeric-semantics.md), [Floating-Point and Decimal Special-Value Semantics](docs/architecture/floating-special-semantics.md), and [ADR 0002](docs/adr/0002-exact-numeric-semantics.md). Those documents are normative refinements of this value-type contract.
 
 ### 7.3 Canonical binary document format
 

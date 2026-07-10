@@ -9,7 +9,7 @@
 - Decision: [ADR 0002](../adr/0002-exact-numeric-semantics.md)
 - Normative parent: [logical value model](value-model.md)
 
-This document defines integer width, numeric literal typing, implicit coercion, checked arithmetic, decimal promotion, explicit conversion, and exact mixed finite-number comparison. Floating-point special values, signed zero, hashing details, aggregation tolerance, and CPU/GPU floating behavior are further refined by `P01-004` without weakening the no-silent-loss rules here.
+This document defines integer width, numeric literal typing, implicit coercion, checked arithmetic, decimal promotion, explicit conversion, and exact mixed finite-number comparison. Floating-point special values, signed zero, hashing details, aggregation tolerance, and CPU/GPU floating behavior are defined by [Floating-Point and Decimal Special-Value Semantics](floating-special-semantics.md) without weakening the no-silent-loss rules here.
 
 ## Numeric types
 

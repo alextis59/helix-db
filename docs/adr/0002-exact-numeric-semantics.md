@@ -3,7 +3,7 @@
 - Status: Accepted
 - Date: 2026-07-10
 - Decision owner: Query semantics owner
-- Required before: `P01-003` and `G01`
+- Required before: `P01-003`, `P01-004`, and `G01`
 - Supersedes: None
 - Superseded by: None
 
@@ -102,8 +102,11 @@ The normative rules are in [Integer, Decimal, and Mixed Numeric Semantics](../ar
 - Decimal/float arithmetic requires an explicit conversion.
 - Numeric equality keys normalize cross-type equal values while typed value hashes remain type-sensitive.
 - Unsupported optimized/device arithmetic falls back or returns verified candidates.
+- All numeric NaNs are database-equal and sort after positive infinity; signed zeros are numerically equal while float payload identity preserves the sign bit.
+- Float arithmetic preserves IEEE binary64 results with canonical arithmetic NaN output; decimal finite overflow/terminal underflow remains checked.
+- Authoritative predicates, keys, persisted arithmetic, and aggregates require exact reference results. A 4-ULP envelope exists only for non-authoritative experiment diagnostics, never query truth.
 
-Float/decimal special values, signed zero, and tolerance are deliberately left to `P01-004`; no arithmetic relying on those unresolved results is exposed first.
+The special-value, aggregation, and backend details are normative in [Floating-Point and Decimal Special-Value Semantics](../architecture/floating-special-semantics.md).
 
 ## Consequences
 
@@ -144,6 +147,7 @@ Planner/explain output records when a numeric predicate falls back because a bac
 ## Validation plan
 
 - [x] Define the complete type, literal, promotion, overflow, comparison, conversion, and hashing contract.
+- [x] Define NaN, infinities, signed zero, canonical results, aggregation, and CPU/GPU tolerance.
 - [ ] Commit language-neutral boundary and pairwise fixtures under `P01-019`.
 - [ ] Make the reference interpreter pass every numeric fixture under `P01-020`.
 - [ ] Differential-test the declared MongoDB subset under `P01-021`.
@@ -160,7 +164,7 @@ Planner/explain output records when a numeric predicate falls back because a bac
 
 ## Follow-up work
 
-- [ ] Complete `P01-004` before exposing float arithmetic or special values.
+- [ ] Implement the `P01-004` special-value and deterministic-reduction fixtures under `P01-019` and `P01-020` before exposing float arithmetic.
 - [ ] Assign physical ordered numeric encodings under `P08-001` only after fixtures pass.
 - [ ] Record adapter differences in `P01-022` and `P22-*`.
 
@@ -171,3 +175,4 @@ Planner/explain output records when a numeric predicate falls back because a bac
 - [Implementation plan](../../ImplementationPlan.md)
 - [Logical value model](../architecture/value-model.md)
 - [Numeric semantic contract](../architecture/numeric-semantics.md)
+- [Special-value semantic contract](../architecture/floating-special-semantics.md)
