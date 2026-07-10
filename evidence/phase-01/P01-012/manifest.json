@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-012",
+  "requirements": ["DATA-002", "QUERY-001", "QUERY-002", "INV-002"],
+  "commit": "dfcd25cb47123d17c9b02ae004b6bd31dfc1b500",
+  "recorded_at": "2026-07-10T19:17:02Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check dfcd25c^ dfcd25c", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r dfcd25c", "exit_code": 0 },
+    { "command": "sha256sum of two committed artifacts", "exit_code": 0 },
+    { "command": "node operator/section coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node comparison/logical/list sanity check recorded in README.md", "exit_code": 0 },
+    { "command": "node TTL/vector/string sanity check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/operator-semantics.md", "media_type": "text/markdown", "bytes": 20294, "sha256": "a8ae71581a531c0b39876583b0f9a2540b096093d8b25a98536dfa89f77af3e8" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 67167, "sha256": "001b3db25b9b420d8e204e528d5b838808111e95129bed3553bf35e7413fa50e" }
+  ],
+  "verdict": "pass"
+}
