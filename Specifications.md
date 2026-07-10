@@ -389,6 +389,8 @@ Internal metadata such as `_v` and `_ts` should not be exposed unless requested 
 
 ### 7.2 Supported value types
 
+The complete logical domains, stable type names, missing-value boundary, container rules, vector identity, and transport obligations are defined by the [HelixDB Logical Value Model](docs/architecture/value-model.md). That document is a normative refinement of this section.
+
 Required v1 types:
 
 - `null`
