@@ -418,6 +418,8 @@ Timestamp precision/range, timezone normalization, date conversion, leap-second 
 
 UTF-8 validation/preservation, normalization, exact equality and binary ordering, hashing, string-search boundaries, and the single v1 collation are defined by [String, Unicode, Normalization, and Collation Semantics](docs/architecture/string-semantics.md) and [ADR 0004](docs/adr/0004-preserve-utf8-and-use-binary-collation.md). Those documents are normative refinements of the string/query contract.
 
+Object mapping identity, presentation/canonical field order, recursive equality and hashes, normal duplicate-key rejection, and quarantine-only legacy import resolution are defined by [Object Ordering, Equality, Canonical Hashing, and Duplicate Keys](docs/architecture/object-semantics.md). That document is a normative refinement of the object/HDoc contract.
+
 ### 7.3 Canonical binary document format
 
 The required distinction between absent fields and present null values, including observable read, filter, sort, projection, index, sidecar, aggregation, update, and recovery behavior, is defined by [Missing and Null Semantics](docs/architecture/missing-null-semantics.md). That document is a normative refinement of this section and `DATA-002`.
