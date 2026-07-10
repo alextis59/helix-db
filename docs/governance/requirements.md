@@ -48,10 +48,10 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 
 | Requirement | Summary | Implementation tasks | Planned tests and evidence | Status |
 | --- | --- | --- | --- | --- |
-| `DATA-001` | Every document has `_id` and a canonical typed HDoc representation. | `P01-001`–`P01-011`, `P03-*`, `P05-013`, `P08-002` | Semantic fixtures, golden HDoc vectors, ID collision tests, `G01`, `G03`, `G08` | Planned |
+| `DATA-001` | Every document has `_id` and a canonical typed HDoc representation. | `P01-001`–`P01-011`, `P03-*`, `P05-013`, `P08-002` | Semantic fixtures, golden HDoc vectors, ID collision tests, `G01`, `G03`, `G08` | In progress |
 | `DATA-002` | Missing and null stay distinct through every storage and query layer. | `P01-002`, `P01-019`, `P03-*`, `P07-*`, `P08-*`, `P09-*`, `P10-*` | Cross-layer semantic corpus, index/row/column/GPU differential hashes, `G07`–`G10` | Planned |
 | `DATA-003` | Path-dictionary and persistent-format changes are versioned and recoverable. | `P03-013`–`P03-019`, `P15-013`–`P15-017`, `P24-002`, `P24-009` | Dictionary golden versions, migration interruption, rebuild/restore proof, `G03`, `G15` | Planned |
-| `QUERY-001` | One normalized semantic definition is shared by APIs and backends. | `P01-*`, `P07-*`, `P09-*`, `P10-*`, `P12-012`, `P22-*` | Semantic oracle, protocol/SDK/backend differential suites, `G07`, `G10`, `G12`, `G22` | Planned |
+| `QUERY-001` | One normalized semantic definition is shared by APIs and backends. | `P01-*`, `P07-*`, `P09-*`, `P10-*`, `P12-012`, `P22-*` | Semantic oracle, protocol/SDK/backend differential suites, `G07`, `G10`, `G12`, `G22` | In progress |
 | `QUERY-002` | Unsupported behavior fails explicitly and is never silently reinterpreted. | `P01-016`, `P07-002`, `P07-018`, `P12-009`, `P22-006`, `P22-012`, `P24-012` | Unsupported matrix, typed-error fixtures, adapter protocol tests, claim audit | Planned |
 | `QUERY-003` | `explain()` reports indexes, CPU/GPU stages, fallback, verification, and material statistics. | `P07-019`, `P08-010`, `P08-019`, `P09-017`, `P10-021`, `P14-008` | Versioned explain fixtures, planner reason tests, operator exercise, `G14` | Planned |
 | `STORE-001` | Acknowledged writes meet their selected failure/durability promise. | `P05-005`, `P05-019`–`P05-023`, `P06-011`–`P06-017`, `P17-008`, `P24-005` | Fault-point matrix, recovered hashes, concern histories, `G05`, `G06`, `G17` | Planned |

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-001",
+  "requirements": [
+    "DATA-001",
+    "QUERY-001"
+  ],
+  "commit": "87043c5cf84442189400e00d52f92ce0122f2ad9",
+  "recorded_at": "2026-07-10T17:20:51Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "node": "22.19.0",
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)"
+    }
+  },
+  "commands": [
+    {
+      "command": "git status --porcelain=v1",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff --check 87043c5^ 87043c5",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff-tree --no-commit-id --name-status -r 87043c5",
+      "exit_code": 0
+    },
+    {
+      "command": "git show 87043c5:docs/architecture/value-model.md | sha256sum",
+      "exit_code": 0
+    },
+    {
+      "command": "git show 87043c5:Specifications.md | sha256sum",
+      "exit_code": 0
+    },
+    {
+      "command": "node logical-type and follow-up-owner coverage check recorded in README.md",
+      "exit_code": 0
+    },
+    {
+      "command": "node formatting and local-link check recorded in README.md",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/architecture/value-model.md",
+      "media_type": "text/markdown",
+      "bytes": 15344,
+      "sha256": "4f7a67151b77d17be36c3f156f4045a28cea460351d2ed8656adfe8b298896cb"
+    },
+    {
+      "path": "Specifications.md",
+      "media_type": "text/markdown",
+      "bytes": 62894,
+      "sha256": "ce81d65e5be2ab97f4d88fac51657bd41f01f48a2fd2e7da6f14f333fe0f765b"
+    }
+  ],
+  "verdict": "pass"
+}
