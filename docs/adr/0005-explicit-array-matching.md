@@ -141,9 +141,9 @@ The [initial `P01-021` profile](../../differential/mongodb/README.md) covers dir
 
 ## Follow-up work
 
-- [ ] Implement the language-neutral array corpus and reference path evaluator.
+- [x] Implement the language-neutral array corpus and reference path evaluator.
 - [ ] Freeze multikey index provenance/compound restrictions before index format fixtures.
-- [ ] Publish exact MongoDB array differences before compatibility claims.
+- [x] Publish the initial exact/different MongoDB array observations and prohibit untested claims under `P01-021`/`P01-022`.
 
 ## References
 

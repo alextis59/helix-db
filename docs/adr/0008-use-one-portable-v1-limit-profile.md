@@ -136,7 +136,7 @@ The first HDoc/protocol/backup manifests record `limits-v1`. Raising a persisten
 ## Follow-up work
 
 - [ ] Implement a shared limit-ID/counter library used by all parsers/core paths.
-- [ ] Add exact boundary generators before HDoc/protocol formats freeze.
+- [x] Add exact semantic boundary generators before HDoc/protocol formats freeze.
 - [ ] Record every later operational quota separately without weakening `limits-v1`.
 
 ## References

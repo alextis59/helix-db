@@ -164,9 +164,10 @@ Planner/explain output records when a numeric predicate falls back because a bac
 
 ## Follow-up work
 
-- [ ] Implement the `P01-004` special-value and deterministic-reduction fixtures under `P01-019` and `P01-020` before exposing float arithmetic.
+- [x] Implement the `P01-004` special-value and deterministic-reduction fixtures under `P01-019` and `P01-020` before exposing float arithmetic.
 - [ ] Assign physical ordered numeric encodings under `P08-001` only after fixtures pass.
-- [ ] Record adapter differences in `P01-022` and `P22-*`.
+- [x] Record the initial experimental adapter differences and closed-world unsupported baseline under `P01-022`.
+- [ ] Expand adapter differences from implemented protocol behavior under `P22-*` before compatibility claims.
 
 ## References
 

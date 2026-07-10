@@ -112,7 +112,7 @@ Rounding within the finite representable decimal128 context is part of decimal a
 
 Binary64 arithmetic does not inherit integer or decimal trapping rules. `P01-004` defines when binary64 produces infinity, subnormal values, signed zero, or NaN and how those results participate in writes, queries, aggregation, hashing, and GPU fallback.
 
-Until that contract is accepted, an implementation may parse and round-trip finite float64 values but must not expose arithmetic that relies on unresolved special-result behavior.
+That contract is accepted in [ADR 0002](../adr/0002-exact-numeric-semantics.md) and the executable `P01-004`/`P01-019`/`P01-020` semantic baseline. An implementation may expose binary64 arithmetic only when it reproduces those special-result, reduction, comparison, and hashing fixtures exactly. Optimized CPU and GPU paths remain subject to their later equivalence gates.
 
 ## Exact mixed numeric comparison
 

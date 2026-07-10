@@ -129,8 +129,8 @@ MongoDB/BSON dates use a different declared precision/range. A compatibility ada
 ## Validation plan
 
 - [x] Define precision, epoch, range, parsing, normalization, date conversion, clock roles, expiry boundary, and unsafe-clock behavior.
-- [ ] Commit executable temporal/parser/TTL fixtures under `P01-019`.
-- [ ] Make the reference interpreter pass the fixtures under `P01-020`.
+- [x] Commit executable temporal range and parser fixtures under `P01-019`.
+- [x] Make the reference interpreter pass the committed temporal fixtures under `P01-020`.
 - [ ] Prove host clock capability injection and denial under `P04-009`/`G04`.
 - [ ] Prove MVCC and timestamp separation under `P06-*`/`G06`.
 - [ ] Run backward/forward/restart/suspend TTL histories under `P20-*`/`G20`.
@@ -147,7 +147,8 @@ MongoDB/BSON dates use a different declared precision/range. A compatibility ada
 
 ## Follow-up work
 
-- [ ] Implement the executable time/expiry fixtures and oracle before temporal operators ship.
+- [x] Implement the executable timestamp range/parser fixtures and oracle before temporal operators ship.
+- [ ] Add executable expiry/TTL state histories with the durable expiry oracle under `P20-*` before TTL support ships.
 - [ ] Specify durable expiry-oracle persistence/recovery mechanism in its storage phase.
 - [ ] Publish adapter precision/range differences before compatibility claims.
 

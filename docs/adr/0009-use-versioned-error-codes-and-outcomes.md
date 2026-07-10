@@ -128,8 +128,8 @@ Rollback is safe before external/persistent consumers rely on `errors-v1`. After
 ## Validation plan
 
 - [x] Define envelope, all categories/codes, phases, outcomes, retry scopes, precedence, registered details, redaction, mappings, observability, and evolution rules.
-- [ ] Generate language-neutral registry/envelope fixtures under `P01-018`–`P01-019`.
-- [ ] Make the independent reference oracle select exact primary errors under `P01-020`.
+- [x] Generate language-neutral registry/envelope fixtures under `P01-018`–`P01-019`.
+- [x] Make the independent reference oracle select exact primary errors under `P01-020`.
 - [ ] Prove native/Wasm/browser/server/CPU/GPU/fallback equivalence.
 - [ ] Prove commit/abort/unknown behavior through idempotency, crash, timeout, disconnect, and sync fault injection.
 - [ ] Prove HTTP/gRPC/SDK/adapter mapping and unknown-code preservation.

@@ -124,11 +124,11 @@ Adding a collation creates a new explicit identifier and separate index compatib
 ## Validation plan
 
 - [x] Define UTF-8 validation, preservation, normalization, equality, order, hashing, collation, search boundaries, and security behavior.
-- [ ] Commit malformed/boundary/equality/order fixtures under `P01-019`.
-- [ ] Make the reference interpreter pass them under `P01-020`.
+- [x] Commit malformed/boundary/equality/order fixtures under `P01-019`.
+- [x] Make the reference interpreter pass them under `P01-020`.
 - [ ] Prove HDoc/SDK/protocol/backup byte-exact round trips.
 - [ ] Prove index/dictionary/sidecar/GPU candidate and collision behavior.
-- [ ] Differential-test only the declared binary-compatible adapter subset.
+- [x] Differential-test only the declared initial binary-compatible adapter subset under `P01-021`.
 - [ ] Complete independent string/Unicode review at `G01`.
 
 ## Implementation impact
@@ -140,9 +140,9 @@ Adding a collation creates a new explicit identifier and separate index compatib
 
 ## Follow-up work
 
-- [ ] Implement the executable Unicode/string corpus and oracle.
+- [x] Implement the executable Unicode/string corpus and oracle.
 - [ ] Evaluate a versioned opt-in collation provider only after v1 binary semantics ship.
-- [ ] Publish explicit adapter collation/regex differences before compatibility claims.
+- [x] Publish explicit adapter collation/regex unsupported boundaries under `P01-022` before compatibility claims.
 
 ## References
 

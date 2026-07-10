@@ -129,7 +129,8 @@ Physical layout/algorithm changes need no migration when exact ordered conforman
 ## Validation plan
 
 - [x] Define default/rank/explicit ties, command input versus collection order, pipeline ordinals, pagination, mutations, backend/distributed rules, unspecified surfaces, compatibility, and versioning.
-- [ ] Commit mixed-ID/filter/sort/vector/pipeline/batch/cursor order fixtures under `P01-019`.
+- [x] Commit Phase 1 ordering-profile fixtures for explicit sort, vector rank, pipeline ordinal, input order, singleton, and set semantics under `P01-019`.
+- [ ] Add executable mixed-ID/filter/batch/cursor ordering histories as query and cursor surfaces land under `P07-*`/`P12-*`.
 - [x] Make the independent reference oracle produce exact ordered outputs under `P01-020`.
 - [ ] Prove primary/secondary/row/column/bitmap/hash/spill/CPU/GPU equivalence.
 - [ ] Prove cursor one-shot equality across batch sizes, mutation, TTL, retry, and expiry.

@@ -121,8 +121,9 @@ Changing admitted values, reference arithmetic/order, metric meaning, normalizat
 ## Validation plan
 
 - [x] Define types/admitted values, casts, normalization, metrics, eligibility, exact top-k, tolerance/candidates, and invalid/security behavior.
-- [ ] Commit executable vector/metric/boundary fixtures under `P01-019`.
-- [ ] Make the reference interpreter pass them under `P01-020`/`P07-010`.
+- [x] Commit executable vector/metric/boundary fixtures under `P01-019`.
+- [x] Make the reference interpreter pass the committed Phase 1 metric fixtures under `P01-020`.
+- [ ] Expand the reference suite through exact top-k query execution under `P07-010`.
 - [ ] Prove HDoc/SDK/protocol/sidecar exact round trips.
 - [ ] Prove CPU optimized and GPU candidate bounds with zero false negatives and exact reranking.
 - [ ] Evaluate vector index algorithm, recall, recovery, mutation, and rebuild under `P08-*`.
@@ -137,7 +138,7 @@ Changing admitted values, reference arithmetic/order, metric meaning, normalizat
 
 ## Follow-up work
 
-- [ ] Implement exact metric fixtures/reference code before any optimized kernel.
+- [x] Implement exact metric fixtures/reference code before any optimized kernel.
 - [ ] Register and prove per-kernel conservative bounds before candidate pruning.
 - [ ] Keep approximate-index/profile design separate and explicit.
 
