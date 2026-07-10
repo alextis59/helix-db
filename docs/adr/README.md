@@ -1,0 +1,46 @@
+# Architecture Decision Records
+
+Architecture decision records capture material technical and product choices that affect HelixDB semantics, persistent formats, protocols, security, portability, compatibility, operations, or delivery gates.
+
+The process is governed by [Specification and Change Control](../governance/change-control.md). Copy [0000-template.md](0000-template.md) for a new decision and assign the next four-digit number. Numbers are never reused.
+
+## Status values
+
+- `Proposed`: under evaluation; experiments may rely on it, but it does not freeze a public or persistent contract.
+- `Accepted`: approved and accompanied by every required specification, plan, fixture, compatibility, and migration update.
+- `Rejected`: considered and declined, with the reason preserved.
+- `Superseded`: replaced by a later ADR; both records link to each other.
+- `Deprecated`: still historically valid but scheduled for removal or no longer recommended.
+
+## Index
+
+| ADR | Title | Status | Decision owner | Required before |
+| --- | --- | --- | --- | --- |
+| [0000](0000-template.md) | Template | Template | Project maintainers | N/A |
+
+## Naming and file rules
+
+- File name: `NNNN-short-kebab-title.md`.
+- Title: `ADR NNNN: Concise decision statement`.
+- Dates use `YYYY-MM-DD`.
+- Decision owners are roles or named maintainers accountable for closing the decision.
+- “Required before” names a checklist item, phase gate, API freeze, or release.
+- Links are repository-relative and must resolve in CI.
+
+## Acceptance checklist
+
+Before an ADR becomes `Accepted`, verify that it:
+
+- States the decision in implementable terms.
+- Records all serious alternatives and why they were not selected.
+- Identifies affected requirement and implementation-plan IDs.
+- Describes correctness, security, portability, performance, operational, and licensing consequences.
+- Defines persistent/public compatibility and migration consequences.
+- Defines rollback or the point at which rollback becomes unsafe.
+- Lists tests, experiments, and artifacts that validate the choice.
+- Updates the specification and plan in the same change when behavior or scope changes.
+- Updates this index.
+
+## Review rule
+
+An ADR can be implemented experimentally while `Proposed`, but no public protocol, persistent format, compatibility claim, or production default is frozen until the ADR is accepted. Phase gates must link to the accepted ADRs on which they depend.
