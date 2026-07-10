@@ -715,6 +715,16 @@ GPU acceleration priority:
 5. projection over columnar fields
 6. sort/top-k for numeric fields
 
+### 8.5 Error contract
+
+Every native failure is represented by the versioned [`errors-v1` structured error contract](docs/architecture/error-semantics.md), adopted by [ADR 0009](docs/adr/0009-use-versioned-error-codes-and-outcomes.md). The contract is a normative refinement of query, storage, GPU-fallback, security, protocol, SDK, and adapter behavior.
+
+Required v1 categories are `parse`, `validation`, `type`, `conflict`, `uniqueness`, `authorization`, `capability`, `quota`, `deadline`, `durability`, and `internal`. Stable codes—not human messages or host exceptions—identify specific conditions.
+
+Every error carries a stable phase, bounded redacted details, and one of `not_applicable`, `not_committed`, `committed`, or `unknown`. Write retries MUST follow the structured retry scope. An `unknown` write MUST NOT be replayed as a fresh command; the caller MUST reuse its idempotency identity or resolve status.
+
+Primary-error selection MUST be deterministic across CPU/GPU, optimized/reference, Wasm/native, browser/server, worker schedules, and adapters. Native category/code/phase/outcome/retry metadata is authoritative; HTTP, gRPC, SDK exceptions, and compatibility error numbers are mappings and MUST preserve it where their transport permits.
+
 ---
 
 ## 9. Query execution pipeline
