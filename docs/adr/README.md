@@ -20,6 +20,7 @@ The process is governed by [Specification and Change Control](../governance/chan
 | [0001](0001-public-product-identity.md) | Retain HelixDB as a temporary development identity | Accepted | Project maintainer | `P00-005`, `G00`; revisit at `P16-016` |
 | [0002](0002-exact-numeric-semantics.md) | Use exact mixed numeric comparison and checked arithmetic | Accepted | Query semantics owner | `P01-003`, `P01-004`, `G01` |
 | [0003](0003-utc-microseconds-and-injected-clocks.md) | Use UTC microseconds and injected clock capabilities | Accepted | Query semantics owner | `P01-005`, `G01` |
+| [0004](0004-preserve-utf8-and-use-binary-collation.md) | Preserve UTF-8 and use one binary v1 collation | Accepted | Query semantics owner | `P01-006`, `G01` |
 
 ## Naming and file rules
 

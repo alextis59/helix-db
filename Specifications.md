@@ -416,6 +416,8 @@ Integer width, literal inference, coercion, checked overflow/underflow, decimal 
 
 Timestamp precision/range, timezone normalization, date conversion, leap-second policy, deterministic clock sources, and logical expiry are defined by [Timestamp, Date, Expiry, and Clock Semantics](docs/architecture/temporal-semantics.md) and [ADR 0003](docs/adr/0003-utc-microseconds-and-injected-clocks.md). Those documents are normative refinements of the temporal value and TTL contracts.
 
+UTF-8 validation/preservation, normalization, exact equality and binary ordering, hashing, string-search boundaries, and the single v1 collation are defined by [String, Unicode, Normalization, and Collation Semantics](docs/architecture/string-semantics.md) and [ADR 0004](docs/adr/0004-preserve-utf8-and-use-binary-collation.md). Those documents are normative refinements of the string/query contract.
+
 ### 7.3 Canonical binary document format
 
 The required distinction between absent fields and present null values, including observable read, filter, sort, projection, index, sidecar, aggregation, update, and recovery behavior, is defined by [Missing and Null Semantics](docs/architecture/missing-null-semantics.md). That document is a normative refinement of this section and `DATA-002`.
