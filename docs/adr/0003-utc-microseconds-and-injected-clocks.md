@@ -135,7 +135,7 @@ MongoDB/BSON dates use a different declared precision/range. A compatibility ada
 - [ ] Prove MVCC and timestamp separation under `P06-*`/`G06`.
 - [ ] Run backward/forward/restart/suspend TTL histories under `P20-*`/`G20`.
 - [ ] Prove HDoc/SDK/protocol/backup/restore round trips in their gates.
-- [ ] Complete independent temporal review at `G01`.
+- [x] Complete independent temporal review at [`G01`](../../evidence/phase-01/G01/review.md).
 
 ## Implementation impact
 

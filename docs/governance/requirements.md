@@ -42,7 +42,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `PLAT-003` | Native hosts expose wgpu or Dawn behind the common abstraction. | `P10-001`–`P10-005`, `P10-024`–`P10-025` | GPU ADR, native capability profile, native/browser differential and benchmark reports, `G10` | Planned |
 | `CORE-001` | The Wasm core owns deterministic codecs, semantics, MVCC, planning, metadata, and command application. | `P03-*`, `P04-001`–`P04-009`, `P06-*`, `P07-*`, `P17-004` | Core dependency audit, deterministic replay, cross-host conformance, `G04`, `G07`, `G17` | Planned |
 | `CORE-002` | External resources reach the core only through explicit host interfaces. | `P01-005`, `P01-019`–`P01-020`, `P04-002`–`P04-014`, `P13-013` | Capability-denial tests, mock-host failure matrix, interface audit, `G04`, `G13` | In progress |
-| `CORE-003` | Host optimization cannot change persistent or query semantics. | `P04-006`–`P04-017`, `P11-013`, `P12-012`, `P24-003` | Copy/handle equivalence, native/browser/server conformance, shared result hashes, `G04`, `G11`, `G12` | Planned |
+| `CORE-003` | Host optimization cannot change persistent or query semantics. | `P01-003`–`P01-004`, `P01-006`, `P04-006`–`P04-017`, `P11-013`, `P12-012`, `P24-003` | Phase 1 frozen semantics; copy/handle equivalence, native/browser/server conformance, shared result hashes, `G04`, `G11`, `G12` | In progress |
 
 ## Data, query, and storage
 
@@ -91,6 +91,12 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `QUAL-001` | CPU/GPU equivalence, crash recovery, index consistency, and backup/restore block release. | `P16-003`–`P16-015`, `P24-003`–`P24-009` | Full release reports and independent gate review, `G16`, `G24` | Planned |
 | `QUAL-002` | Distributed consistency requires fault injection and Jepsen-style validation. | `P17-016`–`P17-018`, `P18-019`–`P18-020`, `P19-013`–`P19-014`, `P24-006` | Simulation, process chaos, movement histories, Jepsen reports, `G17`–`G19` | Planned |
 | `COMPAT-001` | Every compatibility claim is versioned and backed by executable tests. | `P01-021`–`P01-022`, `P07-022`, `P22-*`, `P24-003`, `P24-012` | Initial versioned MongoDB differential capture, v1 closed-world matrix, MongoDB/Redis adapter matrices, protocol captures, migration hashes, claim review, `G22` | In progress |
+
+## Accepted phase-gate evidence
+
+| Gate | Accepted foundation | Requirements with accepted evidence | Remaining boundary |
+| --- | --- | --- | --- |
+| [`G01`](../../evidence/phase-01/G01/README.md) | Frozen v1 semantic contracts; 17-fixture/313-step corpus; independent oracle; pinned MongoDB differential; closed-world compatibility matrix | `CACHE-002`, `COMPAT-001`, `CORE-002`, `CORE-003`, `DATA-001`, `DATA-002`, `GPU-002`, `GPU-003`, `GPU-004`, `INV-002`, `INV-007`, `INV-010`, `QUERY-001`, `QUERY-002`, `SEC-001`, `SEC-002`, `STORE-001` | These rows remain `In progress` because their complete requirements include later formats, engines, hosts, GPU paths, security controls, durability histories, or adapters. |
 
 ## Update procedure
 

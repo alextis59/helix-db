@@ -136,7 +136,8 @@ Physical layout/algorithm changes need no migration when exact ordered conforman
 - [ ] Prove cursor one-shot equality across batch sizes, mutation, TTL, retry, and expiry.
 - [ ] Prove rebuild/restore/different physical layouts retain ordered hashes.
 - [ ] Publish adapter unsorted differences under `P01-022`/`P22-*`.
-- [ ] Complete independent semantic review at `G01` and later gates.
+- [x] Complete independent Phase 1 ordering review at [`G01`](../../evidence/phase-01/G01/review.md).
+- [ ] Repeat ordering review at later query, backend, cursor, restore, and distributed gates.
 
 ## Implementation impact
 

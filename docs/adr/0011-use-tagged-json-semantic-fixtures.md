@@ -142,7 +142,7 @@ Historical gate/release fixtures and hashes remain immutable. A correction after
 - [x] Implement the complete independent validator/oracle and registered value/command actions under `P01-020`.
 - [ ] Validate identical corpus decoding/canonical hashes in Rust and TypeScript under Phase 2/query work.
 - [ ] Run the corpus through every backend/host/protocol/adapter and preserve reports at later gates.
-- [ ] Complete independent semantic/corpus review at `G01`.
+- [x] Complete independent semantic/corpus review at [`G01`](../../evidence/phase-01/G01/review.md).
 
 ## Implementation impact
 

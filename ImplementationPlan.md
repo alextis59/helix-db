@@ -33,16 +33,16 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 40
-- Open checklist items: 482
+- Completed checklist items: 41
+- Open checklist items: 481
 - Total checklist items: 522
-- Current phase: Phase 1 — Semantic contract and compatibility corpus
-- Next release gate: `G01` (`G02` may proceed in parallel)
+- Current phase: Phase 2 — Workspace, toolchain, and continuous integration
+- Next release gate: `G02`
 
 | Phase | Deliverable | Release track | Status |
 | --- | --- | --- | --- |
 | 0 | Governance and project baseline | Foundation | Completed |
-| 1 | Semantic contract and compatibility corpus | Foundation | In progress |
+| 1 | Semantic contract and compatibility corpus | Foundation | Completed |
 | 2 | Workspace, toolchain, and CI | Foundation | Not started |
 | 3 | HDoc format and codec | Research prototype | Not started |
 | 4 | Wasm core and host capability ABI | Research prototype | Not started |
@@ -172,7 +172,7 @@ Dependencies: `G00`.
 - [x] **P01-020** Build a reference semantic interpreter or executable oracle independent of optimized physical operators.
 - [x] **P01-021** Build the initial MongoDB differential harness for the declared overlapping semantic subset.
 - [x] **P01-022** Publish a versioned v1 semantic and compatibility matrix with every unsupported behavior explicit.
-- [ ] **G01** Close the semantic gate after fixtures and the reference oracle agree, open semantic decisions are resolved, and the v1 subset is frozen.
+- [x] **G01** Close the semantic gate after fixtures and the reference oracle agree, open semantic decisions are resolved, and the v1 subset is frozen.
 
 Evidence required for `G01`: semantic corpus, oracle results, differential report, compatibility matrix, and ADRs for numeric, string, array, time, and identifier behavior.
 

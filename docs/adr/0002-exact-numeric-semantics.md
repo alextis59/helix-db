@@ -153,7 +153,7 @@ Planner/explain output records when a numeric predicate falls back because a bac
 - [x] Differential-test the declared initial MongoDB subset under `P01-021`.
 - [ ] Prove HDoc/SDK/protocol lossless round trips in their governing phases.
 - [ ] Prove index, grouping, CPU/optimized, and GPU-fallback equivalence.
-- [ ] Complete independent semantic review at `G01`.
+- [x] Complete independent semantic review at [`G01`](../../evidence/phase-01/G01/review.md).
 
 ## Implementation impact
 

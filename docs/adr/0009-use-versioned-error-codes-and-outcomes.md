@@ -134,7 +134,8 @@ Rollback is safe before external/persistent consumers rely on `errors-v1`. After
 - [ ] Prove commit/abort/unknown behavior through idempotency, crash, timeout, disconnect, and sync fault injection.
 - [ ] Prove HTTP/gRPC/SDK/adapter mapping and unknown-code preservation.
 - [ ] Run redaction canaries and observability-cardinality tests.
-- [ ] Complete independent semantic/security/durability review at `G01` and later gates.
+- [x] Complete independent Phase 1 semantic/security/durability review at [`G01`](../../evidence/phase-01/G01/review.md).
+- [ ] Repeat error/outcome review at later runtime, durability, security, protocol, and release gates.
 
 ## Implementation impact
 

@@ -129,7 +129,7 @@ Changing the native generation profile, UUID algorithm, accepted `_id` types, eq
 - [ ] Prove clock/CSPRNG capability injection/failure under `P04-009`/`G04`.
 - [ ] Prove HDoc/WAL/primary-index/recovery/backup exactness and uniqueness.
 - [ ] Differential-test the MongoDB ObjectId/ID subset.
-- [ ] Complete independent identifier review at `G01`.
+- [x] Complete independent identifier review at [`G01`](../../evidence/phase-01/G01/review.md).
 
 ## Implementation impact
 

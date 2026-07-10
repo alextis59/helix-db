@@ -123,7 +123,8 @@ The first HDoc/protocol/backup manifests record `limits-v1`. Raising a persisten
 - [ ] Prove HDoc exact-size, parser/decompression, update, import, backup, and restore boundaries.
 - [ ] Prove native/Wasm/browser/server/adapter error equivalence.
 - [ ] Run resource/security tests for all amplification dimensions.
-- [ ] Complete independent limit/security review at `G01` and later gates.
+- [x] Complete independent Phase 1 limit/security review at [`G01`](../../evidence/phase-01/G01/review.md).
+- [ ] Repeat limit/security review at every later gate that consumes externally supplied data.
 
 ## Implementation impact
 

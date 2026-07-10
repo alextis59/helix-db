@@ -127,7 +127,7 @@ Changing admitted values, reference arithmetic/order, metric meaning, normalizat
 - [ ] Prove HDoc/SDK/protocol/sidecar exact round trips.
 - [ ] Prove CPU optimized and GPU candidate bounds with zero false negatives and exact reranking.
 - [ ] Evaluate vector index algorithm, recall, recovery, mutation, and rebuild under `P08-*`.
-- [ ] Complete independent vector review at `G01`.
+- [x] Complete independent vector review at [`G01`](../../evidence/phase-01/G01/review.md).
 
 ## Implementation impact
 

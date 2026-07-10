@@ -129,7 +129,7 @@ Adding a collation creates a new explicit identifier and separate index compatib
 - [ ] Prove HDoc/SDK/protocol/backup byte-exact round trips.
 - [ ] Prove index/dictionary/sidecar/GPU candidate and collision behavior.
 - [x] Differential-test only the declared initial binary-compatible adapter subset under `P01-021`.
-- [ ] Complete independent string/Unicode review at `G01`.
+- [x] Complete independent string/Unicode review at [`G01`](../../evidence/phase-01/G01/review.md).
 
 ## Implementation impact
 
