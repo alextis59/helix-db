@@ -420,6 +420,8 @@ UTF-8 validation/preservation, normalization, exact equality and binary ordering
 
 Object mapping identity, presentation/canonical field order, recursive equality and hashes, normal duplicate-key rejection, and quarantine-only legacy import resolution are defined by [Object Ordering, Equality, Canonical Hashing, and Duplicate Keys](docs/architecture/object-semantics.md). That document is a normative refinement of the object/HDoc contract.
 
+Array equality/order/hashes, provenance-aware dotted traversal, multivalue predicate reduction, `$all`, `$size`, `$elemMatch`, and nested-array boundaries are defined by [Array Equality, Ordering, Traversal, and Operator Semantics](docs/architecture/array-semantics.md) and [ADR 0005](docs/adr/0005-explicit-array-matching.md). Those documents are normative refinements of the array/query contract.
+
 ### 7.3 Canonical binary document format
 
 The required distinction between absent fields and present null values, including observable read, filter, sort, projection, index, sidecar, aggregation, update, and recovery behavior, is defined by [Missing and Null Semantics](docs/architecture/missing-null-semantics.md). That document is a normative refinement of this section and `DATA-002`.
