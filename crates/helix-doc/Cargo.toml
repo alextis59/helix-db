@@ -1,0 +1,12 @@
+[package]
+name = "helix-doc"
+description = "Boundary skeleton for HelixDB logical documents and canonical semantics"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[package.metadata.helix]
+status = "boundary-skeleton"
+database-functionality = false

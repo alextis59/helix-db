@@ -1,0 +1,20 @@
+[package]
+name = "helix-host-native"
+description = "Boundary skeleton for native HelixDB host capabilities and optional GPU integration"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[package.metadata.helix]
+status = "boundary-skeleton"
+database-functionality = false
+
+[features]
+default = []
+gpu = ["dep:helix-gpu"]
+
+[dependencies]
+helix-core.workspace = true
+helix-gpu = { workspace = true, optional = true }

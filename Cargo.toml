@@ -1,0 +1,34 @@
+[workspace]
+members = [
+    "crates/helix-columnar",
+    "crates/helix-core",
+    "crates/helix-doc",
+    "crates/helix-gpu",
+    "crates/helix-host-native",
+    "crates/helix-query",
+    "crates/helix-server",
+    "crates/helix-storage",
+]
+resolver = "2"
+
+[workspace.package]
+version = "0.0.0"
+edition = "2024"
+license = "MIT"
+repository = "https://github.com/alextis59/helix-db"
+publish = false
+
+[workspace.dependencies]
+helix-columnar = { path = "crates/helix-columnar" }
+helix-core = { path = "crates/helix-core" }
+helix-doc = { path = "crates/helix-doc" }
+helix-gpu = { path = "crates/helix-gpu" }
+helix-host-native = { path = "crates/helix-host-native" }
+helix-query = { path = "crates/helix-query" }
+helix-storage = { path = "crates/helix-storage" }
+
+[workspace.metadata.helix]
+plan-item = "P02-001"
+status = "boundary-skeleton"
+database-functionality = false
+public-release = false

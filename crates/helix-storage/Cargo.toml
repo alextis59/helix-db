@@ -1,0 +1,15 @@
+[package]
+name = "helix-storage"
+description = "Boundary skeleton for deterministic HelixDB storage and MVCC algorithms"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[package.metadata.helix]
+status = "boundary-skeleton"
+database-functionality = false
+
+[dependencies]
+helix-doc.workspace = true

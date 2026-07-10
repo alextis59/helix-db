@@ -1,0 +1,17 @@
+[package]
+name = "helix-gpu"
+description = "Boundary skeleton for optional HelixDB GPU candidates, dispatch, and verification"
+version.workspace = true
+edition.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[package.metadata.helix]
+status = "boundary-skeleton"
+database-functionality = false
+
+[dependencies]
+helix-columnar.workspace = true
+helix-doc.workspace = true
+helix-query.workspace = true

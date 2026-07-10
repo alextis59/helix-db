@@ -7,3 +7,6 @@
 /docs/governance/ @alextis59
 /docs/adr/ @alextis59
 /.github/ @alextis59
+/crates/ @alextis59
+/Cargo.toml @alextis59
+/Cargo.lock @alextis59
