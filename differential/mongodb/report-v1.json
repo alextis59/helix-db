@@ -3,7 +3,7 @@
   "profile": "mongodb-6.0.5-initial-v1",
   "harness": {
     "name": "helix-mongodb-differential",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "client": {
     "product": "MongoDB Shell",
@@ -21,7 +21,7 @@
   },
   "inputs": {
     "cases_path": "differential/mongodb/cases-v1.json",
-    "cases_sha256": "31125f8841bd1b6f3789d54608e531e88304d9dedcfcf5e71f1dd92566521235",
+    "cases_sha256": "c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5",
     "corpus_manifest_sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8",
     "oracle_report_sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
   },
@@ -40,7 +40,7 @@
   "observations": {
     "path": "differential/mongodb/upstream-observations-v1.json",
     "bytes": 34775,
-    "sha256": "31ba5e000c14a6a504dcf2b12c9cb2c5f832ab930c3af89e93f4d92574aeb693"
+    "sha256": "462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8"
   },
   "cases": [
     {

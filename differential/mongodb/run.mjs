@@ -183,11 +183,12 @@ try {
   docker([
     'run', '-d', '--pull=never', '--name', containerName,
     '--read-only', '--user', '999:999',
-    '--tmpfs', '/data/db:rw,noexec,nosuid,size=256m,uid=999,gid=999,mode=0700',
+    '--tmpfs', '/data/db:rw,noexec,nosuid,size=512m,uid=999,gid=999,mode=0700',
     '--tmpfs', '/tmp:rw,noexec,nosuid,size=64m,uid=999,gid=999,mode=0700',
-    '--memory=512m', '--cpus=2', '--cap-drop=ALL',
+    '--memory=1g', '--cpus=2', '--cap-drop=ALL',
     '-p', '127.0.0.1::27017', specification.upstream.image,
     'mongod', '--bind_ip_all', '--quiet',
+    '--nojournal', '--wiredTigerCacheSizeGB', '0.25',
     '--setParameter', 'diagnosticDataCollectionEnabled=false',
   ]);
   containerStarted = true;

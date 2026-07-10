@@ -18,7 +18,7 @@ The result proves only the 16 committed cases over the six committed documents. 
 
 | Component | Frozen identity |
 | --- | --- |
-| Harness | `helix-mongodb-differential` 1.0.0 |
+| Harness | `helix-mongodb-differential` 1.0.1 |
 | MongoDB server | Community Server 6.0.5 |
 | Server Git revision | `c9a99c120371d4d4c52cbb15dac34a36ce8d3b1d` |
 | Feature compatibility version | 6.0 |
@@ -76,9 +76,9 @@ The pinned run contains 16 passing cases: 12 expected exact matches and four exp
 
 | Artifact | Role | SHA-256 or canonical identity |
 | --- | --- | --- |
-| [cases-v1.json](cases-v1.json) | Versioned inputs and expectations | source `31125f8841bd1b6f3789d54608e531e88304d9dedcfcf5e71f1dd92566521235` |
-| [upstream-observations-v1.json](upstream-observations-v1.json) | Complete MongoDB EJSON rows | source `31ba5e000c14a6a504dcf2b12c9cb2c5f832ab930c3af89e93f4d92574aeb693`, 34,775 bytes |
-| [report-v1.json](report-v1.json) | Normalized differential result | source `e35a60c6554ff4e38a44b0dbbb724f93528ddfe1b730ad4dac331afce4f9a1a9`; canonical `01297f534627feee0256e0daf418bc7bd3f9c29aefba6dba0d8f411e02e61eca` |
+| [cases-v1.json](cases-v1.json) | Versioned inputs and expectations | source `c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5` |
+| [upstream-observations-v1.json](upstream-observations-v1.json) | Complete MongoDB EJSON rows | source `462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8`, 34,775 bytes |
+| [report-v1.json](report-v1.json) | Normalized differential result | source `6a04b5d3cf93662ed9727de9dd5753d646acff12b914b785f6604cd61ef5b019`; canonical `22173d344e6b894444b53f2ff158b7d1cf6cf6c2a0c916deff58e1b2ad1ed8e5` |
 | Semantic corpus manifest | Native semantic input | source `ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8` |
 | Semantic oracle report | Native executable authority | source `8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f` |
 
@@ -113,7 +113,8 @@ Each live run:
 - refuses a pre-existing container of that name;
 - publishes MongoDB only to a random loopback port;
 - runs as unprivileged UID/GID 999 with a read-only root filesystem;
-- uses bounded `noexec,nosuid` tmpfs storage, 512 MiB memory, two CPUs, and no Linux capabilities;
+- uses a bounded 512 MiB `noexec,nosuid` data tmpfs, 1 GiB memory, two CPUs, a 256 MiB WiredTiger cache, and no Linux capabilities;
+- disables journaling because the profile tests query semantics rather than durability;
 - disables MongoDB's background diagnostic archive inside this disposable, space-bounded test server;
 - caps each query at five seconds and the relevant host subprocesses at bounded timeouts;
 - requires consecutive readiness probes, captures logs before cleanup on failure, drops the isolated database in a `finally` block, and removes the container; and

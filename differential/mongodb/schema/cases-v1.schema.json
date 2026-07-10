@@ -17,7 +17,7 @@
   "properties": {
     "cases_schema": { "const": "helix.mongodb-differential-cases/1" },
     "profile": { "const": "mongodb-6.0.5-initial-v1" },
-    "harness_version": { "const": "1.0.0" },
+    "harness_version": { "const": "1.0.1" },
     "client": {
       "type": "object",
       "required": ["product", "version"],

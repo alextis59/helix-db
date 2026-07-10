@@ -23,7 +23,7 @@
       "required": ["name", "version"],
       "properties": {
         "name": { "const": "helix-mongodb-differential" },
-        "version": { "const": "1.0.0" }
+        "version": { "const": "1.0.1" }
       },
       "additionalProperties": false
     },

@@ -1,7 +1,7 @@
 {
   "observations_schema": "helix.mongodb-upstream-observations/1",
   "profile": "mongodb-6.0.5-initial-v1",
-  "cases_source_sha256": "31125f8841bd1b6f3789d54608e531e88304d9dedcfcf5e71f1dd92566521235",
+  "cases_source_sha256": "c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5",
   "client": {
     "product": "MongoDB Shell",
     "version": "1.8.0"

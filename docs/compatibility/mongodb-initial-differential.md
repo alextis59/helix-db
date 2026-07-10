@@ -44,11 +44,11 @@ These differences are first-class results, not failures to hide. A future adapte
 
 The committed report binds:
 
-- the exact case source (`31125f8841bd1b6f3789d54608e531e88304d9dedcfcf5e71f1dd92566521235`);
+- harness 1.0.1 and the exact case source (`c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5`);
 - the semantic corpus and independent-oracle source hashes;
 - MongoDB server version, Git revision, FCV, wire version, image digest/ID, and empty module set;
 - MongoDB Shell 1.8.0;
-- 34,775 bytes of complete upstream Extended JSON observations (`31ba5e000c14a6a504dcf2b12c9cb2c5f832ab930c3af89e93f4d92574aeb693`); and
+- 34,775 bytes of complete upstream Extended JSON observations (`462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8`); and
 - all normalized case hashes, IDs, counts, relations, translations, and comparison modes.
 
 The live check recreates both generated files byte-for-byte. The offline check replays the native oracle from the case source and rejects mutated expectations, counts, observation bytes, and case order. A separate live canary changes one expected relation in memory and succeeds only when the contradiction is detected.

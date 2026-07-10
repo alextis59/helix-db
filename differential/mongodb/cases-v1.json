@@ -1,7 +1,7 @@
 {
   "cases_schema": "helix.mongodb-differential-cases/1",
   "profile": "mongodb-6.0.5-initial-v1",
-  "harness_version": "1.0.0",
+  "harness_version": "1.0.1",
   "client": {
     "product": "MongoDB Shell",
     "version": "1.8.0"
