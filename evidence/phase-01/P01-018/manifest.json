@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-018",
+  "requirements": ["INV-002", "INV-007", "DATA-001", "DATA-002", "QUERY-001", "QUERY-002"],
+  "accepted_adrs": ["0011"],
+  "commit": "90c3388e63e061f810592377cbff68034b9e37d3",
+  "recorded_at": "2026-07-10T20:28:31Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "node": "22.19.0",
+      "python": "3.10.12",
+      "python_jsonschema": "4.23.0"
+    }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 90c3388e63e061f810592377cbff68034b9e37d3^ 90c3388e63e061f810592377cbff68034b9e37d3", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 90c3388e63e061f810592377cbff68034b9e37d3", "exit_code": 0 },
+    { "command": "node evidence/phase-01/P01-018/verify.mjs 90c3388e63e061f810592377cbff68034b9e37d3", "exit_code": 0 },
+    { "command": "python3 --version", "exit_code": 0 },
+    { "command": "python3 jsonschema version check", "exit_code": 0 }
+  ],
+  "verification": {
+    "artifact_files": 21,
+    "schemas": 2,
+    "fixture_schema_internal_refs": 80,
+    "manifest_schema_internal_refs": 11,
+    "valid_examples": 4,
+    "schema_negative_examples": 3,
+    "semantic_negative_examples": 3,
+    "logical_types": 15,
+    "observable_missing": 1,
+    "action_kinds": 3,
+    "error_categories": 11,
+    "error_phases": 15,
+    "outcomes": 4,
+    "retry_scopes": 7
+  },
+  "artifacts": [
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 72456, "sha256": "b85420a89287982250e38fc5c371559d0a6a3c522c25f2bfa282d1b597ab5c86" },
+    { "path": "docs/adr/0011-use-tagged-json-semantic-fixtures.md", "media_type": "text/markdown", "bytes": 9805, "sha256": "45914bbc4b0754d8a37624869685ed79f343d90157bee056f6051f3eb8a65066" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 4246, "sha256": "187b177b521012ea82ada48bf14b967113ec63013fbdb42e955192c2c3fd61f0" },
+    { "path": "docs/quality/semantic-fixture-format.md", "media_type": "text/markdown", "bytes": 22022, "sha256": "9a766dcb91a92de23c12e920c1651bbe8356babc5df176d5d43fb0697dee7ff0" },
+    { "path": "fixtures/semantic/README.md", "media_type": "text/markdown", "bytes": 1446, "sha256": "7458bd7d8ba9d091dde29b8583d3246beda25a049b654221737c8a73b862acfe" },
+    { "path": "fixtures/semantic/schema/check-canonical-examples.mjs", "media_type": "text/javascript", "bytes": 2362, "sha256": "cfa2e042b92085b79dba059fb8707ef5462f09c1111ccd900c4c5e7de340b0ff" },
+    { "path": "fixtures/semantic/schema/check-semantic-examples.mjs", "media_type": "text/javascript", "bytes": 11356, "sha256": "5336ac6c9635de22882e2611d97e2e24bb9f4c3b1854185e7b6ceb7c65632829" },
+    { "path": "fixtures/semantic/schema/examples/README.md", "media_type": "text/markdown", "bytes": 1506, "sha256": "8b6f0ba80bedbb0d17b80213e139c5fe28e8ae9fc58d50083bee6dfda8ea690e" },
+    { "path": "fixtures/semantic/schema/examples/invalid-schema/bare-integer-payload.json", "media_type": "application/json", "bytes": 1025, "sha256": "92b353c3f91c0cab9be7bac7fbc43366db2d6ceefb0005bba7db48e28fd7f021" },
+    { "path": "fixtures/semantic/schema/examples/invalid-schema/error-message-forbidden.json", "media_type": "application/json", "bytes": 1301, "sha256": "736de21c6243d6f4838343cbc945acd25d227ac94b4075fb446e9898ab7048a9" },
+    { "path": "fixtures/semantic/schema/examples/invalid-schema/exact-order-without-keys.json", "media_type": "application/json", "bytes": 976, "sha256": "65740a64341f7f79b5219bf80d768c55878706a86d87b0d849ae9922f5c85648" },
+    { "path": "fixtures/semantic/schema/examples/invalid-semantic/duplicate-logical-object-field.json", "media_type": "application/json", "bytes": 1235, "sha256": "2415e9407a958c9646ee5152724f87911c6f05567022d74ac57294e6a5dba8b7" },
+    { "path": "fixtures/semantic/schema/examples/invalid-semantic/initial-documents-out-of-order.json", "media_type": "application/json", "bytes": 1430, "sha256": "cd20df86d0e3a42eab896dce3ea1e70546c81a0fa58ed0ad6674f964c850e2f7" },
+    { "path": "fixtures/semantic/schema/examples/invalid-semantic/vector-dimension-mismatch.json", "media_type": "application/json", "bytes": 1143, "sha256": "f3409b3fd66071a493d068f3aab1b65d77e087c396989c3e398f9beabe294969" },
+    { "path": "fixtures/semantic/schema/examples/valid/all-value-types.json", "media_type": "application/json", "bytes": 2785, "sha256": "f486ce839cef522eb9c3322ca95ccd093407a4f81459b8d1ec65df7dd9843b13" },
+    { "path": "fixtures/semantic/schema/examples/valid/command-default-order.json", "media_type": "application/json", "bytes": 3739, "sha256": "39beb0f2ce90a6a66eb1f67f51bc75ebd68af177cbd70a41a4986016935daf85" },
+    { "path": "fixtures/semantic/schema/examples/valid/expectation-variants.json", "media_type": "application/json", "bytes": 3835, "sha256": "5d4d643556fc6b50ae3f56e2b3f2a6de6a88b6b1fc0068eb4537c03104ac3c32" },
+    { "path": "fixtures/semantic/schema/examples/valid/raw-error.json", "media_type": "application/json", "bytes": 1313, "sha256": "a4ea2d17957e00d2d3535b626efd1b3a6b4835323e7376517846e6ec0e48d472" },
+    { "path": "fixtures/semantic/schema/fixture-jcs.mjs", "media_type": "text/javascript", "bytes": 1307, "sha256": "8cad46d5c577026e53a0990413feecd516e42fce734998963b88c50f6bd6b173" },
+    { "path": "fixtures/semantic/schema/semantic-corpus-manifest-v1.schema.json", "media_type": "application/schema+json", "bytes": 3900, "sha256": "17d7b070b06a451e797635564c4189e7425eb6995c06e2baa153fbda5b69ee10" },
+    { "path": "fixtures/semantic/schema/semantic-fixture-v1.schema.json", "media_type": "application/schema+json", "bytes": 28824, "sha256": "6afcb0b18a3472c54823d1a10320c0f0c54e7bb79f29fa2c7b0c76d435f489bf" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-01/P01-018/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 10609,
+    "sha256": "ae8504f0831a727bb288ef27ba5489ed6523d311f85bf054b3de8d01125f1119"
+  },
+  "verdict": "pass"
+}

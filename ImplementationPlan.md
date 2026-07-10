@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 35
-- Open checklist items: 487
+- Completed checklist items: 36
+- Open checklist items: 486
 - Total checklist items: 522
 - Current phase: Phase 1 — Semantic contract and compatibility corpus
 - Next release gate: `G01` (`G02` may proceed in parallel)
@@ -167,7 +167,7 @@ Dependencies: `G00`.
 - [x] **P01-015** Specify v1 aggregation behavior for `$match`, `$project`, `$sort`, `$limit`, `$skip`, `$count`, `$group`, and `$unwind`.
 - [x] **P01-016** Define stable error categories for parse, validation, type, conflict, uniqueness, authorization, capability, quota, deadline, durability, and internal failures.
 - [x] **P01-017** Define deterministic result ordering where no explicit sort is supplied and document when order is intentionally unspecified.
-- [ ] **P01-018** Design a language-neutral semantic-fixture schema with input documents, commands, expected values, expected ordering, and expected errors.
+- [x] **P01-018** Design a language-neutral semantic-fixture schema with input documents, commands, expected values, expected ordering, and expected errors.
 - [ ] **P01-019** Populate fixtures for all scalar edge cases, missing/null combinations, arrays, nested paths, invalid commands, and limit boundaries.
 - [ ] **P01-020** Build a reference semantic interpreter or executable oracle independent of optimized physical operators.
 - [ ] **P01-021** Build the initial MongoDB differential harness for the declared overlapping semantic subset.
