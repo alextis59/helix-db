@@ -12,3 +12,8 @@
 /Cargo.lock @alextis59
 /rust-toolchain.toml @alextis59
 /rustfmt.toml @alextis59
+/package.json @alextis59
+/package-lock.json @alextis59
+/.npmrc @alextis59
+/.nvmrc @alextis59
+/tsconfig*.json @alextis59

@@ -14,6 +14,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [V1 semantic and compatibility matrix](docs/compatibility/v1-semantic-compatibility-matrix.md) — closed-world native maturity and explicit unsupported MongoDB surface.
 - [Rust workspace boundaries](docs/architecture/workspace-boundaries.md) — initial unpublished crate graph and dependency rules.
 - [Rust toolchain policy](docs/architecture/rust-toolchain-policy.md) — exact compiler/MSRV, components, formatter/linter, and Wasm target status.
+- [JavaScript/TypeScript toolchain policy](docs/architecture/javascript-toolchain-policy.md) — Node/npm window, lockfile, compiler, bundler, test runner, and browser harness.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 
