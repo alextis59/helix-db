@@ -1,0 +1,107 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-020",
+  "requirements": [
+    "INV-002",
+    "INV-007",
+    "CORE-002",
+    "DATA-001",
+    "DATA-002",
+    "QUERY-001",
+    "QUERY-002",
+    "GPU-002",
+    "SEC-002"
+  ],
+  "accepted_adrs": ["0008", "0010", "0011"],
+  "commit": "23e5fc2d30aa3c5f1e81acd284008126020ce040",
+  "recorded_at": "2026-07-10T21:33:33Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "node": "22.19.0",
+      "python": "3.10.12",
+      "python_jsonschema": "4.23.0"
+    },
+    "determinism_profiles": [
+      { "TZ": "Pacific/Kiritimati", "LANG": "C", "LC_ALL": "C" },
+      { "TZ": "America/Los_Angeles", "LANG": "tr_TR.UTF-8", "LC_ALL": "C" }
+    ]
+  },
+  "commands": [
+    {
+      "command": "git diff --check 23e5fc2d30aa3c5f1e81acd284008126020ce040^ 23e5fc2d30aa3c5f1e81acd284008126020ce040",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff-tree --no-commit-id --name-status -r 23e5fc2d30aa3c5f1e81acd284008126020ce040",
+      "exit_code": 0
+    },
+    { "command": "node --check evidence/phase-01/P01-020/verify.mjs", "exit_code": 0 },
+    {
+      "command": "node evidence/phase-01/P01-020/verify.mjs 23e5fc2d30aa3c5f1e81acd284008126020ce040",
+      "exit_code": 0
+    },
+    { "command": "node reference/semantic-oracle/test-oracle.mjs", "exit_code": 0 },
+    { "command": "node reference/semantic-oracle/cli.mjs --check-report", "exit_code": 0 },
+    { "command": "node fixtures/semantic/generate-corpus.mjs --check", "exit_code": 0 },
+    { "command": "node fixtures/semantic/check-corpus.mjs", "exit_code": 0 }
+  ],
+  "verification": {
+    "artifact_files": 21,
+    "oracle_modules": 9,
+    "draft_2020_12_schemas": 3,
+    "fixtures": 17,
+    "steps": 313,
+    "passed": 313,
+    "failed": 0,
+    "skipped": 0,
+    "unit_property_negative_assertions": 382,
+    "mutation_canaries": 4,
+    "action_kinds": 3,
+    "structured_commands": 15,
+    "raw_inputs": 18,
+    "value_operations_executed": 280,
+    "registered_value_operations": 17,
+    "stable_limit_ids": 23,
+    "error_codes": 74,
+    "alternate_environment_profiles": 2,
+    "corpus_manifest_sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8",
+    "oracle_report_source_sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f",
+    "oracle_report_canonical_sha256": "155dc909a2a5133e1807937f745c3d2ff7ca7d5882529c3de55fe1a1197fac84",
+    "action_executor_reads_expectation": false,
+    "forbidden_generator_runtime_ambient_imports": 0,
+    "report_byte_reproducible": true
+  },
+  "artifacts": [
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 1363, "sha256": "b85126c5736cb57fd4fbb337aa65cdd2c066bc7d927f1f4787582c0337a853c2" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 72992, "sha256": "72a219f0cc7d8fd92961a17de5bde1016c5102c214ad4f099b2a1ad2fa6ac10d" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 5885, "sha256": "20e8f1f3461215dcea231e0c1108209e7612e486620c995a17704a02181e5248" },
+    { "path": "docs/adr/0008-use-one-portable-v1-limit-profile.md", "media_type": "text/markdown", "bytes": 6542, "sha256": "a2f6e40f82d0ffa185b86b28fd7fb1cbe2276d62fb44fde52ac6cf9c304d4a66" },
+    { "path": "docs/adr/0010-use-id-order-as-the-native-default.md", "media_type": "text/markdown", "bytes": 8553, "sha256": "ecd6b7153e175cd5dbf2d5ed29e1bc3ec6ce2fd3a4fb13372109bdc6289602f0" },
+    { "path": "docs/adr/0011-use-tagged-json-semantic-fixtures.md", "media_type": "text/markdown", "bytes": 9805, "sha256": "cac300761591d90e48374f87043ebcdc96b059d7e51dedf8d151b28da510ef26" },
+    { "path": "docs/quality/semantic-fixture-format.md", "media_type": "text/markdown", "bytes": 24425, "sha256": "6fae599990e0836a99c783adb468ee5062698fe5d1334c21e6effb3ba5163825" },
+    { "path": "fixtures/semantic/COVERAGE.md", "media_type": "text/markdown", "bytes": 8188, "sha256": "a8ca1ad9cfa45d276b9a2526380d1dcbef466e901156deb319fde36ba4d720c7" },
+    { "path": "fixtures/semantic/README.md", "media_type": "text/markdown", "bytes": 2163, "sha256": "cb442263b34e7207196eae9038b1118ac2413b6a905612e0d51f5b56b56b1b3a" },
+    { "path": "fixtures/semantic/oracle-report-v1.json", "media_type": "application/json", "bytes": 4863, "sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f" },
+    { "path": "fixtures/semantic/schema/semantic-oracle-report-v1.schema.json", "media_type": "application/schema+json", "bytes": 2864, "sha256": "6e380cdcc574dd3de74437fdc4b1785679ddf72d6a10616071294856394947aa" },
+    { "path": "reference/semantic-oracle/README.md", "media_type": "text/markdown", "bytes": 7628, "sha256": "c9cb9117e1a4c6ff15ac376fb64cb9a1c1f46906c7e8dbd9050c6fb09a662c3b" },
+    { "path": "reference/semantic-oracle/canonical.mjs", "media_type": "text/javascript", "bytes": 880, "sha256": "99872bde86c7744140eef65b62dac77a87e4fab2e4d263eaa4c3dc2615da0b12" },
+    { "path": "reference/semantic-oracle/cli.mjs", "media_type": "text/javascript", "bytes": 3289, "sha256": "54ec79146f6c5b5065b6754871bc6804f66863638232a9e6dbcb76c81e1f8aed" },
+    { "path": "reference/semantic-oracle/command.mjs", "media_type": "text/javascript", "bytes": 12714, "sha256": "8518401683b3dc5ed18f10af92ffac854673650fb3271c3b795f38ab9216e273" },
+    { "path": "reference/semantic-oracle/oracle.mjs", "media_type": "text/javascript", "bytes": 15441, "sha256": "2be2ad0a6514550ceae36e7fea4398fd0453720155d871d2ae43b2111d2f96bd" },
+    { "path": "reference/semantic-oracle/raw-json.mjs", "media_type": "text/javascript", "bytes": 9440, "sha256": "068815063b8cfce1e69f3c7133cf0bea2d57e1243e667f34f3cfb421630f1a1c" },
+    { "path": "reference/semantic-oracle/registry.mjs", "media_type": "text/javascript", "bytes": 7831, "sha256": "f017675077c49bdbc3972cfa1b02cb8a502e633d8fb05b814aac21a4f6b8e5b9" },
+    { "path": "reference/semantic-oracle/test-oracle.mjs", "media_type": "text/javascript", "bytes": 11939, "sha256": "1555684f77e48a2fda2082adb996b47a2265a7cdf2c1308ffaa786a32e4f18c9" },
+    { "path": "reference/semantic-oracle/validate.mjs", "media_type": "text/javascript", "bytes": 22320, "sha256": "5236b411be2d3a83f5abc70f6cb94363cb6d7c047b8cd7e5666ae9cf746213ec" },
+    { "path": "reference/semantic-oracle/value.mjs", "media_type": "text/javascript", "bytes": 33058, "sha256": "1bb0e20120cc44913385a7e6f0c56430a7b2a396a45c5ae9743315158c6d3c01" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-01/P01-020/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 13236,
+    "sha256": "93dc0c7e2866021725f613585897bebff1bc915cd7789ebbdb0db52a5080b9ed"
+  },
+  "verdict": "pass"
+}
