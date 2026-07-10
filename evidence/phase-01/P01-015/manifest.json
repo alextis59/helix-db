@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-015",
+  "requirements": ["DATA-002", "QUERY-001", "INV-002"],
+  "commit": "87bdd94a1d7d538cdead032c00376bc8b7f67c73",
+  "recorded_at": "2026-07-10T19:39:36Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 87bdd94^ 87bdd94", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 87bdd94", "exit_code": 0 },
+    { "command": "sha256sum of two committed artifacts", "exit_code": 0 },
+    { "command": "node aggregation stage/marker coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node sequential pipeline/count sanity check recorded in README.md", "exit_code": 0 },
+    { "command": "node group/unwind sanity check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/aggregation-semantics.md", "media_type": "text/markdown", "bytes": 17001, "sha256": "358b03c57b3bfeceda89a71af67043937fb2a74b319de52778b44446e615d15f" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 68277, "sha256": "c84bb129b0d9fcbc2f56a07b3264138a375e9208ac71022b79cf3c54dd4b978a" }
+  ],
+  "verdict": "pass"
+}
