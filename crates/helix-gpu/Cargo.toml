@@ -3,6 +3,7 @@ name = "helix-gpu"
 description = "Boundary skeleton for optional HelixDB GPU candidates, dispatch, and verification"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 publish.workspace = true

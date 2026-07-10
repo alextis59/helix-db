@@ -62,7 +62,7 @@ The initial graph rejects these dependency directions unless an accepted archite
 - `helix-query` to physical storage or execution backends;
 - any cycle among workspace crates.
 
-External dependencies are intentionally absent at this step. Toolchain, target, dependency, formatting, lint, and policy selection belongs to later `P02-*` items and must preserve this graph.
+External dependencies are intentionally absent at this step. The exact compiler, MSRV, components, formatter, linter, and initial Wasm targets are selected by the [Rust toolchain policy](rust-toolchain-policy.md); dependency, strict lint, and broader build policy remain later `P02-*` work and must preserve this graph.
 
 ## Verification contract
 

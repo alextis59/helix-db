@@ -3,6 +3,7 @@ name = "helix-host-native"
 description = "Boundary skeleton for native HelixDB host capabilities and optional GPU integration"
 version.workspace = true
 edition.workspace = true
+rust-version.workspace = true
 license.workspace = true
 repository.workspace = true
 publish.workspace = true

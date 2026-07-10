@@ -10,3 +10,5 @@
 /crates/ @alextis59
 /Cargo.toml @alextis59
 /Cargo.lock @alextis59
+/rust-toolchain.toml @alextis59
+/rustfmt.toml @alextis59
