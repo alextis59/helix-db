@@ -424,6 +424,8 @@ Array equality/order/hashes, provenance-aware dotted traversal, multivalue predi
 
 Accepted root `_id` types, UUID/ObjectId representation and generation, immutability, total primary-key order, retry determinism, and collision handling are defined by [`_id`, UUID, ObjectId, Generation, and Collision Semantics](docs/architecture/identifier-semantics.md) and [ADR 0006](docs/adr/0006-default-to-uuidv7-identifiers.md). Those documents are normative refinements of the identifier/primary-key contract.
 
+Vector family/dimension, finite elements and checked casts, normalization, L2/cosine/dot reference metrics, exact top-k/ties, eligibility, and CPU/GPU candidate tolerance are defined by [Vector Types, Metrics, Normalization, and Tolerance Semantics](docs/architecture/vector-semantics.md) and [ADR 0007](docs/adr/0007-exact-vector-results-with-cpu-reranking.md). Those documents are normative refinements of the vector/query contract.
+
 ### 7.3 Canonical binary document format
 
 The required distinction between absent fields and present null values, including observable read, filter, sort, projection, index, sidecar, aggregation, update, and recovery behavior, is defined by [Missing and Null Semantics](docs/architecture/missing-null-semantics.md). That document is a normative refinement of this section and `DATA-002`.
