@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 5
-- Open checklist items: 516
+- Completed checklist items: 6
+- Open checklist items: 515
 - Total checklist items: 521
 - Current phase: Phase 0 — Governance and project baseline
 - Next release gate: `G00`
@@ -129,7 +129,7 @@ Objective: establish authoritative scope, decision processes, evidence rules, an
 - [x] **P00-004** Establish this complete implementation checklist with stable task IDs and gates.
 - [ ] **P00-005** Approve the HelixDB product name, repository identity, and terminology used by formats, crates, packages, binaries, and protocols.
 - [x] **P00-006** Approve v1, v2, and long-term scope boundaries, including explicit non-goals and compatibility claim language.
-- [ ] **P00-007** Designate `Specifications.md` as normative and document how accepted changes update specifications, study conclusions, and this plan.
+- [x] **P00-007** Designate `Specifications.md` as normative and document how accepted changes update specifications, study conclusions, and this plan.
 - [ ] **P00-008** Create an architecture-decision-record template and index covering context, options, decision, consequences, compatibility, and rollback.
 - [ ] **P00-009** Assign owners and deadlines for every open architecture decision in Specification section 28.
 - [ ] **P00-010** Create a requirement traceability ledger mapping every `INV-*`, `PLAT-*`, `CORE-*`, `DATA-*`, `QUERY-*`, `STORE-*`, `GPU-*`, `DIST-*`, `CACHE-*`, `SYNC-*`, `SEC-*`, `OPS-*`, `QUAL-*`, and `COMPAT-*` item to tests and artifacts.
