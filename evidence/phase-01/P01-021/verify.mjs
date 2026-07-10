@@ -20,6 +20,7 @@ const gitText = (args, options = {}) =>
   execFileSync('git', args, { encoding: 'utf8', ...options });
 const gitBytes = (args, options = {}) => execFileSync('git', args, options);
 const commit = gitText(['rev-parse', `${input}^{commit}`]).trim();
+const initialArtifactCommit = '26b0b2634f6988ed9b9ae362d7239ec6e78423bd';
 const artifactPaths = [
   'README.md',
   'Specifications.md',
@@ -41,6 +42,16 @@ const artifactPaths = [
   'docs/compatibility/mongodb-initial-differential.md',
   'docs/governance/requirements.md',
   'fixtures/semantic/COVERAGE.md',
+];
+const stabilizationPaths = [
+  'differential/mongodb/README.md',
+  'differential/mongodb/cases-v1.json',
+  'differential/mongodb/report-v1.json',
+  'differential/mongodb/run.mjs',
+  'differential/mongodb/schema/cases-v1.schema.json',
+  'differential/mongodb/schema/report-v1.schema.json',
+  'differential/mongodb/upstream-observations-v1.json',
+  'docs/compatibility/mongodb-initial-differential.md',
 ];
 const expectedCaseIds = [
   'array.all.direct',
@@ -110,13 +121,33 @@ const same = (actual, expected, label) => {
   }
 };
 
-gitText(['diff', '--check', `${commit}^`, commit]);
-const changed = gitText(['diff-tree', '--no-commit-id', '--name-only', '-r', commit])
+gitText(['merge-base', '--is-ancestor', initialArtifactCommit, commit]);
+gitText(['diff', '--check', `${initialArtifactCommit}^`, initialArtifactCommit]);
+const initialChanged = gitText([
+  'diff-tree',
+  '--no-commit-id',
+  '--name-only',
+  '-r',
+  initialArtifactCommit,
+])
   .trim()
   .split('\n')
   .filter(Boolean)
   .sort();
-same(changed, [...artifactPaths].sort(), 'artifact commit scope');
+same(initialChanged, [...artifactPaths].sort(), 'initial artifact commit scope');
+gitText(['diff', '--check', `${commit}^`, commit]);
+const stabilizationChanged = gitText([
+  'diff-tree',
+  '--no-commit-id',
+  '--name-only',
+  '-r',
+  commit,
+])
+  .trim()
+  .split('\n')
+  .filter(Boolean)
+  .sort();
+same(stabilizationChanged, [...stabilizationPaths].sort(), 'stabilization commit scope');
 
 const files = Object.fromEntries(artifactPaths.map((file) => [file, showBytes(file)]));
 for (const [file, bytes] of Object.entries(files)) {
@@ -151,7 +182,7 @@ const report = parse('differential/mongodb/report-v1.json');
 if (
   cases.cases_schema !== 'helix.mongodb-differential-cases/1' ||
   cases.profile !== 'mongodb-6.0.5-initial-v1' ||
-  cases.harness_version !== '1.0.0'
+  cases.harness_version !== '1.0.1'
 ) throw new Error('case profile identity mismatch');
 same(cases.client, { product: 'MongoDB Shell', version: '1.8.0' }, 'case client');
 same(cases.sources, expectedSources, 'MongoDB source inventory');
@@ -194,14 +225,14 @@ same(
 const casesBytes = files['differential/mongodb/cases-v1.json'];
 const observationBytes = files['differential/mongodb/upstream-observations-v1.json'];
 const reportBytes = files['differential/mongodb/report-v1.json'];
-if (sha256(casesBytes) !== '31125f8841bd1b6f3789d54608e531e88304d9dedcfcf5e71f1dd92566521235') {
+if (sha256(casesBytes) !== 'c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5') {
   throw new Error('case source hash mismatch');
 }
 if (
   observationBytes.length !== 34_775 ||
-  sha256(observationBytes) !== '31ba5e000c14a6a504dcf2b12c9cb2c5f832ab930c3af89e93f4d92574aeb693'
+  sha256(observationBytes) !== '462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8'
 ) throw new Error('observation source identity mismatch');
-if (sha256(reportBytes) !== 'e35a60c6554ff4e38a44b0dbbb724f93528ddfe1b730ad4dac331afce4f9a1a9') {
+if (sha256(reportBytes) !== '6a04b5d3cf93662ed9727de9dd5753d646acff12b914b785f6604cd61ef5b019') {
   throw new Error('report source hash mismatch');
 }
 same(report.inputs, {
@@ -256,6 +287,10 @@ for (const required of [
   "'--read-only'",
   "'--cap-drop=ALL'",
   "'127.0.0.1::27017'",
+  "'/data/db:rw,noexec,nosuid,size=512m",
+  "'--memory=1g'",
+  "'--nojournal'",
+  "'--wiredTigerCacheSizeGB'",
   "'diagnosticDataCollectionEnabled=false'",
   "'--canary-expected-relation'",
   "['rm', '--force', containerName]",
@@ -376,8 +411,8 @@ try {
     requireMarkers(output, [
       'PASS MongoDB differential: 16 cases, 12 exact, 4 deliberate differences, 0 failed, 0 skipped',
       'PASS upstream: MongoDB 6.0.5 git=c9a99c120371d4d4c52cbb15dac34a36ce8d3b1d wire=17',
-      'PASS observations: 31ba5e000c14a6a504dcf2b12c9cb2c5f832ab930c3af89e93f4d92574aeb693 34775 bytes',
-      'PASS report: 01297f534627feee0256e0daf418bc7bd3f9c29aefba6dba0d8f411e02e61eca',
+      'PASS observations: 462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8 34775 bytes',
+      'PASS report: 22173d344e6b894444b53f2ff158b7d1cf6cf6c2a0c916deff58e1b2ad1ed8e5',
     ], `live differential ${JSON.stringify(environment)}`);
     liveOutputs.push(output);
   }
@@ -423,7 +458,8 @@ try {
 }
 
 if (existingContainers()) throw new Error('residual P01-021 container exists after temporary cleanup');
-console.log(`PASS exact 20-file artifact scope at ${commit}`);
+console.log(`PASS exact 20-file initial artifact scope at ${initialArtifactCommit}`);
+console.log(`PASS exact 8-file storage-stabilization scope at ${commit}`);
 console.log('PASS pinned server image/client identity and complete upstream observation binding');
 console.log('PASS byte-identical live report under two alternate TZ/LANG environments');
 console.log('PASS bounded container lifecycle with no residual differential containers');
