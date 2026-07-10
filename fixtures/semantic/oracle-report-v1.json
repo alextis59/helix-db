@@ -1,0 +1,182 @@
+{
+  "report_schema": "helix.semantic-oracle-report/1",
+  "oracle": {
+    "profile": "helix-reference-oracle/1",
+    "version": "1.0.0"
+  },
+  "fixture_schema": "helix.semantic-fixture/1",
+  "semantic_profile": "helix-native-v1",
+  "corpus_manifest_sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8",
+  "counts": {
+    "fixtures": 17,
+    "steps": 313,
+    "passed": 313,
+    "failed": 0,
+    "skipped": 0
+  },
+  "action_counts": {
+    "command": 15,
+    "raw_input": 18,
+    "value_operation": 280
+  },
+  "operation_counts": {
+    "array.all": 1,
+    "array.elem-match": 1,
+    "array.size": 1,
+    "command": 15,
+    "fixture.echo-order": 6,
+    "fixture.generate-boundary": 69,
+    "fixture.raise-error": 74,
+    "numeric.add": 8,
+    "numeric.negate": 2,
+    "path.exists": 2,
+    "path.resolve": 5,
+    "raw_input": 18,
+    "string.contains": 1,
+    "time.parse-timestamp": 3,
+    "value.compare": 13,
+    "value.equal": 20,
+    "value.identical": 4,
+    "value.identity": 67,
+    "vector.distance": 3
+  },
+  "fixtures": [
+    {
+      "id": "errors.registry",
+      "steps": 74,
+      "passed": 74,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "f3416af12386e9eafa09fab163f874fcd1cf3520ca6d7effc61c1654df6659db"
+    },
+    {
+      "id": "invalid.commands",
+      "steps": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "c47a68a9dcaf30c088af75070b4c80e606cab0b911b1a3f729726862b22b4276"
+    },
+    {
+      "id": "invalid.raw-inputs",
+      "steps": 18,
+      "passed": 18,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "d20916079577b1beff3470e876a7b670d7dd6a137e3d2bc193160bbf317a931b"
+    },
+    {
+      "id": "limits.commands-queries",
+      "steps": 36,
+      "passed": 36,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "7a59cb12b5e8145d3eb20f296c69521bd76e1c7dc618faac96193c68819bd933"
+    },
+    {
+      "id": "limits.document-values",
+      "steps": 33,
+      "passed": 33,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "921d614582d8f0af7f0b37511914d68ce038b3630496565717f86581798e1d8b"
+    },
+    {
+      "id": "ordering.profiles",
+      "steps": 6,
+      "passed": 6,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "2175ba7cfca37486a22754630ff22278f19b9739c9249b551e290d5733813269"
+    },
+    {
+      "id": "presence.missing-null-paths",
+      "steps": 9,
+      "passed": 9,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "5b90ad171bce1ad78b8e5ecd140bf494c27e191d9e5c3b49a135d7de23b6d710"
+    },
+    {
+      "id": "query.missing-array-nested",
+      "steps": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "c79c5d28c487d04208150604a41f4f2adf14f22622d8ebc68404a2d95d1a82b0"
+    },
+    {
+      "id": "scalar.decimal128-specials",
+      "steps": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "db3e81655757392b817ffe9e3281c5f75d9057b1da1d10f0d22c11b47c42528f"
+    },
+    {
+      "id": "scalar.float64-specials",
+      "steps": 19,
+      "passed": 19,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "71dd4c770a3bf4c501ebab8787fd9e7d82746c26498490b410a4fb3b9e3fe906"
+    },
+    {
+      "id": "scalar.integers",
+      "steps": 14,
+      "passed": 14,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "b4a803f01f4647ad16f73be29d41ccaf1f61af127fcb91d339a668f7a30c2d8b"
+    },
+    {
+      "id": "scalar.mixed-numeric",
+      "steps": 7,
+      "passed": 7,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "9044b0a2f1d5f508b75ce7653ddf516f81a2bc13f9d7fdde5cd1b92a4ffb01ca"
+    },
+    {
+      "id": "scalar.null-bool",
+      "steps": 8,
+      "passed": 8,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "90bca2a97428ca41a4d6ec0535a356ac71ec87fd2a2a2e0c889a24966c8eb56e"
+    },
+    {
+      "id": "scalar.string-binary",
+      "steps": 15,
+      "passed": 15,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "83484d64852ca3f40d95dbea6d0a94963c9c6a459c14ebd45bf9aab4704388ff"
+    },
+    {
+      "id": "scalar.temporal-identifiers",
+      "steps": 16,
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "30c0e0513804b94544249833c2b88cdeaa3ba182871c5caf6fb4962dd2a9a43f"
+    },
+    {
+      "id": "scalar.vectors",
+      "steps": 12,
+      "passed": 12,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "721180490740759a364dfb7b945918acec2bc9a2333db27fefb226822a92e8f6"
+    },
+    {
+      "id": "values.objects-arrays",
+      "steps": 16,
+      "passed": 16,
+      "failed": 0,
+      "skipped": 0,
+      "observations_sha256": "7e078d8a5e0849dac80426e9353e99d53659e19852c0e2882a66d8d63683ec7e"
+    }
+  ],
+  "verdict": "pass"
+}

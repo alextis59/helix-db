@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:helix-db:schema:semantic-oracle-report:1",
+  "title": "HelixDB semantic oracle report v1",
+  "type": "object",
+  "required": [
+    "report_schema",
+    "oracle",
+    "fixture_schema",
+    "semantic_profile",
+    "corpus_manifest_sha256",
+    "counts",
+    "action_counts",
+    "operation_counts",
+    "fixtures",
+    "verdict"
+  ],
+  "properties": {
+    "report_schema": { "const": "helix.semantic-oracle-report/1" },
+    "oracle": {
+      "type": "object",
+      "required": ["profile", "version"],
+      "properties": {
+        "profile": { "const": "helix-reference-oracle/1" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" }
+      },
+      "additionalProperties": false
+    },
+    "fixture_schema": { "const": "helix.semantic-fixture/1" },
+    "semantic_profile": { "const": "helix-native-v1" },
+    "corpus_manifest_sha256": { "$ref": "#/$defs/sha256" },
+    "counts": {
+      "type": "object",
+      "required": ["fixtures", "steps", "passed", "failed", "skipped"],
+      "properties": {
+        "fixtures": { "$ref": "#/$defs/nonnegative" },
+        "steps": { "$ref": "#/$defs/nonnegative" },
+        "passed": { "$ref": "#/$defs/nonnegative" },
+        "failed": { "$ref": "#/$defs/nonnegative" },
+        "skipped": { "$ref": "#/$defs/nonnegative" }
+      },
+      "additionalProperties": false
+    },
+    "action_counts": {
+      "type": "object",
+      "required": ["command", "raw_input", "value_operation"],
+      "properties": {
+        "command": { "$ref": "#/$defs/nonnegative" },
+        "raw_input": { "$ref": "#/$defs/nonnegative" },
+        "value_operation": { "$ref": "#/$defs/nonnegative" }
+      },
+      "additionalProperties": false
+    },
+    "operation_counts": {
+      "type": "object",
+      "propertyNames": { "pattern": "^[a-z][a-z0-9._-]*$" },
+      "additionalProperties": { "$ref": "#/$defs/nonnegative" },
+      "minProperties": 1
+    },
+    "fixtures": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "steps", "passed", "failed", "skipped", "observations_sha256"],
+        "properties": {
+          "id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]*[a-z0-9]$" },
+          "steps": { "$ref": "#/$defs/nonnegative" },
+          "passed": { "$ref": "#/$defs/nonnegative" },
+          "failed": { "$ref": "#/$defs/nonnegative" },
+          "skipped": { "$ref": "#/$defs/nonnegative" },
+          "observations_sha256": { "$ref": "#/$defs/sha256" }
+        },
+        "additionalProperties": false
+      }
+    },
+    "verdict": { "enum": ["pass", "fail"] }
+  },
+  "$defs": {
+    "nonnegative": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+  },
+  "additionalProperties": false
+}

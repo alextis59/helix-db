@@ -130,7 +130,7 @@ Physical layout/algorithm changes need no migration when exact ordered conforman
 
 - [x] Define default/rank/explicit ties, command input versus collection order, pipeline ordinals, pagination, mutations, backend/distributed rules, unspecified surfaces, compatibility, and versioning.
 - [ ] Commit mixed-ID/filter/sort/vector/pipeline/batch/cursor order fixtures under `P01-019`.
-- [ ] Make the independent reference oracle produce exact ordered outputs under `P01-020`.
+- [x] Make the independent reference oracle produce exact ordered outputs under `P01-020`.
 - [ ] Prove primary/secondary/row/column/bitmap/hash/spill/CPU/GPU equivalence.
 - [ ] Prove cursor one-shot equality across batch sizes, mutation, TTL, retry, and expiry.
 - [ ] Prove rebuild/restore/different physical layouts retain ordered hashes.

@@ -138,8 +138,8 @@ Historical gate/release fixtures and hashes remain immutable. A correction after
 - [x] Define fixture/corpus schemas, profiles, typed values, setup/capabilities, actions, success/error/order/state expectations, hashing, manifests, semantic lint, evolution, and security rules.
 - [x] Add positive structural examples, schema-negative examples, and schema-valid semantic-negative examples.
 - [x] Metaschema-check both Draft 2020-12 schemas and run the dependency-free semantic example checker.
-- [ ] Populate every scalar/path/array/command/limit family under `P01-019` and generate exact manifest coverage/hashes.
-- [ ] Implement the complete independent validator/oracle and registered value/command actions under `P01-020`.
+- [x] Populate every scalar/path/array/command/limit family under `P01-019` and generate exact manifest coverage/hashes.
+- [x] Implement the complete independent validator/oracle and registered value/command actions under `P01-020`.
 - [ ] Validate identical corpus decoding/canonical hashes in Rust and TypeScript under Phase 2/query work.
 - [ ] Run the corpus through every backend/host/protocol/adapter and preserve reports at later gates.
 - [ ] Complete independent semantic/corpus review at `G01`.
@@ -158,7 +158,7 @@ Historical gate/release fixtures and hashes remain immutable. A correction after
 
 - [ ] Generate typed-value/action builders so authors do not hand-copy wrappers.
 - [ ] Add locked Rust/TypeScript Draft 2020-12 and RFC 8785 cross-checks.
-- [ ] Generate manifest/coverage and fail on unlisted/duplicate/drifted cases.
+- [x] Generate manifest/coverage and fail on unlisted/duplicate/drifted cases.
 - [ ] Keep format/protocol byte fixtures linked but separately versioned.
 
 ## References

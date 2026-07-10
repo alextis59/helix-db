@@ -20,6 +20,9 @@ The committed v1 corpus inventory and integrity files are:
 - [Value-operation registry](operations-v1.json)
 - [Structured error-case registry](error-cases-v1.json)
 - [Generated case files](cases/)
+- [Independent oracle report](oracle-report-v1.json)
+- [Oracle report schema](schema/semantic-oracle-report-v1.schema.json)
+- [Reference oracle implementation](../../reference/semantic-oracle/README.md)
 
 Focused local checks available before Phase 2 toolchain automation:
 
@@ -29,6 +32,8 @@ node fixtures/semantic/schema/check-semantic-examples.mjs
 node fixtures/semantic/schema/check-canonical-examples.mjs
 node fixtures/semantic/generate-corpus.mjs --check
 node fixtures/semantic/check-corpus.mjs
+node reference/semantic-oracle/test-oracle.mjs
+node reference/semantic-oracle/cli.mjs --check-report
 ```
 
 Corpus consumers must reject unknown schema/profile/action behavior, validate source and canonical hashes, preserve exact typed values/order/errors/state, and report skips/failures explicitly.

@@ -72,7 +72,7 @@ at    = maximum     → success with exact measured summary
 above = maximum + 1 → QUOTA_LIMIT_EXCEEDED with limit_id/max/observed/unit
 ```
 
-The compact generator operation avoids checking accidental 64 MiB/million-element files into the repository. `P01-020` verifies the mathematical generator/oracle; later parser/format/runtime gates must materialize or stream the real boundary shape and prove identical accept/reject behavior, allocation safety, and atomic state.
+The compact generator operation avoids checking accidental 64 MiB/million-element files into the repository. The [independent oracle report](oracle-report-v1.json) verifies the mathematical maximum/relation/error contract; later parser/format/runtime gates must materialize or stream the real boundary shape and prove identical accept/reject behavior, allocation safety, and atomic state.
 
 ## Error registry matrix
 
@@ -86,7 +86,7 @@ These registry cases prove envelope metadata breadth. Command/raw/numeric/vector
 - Explicit sort, vector rank, pipeline ordinal, input index, singleton, and explicit set comparison shapes are present.
 - Every step declares order mode/basis/row count/keys and state mode.
 - Invalid/read-only/limit registry cases assert unchanged or unknown state according to outcome.
-- Actual successful mutation/exact post-state, cursor batching, repeated aggregation sort/unwind/group provenance, and fault-resolved committed/unknown histories receive deeper executable coverage in `P01-020`, CRUD/query phases, MVCC, and recovery gates.
+- Actual successful mutation/exact post-state, cursor batching, repeated aggregation sort/unwind/group provenance, and fault-resolved committed/unknown histories receive deeper executable coverage in the CRUD/query phases, MVCC, and recovery gates.
 
 ## Determinism and validation
 
@@ -101,7 +101,7 @@ Draft 2020-12 validation is additionally required for every case and the manifes
 
 ## Explicit follow-up boundary
 
-- `P01-020` supplies the independent executable oracle; current expected outputs are committed normative inputs awaiting that independent agreement.
+- The [`P01-020` independent executable oracle](../../reference/semantic-oracle/README.md) agrees with all 313 committed expectations, with zero failures/skips and four mutation canaries proving value/error/order/state mismatch detection.
 - These are semantic fixtures, not HDoc/protocol/WAL/backup byte fixtures.
 - Compact boundaries do not replace real allocation/decompression/stream/atomicity tests.
 - `fixture.raise-error` does not replace real authorization, GPU loss, corruption, durability, or recovery fault injection.

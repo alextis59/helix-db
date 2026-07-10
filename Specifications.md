@@ -1934,6 +1934,8 @@ Corpus manifest `helix.semantic-corpus/1` MUST inventory every accepted case wit
 
 Expected values originate from the independent semantic oracle, never an optimized/backend/runtime implementation. Every later host, engine, protocol, SDK, GPU, persistence, and advertised adapter conformance run MUST identify the exact corpus manifest hash and record values, order, errors, state, failures, and skips.
 
+The v1 independent baseline is [`helix-reference-oracle/1`](reference/semantic-oracle/README.md). Its deterministic [oracle report](fixtures/semantic/oracle-report-v1.json) MUST validate against [`helix.semantic-oracle-report/1`](fixtures/semantic/schema/semantic-oracle-report-v1.schema.json), bind the exact corpus-manifest source hash and per-fixture observation hashes, and report zero unaccounted skips. Corpus generation/integrity code and optimized/runtime implementations MUST NOT be imported as the oracle's action semantics.
+
 ---
 
 ## 21. Performance targets

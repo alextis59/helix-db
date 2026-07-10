@@ -118,8 +118,8 @@ The first HDoc/protocol/backup manifests record `limits-v1`. Raising a persisten
 ## Validation plan
 
 - [x] Define every requested limit, exact measurement/counting, grammar, atomicity, lower-quota, and migration behavior.
-- [ ] Commit below/at/above executable fixtures under `P01-019`.
-- [ ] Make the reference interpreter/parser pass them under `P01-020`.
+- [x] Commit below/at/above executable fixtures under `P01-019`.
+- [x] Make the reference interpreter/parser pass them under `P01-020`.
 - [ ] Prove HDoc exact-size, parser/decompression, update, import, backup, and restore boundaries.
 - [ ] Prove native/Wasm/browser/server/adapter error equivalence.
 - [ ] Run resource/security tests for all amplification dimensions.

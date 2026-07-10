@@ -14,6 +14,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [ADR index](adr/README.md) | Material technical/product decisions and alternatives |
 | [Requirement ledger](governance/requirements.md) | Requirement-to-task/test/evidence traceability |
 | [Evidence guide](../evidence/README.md) | Durable task and gate proof conventions |
+| [Reference semantic oracle](../reference/semantic-oracle/README.md) | Independent executable semantic baseline and report commands |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 
