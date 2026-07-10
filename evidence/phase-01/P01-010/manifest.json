@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-010",
+  "requirements": ["QUERY-001", "INV-002", "GPU-002", "GPU-003"],
+  "commit": "564333a8fa73463de160510faeee851999263086",
+  "recorded_at": "2026-07-10T19:02:16Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 564333a^ 564333a", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 564333a", "exit_code": 0 },
+    { "command": "sha256sum of four committed artifacts", "exit_code": 0 },
+    { "command": "node vector semantic coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node metric/zero-norm/finite check recorded in README.md", "exit_code": 0 },
+    { "command": "node top-k tie and candidate interval check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/vector-semantics.md", "media_type": "text/markdown", "bytes": 16109, "sha256": "8722eb1699212bf717a6e11f3a70c620460f13ab238fa1bd51b4175315df9d39" },
+    { "path": "docs/adr/0007-exact-vector-results-with-cpu-reranking.md", "media_type": "text/markdown", "bytes": 7150, "sha256": "7f962394c203c4870fec6a5159e8dd181d6ab363d355e028cd9b41b6f1135808" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 66217, "sha256": "0d2b537e574d4c307edaae6468cc54487da65b0152cadadf148e13813e27e87b" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 3579, "sha256": "ce8518c670dce584601c8ece0ff994e1d12eb493d521c40c6c619e5eb477681e" }
+  ],
+  "verdict": "pass"
+}

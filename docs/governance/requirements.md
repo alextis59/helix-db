@@ -23,7 +23,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | Requirement | Summary | Implementation tasks | Planned tests and evidence | Status |
 | --- | --- | --- | --- | --- |
 | `INV-001` | HDoc rows are authoritative; indexes and sidecars are rebuildable. | `P03-*`, `P08-*`, `P09-*`, `P15-*` | Golden HDoc hashes, delete/rebuild proof, restore without derived files, `G03`, `G09`, `G15` | Planned |
-| `INV-002` | CPU defines reference semantics; GPU returns exact results or verified candidates. | `P07-*`, `P09-*`, `P10-*`, `P24-003`–`P24-004` | Semantic corpus, CPU/column differential, CPU/GPU replay corpus, `G07`, `G09`, `G10` | Planned |
+| `INV-002` | CPU defines reference semantics; GPU returns exact results or verified candidates. | `P01-010`, `P07-*`, `P09-*`, `P10-*`, `P24-003`–`P24-004` | Semantic corpus, CPU/column differential, CPU/GPU replay corpus, `G07`, `G09`, `G10` | In progress |
 | `INV-003` | GPU is never required for correctness, durability, recovery, or availability. | `P10-016`, `P10-017`, `P10-026`, `P11-010`, `P16-005`, `P24-004` | GPU-disabled workflows, unsupported-device matrix, device-loss histories, `G10`, `G16` | Planned |
 | `INV-004` | Deterministic logic stays in the Wasm core; ambient resources are host capabilities. | `P04-*`, `P13-013`, `P13-021`–`P13-024` | Host conformance, capability-denial, deterministic replay, ABI benchmarks, `G04`, `G13` | Planned |
 | `INV-005` | Durable and evictable storage classes have explicit, separate policies. | `P20-001`–`P20-009`, `P24-007` | Storage-class transition matrix, eviction invariant, TTL histories, `G20` | Planned |
@@ -63,8 +63,8 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | Requirement | Summary | Implementation tasks | Planned tests and evidence | Status |
 | --- | --- | --- | --- | --- |
 | `GPU-001` | GPU selection includes all preparation, transfer, queue, and materialization costs. | `P10-019`–`P10-025`, `P14-003`, `P16-007`–`P16-008` | Cold/warm/resident raw benchmarks, calibration/misselection report, `EXP-006`, `EXP-012`, `G10` | Planned |
-| `GPU-002` | Every kernel has CPU reference, property, edge, and differential tests. | `P07-017`, `P09-013`–`P09-014`, `P10-009`–`P10-014`, `P10-022`, `P10-030` | Kernel replay corpus and result hashes for every capability profile, `G10` | Planned |
-| `GPU-003` | Non-exact kernels return candidates that receive CPU verification. | `P10-011`–`P10-014`, `P10-021`–`P10-023` | Candidate/selectivity fixtures, verified result hashes, explain exactness evidence | Planned |
+| `GPU-002` | Every kernel has CPU reference, property, edge, and differential tests. | `P01-010`, `P07-017`, `P09-013`–`P09-014`, `P10-009`–`P10-014`, `P10-022`, `P10-030` | Kernel replay corpus and result hashes for every capability profile, `G10` | In progress |
+| `GPU-003` | Non-exact kernels return candidates that receive CPU verification. | `P01-010`, `P10-011`–`P10-014`, `P10-021`–`P10-023` | Candidate/selectivity fixtures, verified result hashes, explain exactness evidence | In progress |
 | `GPU-004` | GPU failures cause bounded fallback or typed error, never process crash. | `P10-015`–`P10-017`, `P10-023`, `P11-010`, `P16-005`, `P24-004` | Device-loss/OOM/deadline/quota histories, GPU-disabled workflow, `EXP-008`, `EXP-009` | Planned |
 | `GPU-005` | GPU resources are quota-controlled per device, query, and tenant. | `P10-007`, `P10-015`, `P10-018`, `P13-016`, `P23-002`–`P23-003` | Quota/admission/fairness/isolation tests, security review, managed noisy-neighbor report | Planned |
 
