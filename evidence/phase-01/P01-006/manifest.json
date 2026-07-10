@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-006",
+  "requirements": ["DATA-001", "QUERY-001", "CORE-003"],
+  "commit": "afad0fec7331970174e52a9c907c73a274ba6d25",
+  "recorded_at": "2026-07-10T17:48:57Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0", "unicode_data": "17.0.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check afad0fe^ afad0fe", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r afad0fe", "exit_code": 0 },
+    { "command": "sha256sum of four committed artifacts", "exit_code": 0 },
+    { "command": "node string semantic coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node ordering, invalid UTF-8, and normalization check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/string-semantics.md", "media_type": "text/markdown", "bytes": 13342, "sha256": "fd5e6da45e59c37fa695d6bb2138eecddf02329943d09aeaa75320c781020752" },
+    { "path": "docs/adr/0004-preserve-utf8-and-use-binary-collation.md", "media_type": "text/markdown", "bytes": 7365, "sha256": "9d4da4ec2f0e5cb9b891031030c934f373e3cb996fc483aab9efa8aee3837d1d" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 64601, "sha256": "05c532b7cc19a1d5e9c62bf8abb48ca53cf30a5bb094dd70d4f5b8c33aaa2e4d" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 3109, "sha256": "c0399710bd890495290314fa808ee7b763fa57d39acf3225f3d2b75a43dc0162" }
+  ],
+  "verdict": "pass"
+}
