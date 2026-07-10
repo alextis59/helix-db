@@ -17,7 +17,7 @@ The process is governed by [Specification and Change Control](../governance/chan
 | ADR | Title | Status | Decision owner | Required before |
 | --- | --- | --- | --- | --- |
 | [0000](0000-template.md) | Template | Template | Project maintainers | N/A |
-| [0001](0001-public-product-identity.md) | Select a conflict-free public product identity | Proposed | Project maintainer | `P00-005`, `G00` |
+| [0001](0001-public-product-identity.md) | Retain HelixDB as a temporary development identity | Accepted | Project maintainer | `P00-005`, `G00`; revisit at `P16-016` |
 
 ## Naming and file rules
 

@@ -33,9 +33,9 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 16
+- Completed checklist items: 17
 - Open checklist items: 505
-- Total checklist items: 521
+- Total checklist items: 522
 - Current phase: Phase 0 — Governance and project baseline
 - Next release gate: `G00`
 
@@ -127,7 +127,7 @@ Objective: establish authoritative scope, decision processes, evidence rules, an
 - [x] **P00-002** Publish the detailed normative project specification.
 - [x] **P00-003** Publish the technical and feasibility study with experiments and risks.
 - [x] **P00-004** Establish this complete implementation checklist with stable task IDs and gates.
-- [ ] **P00-005** Approve the HelixDB product name, repository identity, and terminology used by formats, crates, packages, binaries, and protocols.
+- [x] **P00-005** Approve the HelixDB product name, repository identity, and terminology used by formats, crates, packages, binaries, and protocols.
 - [x] **P00-006** Approve v1, v2, and long-term scope boundaries, including explicit non-goals and compatibility claim language.
 - [x] **P00-007** Designate `Specifications.md` as normative and document how accepted changes update specifications, study conclusions, and this plan.
 - [x] **P00-008** Create an architecture-decision-record template and index covering context, options, decision, consequences, compatibility, and rollback.
@@ -617,6 +617,7 @@ Dependencies: `G01`–`G15` as applicable; no distributed feature may be used to
 - [ ] **P16-012** Complete user, API, format, administration, security, backup, upgrade, troubleshooting, and compatibility documentation.
 - [ ] **P16-013** Complete independent release-candidate review of data loss, security, compatibility, performance claims, and operational readiness.
 - [ ] **P16-014** Resolve all critical/high issues and explicitly defer lower issues with owners and release notes.
+- [ ] **P16-016** Re-evaluate the public product name and migrate or confirm every repository, package, binary, SDK, container, protocol, telemetry, configuration, and operator identifier before publication.
 - [ ] **P16-015** Tag and publish an immutable v1 release candidate, repeat install/restore proof from published artifacts, then promote the approved release.
 - [ ] **G16** Close the v1 gate only when Specification section 29.2 is satisfied from real packaged artifacts and no claim depends on unimplemented distribution.
 

@@ -1,14 +1,15 @@
 # P00-005 Naming Due-Diligence Evidence
 
-- Status: Incomplete — product-owner decision required
+- Status: Complete — temporary development identity accepted
 - Recorded at: 2026-07-10T05:58:46Z
+- Decision recorded at: 2026-07-10T17:13:04Z
 - Source commit before evidence: `0b0bd37`
 - Task: `P00-005`
 - ADR: [ADR 0001](../../../docs/adr/0001-public-product-identity.md)
 
 ## Scope
 
-This evidence establishes that the working name HelixDB and intuitive public package coordinates conflict with existing database projects/packages. It does not select or clear a replacement name.
+This evidence establishes that the working name HelixDB and intuitive public package coordinates conflict with existing database projects/packages. The project owner subsequently directed the project to keep HelixDB/`helix-db` for development and reconsider an alternative later. The decision does not clear or reserve a public identity.
 
 ## Commands and observed results
 
@@ -111,9 +112,24 @@ The shorter base name `Nexilis` is already used in some package/domain/GitHub co
 - npm scope creation, GitHub organization creation, and container publication require account-level actions not authorized by the current task.
 - Checks must be repeated immediately before claiming public identities.
 
-## Remaining evidence
+## Owner decision and development identifiers
 
-- Product-owner direction.
-- Final selection from the screened shortlist or another directed name.
+The project owner directed: keep `helix-db` for now and revisit an alternative later.
+
+ADR 0001 therefore accepts a temporary development identity with these safeguards:
+
+- HelixDB/`helix-db` remain in source and documentation.
+- Rust `helix-*` packages remain non-published.
+- TypeScript `@helix-db-internal/*` packages remain private.
+- Development CLI/daemon names are `helix`/`helixd`.
+- No artifact is published to the occupied npm/crates.io `helix-db` identifiers or `@helix-db` scope.
+- Public name and coordinates are a release blocker under `P16-016` before `P16-015`.
+- HDoc is defined as Hybrid Document and remains product-neutral.
+
+The full matrix is [documented here](../../../docs/governance/terminology.md).
+
+## Deferred release evidence
+
+- Final public selection or explicit confirmation of the development name under `P16-016`.
 - Repeat checks and appropriate legal/trademark review for the selected name before release.
-- Final canonical identifier matrix.
+- Public package, protocol, container, operator, domain, and telemetry identifier matrix.

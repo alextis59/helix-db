@@ -1,8 +1,8 @@
 # helix-db
 
-HelixDB is the working name for a portable document database with a deterministic Wasm core, a durable LSM-like row store, typed columnar sidecars, adaptive CPU/WebGPU query execution, and later distributed, cache, and local-sync operating modes.
+HelixDB is the development name for a portable document database with a deterministic Wasm core, a durable LSM-like row store, typed columnar sidecars, adaptive CPU/WebGPU query execution, and later distributed, cache, and local-sync operating modes.
 
-The public product/package name remains open under `P00-005` because existing database projects and registry packages already use HelixDB identifiers.
+The project owner has chosen to keep `helix-db` during development. Existing database projects and registry packages already use HelixDB identifiers, so public naming/package coordinates must be re-evaluated before v1 publication under `P16-016`.
 
 ## Project documents
 

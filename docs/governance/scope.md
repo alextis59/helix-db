@@ -5,7 +5,7 @@
 - Authority: [Specifications.md](../../Specifications.md)
 - Execution ledger: [ImplementationPlan.md](../../ImplementationPlan.md)
 
-This document freezes the implementation boundaries used to plan and evaluate releases. The public product name remains a separate open decision under `P00-005`; “HelixDB” is the working name in this document.
+This document freezes the implementation boundaries used to plan and evaluate releases. HelixDB/`helix-db` is the accepted development identity; public naming and package coordinates are re-evaluated under release-blocking task `P16-016`.
 
 ## Product definition
 

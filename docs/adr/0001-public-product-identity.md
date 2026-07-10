@@ -1,6 +1,6 @@
-# ADR 0001: Select a conflict-free public product identity
+# ADR 0001: Retain HelixDB as a temporary development identity
 
-- Status: Proposed
+- Status: Accepted
 - Date: 2026-07-10
 - Decision owner: Project maintainer
 - Required before: `P00-005` and `G00`
@@ -102,35 +102,28 @@ The technical recommendation is **NexilisDB**. It best expresses the shared engi
 
 This is a preliminary availability screen, not legal trademark clearance or a reservation. The chosen identifiers must be claimed promptly and reviewed again before public release.
 
-## Proposed decision
+## Decision
 
-Select Option B: choose a distinct public product name before `G00` closes. The recommended replacement is **NexilisDB**.
+Retain **HelixDB** and `helix-db` as the development identity for now, as explicitly directed by the project owner on 2026-07-10. Re-evaluate a distinct public identity before v1 publication under new release-blocking task `P16-016`.
 
-Final acceptance remains pending explicit product-owner direction. Until it is accepted:
+This accepts Option C as a temporary development policy, not as a claim that the existing public-name conflict is resolved.
 
-- “HelixDB” is a working codename only.
-- No public package, crate, binary, container, protocol, telemetry, operator, or format identifier is frozen.
-- Implementation phases that depend on public identity remain blocked by `G00`.
-- Candidate names must undergo GitHub, crates.io, npm, container registry, general web, and reasonable trademark/domain due diligence.
+Until `P16-016` is complete:
 
-The ADR becomes `Accepted` only after the final name and canonical identifiers are recorded.
+- Documentation and source use HelixDB.
+- The repository remains `helix-db`.
+- Rust workspace packages use `helix-*` with `publish = false`.
+- TypeScript workspace packages use the private, non-published `@helix-db-internal/*` convention.
+- Development binaries are `helix` and `helixd`.
+- The development protocol/profile is explicitly unstable `helix.internal.v0`.
+- Development environment and telemetry prefixes are `HELIX_*` and `helix.*`.
+- No package is published to the occupied `helix-db` npm/crates.io identifiers or `@helix-db` npm scope.
+- No public container, Kubernetes API group, trademark claim, or stable v1 protocol identity is frozen.
+- HDoc means **Hybrid Document** and remains product-neutral.
 
-If NexilisDB is accepted, the proposed identifier matrix is:
+The complete accepted identifier matrix and terminology are maintained in [the terminology document](../governance/terminology.md).
 
-| Surface | Proposed identity |
-| --- | --- |
-| Product | `NexilisDB` |
-| Repository slug | `nexilis-db` |
-| Rust crate prefix | `nexilis-` with `nexilis-db` reserved for the umbrella/client identity |
-| npm scope | `@nexilis-db` with packages such as `core`, `browser`, and `client` |
-| CLI / daemon | `nexilis` / `nexilisd` |
-| Initial container | `ghcr.io/alextis59/nexilis-db` until an organization is explicitly created |
-| Protocol/profile prefix | `nexilis` with explicit version, for example `nexilis.v1` |
-| Environment prefix | `NEXILIS_` |
-| Telemetry namespace | `nexilis.*` |
-| Local configuration/data directory | `.nexilis` where platform conventions permit |
-| Kubernetes API group | Deferred until a controlled domain is selected |
-| Canonical document format | Keep `HDoc`, defined as **Hybrid Document**, so durable format identity is not coupled to a product trademark |
+NexilisDB remains the leading screened alternative, with the other candidates preserved for the release-time review. Registry/domain checks must be repeated because availability can change.
 
 ## Consequences
 
@@ -142,17 +135,19 @@ If NexilisDB is accepted, the proposed identifier matrix is:
 
 ### Negative
 
-- Phase 0 cannot close until the product owner chooses or explicitly accepts the conflict.
-- Current documents will require a coordinated mechanical rename.
+- Development identifiers may require coordinated migration before v1 publication.
+- Contributors must distinguish internal names from publicly clear package/product identities.
+- The known name conflict remains and must not be hidden in marketing or package metadata.
 
 ### Neutral or deferred
 
-- The repository may remain `helix-db` temporarily as historical working context.
-- Internal technical terms such as HDoc are also reviewed when the final product identity is selected.
+- The repository remains `helix-db` during implementation.
+- HDoc is defined as Hybrid Document and does not need to follow a product rename.
+- Public name selection moves to `P16-016`, which must precede release publication task `P16-015`.
 
 ## Compatibility and migration
 
-There is no shipped data or public protocol to migrate. The acceptance change will update:
+There is no shipped data or public protocol to migrate now. If `P16-016` selects a new identity, its implementation will update or explicitly preserve:
 
 - Repository and remote identity if authorized.
 - Root and documentation titles/text.
@@ -161,7 +156,7 @@ There is no shipped data or public protocol to migrate. The acceptance change wi
 - Telemetry, error, environment, and configuration prefixes.
 - ADR, scope, ownership, evidence, and requirement links where names change.
 
-The transcript remains unchanged as provenance.
+The transcript remains unchanged as provenance. Development names have no public compatibility promise, but any migration tool must still preserve developer data exactly according to its documented contract.
 
 ## Security and operations
 
@@ -172,23 +167,24 @@ A distinct identity reduces dependency-confusion and wrong-package installation 
 - [x] Search GitHub for exact/near database repository names.
 - [x] Query crates.io for `helix-db`.
 - [x] Query npm for `helix-db` and `helixdb` results.
-- [ ] Receive product-owner direction to rename or knowingly retain the conflict.
+- [x] Receive product-owner direction to retain HelixDB/`helix-db` during development and reconsider an alternative later.
 - [x] Screen the NexilisDB, NodalysDB, and VireliaDB exact slugs across the planned registries, domains, and general web results.
-- [ ] Repeat the selected candidate checks immediately before claiming identifiers and obtain appropriate trademark/legal review before release.
-- [ ] Update every canonical identifier in one reviewed change.
-- [ ] Re-run repository link, checklist, and traceability validation.
+- [x] Record the accepted development identifier matrix and publication prohibitions.
+- [x] Re-run repository link, checklist, and traceability validation for `P00-005`.
+- [ ] Under `P16-016`, repeat candidate checks immediately before claiming public identifiers and obtain appropriate trademark/legal review before release.
+- [ ] Under `P16-016`, update every affected public/development identifier in one reviewed migration change if the name changes.
 
 ## Implementation impact
 
-- `P00-005` and `G00` remain open.
-- Phase 2 workspace/package naming and Phase 3 format identity depend on acceptance.
-- No current implementation code is affected.
+- `P00-005` may close with this accepted development identity.
+- `G00` may close after its final independent review.
+- Phase 2 may create private/non-published workspace identifiers using the terminology document.
+- `P16-016` blocks public release publication and is ordered before `P16-015`.
 
 ## Follow-up work
 
-- [ ] Select the final public product name.
-- [ ] Define the canonical repository, crate, npm scope/package, binaries, SDKs, container, operator, protocol, telemetry, configuration, and format prefixes.
-- [ ] Rename the repository remote only with explicit authorization.
+- [ ] Complete `P16-016`: select or confirm the final public product name and clear identifier matrix.
+- [ ] Rename the repository remote only with explicit authorization if the later decision requires it.
 
 ## References
 

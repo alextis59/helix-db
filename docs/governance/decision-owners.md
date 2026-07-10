@@ -28,7 +28,7 @@ The project maintainer is the acting owner for every unfilled role at project st
 
 | Decision | Primary owner | Required reviewers | Deadline | Related plan work |
 | --- | --- | --- | --- | --- |
-| Public product, crate, package, binary, and protocol identity | Project maintainer | Query semantics, operations, legal/licensing review | Before `G00` | `P00-005` |
+| Development identity and final public product/package/protocol identity | Project maintainer | Query semantics, operations, legal/licensing review | Development matrix before `G00`; public matrix before `P16-015` | `P00-005`, `P16-016` |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | GPU architecture owner | Runtime, security, operations | Before `P10-003`; no later than Phase 0 research exit | `P10-001` |
 | Server runtime and WASI component boundary | Runtime architecture owner | Storage, GPU, security | Before `G04` | `P04-001`–`P04-017` |
 | HDoc checksum, compression, endianness, alignment, and canonical hash rules | Storage architecture owner | Query semantics, runtime, security | Before HDoc v1 fixtures; no later than `P03-008` | `P03-001`–`P03-007` |

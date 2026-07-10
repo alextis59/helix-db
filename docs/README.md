@@ -1,6 +1,6 @@
 # Documentation Guide
 
-This directory is the entry point for HelixDB project documentation. The public product name is still governed by open checklist item `P00-005`; paths use the repository's working name until that decision is accepted.
+This directory is the entry point for HelixDB project documentation. HelixDB/`helix-db` is the accepted development identity; a conflict-free public name and package matrix are reconsidered before v1 publication under `P16-016`.
 
 ## Authority and provenance
 
