@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-008",
+  "requirements": ["DATA-001", "DATA-002", "QUERY-001"],
+  "commit": "7914c4b05e893cdf52425cade1e7536f13f532dd",
+  "recorded_at": "2026-07-10T18:43:29Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 7914c4b^ 7914c4b", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 7914c4b", "exit_code": 0 },
+    { "command": "sha256sum of four committed artifacts", "exit_code": 0 },
+    { "command": "node array semantic coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node path traversal sanity check recorded in README.md", "exit_code": 0 },
+    { "command": "node equality/all/elemMatch sanity check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/array-semantics.md", "media_type": "text/markdown", "bytes": 14315, "sha256": "9b3754ecfb3e9b4ee3c8c81d9e24073e7e23e11acb75aa7bfa23f35430fe54e6" },
+    { "path": "docs/adr/0005-explicit-array-matching.md", "media_type": "text/markdown", "bytes": 7045, "sha256": "beb322faf1f324a39eeec94909f78169c9b9fa6e10f12f136a64fed22d4efd42" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 65362, "sha256": "e654c12798664a74521201892f67b9451d8e584b7d11f13468216d3faedcfa15" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 3255, "sha256": "b1cf5a7282eae78052b78549f9415c667134b3101134cd9e9b8b43b086a78a61" }
+  ],
+  "verdict": "pass"
+}
