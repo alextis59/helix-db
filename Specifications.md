@@ -414,6 +414,8 @@ The canonical document format should preserve enough type information to avoid J
 
 Integer width, literal inference, coercion, checked overflow/underflow, decimal promotion, explicit conversion, exact mixed numeric comparison, special values, numeric hashing, deterministic aggregation, and CPU/GPU tolerance are defined by [Integer, Decimal, and Mixed Numeric Semantics](docs/architecture/numeric-semantics.md), [Floating-Point and Decimal Special-Value Semantics](docs/architecture/floating-special-semantics.md), and [ADR 0002](docs/adr/0002-exact-numeric-semantics.md). Those documents are normative refinements of this value-type contract.
 
+Timestamp precision/range, timezone normalization, date conversion, leap-second policy, deterministic clock sources, and logical expiry are defined by [Timestamp, Date, Expiry, and Clock Semantics](docs/architecture/temporal-semantics.md) and [ADR 0003](docs/adr/0003-utc-microseconds-and-injected-clocks.md). Those documents are normative refinements of the temporal value and TTL contracts.
+
 ### 7.3 Canonical binary document format
 
 The required distinction between absent fields and present null values, including observable read, filter, sort, projection, index, sidecar, aggregation, update, and recovery behavior, is defined by [Missing and Null Semantics](docs/architecture/missing-null-semantics.md). That document is a normative refinement of this section and `DATA-002`.
