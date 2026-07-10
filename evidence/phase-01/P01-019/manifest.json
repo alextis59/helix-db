@@ -1,0 +1,113 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-019",
+  "requirements": [
+    "INV-002",
+    "INV-007",
+    "CORE-002",
+    "DATA-001",
+    "DATA-002",
+    "QUERY-001",
+    "QUERY-002",
+    "STORE-001",
+    "GPU-002",
+    "GPU-003",
+    "GPU-004",
+    "SEC-001",
+    "SEC-002"
+  ],
+  "accepted_adrs": ["0011"],
+  "commit": "a490395e61f0f626abc4744f72f774a969da4632",
+  "recorded_at": "2026-07-10T20:58:26Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "node": "22.19.0",
+      "python": "3.10.12",
+      "python_jsonschema": "4.23.0"
+    }
+  },
+  "commands": [
+    {
+      "command": "git diff --check a490395e61f0f626abc4744f72f774a969da4632^ a490395e61f0f626abc4744f72f774a969da4632",
+      "exit_code": 0
+    },
+    {
+      "command": "git diff-tree --no-commit-id --name-status -r a490395e61f0f626abc4744f72f774a969da4632",
+      "exit_code": 0
+    },
+    {
+      "command": "node --check evidence/phase-01/P01-019/verify.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-01/P01-019/verify.mjs a490395e61f0f626abc4744f72f774a969da4632",
+      "exit_code": 0
+    },
+    { "command": "python3 --version", "exit_code": 0 },
+    { "command": "python3 jsonschema version check", "exit_code": 0 }
+  ],
+  "verification": {
+    "artifact_files": 31,
+    "fixture_schemas": 2,
+    "fixtures": 17,
+    "steps": 313,
+    "successes": 183,
+    "errors": 130,
+    "logical_value_types": 15,
+    "observable_missing": 1,
+    "action_kinds": 3,
+    "order_bases": 8,
+    "value_operations": 17,
+    "stable_limit_ids": 23,
+    "boundary_relations_per_limit": 3,
+    "error_codes": 74,
+    "error_categories": 11,
+    "fixture_requirement_ids": 12,
+    "generator_byte_reproducible": true,
+    "source_hashes_verified": 17,
+    "canonical_hashes_verified": 17
+  },
+  "artifacts": [
+    { "path": "docs/architecture/error-semantics.md", "media_type": "text/markdown", "bytes": 26195, "sha256": "641997fabcd4d1bc218f1a2d3ef10317a19c00926a23f7463d50591767536fdf" },
+    { "path": "docs/architecture/floating-special-semantics.md", "media_type": "text/markdown", "bytes": 16378, "sha256": "7326f9c17ec785a574dd15ab7622b0985665bbae61fd5bc01b5b214464c881a7" },
+    { "path": "docs/architecture/limits-v1.md", "media_type": "text/markdown", "bytes": 16530, "sha256": "afd00456f6582cbdc5197107c10557cf5317fd86fa88aa46e6d005358c616a4d" },
+    { "path": "docs/architecture/numeric-semantics.md", "media_type": "text/markdown", "bytes": 13038, "sha256": "fe76218e36b90e8889d598db6964853fc7bc062b9e5aabca31132b336da31be9" },
+    { "path": "docs/quality/semantic-fixture-format.md", "media_type": "text/markdown", "bytes": 22144, "sha256": "ae2b172d842a25e70fa051fd9c3fc6a266880e269beba2fe9204e7c7eeb757f9" },
+    { "path": "fixtures/semantic/COVERAGE.md", "media_type": "text/markdown", "bytes": 8045, "sha256": "996fcf7c4f4f072afd3994b201acc1ac9638a1bcb039e24758cef863020c4624" },
+    { "path": "fixtures/semantic/README.md", "media_type": "text/markdown", "bytes": 1859, "sha256": "c5570252e9952710cb27ef538982b9f191f8a9171928fb10032eb8729a0a4271" },
+    { "path": "fixtures/semantic/cases/errors/registry.json", "media_type": "application/json", "bytes": 62341, "sha256": "d17ce274018b27850c01b25fc6728fe243c95cf940e6b1d6600efc639f68b661" },
+    { "path": "fixtures/semantic/cases/invalid/commands.json", "media_type": "application/json", "bytes": 7471, "sha256": "2f1c6f578763ace0c5dfafa5b9193b15161f404fab49521aa5e16b5c7bb9ac3f" },
+    { "path": "fixtures/semantic/cases/invalid/raw-inputs.json", "media_type": "application/json", "bytes": 16262, "sha256": "0500ce98382cfd4e0d3e6a27817fdc5f6743bd8ff086ddde93f4d5dcf9c74e1b" },
+    { "path": "fixtures/semantic/cases/limits/commands-queries.json", "media_type": "application/json", "bytes": 59436, "sha256": "cb655502aa32bbf1eb0c3c21c9416b291c2732f2e1d070047d726eb698bbc319" },
+    { "path": "fixtures/semantic/cases/limits/document-values.json", "media_type": "application/json", "bytes": 54726, "sha256": "7488b899c5891125aa22ece2001dbf984ff7aa366eee5a3a3bef618084fa3d6f" },
+    { "path": "fixtures/semantic/cases/ordering/profiles.json", "media_type": "application/json", "bytes": 10190, "sha256": "4855bf9e979871f0186274e5ae44979767f0a8e9f94f3e147903bbec8786a798" },
+    { "path": "fixtures/semantic/cases/presence/missing-null-paths.json", "media_type": "application/json", "bytes": 21491, "sha256": "4cd2d9bf953c28dd3ac051d01d57a28dc1f7395998c2c42bb1ad65696e570fb5" },
+    { "path": "fixtures/semantic/cases/query/missing-array-nested.json", "media_type": "application/json", "bytes": 36500, "sha256": "5cab03c2b93ed826a8644a6bb6fbc20bf88ce704e1ef0e54813fde0bd376105d" },
+    { "path": "fixtures/semantic/cases/scalar/decimal128-specials.json", "media_type": "application/json", "bytes": 12944, "sha256": "92ae5b4b0cbac419b8c3337bdf10a1247120cba7f82849013b1127104cb67ff9" },
+    { "path": "fixtures/semantic/cases/scalar/float64-specials.json", "media_type": "application/json", "bytes": 13084, "sha256": "55a7ec4ee2c96f1d3ae5b0e4f5ee1306d96671c099249e1b1c5403a156b421a0" },
+    { "path": "fixtures/semantic/cases/scalar/integers.json", "media_type": "application/json", "bytes": 10165, "sha256": "7eaad5e906511765c2b7887fff030f6b78bad3dc909f4193e4d2b6db0d40d9b0" },
+    { "path": "fixtures/semantic/cases/scalar/mixed-numeric.json", "media_type": "application/json", "bytes": 6133, "sha256": "b60957b27028958d85389f8721e4687011104ef3261051dfca5285e66db066ae" },
+    { "path": "fixtures/semantic/cases/scalar/null-bool.json", "media_type": "application/json", "bytes": 5525, "sha256": "922bca2fc9b7e04a688362da21c5fd5c56abb6d7f264c06793520cc1731ea708" },
+    { "path": "fixtures/semantic/cases/scalar/string-binary.json", "media_type": "application/json", "bytes": 10321, "sha256": "e793ced930da09e09e723025008a902822ed7dc1364054670ec2e0608e5707c6" },
+    { "path": "fixtures/semantic/cases/scalar/temporal-identifiers.json", "media_type": "application/json", "bytes": 11305, "sha256": "e35f4bd0f0229994449ec011185fbc4689492b692b67b2babcd646d34c7bcc8f" },
+    { "path": "fixtures/semantic/cases/scalar/vectors.json", "media_type": "application/json", "bytes": 11022, "sha256": "44ef43fb4adf9b45a039af322cfcaf2abc5b0a932c7e10f6b085671818cc2fc1" },
+    { "path": "fixtures/semantic/cases/values/objects-arrays.json", "media_type": "application/json", "bytes": 18315, "sha256": "b13f66e858639a0c8ec5661bdbaaaff6ed6365fe8a31b8fe68d8319a0422e649" },
+    { "path": "fixtures/semantic/check-corpus.mjs", "media_type": "text/javascript", "bytes": 8695, "sha256": "76bda22fbffa149995e708e1672b12168d67cfbc93baa24005304252db568642" },
+    { "path": "fixtures/semantic/coverage-v1.json", "media_type": "application/json", "bytes": 4494, "sha256": "81e9cb30e88786f9bab38abfa69ab04a2395181c7c01928809703aac96c4c5ef" },
+    { "path": "fixtures/semantic/error-cases-v1.json", "media_type": "application/json", "bytes": 16242, "sha256": "798d6d47afcc5992373acb98ae4ebbda22379c25ea986c6da50816d5d9859f68" },
+    { "path": "fixtures/semantic/generate-corpus.mjs", "media_type": "text/javascript", "bytes": 50713, "sha256": "5c1ce426ca670927f49b6ef9fb83e025ae4f45a57fe5b96c784835434dab71cc" },
+    { "path": "fixtures/semantic/manifest.json", "media_type": "application/json", "bytes": 10974, "sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8" },
+    { "path": "fixtures/semantic/operations-v1.json", "media_type": "application/json", "bytes": 3066, "sha256": "d5aaa5ecb693d58607635a94f6e7361613ce4fa42922ce8bb331fe25ec365474" },
+    { "path": "fixtures/semantic/schema/check-semantic-examples.mjs", "media_type": "text/javascript", "bytes": 11847, "sha256": "f8c11ca0a3602d89c5bfa174c99178fc92843f844ca57f8dc25bd6617a707331" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-01/P01-019/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 14985,
+    "sha256": "0ca7ce5e48b943e59737f847ac6542185b706eacf8c8e6e9761d21fafaeae46d"
+  },
+  "verdict": "pass"
+}
