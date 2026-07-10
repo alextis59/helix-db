@@ -1,0 +1,175 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:helix-db:schema:mongodb-differential-report:1",
+  "title": "HelixDB MongoDB differential report v1",
+  "type": "object",
+  "required": [
+    "report_schema",
+    "profile",
+    "harness",
+    "client",
+    "upstream",
+    "inputs",
+    "counts",
+    "observations",
+    "cases",
+    "verdict"
+  ],
+  "properties": {
+    "report_schema": { "const": "helix.mongodb-differential-report/1" },
+    "profile": { "const": "mongodb-6.0.5-initial-v1" },
+    "harness": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "helix-mongodb-differential" },
+        "version": { "const": "1.0.0" }
+      },
+      "additionalProperties": false
+    },
+    "client": { "$ref": "#/$defs/client" },
+    "upstream": { "$ref": "#/$defs/upstream" },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "cases_path",
+        "cases_sha256",
+        "corpus_manifest_sha256",
+        "oracle_report_sha256"
+      ],
+      "properties": {
+        "cases_path": { "const": "differential/mongodb/cases-v1.json" },
+        "cases_sha256": { "$ref": "#/$defs/sha256" },
+        "corpus_manifest_sha256": { "$ref": "#/$defs/sha256" },
+        "oracle_report_sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "cases",
+        "expected_exact",
+        "expected_different",
+        "observed_exact",
+        "observed_different",
+        "direct",
+        "adapter_rewrite",
+        "passed",
+        "failed",
+        "skipped"
+      ],
+      "properties": {
+        "cases": { "$ref": "#/$defs/count" },
+        "expected_exact": { "$ref": "#/$defs/count" },
+        "expected_different": { "$ref": "#/$defs/count" },
+        "observed_exact": { "$ref": "#/$defs/count" },
+        "observed_different": { "$ref": "#/$defs/count" },
+        "direct": { "$ref": "#/$defs/count" },
+        "adapter_rewrite": { "$ref": "#/$defs/count" },
+        "passed": { "$ref": "#/$defs/count" },
+        "failed": { "$ref": "#/$defs/count" },
+        "skipped": { "$ref": "#/$defs/count" }
+      },
+      "additionalProperties": false
+    },
+    "observations": {
+      "type": "object",
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "const": "differential/mongodb/upstream-observations-v1.json" },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": [
+          "id",
+          "family",
+          "expected_relation",
+          "observed_relation",
+          "translation",
+          "comparison",
+          "native_rows",
+          "mongo_rows",
+          "native_ids",
+          "mongo_ids",
+          "native_sha256",
+          "mongo_sha256",
+          "status"
+        ],
+        "properties": {
+          "id": { "$ref": "#/$defs/stable_id" },
+          "family": { "$ref": "#/$defs/stable_id" },
+          "expected_relation": { "$ref": "#/$defs/relation" },
+          "observed_relation": { "$ref": "#/$defs/relation" },
+          "translation": { "enum": ["direct", "adapter_rewrite"] },
+          "comparison": { "enum": ["ordered_ids", "ordered_rows"] },
+          "native_rows": { "$ref": "#/$defs/count" },
+          "mongo_rows": { "$ref": "#/$defs/count" },
+          "native_ids": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "mongo_ids": {
+            "type": "array",
+            "items": { "type": "string", "minLength": 1 }
+          },
+          "native_sha256": { "$ref": "#/$defs/sha256" },
+          "mongo_sha256": { "$ref": "#/$defs/sha256" },
+          "status": { "enum": ["pass", "fail"] }
+        },
+        "additionalProperties": false
+      }
+    },
+    "verdict": { "enum": ["pass", "fail"] }
+  },
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0 },
+    "relation": { "enum": ["exact", "different"] },
+    "stable_id": {
+      "type": "string",
+      "pattern": "^[a-z0-9][a-z0-9._-]{0,126}[a-z0-9]$"
+    },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "client": {
+      "type": "object",
+      "required": ["product", "version"],
+      "properties": {
+        "product": { "const": "MongoDB Shell" },
+        "version": { "const": "1.8.0" }
+      },
+      "additionalProperties": false
+    },
+    "upstream": {
+      "type": "object",
+      "required": [
+        "product",
+        "version",
+        "git_version",
+        "feature_compatibility_version",
+        "max_wire_version",
+        "modules",
+        "image",
+        "image_id"
+      ],
+      "properties": {
+        "product": { "const": "MongoDB Community Server" },
+        "version": { "const": "6.0.5" },
+        "git_version": { "const": "c9a99c120371d4d4c52cbb15dac34a36ce8d3b1d" },
+        "feature_compatibility_version": { "const": "6.0" },
+        "max_wire_version": { "const": 17 },
+        "modules": { "type": "array", "maxItems": 0 },
+        "image": { "const": "mongo@sha256:928347070dc089a596f869a22a4204c0feace3eb03470a6a2de6814f11fb7309" },
+        "image_id": { "const": "sha256:8b33e239cde686e9378f9d8941eafa167fdf73527e9e006ab1fe9174c9622797" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

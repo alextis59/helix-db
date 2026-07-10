@@ -1,0 +1,408 @@
+{
+  "cases_schema": "helix.mongodb-differential-cases/1",
+  "profile": "mongodb-6.0.5-initial-v1",
+  "harness_version": "1.0.0",
+  "client": {
+    "product": "MongoDB Shell",
+    "version": "1.8.0"
+  },
+  "upstream": {
+    "product": "MongoDB Community Server",
+    "version": "6.0.5",
+    "git_version": "c9a99c120371d4d4c52cbb15dac34a36ce8d3b1d",
+    "feature_compatibility_version": "6.0",
+    "max_wire_version": 17,
+    "image": "mongo@sha256:928347070dc089a596f869a22a4204c0feace3eb03470a6a2de6814f11fb7309",
+    "image_id": "sha256:8b33e239cde686e9378f9d8941eafa167fdf73527e9e006ab1fe9174c9622797"
+  },
+  "semantic_inputs": {
+    "fixture_schema": "helix.semantic-fixture/1",
+    "semantic_profile": "helix-native-v1",
+    "corpus_manifest_sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8",
+    "oracle_report_sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+  },
+  "sources": [
+    "https://www.mongodb.com/docs/v6.0/reference/bson-type-comparison-order/",
+    "https://www.mongodb.com/docs/v6.0/reference/operator/aggregation/sort/",
+    "https://www.mongodb.com/docs/v6.0/reference/operator/query/all/",
+    "https://www.mongodb.com/docs/v6.0/reference/operator/query/elemmatch/",
+    "https://www.mongodb.com/docs/v6.0/reference/operator/query/size/",
+    "https://www.mongodb.com/docs/v6.0/tutorial/project-fields-from-query-results/",
+    "https://www.mongodb.com/docs/v6.0/tutorial/query-arrays/",
+    "https://www.mongodb.com/docs/v6.0/tutorial/query-for-null-fields/"
+  ],
+  "datasets": [
+    {
+      "id": "core",
+      "collection": "cases",
+      "documents": [
+        {
+          "_id": { "$numberInt": "1" },
+          "a": [{ "$numberInt": "1" }, { "$numberInt": "2" }],
+          "profile": { "age": { "$numberInt": "21" } },
+          "items": [{ "v": { "$numberInt": "1" } }, { "v": { "$numberInt": "2" } }],
+          "s": "é",
+          "obj": { "a": { "$numberInt": "1" }, "b": { "$numberInt": "2" } },
+          "n": { "$numberInt": "1" }
+        },
+        {
+          "_id": { "$numberInt": "2" },
+          "x": null,
+          "a": [{ "$numberInt": "2" }, { "$numberInt": "3" }],
+          "profile": { "age": { "$numberInt": "17" } },
+          "items": [{ "v": { "$numberInt": "3" } }],
+          "s": "é",
+          "obj": { "b": { "$numberInt": "2" }, "a": { "$numberInt": "1" } },
+          "n": { "$numberLong": "1" }
+        },
+        {
+          "_id": { "$numberInt": "3" },
+          "x": { "$numberInt": "1" },
+          "a": [{ "$numberInt": "3" }],
+          "profile": { "age": { "$numberInt": "30" } },
+          "items": [{ "v": { "$numberInt": "0" } }],
+          "s": "abc",
+          "obj": { "a": { "$numberInt": "1" }, "b": { "$numberInt": "3" } },
+          "n": { "$numberDouble": "1.0" }
+        },
+        {
+          "_id": { "$numberInt": "4" },
+          "x": "v",
+          "a": [
+            [{ "$numberInt": "1" }, { "$numberInt": "2" }],
+            [{ "$numberInt": "3" }, { "$numberInt": "4" }]
+          ],
+          "profile": { "age": { "$numberInt": "18" } },
+          "items": [],
+          "s": "z",
+          "obj": {},
+          "n": { "$numberDecimal": "1" }
+        },
+        {
+          "_id": { "$numberInt": "5" },
+          "x": false,
+          "a": [{ "$numberInt": "2" }],
+          "profile": { "age": { "$numberInt": "18" } },
+          "items": [{ "v": { "$numberInt": "2" } }, { "v": { "$numberInt": "2" } }],
+          "s": "é",
+          "obj": { "a": { "$numberInt": "1" }, "b": { "$numberInt": "2" } },
+          "n": { "$numberDecimal": "0.1" }
+        },
+        {
+          "_id": { "$numberInt": "6" },
+          "x": true,
+          "a": [{ "$numberDouble": "0.1" }],
+          "profile": { "age": { "$numberInt": "19" } },
+          "items": [{ "v": { "$numberInt": "1" } }],
+          "s": "A",
+          "obj": { "a": { "$numberInt": "0" } },
+          "n": { "$numberDouble": "0.1" }
+        }
+      ]
+    }
+  ],
+  "cases": [
+    {
+      "id": "array.all.direct",
+      "family": "array",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "a": { "$all": { "$literal": [{ "$numberInt": "2" }] } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "a": { "$all": [{ "$numberInt": "2" }] } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Both profiles require every requested scalar to occur as an immediate array element."
+    },
+    {
+      "id": "array.elem-match.direct",
+      "family": "array",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "a": { "$elemMatch": { "$eq": { "$literal": { "$numberInt": "2" } } } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "a": { "$elemMatch": { "$eq": { "$numberInt": "2" } } } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Explicit immediate-element equality has the same match set."
+    },
+    {
+      "id": "array.scalar-equality.direct",
+      "family": "array",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "different",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "a": { "$eq": { "$literal": { "$numberInt": "2" } } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "a": { "$numberInt": "2" } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "MongoDB scalar equality implicitly matches array elements; native equality compares the whole array."
+    },
+    {
+      "id": "array.scalar-equality.rewrite",
+      "family": "array",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "adapter_rewrite",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "a": { "$elemMatch": { "$eq": { "$literal": { "$numberInt": "2" } } } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "a": { "$numberInt": "2" } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "An adapter can translate the proven all-array dataset subset to explicit element matching."
+    },
+    {
+      "id": "array.size.direct",
+      "family": "array",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "a": { "$size": { "$literal": { "$numberInt": "2" } } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "a": { "$size": 2 } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Both profiles count immediate dense array elements."
+    },
+    {
+      "id": "array.whole-equality.direct",
+      "family": "array",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "different",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": {
+          "a": {
+            "$eq": {
+              "$literal": [{ "$numberInt": "1" }, { "$numberInt": "2" }]
+            }
+          }
+        },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "a": [{ "$numberInt": "1" }, { "$numberInt": "2" }] },
+        "sort": { "_id": 1 }
+      },
+      "reason": "MongoDB also matches an immediate nested array element equal to the query array; native equality compares only the whole field value."
+    },
+    {
+      "id": "missing.exists-false.direct",
+      "family": "missing-null",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "DATA-002", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "x": { "$exists": false } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "x": { "$exists": false } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Both profiles distinguish absence with an explicit exists predicate."
+    },
+    {
+      "id": "missing.exists-true.direct",
+      "family": "missing-null",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "DATA-002", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "x": { "$exists": true } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "x": { "$exists": true } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Explicit null remains present in both profiles."
+    },
+    {
+      "id": "missing.null-equality.direct",
+      "family": "missing-null",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "DATA-002", "QUERY-001"],
+      "expected_relation": "different",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "x": { "$eq": { "$literal": null } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "x": null },
+        "sort": { "_id": 1 }
+      },
+      "reason": "MongoDB null equality includes missing fields; native null equality does not."
+    },
+    {
+      "id": "missing.null-equality.rewrite",
+      "family": "missing-null",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "DATA-002", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "adapter_rewrite",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "x": { "$eq": { "$literal": null } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "x": { "$type": 10 } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "MongoDB type-null is the explicit-null-only reference for native equality."
+    },
+    {
+      "id": "numeric.cross-width-equality.direct",
+      "family": "numeric",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "n": { "$eq": { "$literal": { "$numberInt": "1" } } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "n": { "$eq": { "$numberInt": "1" } } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Int32, int64, exact double, and decimal one share numeric equality."
+    },
+    {
+      "id": "object.field-order-equality.direct",
+      "family": "object",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "different",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": {
+          "obj": {
+            "$eq": {
+              "$literal": { "a": { "$numberInt": "1" }, "b": { "$numberInt": "2" } }
+            }
+          }
+        },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "obj": { "a": { "$numberInt": "1" }, "b": { "$numberInt": "2" } } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Native mapping equality ignores field presentation order; MongoDB embedded-document equality preserves it."
+    },
+    {
+      "id": "path.nested-range.direct",
+      "family": "path",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "items.v": { "$gte": { "$literal": { "$numberInt": "2" } } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "items.v": { "$gte": { "$numberInt": "2" } } },
+        "sort": { "_id": 1 }
+      },
+      "reason": "One-level dotted traversal over object array elements has the same positive-candidate result."
+    },
+    {
+      "id": "projection.exclude-id.direct",
+      "family": "projection",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_rows",
+      "native": {
+        "filter": {},
+        "projection": { "_id": 0, "x": 1 },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": {},
+        "projection": { "_id": 0, "x": 1 },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Inclusion projection can suppress _id while preserving explicit query order."
+    },
+    {
+      "id": "sort.explicit-stable.direct",
+      "family": "ordering",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": {},
+        "sort": { "profile.age": 1, "_id": 1 }
+      },
+      "mongo": {
+        "filter": {},
+        "sort": { "profile.age": 1, "_id": 1 }
+      },
+      "reason": "The explicit unique _id tie key makes both result sequences deterministic."
+    },
+    {
+      "id": "string.binary-equality.direct",
+      "family": "string",
+      "dataset": "core",
+      "requirements": ["COMPAT-001", "QUERY-001"],
+      "expected_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native": {
+        "filter": { "s": { "$eq": { "$literal": "é" } } },
+        "sort": { "_id": 1 }
+      },
+      "mongo": {
+        "filter": { "s": "é" },
+        "sort": { "_id": 1 }
+      },
+      "reason": "Simple binary string equality preserves distinct Unicode normalization forms."
+    }
+  ]
+}

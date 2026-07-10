@@ -10,7 +10,8 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Study](Study.md) — architecture and feasibility analysis.
 - [Implementation plan](ImplementationPlan.md) — complete checklisted implementation ledger.
 - [Reference semantic oracle](reference/semantic-oracle/README.md) — executable v1 fixture semantics and deterministic report.
+- [Initial MongoDB differential harness](differential/mongodb/README.md) — pinned upstream observations for the first declared overlap and differences.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 
-Implementation is currently in the foundation semantic-contract phase. The reference oracle is a test authority, not a storage engine or production database; the broader documentation describes intended work and must not be read as a claim that database functionality already exists.
+Implementation is currently in the foundation semantic-contract phase. The reference oracle and initial MongoDB differential harness are test authorities, not a storage engine, adapter, or production database; the broader documentation describes intended work and must not be read as a claim that database functionality already exists.

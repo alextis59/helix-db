@@ -943,6 +943,14 @@ Exit evidence:
 | `EXP-015` | Range movement is retry-safe. | Concurrent workload plus failure at every protocol phase. | No lost/duplicated logical writes and correct epochs. |
 | `EXP-016` | Local replica resume is duplicate-safe. | Replay overlapping change windows and crash checkpoints. | Identical final state across repeated resumes. |
 
+### 21.1 `EXP-013` initial observation
+
+`P01-021` now provides a reproducible first observation for `EXP-013` through the [`mongodb-6.0.5-initial-v1` harness](differential/mongodb/README.md). Six typed documents and 16 ordered query cases were executed through the independent native semantic oracle and a digest-pinned MongoDB Community Server 6.0.5 using a pinned `mongosh` 1.8.0 client. The report recorded 12 expected exact cases, four expected semantic differences, 14 direct translations, two proposed rewrites, zero failures, and zero skips.
+
+The observation supports the architecture's “native semantics first” direction. `$all`, explicit `$elemMatch`, `$size`, explicit existence, one nested range, one projection, binary equality/order, and one finite cross-width numeric equality aligned over the selected documents. Direct scalar-on-array equality, nested whole-array equality, direct null equality, and order-insensitive native object equality did not align. The first and third differences can align in these fixtures through explicit element and existence rewrites; those rewrites still require applicability checks and adapter-level errors before they become product behavior.
+
+The result is deliberately too small to close `EXP-013`. It uses a hand-selected query-only dataset and the semantic oracle rather than an implemented engine or adapter. It does not cover writes, errors, aggregation, indexes, collation, regex, cursors, transactions, wire behavior, or generated combinations. The decision signal remains open until `P01-022` freezes the first versioned exact/different/unsupported/untested matrix, `P07-022` replays implemented query operators, and `P22-008` completes the broader experiment.
+
 ## 22. Risk register
 
 | Risk | Likelihood | Impact | Leading indicator | Primary mitigation |

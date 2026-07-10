@@ -1,0 +1,1793 @@
+{
+  "observations_schema": "helix.mongodb-upstream-observations/1",
+  "profile": "mongodb-6.0.5-initial-v1",
+  "cases_source_sha256": "31125f8841bd1b6f3789d54608e531e88304d9dedcfcf5e71f1dd92566521235",
+  "client": {
+    "product": "MongoDB Shell",
+    "version": "1.8.0"
+  },
+  "upstream": {
+    "product": "MongoDB Community Server",
+    "version": "6.0.5",
+    "git_version": "c9a99c120371d4d4c52cbb15dac34a36ce8d3b1d",
+    "feature_compatibility_version": "6.0",
+    "max_wire_version": 17,
+    "modules": [],
+    "image": "mongo@sha256:928347070dc089a596f869a22a4204c0feace3eb03470a6a2de6814f11fb7309",
+    "image_id": "sha256:8b33e239cde686e9378f9d8941eafa167fdf73527e9e006ab1fe9174c9622797"
+  },
+  "cases": [
+    {
+      "id": "array.all.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "array.elem-match.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "array.scalar-equality.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "array.scalar-equality.rewrite",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "array.size.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "4"
+          },
+          "x": "v",
+          "a": [
+            [
+              {
+                "$numberInt": "1"
+              },
+              {
+                "$numberInt": "2"
+              }
+            ],
+            [
+              {
+                "$numberInt": "3"
+              },
+              {
+                "$numberInt": "4"
+              }
+            ]
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [],
+          "s": "z",
+          "obj": {},
+          "n": {
+            "$numberDecimal": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "array.whole-equality.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "4"
+          },
+          "x": "v",
+          "a": [
+            [
+              {
+                "$numberInt": "1"
+              },
+              {
+                "$numberInt": "2"
+              }
+            ],
+            [
+              {
+                "$numberInt": "3"
+              },
+              {
+                "$numberInt": "4"
+              }
+            ]
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [],
+          "s": "z",
+          "obj": {},
+          "n": {
+            "$numberDecimal": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "missing.exists-false.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "missing.exists-true.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "3"
+          },
+          "x": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "30"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "0"
+              }
+            }
+          ],
+          "s": "abc",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "3"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "4"
+          },
+          "x": "v",
+          "a": [
+            [
+              {
+                "$numberInt": "1"
+              },
+              {
+                "$numberInt": "2"
+              }
+            ],
+            [
+              {
+                "$numberInt": "3"
+              },
+              {
+                "$numberInt": "4"
+              }
+            ]
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [],
+          "s": "z",
+          "obj": {},
+          "n": {
+            "$numberDecimal": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "6"
+          },
+          "x": true,
+          "a": [
+            {
+              "$numberDouble": "0.1"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "19"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            }
+          ],
+          "s": "A",
+          "obj": {
+            "a": {
+              "$numberInt": "0"
+            }
+          },
+          "n": {
+            "$numberDouble": "0.1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "missing.null-equality.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "missing.null-equality.rewrite",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "numeric.cross-width-equality.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "3"
+          },
+          "x": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "30"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "0"
+              }
+            }
+          ],
+          "s": "abc",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "3"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "4"
+          },
+          "x": "v",
+          "a": [
+            [
+              {
+                "$numberInt": "1"
+              },
+              {
+                "$numberInt": "2"
+              }
+            ],
+            [
+              {
+                "$numberInt": "3"
+              },
+              {
+                "$numberInt": "4"
+              }
+            ]
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [],
+          "s": "z",
+          "obj": {},
+          "n": {
+            "$numberDecimal": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "object.field-order-equality.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "path.nested-range.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "projection.exclude-id.direct",
+      "rows": [
+        {},
+        {
+          "x": null
+        },
+        {
+          "x": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "x": "v"
+        },
+        {
+          "x": false
+        },
+        {
+          "x": true
+        }
+      ]
+    },
+    {
+      "id": "sort.explicit-stable.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "2"
+          },
+          "x": null,
+          "a": [
+            {
+              "$numberInt": "2"
+            },
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "17"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "3"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "b": {
+              "$numberInt": "2"
+            },
+            "a": {
+              "$numberInt": "1"
+            }
+          },
+          "n": {
+            "$numberLong": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "4"
+          },
+          "x": "v",
+          "a": [
+            [
+              {
+                "$numberInt": "1"
+              },
+              {
+                "$numberInt": "2"
+              }
+            ],
+            [
+              {
+                "$numberInt": "3"
+              },
+              {
+                "$numberInt": "4"
+              }
+            ]
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [],
+          "s": "z",
+          "obj": {},
+          "n": {
+            "$numberDecimal": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "6"
+          },
+          "x": true,
+          "a": [
+            {
+              "$numberDouble": "0.1"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "19"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            }
+          ],
+          "s": "A",
+          "obj": {
+            "a": {
+              "$numberInt": "0"
+            }
+          },
+          "n": {
+            "$numberDouble": "0.1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "3"
+          },
+          "x": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "3"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "30"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "0"
+              }
+            }
+          ],
+          "s": "abc",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "3"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        }
+      ]
+    },
+    {
+      "id": "string.binary-equality.direct",
+      "rows": [
+        {
+          "_id": {
+            "$numberInt": "1"
+          },
+          "a": [
+            {
+              "$numberInt": "1"
+            },
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "21"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "1"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberInt": "1"
+          }
+        },
+        {
+          "_id": {
+            "$numberInt": "5"
+          },
+          "x": false,
+          "a": [
+            {
+              "$numberInt": "2"
+            }
+          ],
+          "profile": {
+            "age": {
+              "$numberInt": "18"
+            }
+          },
+          "items": [
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            },
+            {
+              "v": {
+                "$numberInt": "2"
+              }
+            }
+          ],
+          "s": "é",
+          "obj": {
+            "a": {
+              "$numberInt": "1"
+            },
+            "b": {
+              "$numberInt": "2"
+            }
+          },
+          "n": {
+            "$numberDecimal": "0.1"
+          }
+        }
+      ]
+    }
+  ]
+}

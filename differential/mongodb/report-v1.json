@@ -1,0 +1,399 @@
+{
+  "report_schema": "helix.mongodb-differential-report/1",
+  "profile": "mongodb-6.0.5-initial-v1",
+  "harness": {
+    "name": "helix-mongodb-differential",
+    "version": "1.0.0"
+  },
+  "client": {
+    "product": "MongoDB Shell",
+    "version": "1.8.0"
+  },
+  "upstream": {
+    "product": "MongoDB Community Server",
+    "version": "6.0.5",
+    "git_version": "c9a99c120371d4d4c52cbb15dac34a36ce8d3b1d",
+    "feature_compatibility_version": "6.0",
+    "max_wire_version": 17,
+    "modules": [],
+    "image": "mongo@sha256:928347070dc089a596f869a22a4204c0feace3eb03470a6a2de6814f11fb7309",
+    "image_id": "sha256:8b33e239cde686e9378f9d8941eafa167fdf73527e9e006ab1fe9174c9622797"
+  },
+  "inputs": {
+    "cases_path": "differential/mongodb/cases-v1.json",
+    "cases_sha256": "31125f8841bd1b6f3789d54608e531e88304d9dedcfcf5e71f1dd92566521235",
+    "corpus_manifest_sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8",
+    "oracle_report_sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+  },
+  "counts": {
+    "cases": 16,
+    "expected_exact": 12,
+    "expected_different": 4,
+    "observed_exact": 12,
+    "observed_different": 4,
+    "direct": 14,
+    "adapter_rewrite": 2,
+    "passed": 16,
+    "failed": 0,
+    "skipped": 0
+  },
+  "observations": {
+    "path": "differential/mongodb/upstream-observations-v1.json",
+    "bytes": 34775,
+    "sha256": "31ba5e000c14a6a504dcf2b12c9cb2c5f832ab930c3af89e93f4d92574aeb693"
+  },
+  "cases": [
+    {
+      "id": "array.all.direct",
+      "family": "array",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 3,
+      "mongo_rows": 3,
+      "native_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "native_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "mongo_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "status": "pass"
+    },
+    {
+      "id": "array.elem-match.direct",
+      "family": "array",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 3,
+      "mongo_rows": 3,
+      "native_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "native_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "mongo_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "status": "pass"
+    },
+    {
+      "id": "array.scalar-equality.direct",
+      "family": "array",
+      "expected_relation": "different",
+      "observed_relation": "different",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 0,
+      "mongo_rows": 3,
+      "native_ids": [],
+      "mongo_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "native_sha256": "4f53cda18c2baa0c0354bb5f9a3ecbe5ed12ab4d8e11ba873c2f11161202b945",
+      "mongo_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "status": "pass"
+    },
+    {
+      "id": "array.scalar-equality.rewrite",
+      "family": "array",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "adapter_rewrite",
+      "comparison": "ordered_ids",
+      "native_rows": 3,
+      "mongo_rows": 3,
+      "native_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "native_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "mongo_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "status": "pass"
+    },
+    {
+      "id": "array.size.direct",
+      "family": "array",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 3,
+      "mongo_rows": 3,
+      "native_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:4"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:4"
+      ],
+      "native_sha256": "10596feeaa1ff9c5997b8722beef31f7f7b0635c38f72b0522d4ee9bb2cdc754",
+      "mongo_sha256": "10596feeaa1ff9c5997b8722beef31f7f7b0635c38f72b0522d4ee9bb2cdc754",
+      "status": "pass"
+    },
+    {
+      "id": "array.whole-equality.direct",
+      "family": "array",
+      "expected_relation": "different",
+      "observed_relation": "different",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 1,
+      "mongo_rows": 2,
+      "native_ids": [
+        "int32:1"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:4"
+      ],
+      "native_sha256": "09a70b4eb532b7df6373bd224c3090a06a0b83aa23630d3588d927d8b811648a",
+      "mongo_sha256": "6186904e72c4006734577bab546c1c63955ceb448eb823992af8779ffe61d604",
+      "status": "pass"
+    },
+    {
+      "id": "missing.exists-false.direct",
+      "family": "missing-null",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 1,
+      "mongo_rows": 1,
+      "native_ids": [
+        "int32:1"
+      ],
+      "mongo_ids": [
+        "int32:1"
+      ],
+      "native_sha256": "09a70b4eb532b7df6373bd224c3090a06a0b83aa23630d3588d927d8b811648a",
+      "mongo_sha256": "09a70b4eb532b7df6373bd224c3090a06a0b83aa23630d3588d927d8b811648a",
+      "status": "pass"
+    },
+    {
+      "id": "missing.exists-true.direct",
+      "family": "missing-null",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 5,
+      "mongo_rows": 5,
+      "native_ids": [
+        "int32:2",
+        "int32:3",
+        "int32:4",
+        "int32:5",
+        "int32:6"
+      ],
+      "mongo_ids": [
+        "int32:2",
+        "int32:3",
+        "int32:4",
+        "int32:5",
+        "int32:6"
+      ],
+      "native_sha256": "c230dfc027f94a0742de61d8140f7739216a25ea78634e7da7a943d76627947a",
+      "mongo_sha256": "c230dfc027f94a0742de61d8140f7739216a25ea78634e7da7a943d76627947a",
+      "status": "pass"
+    },
+    {
+      "id": "missing.null-equality.direct",
+      "family": "missing-null",
+      "expected_relation": "different",
+      "observed_relation": "different",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 1,
+      "mongo_rows": 2,
+      "native_ids": [
+        "int32:2"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:2"
+      ],
+      "native_sha256": "e9fb6dda161b2aaee9cdeb2eec133411e7c207d9e78c1f7d9662acfabea662eb",
+      "mongo_sha256": "628197a25b3524f4a5d6b78cf575e169b4bcf3bb460a4898e7dd2e213ff96da1",
+      "status": "pass"
+    },
+    {
+      "id": "missing.null-equality.rewrite",
+      "family": "missing-null",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "adapter_rewrite",
+      "comparison": "ordered_ids",
+      "native_rows": 1,
+      "mongo_rows": 1,
+      "native_ids": [
+        "int32:2"
+      ],
+      "mongo_ids": [
+        "int32:2"
+      ],
+      "native_sha256": "e9fb6dda161b2aaee9cdeb2eec133411e7c207d9e78c1f7d9662acfabea662eb",
+      "mongo_sha256": "e9fb6dda161b2aaee9cdeb2eec133411e7c207d9e78c1f7d9662acfabea662eb",
+      "status": "pass"
+    },
+    {
+      "id": "numeric.cross-width-equality.direct",
+      "family": "numeric",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 4,
+      "mongo_rows": 4,
+      "native_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:3",
+        "int32:4"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:3",
+        "int32:4"
+      ],
+      "native_sha256": "9953ab47aa6a9bd75082b73465c8133c912a5334fcbfeacc27f42604d9fc2a1b",
+      "mongo_sha256": "9953ab47aa6a9bd75082b73465c8133c912a5334fcbfeacc27f42604d9fc2a1b",
+      "status": "pass"
+    },
+    {
+      "id": "object.field-order-equality.direct",
+      "family": "object",
+      "expected_relation": "different",
+      "observed_relation": "different",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 3,
+      "mongo_rows": 2,
+      "native_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:5"
+      ],
+      "native_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "mongo_sha256": "cdb1dadafcd1e55c72fc09d3cd47c7c8f84a4e65ae0c3a0009232d13ef8ef6f8",
+      "status": "pass"
+    },
+    {
+      "id": "path.nested-range.direct",
+      "family": "path",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 3,
+      "mongo_rows": 3,
+      "native_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:2",
+        "int32:5"
+      ],
+      "native_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "mongo_sha256": "48f4359247c98a892c5096e89511074c499593d3d667bbf47c53c9d89457bb97",
+      "status": "pass"
+    },
+    {
+      "id": "projection.exclude-id.direct",
+      "family": "projection",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_rows",
+      "native_rows": 6,
+      "mongo_rows": 6,
+      "native_ids": [],
+      "mongo_ids": [],
+      "native_sha256": "a6d5d4db23a4bb1c28740ec5abf021c37418d0618f2639debf4c4f4010fc563c",
+      "mongo_sha256": "a6d5d4db23a4bb1c28740ec5abf021c37418d0618f2639debf4c4f4010fc563c",
+      "status": "pass"
+    },
+    {
+      "id": "sort.explicit-stable.direct",
+      "family": "ordering",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 6,
+      "mongo_rows": 6,
+      "native_ids": [
+        "int32:2",
+        "int32:4",
+        "int32:5",
+        "int32:6",
+        "int32:1",
+        "int32:3"
+      ],
+      "mongo_ids": [
+        "int32:2",
+        "int32:4",
+        "int32:5",
+        "int32:6",
+        "int32:1",
+        "int32:3"
+      ],
+      "native_sha256": "8fbce8aa01f6e3ed049a8fd790aacdd6d6d7c8b0c6b1672523e6c0a65c97a20c",
+      "mongo_sha256": "8fbce8aa01f6e3ed049a8fd790aacdd6d6d7c8b0c6b1672523e6c0a65c97a20c",
+      "status": "pass"
+    },
+    {
+      "id": "string.binary-equality.direct",
+      "family": "string",
+      "expected_relation": "exact",
+      "observed_relation": "exact",
+      "translation": "direct",
+      "comparison": "ordered_ids",
+      "native_rows": 2,
+      "mongo_rows": 2,
+      "native_ids": [
+        "int32:1",
+        "int32:5"
+      ],
+      "mongo_ids": [
+        "int32:1",
+        "int32:5"
+      ],
+      "native_sha256": "cdb1dadafcd1e55c72fc09d3cd47c7c8f84a4e65ae0c3a0009232d13ef8ef6f8",
+      "mongo_sha256": "cdb1dadafcd1e55c72fc09d3cd47c7c8f84a4e65ae0c3a0009232d13ef8ef6f8",
+      "status": "pass"
+    }
+  ],
+  "verdict": "pass"
+}

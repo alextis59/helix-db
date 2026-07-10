@@ -105,6 +105,6 @@ Draft 2020-12 validation is additionally required for every case and the manifes
 - These are semantic fixtures, not HDoc/protocol/WAL/backup byte fixtures.
 - Compact boundaries do not replace real allocation/decompression/stream/atomicity tests.
 - `fixture.raise-error` does not replace real authorization, GPU loss, corruption, durability, or recovery fault injection.
-- The initial MongoDB differential subset/report is `P01-021`; native/upstream differences remain explicit.
+- The [`P01-021` initial MongoDB differential harness](../../differential/mongodb/README.md) binds this manifest and oracle report, retains all upstream rows, and passes 16/16 declared relations: 12 exact and four deliberate differences, with zero skips.
 - The published semantic/compatibility matrix is `P01-022`.
 - `G01` remains open until corpus, oracle, differential report, matrix, and independent review agree.

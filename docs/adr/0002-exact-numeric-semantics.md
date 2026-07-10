@@ -148,9 +148,9 @@ Planner/explain output records when a numeric predicate falls back because a bac
 
 - [x] Define the complete type, literal, promotion, overflow, comparison, conversion, and hashing contract.
 - [x] Define NaN, infinities, signed zero, canonical results, aggregation, and CPU/GPU tolerance.
-- [ ] Commit language-neutral boundary and pairwise fixtures under `P01-019`.
-- [ ] Make the reference interpreter pass every numeric fixture under `P01-020`.
-- [ ] Differential-test the declared MongoDB subset under `P01-021`.
+- [x] Commit language-neutral boundary and pairwise fixtures under `P01-019`.
+- [x] Make the reference interpreter pass every numeric fixture under `P01-020`.
+- [x] Differential-test the declared initial MongoDB subset under `P01-021`.
 - [ ] Prove HDoc/SDK/protocol lossless round trips in their governing phases.
 - [ ] Prove index, grouping, CPU/optimized, and GPU-fallback equivalence.
 - [ ] Complete independent semantic review at `G01`.

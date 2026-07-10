@@ -1,0 +1,65 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:helix-db:schema:mongodb-upstream-observations:1",
+  "title": "HelixDB MongoDB upstream observations v1",
+  "type": "object",
+  "required": ["observations_schema", "profile", "cases_source_sha256", "client", "upstream", "cases"],
+  "properties": {
+    "observations_schema": { "const": "helix.mongodb-upstream-observations/1" },
+    "profile": { "const": "mongodb-6.0.5-initial-v1" },
+    "cases_source_sha256": { "$ref": "#/$defs/sha256" },
+    "client": { "$ref": "#/$defs/client" },
+    "upstream": { "$ref": "#/$defs/upstream" },
+    "cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "rows"],
+        "properties": {
+          "id": { "$ref": "#/$defs/stable_id" },
+          "rows": { "type": "array", "items": { "type": "object" } }
+        },
+        "additionalProperties": false
+      }
+    }
+  },
+  "$defs": {
+    "stable_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,126}[a-z0-9]$" },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "client": {
+      "type": "object",
+      "required": ["product", "version"],
+      "properties": {
+        "product": { "const": "MongoDB Shell" },
+        "version": { "const": "1.8.0" }
+      },
+      "additionalProperties": false
+    },
+    "upstream": {
+      "type": "object",
+      "required": [
+        "product",
+        "version",
+        "git_version",
+        "feature_compatibility_version",
+        "max_wire_version",
+        "modules",
+        "image",
+        "image_id"
+      ],
+      "properties": {
+        "product": { "const": "MongoDB Community Server" },
+        "version": { "const": "6.0.5" },
+        "git_version": { "const": "c9a99c120371d4d4c52cbb15dac34a36ce8d3b1d" },
+        "feature_compatibility_version": { "const": "6.0" },
+        "max_wire_version": { "const": 17 },
+        "modules": { "type": "array", "maxItems": 0 },
+        "image": { "const": "mongo@sha256:928347070dc089a596f869a22a4204c0feace3eb03470a6a2de6814f11fb7309" },
+        "image_id": { "const": "sha256:8b33e239cde686e9378f9d8941eafa167fdf73527e9e006ab1fe9174c9622797" }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

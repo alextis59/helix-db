@@ -31,7 +31,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `INV-007` | Persistent formats, commands, semantics, and protocols are versioned. | `P01-018`–`P01-020`, `P03-001`–`P03-007`, `P15-013`–`P15-017`, `P17-002`, `P24-002` | Golden versions, unknown-version rejection, migrations, rolling upgrades, `G15`, `G24` | In progress |
 | `INV-008` | v1 is single-node; distribution is a later gated capability. | `P16-*`, `P17-*`, `P18-*`, `P19-*` | v1 unsupported-feature tests, published claim review, distributed gate evidence, `G16`–`G19` | Planned |
 | `INV-009` | Every consistency/durability promise has a test oracle and failure gate. | `P06-*`, `P17-*`, `P19-*`, `P24-005`–`P24-006` | MVCC model histories, crash matrix, consensus simulation, Jepsen histories, `G06`, `G17`, `G19` | Planned |
-| `INV-010` | Compatibility is limited to an explicit tested subset. | `P01-021`–`P01-022`, `P07-022`, `P22-*`, `P24-003`, `P24-012` | Executable matrices, differential reports, unsupported errors, claim audit, `G22`, `G24` | Planned |
+| `INV-010` | Compatibility is limited to an explicit tested subset. | `P01-021`–`P01-022`, `P07-022`, `P22-*`, `P24-003`, `P24-012` | Initial MongoDB 6.0.5 differential report, executable matrices, unsupported errors, claim audit, `G22`, `G24` | In progress |
 
 ## Platform and portable core
 
@@ -49,7 +49,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | Requirement | Summary | Implementation tasks | Planned tests and evidence | Status |
 | --- | --- | --- | --- | --- |
 | `DATA-001` | Every document has `_id` and a canonical typed HDoc representation. | `P01-001`–`P01-011`, `P01-018`–`P01-020`, `P03-*`, `P05-013`, `P08-002` | Semantic fixtures, golden HDoc vectors, ID collision tests, `G01`, `G03`, `G08` | In progress |
-| `DATA-002` | Missing and null stay distinct through every storage and query layer. | `P01-002`, `P01-018`–`P01-020`, `P03-*`, `P07-*`, `P08-*`, `P09-*`, `P10-*` | Cross-layer semantic corpus, index/row/column/GPU differential hashes, `G07`–`G10` | In progress |
+| `DATA-002` | Missing and null stay distinct through every storage and query layer. | `P01-002`, `P01-018`–`P01-021`, `P03-*`, `P07-*`, `P08-*`, `P09-*`, `P10-*` | Semantic corpus, initial MongoDB missing/null differential, index/row/column/GPU hashes, `G07`–`G10` | In progress |
 | `DATA-003` | Path-dictionary and persistent-format changes are versioned and recoverable. | `P03-013`–`P03-019`, `P15-013`–`P15-017`, `P24-002`, `P24-009` | Dictionary golden versions, migration interruption, rebuild/restore proof, `G03`, `G15` | Planned |
 | `QUERY-001` | One normalized semantic definition is shared by APIs and backends. | `P01-*`, `P07-*`, `P09-*`, `P10-*`, `P12-012`, `P22-*` | Semantic oracle, protocol/SDK/backend differential suites, `G07`, `G10`, `G12`, `G22` | In progress |
 | `QUERY-002` | Unsupported behavior fails explicitly and is never silently reinterpreted. | `P01-011`, `P01-016`, `P01-018`–`P01-020`, `P07-002`, `P07-018`, `P12-009`, `P22-006`, `P22-012`, `P24-012` | Unsupported matrix, typed-error fixtures, adapter protocol tests, claim audit | In progress |
@@ -90,7 +90,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `OPS-002` | Restore procedures are tested from real produced artifacts. | `P15-001`–`P15-019`, `P16-009`, `P23-011`, `P24-008` | Clean full/incremental/PITR/browser restores, DR drills, artifact hashes, `G15`, `G24` | Planned |
 | `QUAL-001` | CPU/GPU equivalence, crash recovery, index consistency, and backup/restore block release. | `P16-003`–`P16-015`, `P24-003`–`P24-009` | Full release reports and independent gate review, `G16`, `G24` | Planned |
 | `QUAL-002` | Distributed consistency requires fault injection and Jepsen-style validation. | `P17-016`–`P17-018`, `P18-019`–`P18-020`, `P19-013`–`P19-014`, `P24-006` | Simulation, process chaos, movement histories, Jepsen reports, `G17`–`G19` | Planned |
-| `COMPAT-001` | Every compatibility claim is versioned and backed by executable tests. | `P01-021`–`P01-022`, `P07-022`, `P22-*`, `P24-003`, `P24-012` | MongoDB/Redis matrices, differential/protocol captures, migration hashes, claim review, `G22` | Planned |
+| `COMPAT-001` | Every compatibility claim is versioned and backed by executable tests. | `P01-021`–`P01-022`, `P07-022`, `P22-*`, `P24-003`, `P24-012` | Initial versioned MongoDB differential capture, MongoDB/Redis matrices, protocol captures, migration hashes, claim review, `G22` | In progress |
 
 ## Update procedure
 

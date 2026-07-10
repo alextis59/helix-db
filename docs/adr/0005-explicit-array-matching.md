@@ -123,12 +123,14 @@ Changing flattening, scalar equality, `$all`, `$size`, `$elemMatch`, or numeric-
 ## Validation plan
 
 - [x] Define equality, order, hash, path fan-out, candidate reduction, `$all`, `$size`, `$elemMatch`, nested boundaries, and compatibility behavior.
-- [ ] Commit executable array/path/operator fixtures under `P01-019`.
-- [ ] Make the reference interpreter pass them under `P01-020`.
+- [x] Commit executable array/path/operator fixtures under `P01-019`.
+- [x] Make the reference interpreter pass them under `P01-020`.
 - [ ] Differential-test every claimed MongoDB array form under `P01-021`/`P22-*`.
 - [ ] Prove HDoc/SDK/protocol/backup round trips.
 - [ ] Prove multikey index/sidecar/GPU candidate provenance and CPU verification.
 - [ ] Complete independent array review at `G01`.
+
+The [initial `P01-021` profile](../../differential/mongodb/README.md) covers direct `$all`, scalar `$elemMatch`, `$size`, scalar-on-array equality, whole-array equality with nested arrays, and one guarded rewrite. The broader checkbox remains open because generated shapes, implemented-engine behavior, indexes, errors, and every future adapter claim remain assigned to `P07-022` and `P22-*`.
 
 ## Implementation impact
 
