@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-005",
+  "requirements": ["QUERY-001", "CORE-002", "CACHE-002"],
+  "commit": "0c1db64b8a1606d34e25fe1884b3a8e17089c9c7",
+  "recorded_at": "2026-07-10T17:44:01Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 0c1db64^ 0c1db64", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 0c1db64", "exit_code": 0 },
+    { "command": "sha256sum of four committed artifacts", "exit_code": 0 },
+    { "command": "GNU date endpoint epoch-second checks recorded in README.md", "exit_code": 0 },
+    { "command": "node timestamp/date bound check recorded in README.md", "exit_code": 0 },
+    { "command": "node temporal coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/temporal-semantics.md", "media_type": "text/markdown", "bytes": 15790, "sha256": "1c8e9d6ea921206297b1f3d6f3609734201ff9ea8c3d5ea311c105fc66bb004b" },
+    { "path": "docs/adr/0003-utc-microseconds-and-injected-clocks.md", "media_type": "text/markdown", "bytes": 8008, "sha256": "3463721a79d1ae362dd2cebbf3c39e7be71676a5e0b8d7cf4e75a3e9191948f6" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 64198, "sha256": "fc0a96d638ca7c312d7f00df9fc4e91cc611dd3e6d9de45e500862ddd57d8210" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 2947, "sha256": "a802d6045289c320cfdaff32580c8d4eb74cc38815ae23fbc0725faec7dc7940" }
+  ],
+  "verdict": "pass"
+}

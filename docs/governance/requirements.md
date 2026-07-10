@@ -41,7 +41,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `PLAT-002` | Browser mode works without WebGPU and falls back from OPFS to IndexedDB. | `P11-005`–`P11-010`, `P11-013`–`P11-018`, `P24-003`–`P24-004` | OPFS/IndexedDB conformance, GPU-disabled browser proof, lifecycle/quota reports, `G11` | Planned |
 | `PLAT-003` | Native hosts expose wgpu or Dawn behind the common abstraction. | `P10-001`–`P10-005`, `P10-024`–`P10-025` | GPU ADR, native capability profile, native/browser differential and benchmark reports, `G10` | Planned |
 | `CORE-001` | The Wasm core owns deterministic codecs, semantics, MVCC, planning, metadata, and command application. | `P03-*`, `P04-001`–`P04-009`, `P06-*`, `P07-*`, `P17-004` | Core dependency audit, deterministic replay, cross-host conformance, `G04`, `G07`, `G17` | Planned |
-| `CORE-002` | External resources reach the core only through explicit host interfaces. | `P04-002`–`P04-014`, `P13-013` | Capability-denial tests, mock-host failure matrix, interface audit, `G04`, `G13` | Planned |
+| `CORE-002` | External resources reach the core only through explicit host interfaces. | `P01-005`, `P04-002`–`P04-014`, `P13-013` | Capability-denial tests, mock-host failure matrix, interface audit, `G04`, `G13` | In progress |
 | `CORE-003` | Host optimization cannot change persistent or query semantics. | `P04-006`–`P04-017`, `P11-013`, `P12-012`, `P24-003` | Copy/handle equivalence, native/browser/server conformance, shared result hashes, `G04`, `G11`, `G12` | Planned |
 
 ## Data, query, and storage
@@ -76,7 +76,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `DIST-002` | Splits and moves preserve acknowledged writes, snapshots, and router retry safety. | `P18-005`, `P18-011`–`P18-020`, `P24-006` | Epoch assertions, concurrent split/move histories, `EXP-015`, `G18` | Planned |
 | `DIST-003` | Distributed plans push work down and merge global sort/limit correctly. | `P18-006`–`P18-010`, `P24-003`, `P24-006` | Single-node/distributed differential results, partial aggregation and explain fixtures, `G18` | Planned |
 | `CACHE-001` | Only explicitly evictable storage classes can be evicted. | `P20-001`–`P20-009`, `P24-007` | Storage-class transition corpus, durable-data eviction invariant, `G20` | Planned |
-| `CACHE-002` | TTL is consistent across reads, indexes, compaction, replication, backup, and restore. | `P06-014`, `P08-006`, `P20-003`–`P20-013`, `P24-007`–`P24-008` | TTL model histories across clocks/restart/restore/replication, `G20`, `G24` | Planned |
+| `CACHE-002` | TTL is consistent across reads, indexes, compaction, replication, backup, and restore. | `P01-005`, `P06-014`, `P08-006`, `P20-003`–`P20-013`, `P24-007`–`P24-008` | TTL model histories across clocks/restart/restore/replication, `G20`, `G24` | In progress |
 | `SYNC-001` | Local sync persists resumable progress and requires an explicit conflict policy for offline writes. | `P21-001`–`P21-015`, `P24-007` | Bootstrap/resume histories, conflict corpus, offline workflow, `G21` | Planned |
 | `SYNC-002` | Change-stream and offline-queue replay are duplicate-safe. | `P21-002`, `P21-005`–`P21-011`, `P21-018`–`P21-019` | Overlap/crash/replay final-state hashes, `EXP-016`, `G21` | Planned |
 
