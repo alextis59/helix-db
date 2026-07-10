@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-007",
+  "requirements": ["DATA-001", "QUERY-001"],
+  "commit": "c1238a280d7f23291b9728aa5c628aa6de39a042",
+  "recorded_at": "2026-07-10T18:33:33Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check c1238a2^ c1238a2", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r c1238a2", "exit_code": 0 },
+    { "command": "sha256sum of two committed artifacts", "exit_code": 0 },
+    { "command": "node object semantic coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node canonical mapping and decoded duplicate check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/object-semantics.md", "media_type": "text/markdown", "bytes": 13910, "sha256": "6ddcdfa9390b8c135d9fce233ac5ed82355ca89c0ca27a0ec1f49417c8bacdd7" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 64962, "sha256": "5e808d9f4243f46c45960b3a0ee7d8fb680506efa6e650a5fe5927da53d55a5f" }
+  ],
+  "verdict": "pass"
+}
