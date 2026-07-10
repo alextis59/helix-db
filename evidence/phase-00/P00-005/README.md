@@ -65,10 +65,55 @@ Relevant results included:
 
 The exact product name and natural registry coordinates are not clear for public use. ADR 0001 recommends selecting a distinct name before implementation bootstrap freezes identifiers.
 
+## Replacement candidate screen
+
+Recorded on 2026-07-10. HTTP `404` means the exact registry/API object was not found at the time of the request; it does not reserve the name.
+
+For each candidate slug, the following official endpoints were queried:
+
+- npm exact package and `@slug/core` package metadata.
+- crates.io exact crate API with an identifying user agent.
+- GitHub repository search filtered to an exact repository name.
+- Docker Hub search filtered to an exact repository suffix.
+- GitHub exact user/organization identity for the compact product spelling.
+- Verisign `.com` and Google Registry `.dev` RDAP.
+- Exact quoted DuckDuckGo HTML search for general web results.
+
+Exact-slug registry results:
+
+```text
+nexilis-db npm=404 scope_core=404 crates=404 github_exact=0 docker_exact=0
+nodalys-db npm=404 scope_core=404 crates=404 github_exact=0 docker_exact=0
+virelia-db npm=404 scope_core=404 crates=404 github_exact=0 docker_exact=0
+```
+
+Compact product identity/domain results:
+
+```text
+nexilisdb github_user=404 docker_user=404 com_rdap=404 dev_rdap=404
+nodalysdb github_user=404 docker_user=404 com_rdap=404 dev_rdap=404
+vireliadb github_user=404 docker_user=404 com_rdap=404 dev_rdap=404
+```
+
+Exact quoted web searches returned no result for `NexilisDB`, `NodalysDB`, or `VireliaDB`, including the recorded trademark/software/database query variants.
+
+### Recommendation
+
+**NexilisDB** is the recommended technical candidate, using the canonical slug `nexilis-db`. It is meaningful for a connected local/distributed database, pronounceable, and passed the exact screen above.
+
+The shorter base name `Nexilis` is already used in some package/domain/GitHub contexts. The recommendation therefore depends on consistently using **NexilisDB**, `nexilis-db`, and a controlled scope rather than claiming the bare `nexilis` ecosystem identity.
+
+### Limitations
+
+- Registry/domain absence is time-sensitive and does not reserve an identifier.
+- Search results are not a trademark opinion.
+- The `.com`/`.dev` RDAP checks do not cover every jurisdiction or domain.
+- npm scope creation, GitHub organization creation, and container publication require account-level actions not authorized by the current task.
+- Checks must be repeated immediately before claiming public identities.
+
 ## Remaining evidence
 
 - Product-owner direction.
-- Candidate shortlist.
-- Candidate GitHub/crates.io/npm/container/web checks.
-- Reasonable trademark/domain review.
+- Final selection from the screened shortlist or another directed name.
+- Repeat checks and appropriate legal/trademark review for the selected name before release.
 - Final canonical identifier matrix.

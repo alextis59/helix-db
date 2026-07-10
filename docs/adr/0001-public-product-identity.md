@@ -86,11 +86,27 @@ Disadvantages:
 - Binaries, telemetry, support, and natural-language claims still collide.
 - A suffix selected only for registry availability may be weak or inconsistent across ecosystems.
 
+## Candidate screening
+
+The first broad candidate list was screened for exact GitHub, npm, crates.io, Docker Hub, `.com`, `.dev`, and web-result collisions. Several names were removed because the base name, GitHub identity, or domain was already actively used.
+
+Three exact `*DB` names survived the initial technical screen:
+
+| Candidate | Fit | Exact registry/web screen | Caveat |
+| --- | --- | --- | --- |
+| **NexilisDB** | Suggests connected local, edge, and distributed operation; pronounceable and technically neutral | `nexilis-db` was absent from npm, the tested npm scope package, crates.io, exact GitHub repository names, and exact Docker results; `nexilisdb.com`/`.dev` returned no RDAP registration; exact web search returned no result | The shorter base name `Nexilis` is used elsewhere, so public identity must consistently include `DB` and the `nexilis-db` slug |
+| **NodalysDB** | Suggests nodes and analysis | Same exact-slug registry result and no exact web result in the recorded screen | Sounds close to “node analysis” and has weaker pronunciation/brand clarity |
+| **VireliaDB** | Distinctive and pronounceable | Same exact-slug registry result and no exact web result in the recorded screen | Has little direct connection to the architecture and would need more brand explanation |
+
+The technical recommendation is **NexilisDB**. It best expresses the shared engine spanning connected local and distributed modes while remaining distinct from the existing HelixDB project in the exact searches performed.
+
+This is a preliminary availability screen, not legal trademark clearance or a reservation. The chosen identifiers must be claimed promptly and reviewed again before public release.
+
 ## Proposed decision
 
-Select Option B: choose a distinct public product name before `G00` closes.
+Select Option B: choose a distinct public product name before `G00` closes. The recommended replacement is **NexilisDB**.
 
-The exact replacement name remains pending explicit product-owner direction. Until it is selected:
+Final acceptance remains pending explicit product-owner direction. Until it is accepted:
 
 - “HelixDB” is a working codename only.
 - No public package, crate, binary, container, protocol, telemetry, operator, or format identifier is frozen.
@@ -98,6 +114,23 @@ The exact replacement name remains pending explicit product-owner direction. Unt
 - Candidate names must undergo GitHub, crates.io, npm, container registry, general web, and reasonable trademark/domain due diligence.
 
 The ADR becomes `Accepted` only after the final name and canonical identifiers are recorded.
+
+If NexilisDB is accepted, the proposed identifier matrix is:
+
+| Surface | Proposed identity |
+| --- | --- |
+| Product | `NexilisDB` |
+| Repository slug | `nexilis-db` |
+| Rust crate prefix | `nexilis-` with `nexilis-db` reserved for the umbrella/client identity |
+| npm scope | `@nexilis-db` with packages such as `core`, `browser`, and `client` |
+| CLI / daemon | `nexilis` / `nexilisd` |
+| Initial container | `ghcr.io/alextis59/nexilis-db` until an organization is explicitly created |
+| Protocol/profile prefix | `nexilis` with explicit version, for example `nexilis.v1` |
+| Environment prefix | `NEXILIS_` |
+| Telemetry namespace | `nexilis.*` |
+| Local configuration/data directory | `.nexilis` where platform conventions permit |
+| Kubernetes API group | Deferred until a controlled domain is selected |
+| Canonical document format | Keep `HDoc`, defined as **Hybrid Document**, so durable format identity is not coupled to a product trademark |
 
 ## Consequences
 
@@ -140,7 +173,8 @@ A distinct identity reduces dependency-confusion and wrong-package installation 
 - [x] Query crates.io for `helix-db`.
 - [x] Query npm for `helix-db` and `helixdb` results.
 - [ ] Receive product-owner direction to rename or knowingly retain the conflict.
-- [ ] Perform the same registry/web/legal due diligence for the selected candidate.
+- [x] Screen the NexilisDB, NodalysDB, and VireliaDB exact slugs across the planned registries, domains, and general web results.
+- [ ] Repeat the selected candidate checks immediately before claiming identifiers and obtain appropriate trademark/legal review before release.
 - [ ] Update every canonical identifier in one reviewed change.
 - [ ] Re-run repository link, checklist, and traceability validation.
 

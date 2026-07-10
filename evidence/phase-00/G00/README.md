@@ -66,7 +66,7 @@ Result:
 
 The working name conflicts with an established Rust database and occupied crates.io/npm coordinates. The project owner must either:
 
-1. Select a distinct public product name and canonical identifier matrix, then accept ADR 0001; or
+1. Accept the screened **NexilisDB** recommendation (or direct another distinct name), finalize its canonical identifier matrix, then accept ADR 0001; or
 2. Explicitly direct the project to retain HelixDB despite the documented conflict and accept the consequences in ADR 0001.
 
 No later phase begins until that decision is recorded, `P00-005` is checked with evidence, and this gate receives its final review.
