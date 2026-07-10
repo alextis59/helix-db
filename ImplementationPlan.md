@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 31
-- Open checklist items: 491
+- Completed checklist items: 32
+- Open checklist items: 490
 - Total checklist items: 522
 - Current phase: Phase 1 — Semantic contract and compatibility corpus
 - Next release gate: `G01` (`G02` may proceed in parallel)
@@ -163,7 +163,7 @@ Dependencies: `G00`.
 - [x] **P01-011** Set document-size, nesting-depth, field-count, field-name, path-length, array-length, vector-dimension, and command-size limits.
 - [x] **P01-012** Specify v1 comparison, logical, element/type, array, string, cache/time, and vector operator truth tables.
 - [x] **P01-013** Specify insert, replace, update, upsert, delete, projection, sort, limit, skip, and cursor semantics.
-- [ ] **P01-014** Specify `$set`, `$unset`, `$inc`, array mutation, conflict, path-creation, and atomicity behavior for supported updates.
+- [x] **P01-014** Specify `$set`, `$unset`, `$inc`, array mutation, conflict, path-creation, and atomicity behavior for supported updates.
 - [ ] **P01-015** Specify v1 aggregation behavior for `$match`, `$project`, `$sort`, `$limit`, `$skip`, `$count`, `$group`, and `$unwind`.
 - [ ] **P01-016** Define stable error categories for parse, validation, type, conflict, uniqueness, authorization, capability, quota, deadline, durability, and internal failures.
 - [ ] **P01-017** Define deterministic result ordering where no explicit sort is supplied and document when order is intentionally unspecified.
