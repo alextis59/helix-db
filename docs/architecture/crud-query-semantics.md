@@ -6,9 +6,9 @@
 - Plan item: `P01-013`
 - Governing requirements: `DATA-001`, `DATA-002`, `QUERY-001`, `STORE-001`
 - Governing gate: `G01`
-- Normative dependencies: [operator truth tables](operator-semantics.md), [identifier semantics](identifier-semantics.md), [limits-v1](limits-v1.md), and [temporal semantics](temporal-semantics.md)
+- Normative dependencies: [operator truth tables](operator-semantics.md), [identifier semantics](identifier-semantics.md), [default ordering](default-ordering-semantics.md), [limits-v1](limits-v1.md), and [temporal semantics](temporal-semantics.md)
 
-This document defines native insert, replace, update, upsert, delete, find/count, projection, sort, skip, limit, and cursor behavior. Update-operator path/mutation details are refined by `P01-014`; aggregation stages by `P01-015`; stable public errors/order by `P01-016`/`P01-017`.
+This document defines native insert, replace, update, upsert, delete, find/count, projection, sort, skip, limit, and cursor behavior. Update-operator path/mutation details are refined by `P01-014`; aggregation stages by `P01-015`; stable public errors by `P01-016`; and default/tie/provenance ordering by [the `default_order_v1` contract](default-ordering-semantics.md).
 
 ## Common command lifecycle
 
@@ -42,7 +42,7 @@ The command's target/input order is still stable for ID generation, deterministi
 
 - One command evaluates filters against one pinned read snapshot and expiry cutoff.
 - A multi-write determines its complete target `_id` set from that snapshot before applying mutations (no Halloween/self-rematch effect).
-- `updateOne`, `replaceOne`, and `deleteOne` choose the first matching document in explicit sort order, or the deterministic default order from `P01-017`.
+- `updateOne`, `replaceOne`, and `deleteOne` choose the first matching document in explicit sort order, or ascending semantic `_id` order from `default_order_v1`.
 - Multi-write execution/lock acquisition uses ascending `_id` order independent of scan/backend completion to avoid nondeterministic conflicts.
 - If a multi-write would target more than 1,000 documents, it returns the stable batch-target-limit error before mutation; callers paginate explicit atomic batches or use a later bulk workflow.
 - Concurrent modification after selection produces the transaction/write-conflict behavior from `P06-*`; a bounded internal retry re-evaluates the whole command or returns a retryable conflict without partial publication.
@@ -232,7 +232,7 @@ For each row:
 
 After all explicit keys tie, append implicit `_id` ascending unless `_id` is already an explicit key. This guarantees a total stable order because `_id` is unique. Sort may use an index/GPU top-k only when it reproduces these keys/ties exactly or returns verified candidates.
 
-Without explicit sort or vector ranking, `P01-017` defines the deterministic default order; storage/worker/GPU completion order is never returned accidentally.
+Without explicit sort or vector ranking, [`default_order_v1`](default-ordering-semantics.md) uses ascending semantic `_id`; storage/worker/GPU completion order is never returned accidentally.
 
 ## Skip and limit
 

@@ -56,7 +56,7 @@ Different logical type classes never compare equal, even when text/bytes resembl
 
 ## Total `_id` order
 
-Primary key scans and deterministic fallback ordering use this ascending type-class order:
+Primary key scans and [`default_order_v1`](default-ordering-semantics.md) use this ascending type-class order:
 
 ```text
 numeric int32/int64

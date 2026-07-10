@@ -6,7 +6,7 @@
 - Plan item: `P01-015`
 - Governing requirements: `DATA-002`, `QUERY-001`, `INV-002`
 - Governing gate: `G01`
-- Normative dependencies: [operator truth tables](operator-semantics.md), [CRUD/query semantics](crud-query-semantics.md), and [limits-v1](limits-v1.md)
+- Normative dependencies: [operator truth tables](operator-semantics.md), [CRUD/query semantics](crud-query-semantics.md), [default ordering](default-ordering-semantics.md), and [limits-v1](limits-v1.md)
 
 This document defines sequential behavior for `$match`, `$project`, `$sort`, `$limit`, `$skip`, `$count`, `$group`, and `$unwind`, plus the minimal versioned expression/accumulator subset required by those stages. Pipeline documents are transient typed objects and need not contain a stored-document `_id`.
 
@@ -29,12 +29,12 @@ Stage order is semantic. A planner may push/reorder/fuse work only with proof th
 
 Every pipeline row carries internal `stable_ordinal` metadata not exposed as a document field:
 
-- Source rows start with their deterministic collection/default-order key (ultimately `_id`).
+- Source rows start with [`default_order_v1`](default-ordering-semantics.md): ascending semantic `_id` encoded as a typed source ordinal.
 - Projection/match/skip/limit preserve it.
 - Unwind appends the immediate element index to the ordinal tuple.
 - Group creates an ordinal from the canonical group-key order.
 - Count creates a singleton ordinal.
-- Sort uses it as the final tie-break after explicit keys.
+- Sort uses the prior ordinal as the final tie-break after explicit keys, then creates a new structured sort ordinal containing keys/directions and prior provenance.
 
 Removing/overwriting visible `_id` does not remove the hidden ordinal. This prevents worker/hash/GPU completion order from leaking into results.
 
@@ -175,6 +175,7 @@ Grammar:
 - Semantic value equality/hash defines membership: numeric widths/zeros/NaNs, object mapping order, array/vector boundaries, strings, identifiers, and types follow accepted contracts.
 - Missing and explicit null are separate keys.
 - For a Missing key, output omits `_id`; for explicit null it emits `_id: null`.
+- When semantically equal keys have different exact type/payload/presentation (for example equal integer widths, zero/NaN payloads, or object field order), output `_id` preserves the exact key from the first contributing row by current hidden ordinal. Canonical group order/ordinal uses the semantic equality class and does not retype/reorder that representative.
 - Empty input produces zero group documents.
 - Groups emit in ascending canonical group-key total order, Missing then null then other ranks, independent of hash/parallel completion.
 

@@ -725,6 +725,16 @@ Every error carries a stable phase, bounded redacted details, and one of `not_ap
 
 Primary-error selection MUST be deterministic across CPU/GPU, optimized/reference, Wasm/native, browser/server, worker schedules, and adapters. Native category/code/phase/outcome/retry metadata is authoritative; HTTP, gRPC, SDK exceptions, and compatibility error numbers are mappings and MUST preserve it where their transport permits.
 
+### 8.6 Default result ordering
+
+Native v1 ordering is defined by the [`default_order_v1` contract](docs/architecture/default-ordering-semantics.md), adopted by [ADR 0010](docs/adr/0010-use-id-order-as-the-native-default.md). A collection-derived stream with no explicit sort or intrinsic rank MUST use ascending semantic `_id` order, never physical/insertion/index/worker/GPU arrival order.
+
+Explicit CRUD sort appends ascending `_id` after declared ties unless `_id` is already explicit. Exact vector ranking uses metric score then ascending `_id`. Aggregation preserves typed hidden provenance through stable stages, appends array indices for unwind, resets groups to canonical key order, and uses the ordinal as the final explicit-sort tie.
+
+One-target writes select the first match under explicit/default order; multi-target work enumerates ascending `_id`. Input-correlated batch results such as `insertMany` IDs remain in command input order instead. Cursor batches persist the complete ordering tuple/profile and MUST concatenate to the one-shot pinned-snapshot sequence.
+
+Supported v1 query results are never silently unordered. Only physical work, independent-command completion, background progress, and operational telemetry interleaving are intentionally unspecified; none may leak into a returned document stream.
+
 ---
 
 ## 9. Query execution pipeline
