@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-003",
+  "requirements": ["DATA-001", "QUERY-001", "CORE-003"],
+  "commit": "a6796a3ce48df8808617a5f311f06ea26cc4c0e2",
+  "recorded_at": "2026-07-10T17:31:48Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check a6796a3^ a6796a3", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r a6796a3", "exit_code": 0 },
+    { "command": "sha256sum of four committed artifacts", "exit_code": 0 },
+    { "command": "node numeric semantic coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node integer and 2^53 boundary check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/numeric-semantics.md", "media_type": "text/markdown", "bytes": 12835, "sha256": "f5e31e9aa08c1a9b1fc9c30a60c8e31a8a58a8b4f04dec2fea1c4daf9605411b" },
+    { "path": "docs/adr/0002-exact-numeric-semantics.md", "media_type": "text/markdown", "bytes": 8298, "sha256": "5507be8c033c5ef8c913897b95ccd40f63fc87e3d53aab86346e82f9eb502de0" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 63627, "sha256": "93a58950d07607b12305bbc58cb7b52db4b12c4cff69f7978fe1d1ed3d4c98fb" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 2770, "sha256": "74842ee82dc94f90710bed326c0475ce016885db5bb5be139277f25aab8d4941" }
+  ],
+  "verdict": "pass"
+}
