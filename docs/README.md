@@ -1,0 +1,108 @@
+# Documentation Guide
+
+This directory is the entry point for HelixDB project documentation. The public product name is still governed by open checklist item `P00-005`; paths use the repository's working name until that decision is accepted.
+
+## Authority and provenance
+
+| Document | Role |
+| --- | --- |
+| [Specifications](../Specifications.md) | Normative product and technical contract |
+| [Implementation plan](../ImplementationPlan.md) | Progress authority and gate ledger |
+| [Study](../Study.md) | Feasibility analysis, risks, experiments, and recommendations |
+| [Source transcript](chatgpt-database-system-with-webgpu-transcript.md) | Archived provenance, not active instructions |
+| [Change control](governance/change-control.md) | Rules for changing normative behavior and contracts |
+| [ADR index](adr/README.md) | Material technical/product decisions and alternatives |
+| [Requirement ledger](governance/requirements.md) | Requirement-to-task/test/evidence traceability |
+| [Evidence guide](../evidence/README.md) | Durable task and gate proof conventions |
+
+When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
+
+## Documentation structure
+
+The repository uses the following structure as implementation lands:
+
+```text
+docs/
+  README.md
+  adr/                    architecture decision records
+  architecture/           component, data-flow, deployment, and dependency design
+  formats/                HDoc, WAL, MANIFEST, SST, VLOG, CSEG, IDX, backup, protocol formats
+  api/                    native API, SDK, embedded, server, and error contracts
+  operations/             configuration, admin, telemetry, backup, restore, upgrade, runbooks
+  security/               threat models, trust boundaries, controls, disclosure guidance
+  quality/                test strategy, conformance, benchmarks, compatibility, release gates
+  compatibility/          MongoDB-like/Redis-like matrices, migrations, known differences
+  releases/               version support, release notes, upgrade and rollback guidance
+  governance/             scope, ownership, change control, severity, evidence policy
+  chatgpt-...transcript.md source-session archive
+```
+
+Directories are created when their first substantive document is added. Placeholder files must not imply an unimplemented design is complete.
+
+## Required document metadata
+
+Normative, architectural, format, API, security, operational, compatibility, and release documents begin with enough metadata to establish:
+
+- Title.
+- Status: Draft, Proposed, Accepted/Approved, Deprecated, or Superseded.
+- Last-updated or effective date.
+- Owning role.
+- Applicable version, phase, task, or gate.
+- Superseding/superseded document where relevant.
+
+Generated reference documentation instead identifies its generator, source version, and reproduction command.
+
+## Content boundaries
+
+### Architecture
+
+Architecture documents explain component responsibilities, invariants, interfaces, dependencies, data flows, deployment modes, and failure boundaries. A material choice links to its accepted ADR.
+
+### Formats
+
+Every persistent or public format document includes:
+
+- Version and feature-negotiation rules.
+- Byte or field layout.
+- Canonicalization and validation.
+- Limits and malformed-input behavior.
+- Checksums/hashes and corruption handling.
+- Golden fixtures.
+- Reader/writer compatibility.
+- Migration, interruption, downgrade, and rollback behavior.
+
+### API and SDK
+
+API documentation defines request/response/error semantics, limits, sessions, concerns, cancellation, feature negotiation, streaming, and unsupported behavior. SDK docs link to shared conformance instead of redefining server semantics.
+
+### Operations
+
+Operational docs contain real commands, configuration precedence, safe defaults, expected outputs, health/metrics, capacity limits, backup/restore, upgrade/rollback, incident behavior, and validation steps.
+
+### Security
+
+Security docs identify assets, actors, trust boundaries, capabilities, threats, controls, residual risks, key/secrets behavior, audit events, and review status. Sensitive exploit evidence follows restricted retention policy.
+
+### Quality and compatibility
+
+Quality docs link claims to executable tests and evidence. Compatibility matrices name the exact adapter/upstream versions and label behavior exact, different, unsupported, or experimental.
+
+### Releases
+
+Release docs state supported platforms/versions, artifacts/digests, known issues, compatibility, migration, rollback boundary, security notices, and proof links.
+
+## Writing and linking rules
+
+- Use repository-relative Markdown links for repository documents.
+- Link to authoritative definitions instead of copying them into several files.
+- Use stable requirement, task, gate, experiment, ADR, format, protocol, and error IDs.
+- Label proposed behavior as proposed; do not write future design in the present tense as if implemented.
+- Include explicit unsupported and failure behavior.
+- Do not include secrets, private data, mutable artifact links as sole evidence, or unverified benchmark claims.
+- Keep examples executable or validate them through documentation tests once the toolchain exists.
+
+## Review and maintenance
+
+Documentation changes follow [CONTRIBUTING.md](../CONTRIBUTING.md) and the domain owners in [governance/ownership.md](governance/ownership.md). A behavior change updates its documentation, tests, traceability, and implementation-plan state in the same coherent step.
+
+Broken-link, generated-doc drift, example, and metadata checks will be added to CI under Phase 2. Until then, each documentation commit performs an explicit local link and whitespace check.
