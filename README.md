@@ -15,6 +15,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Rust workspace boundaries](docs/architecture/workspace-boundaries.md) — initial unpublished crate graph and dependency rules.
 - [Rust toolchain policy](docs/architecture/rust-toolchain-policy.md) — exact compiler/MSRV, components, formatter/linter, and Wasm target status.
 - [JavaScript/TypeScript toolchain policy](docs/architecture/javascript-toolchain-policy.md) — Node/npm window, lockfile, compiler, bundler, test runner, and browser harness.
+- [Repository layout](docs/architecture/repository-layout.md) — tracked source, conformance, benchmark, test, example, and evidence boundaries.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

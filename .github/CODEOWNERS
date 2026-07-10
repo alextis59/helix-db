@@ -8,6 +8,13 @@
 /docs/adr/ @alextis59
 /.github/ @alextis59
 /crates/ @alextis59
+/shaders/ @alextis59
+/packages/ @alextis59
+/conformance/ @alextis59
+/benchmarks/ @alextis59
+/tests/ @alextis59
+/examples/ @alextis59
+/evidence/releases/ @alextis59
 /Cargo.toml @alextis59
 /Cargo.lock @alextis59
 /rust-toolchain.toml @alextis59

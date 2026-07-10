@@ -20,6 +20,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Rust workspace boundaries](architecture/workspace-boundaries.md) | Initial unpublished crate graph, dependency direction, and boundary-only maturity contract |
 | [Rust toolchain policy](architecture/rust-toolchain-policy.md) | Exact Rust/MSRV pin, components, formatter/linter baseline, and Wasm target/promotion rules |
 | [JavaScript/TypeScript toolchain policy](architecture/javascript-toolchain-policy.md) | Node/npm support window, lockfile, compiler, bundler, test runner, and browser harness |
+| [Repository layout](architecture/repository-layout.md) | Tracked source, conformance, benchmark, test, example, and release-evidence boundaries |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 
