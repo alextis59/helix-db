@@ -54,7 +54,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `QUERY-001` | One normalized semantic definition is shared by APIs and backends. | `P01-*`, `P07-*`, `P09-*`, `P10-*`, `P12-012`, `P22-*` | Semantic oracle, protocol/SDK/backend differential suites, `G07`, `G10`, `G12`, `G22` | In progress |
 | `QUERY-002` | Unsupported behavior fails explicitly and is never silently reinterpreted. | `P01-011`, `P01-016`, `P07-002`, `P07-018`, `P12-009`, `P22-006`, `P22-012`, `P24-012` | Unsupported matrix, typed-error fixtures, adapter protocol tests, claim audit | In progress |
 | `QUERY-003` | `explain()` reports indexes, CPU/GPU stages, fallback, verification, and material statistics. | `P07-019`, `P08-010`, `P08-019`, `P09-017`, `P10-021`, `P14-008` | Versioned explain fixtures, planner reason tests, operator exercise, `G14` | Planned |
-| `STORE-001` | Acknowledged writes meet their selected failure/durability promise. | `P01-013`, `P05-005`, `P05-019`–`P05-023`, `P06-011`–`P06-017`, `P17-008`, `P24-005` | Fault-point matrix, recovered hashes, concern histories, `G05`, `G06`, `G17` | In progress |
+| `STORE-001` | Acknowledged writes meet their selected failure/durability promise. | `P01-013`, `P01-016`, `P05-005`, `P05-019`–`P05-023`, `P06-011`–`P06-017`, `P17-008`, `P24-005` | Fault-point matrix, recovered hashes, concern histories, `G05`, `G06`, `G17` | In progress |
 | `STORE-002` | Replay, flush, compaction, and derived rebuilds are idempotent or resumable. | `P05-006`–`P05-021`, `P08-011`–`P08-015`, `P09-008`–`P09-012`, `P15-016`–`P15-017` | Crash/replay histories, orphan cleanup, build resume, migration interruption, `G05`, `G08`, `G09`, `G15` | Planned |
 | `STORE-003` | Compaction preserves snapshots and cannot evict durable live data. | `P06-004`, `P06-013`, `P08-014`, `P09-012`, `P20-003`–`P20-009` | Model-based snapshot/TTL histories, eviction invariant, `EXP-011`, `G09`, `G20` | Planned |
 
@@ -65,7 +65,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `GPU-001` | GPU selection includes all preparation, transfer, queue, and materialization costs. | `P10-019`–`P10-025`, `P14-003`, `P16-007`–`P16-008` | Cold/warm/resident raw benchmarks, calibration/misselection report, `EXP-006`, `EXP-012`, `G10` | Planned |
 | `GPU-002` | Every kernel has CPU reference, property, edge, and differential tests. | `P01-010`, `P07-017`, `P09-013`–`P09-014`, `P10-009`–`P10-014`, `P10-022`, `P10-030` | Kernel replay corpus and result hashes for every capability profile, `G10` | In progress |
 | `GPU-003` | Non-exact kernels return candidates that receive CPU verification. | `P01-010`, `P10-011`–`P10-014`, `P10-021`–`P10-023` | Candidate/selectivity fixtures, verified result hashes, explain exactness evidence | In progress |
-| `GPU-004` | GPU failures cause bounded fallback or typed error, never process crash. | `P10-015`–`P10-017`, `P10-023`, `P11-010`, `P16-005`, `P24-004` | Device-loss/OOM/deadline/quota histories, GPU-disabled workflow, `EXP-008`, `EXP-009` | Planned |
+| `GPU-004` | GPU failures cause bounded fallback or typed error, never process crash. | `P01-016`, `P10-015`–`P10-017`, `P10-023`, `P11-010`, `P16-005`, `P24-004` | Device-loss/OOM/deadline/quota histories, GPU-disabled workflow, `EXP-008`, `EXP-009` | In progress |
 | `GPU-005` | GPU resources are quota-controlled per device, query, and tenant. | `P10-007`, `P10-015`, `P10-018`, `P13-016`, `P23-002`–`P23-003` | Quota/admission/fairness/isolation tests, security review, managed noisy-neighbor report | Planned |
 
 ## Distribution, cache, and synchronization
@@ -84,7 +84,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 
 | Requirement | Summary | Implementation tasks | Planned tests and evidence | Status |
 | --- | --- | --- | --- | --- |
-| `SEC-001` | External and node operations are authenticated, authorized, encrypted, and auditable. | `P13-001`–`P13-008`, `P13-017`–`P13-020`, `P17-014`, `P23-010`, `P24-010` | Authn/authz/mTLS/audit corpus, independent review, cluster security proof, `G13`, `G23` | Planned |
+| `SEC-001` | External and node operations are authenticated, authorized, encrypted, and auditable. | `P01-016`, `P13-001`–`P13-008`, `P13-017`–`P13-020`, `P17-014`, `P23-010`, `P24-010` | Authn/authz/mTLS/audit corpus, independent review, cluster security proof, `G13`, `G23` | In progress |
 | `SEC-002` | Tenant data and resources respect isolation and quotas across storage, GPU, telemetry, and administration. | `P01-011`, `P10-018`, `P13-007`–`P13-017`, `P23-001`–`P23-003`, `P23-016`–`P23-018` | Cross-tenant denial/leak/fairness tests, GPU hygiene, noisy-neighbor report, independent review | In progress |
 | `OPS-001` | Production releases expose health, metrics, logs, traces, backup/restore, and explain evidence. | `P12-007`, `P14-*`, `P15-*`, `P16-012`, `P23-014`–`P23-015` | Metric/log/trace schemas, diagnostic bundle, dashboards, operator exercise, `G14` | Planned |
 | `OPS-002` | Restore procedures are tested from real produced artifacts. | `P15-001`–`P15-019`, `P16-009`, `P23-011`, `P24-008` | Clean full/incremental/PITR/browser restores, DR drills, artifact hashes, `G15`, `G24` | Planned |

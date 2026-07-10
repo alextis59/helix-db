@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-016",
+  "requirements": ["QUERY-002", "STORE-001", "GPU-004", "SEC-001"],
+  "accepted_adrs": ["0009"],
+  "commit": "bc68163788d653d1cb73af8f63bd973704dae794",
+  "recorded_at": "2026-07-10T19:50:45Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check bc68163788d653d1cb73af8f63bd973704dae794^ bc68163788d653d1cb73af8f63bd973704dae794", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r bc68163788d653d1cb73af8f63bd973704dae794", "exit_code": 0 },
+    { "command": "node evidence/phase-01/P01-016/verify.mjs bc68163788d653d1cb73af8f63bd973704dae794", "exit_code": 0 },
+    { "command": "sha256sum of four committed semantic artifacts", "exit_code": 0 }
+  ],
+  "verification": {
+    "categories_expected": 11,
+    "categories_found": 11,
+    "codes_unique": 74,
+    "envelope_fields": 13,
+    "outcomes": 4,
+    "retry_scopes": 7,
+    "precedence_classes": 8
+  },
+  "artifacts": [
+    { "path": "docs/architecture/error-semantics.md", "media_type": "text/markdown", "bytes": 24626, "sha256": "f1c37813e6af11521ecdd4837202fd6ad26556ef511cc1b56156829744c84657" },
+    { "path": "docs/adr/0009-use-versioned-error-codes-and-outcomes.md", "media_type": "text/markdown", "bytes": 8050, "sha256": "694fee511a7792eac5c05c15a6c12a6f61df413e0394705014fc048b2ee1dbb7" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 69539, "sha256": "3cade93f42d99fa54715ba83d5bc17a480b2b42ff9f145d28ed69165de07b1fe" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 3901, "sha256": "8f1bf28c37b07860cea2fb2246d99d2b5392283644f808e345d3fba1407accea" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-01/P01-016/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 7971,
+    "sha256": "4ee2e59e424e5a67e3fd6150ed991f918e994534e3579461286780b1973745a5"
+  },
+  "verdict": "pass"
+}
