@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 15
-- Open checklist items: 506
+- Completed checklist items: 16
+- Open checklist items: 505
 - Total checklist items: 521
 - Current phase: Phase 0 — Governance and project baseline
 - Next release gate: `G00`
@@ -139,7 +139,7 @@ Objective: establish authoritative scope, decision processes, evidence rules, an
 - [x] **P00-014** Define a documentation structure for architecture, formats, APIs, operations, security, testing, compatibility, and release notes.
 - [x] **P00-015** Review the existing license and document third-party dependency, shader, benchmark-data, and generated-code licensing rules.
 - [x] **P00-016** Create initial threat-model, performance-claim, and compatibility-claim templates.
-- [ ] **P00-017** Record a policy that persistent formats and public protocols are versioned from their first committed fixture.
+- [x] **P00-017** Record a policy that persistent formats and public protocols are versioned from their first committed fixture.
 - [ ] **G00** Close the governance gate after scope, ownership, change control, evidence policy, and requirement traceability are approved.
 
 Evidence required for `G00`: accepted scope record, ADR index, requirement ledger, ownership map, and review of all source-document links.
