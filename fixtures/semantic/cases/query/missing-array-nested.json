@@ -1,0 +1,1338 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "query.missing-array-nested",
+  "title": "Missing/null, array operators, nested paths, projection, and default order in commands",
+  "requirements": [
+    "DATA-002",
+    "QUERY-001"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "array",
+    "command",
+    "missing",
+    "nested-path",
+    "null",
+    "query"
+  ],
+  "initial_state": {
+    "collections": [
+      {
+        "name": "docs",
+        "document_order": "default_order_v1",
+        "documents": [
+          {
+            "t": "object",
+            "fields": [
+              {
+                "name": "_id",
+                "value": {
+                  "t": "int32",
+                  "value": "1"
+                }
+              },
+              {
+                "name": "a",
+                "value": {
+                  "t": "array",
+                  "values": [
+                    {
+                      "t": "int32",
+                      "value": "1"
+                    },
+                    {
+                      "t": "int32",
+                      "value": "2"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "profile",
+                "value": {
+                  "t": "object",
+                  "fields": [
+                    {
+                      "name": "age",
+                      "value": {
+                        "t": "int32",
+                        "value": "21"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "t": "object",
+            "fields": [
+              {
+                "name": "_id",
+                "value": {
+                  "t": "int32",
+                  "value": "2"
+                }
+              },
+              {
+                "name": "x",
+                "value": {
+                  "t": "null"
+                }
+              },
+              {
+                "name": "a",
+                "value": {
+                  "t": "array",
+                  "values": [
+                    {
+                      "t": "int32",
+                      "value": "2"
+                    },
+                    {
+                      "t": "int32",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "profile",
+                "value": {
+                  "t": "object",
+                  "fields": [
+                    {
+                      "name": "age",
+                      "value": {
+                        "t": "int32",
+                        "value": "17"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          },
+          {
+            "t": "object",
+            "fields": [
+              {
+                "name": "_id",
+                "value": {
+                  "t": "int32",
+                  "value": "3"
+                }
+              },
+              {
+                "name": "x",
+                "value": {
+                  "t": "int32",
+                  "value": "1"
+                }
+              },
+              {
+                "name": "a",
+                "value": {
+                  "t": "array",
+                  "values": [
+                    {
+                      "t": "int32",
+                      "value": "3"
+                    }
+                  ]
+                }
+              },
+              {
+                "name": "profile",
+                "value": {
+                  "t": "object",
+                  "fields": [
+                    {
+                      "name": "age",
+                      "value": {
+                        "t": "int32",
+                        "value": "30"
+                      }
+                    }
+                  ]
+                }
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  "steps": [
+    {
+      "id": "find-all",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {}
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "1"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "21"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "2"
+                        }
+                      },
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "null"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "3"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "17"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "3"
+                        }
+                      },
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "3"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "30"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 3,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "3"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "native-null-only",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {
+            "x": {
+              "$eq": {
+                "$value": {
+                  "t": "null"
+                }
+              }
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "2"
+                        }
+                      },
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "null"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "3"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "17"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 1,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "missing-exists-false",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {
+            "x": {
+              "$exists": false
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "1"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "21"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 1,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "array-size-two",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {
+            "a": {
+              "$size": {
+                "$value": {
+                  "t": "int32",
+                  "value": "2"
+                }
+              }
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "1"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "21"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "2"
+                        }
+                      },
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "null"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "3"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "17"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "array-all-two",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {
+            "a": {
+              "$all": {
+                "$value": {
+                  "t": "array",
+                  "values": [
+                    {
+                      "t": "int32",
+                      "value": "2"
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "1"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "21"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "2"
+                        }
+                      },
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "null"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "3"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "17"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "array-elem-match-two",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {
+            "a": {
+              "$elemMatch": {
+                "$eq": {
+                  "$value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "1"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "21"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "2"
+                        }
+                      },
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "null"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "3"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "17"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "nested-age-adult",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {
+            "profile.age": {
+              "$gte": {
+                "$value": {
+                  "t": "int32",
+                  "value": "18"
+                }
+              }
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "1"
+                            },
+                            {
+                              "t": "int32",
+                              "value": "2"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "21"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "_id",
+                        "value": {
+                          "t": "int32",
+                          "value": "3"
+                        }
+                      },
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      },
+                      {
+                        "name": "a",
+                        "value": {
+                          "t": "array",
+                          "values": [
+                            {
+                              "t": "int32",
+                              "value": "3"
+                            }
+                          ]
+                        }
+                      },
+                      {
+                        "name": "profile",
+                        "value": {
+                          "t": "object",
+                          "fields": [
+                            {
+                              "name": "age",
+                              "value": {
+                                "t": "int32",
+                                "value": "30"
+                              }
+                            }
+                          ]
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "3"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "project-without-id-keeps-hidden-order",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {},
+          "projection": {
+            "_id": 0,
+            "x": 1
+          }
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "rows",
+              "value": {
+                "t": "array",
+                "values": [
+                  {
+                    "t": "object",
+                    "fields": []
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "null"
+                        }
+                      }
+                    ]
+                  },
+                  {
+                    "t": "object",
+                    "fields": [
+                      {
+                        "name": "x",
+                        "value": {
+                          "t": "int32",
+                          "value": "1"
+                        }
+                      }
+                    ]
+                  }
+                ]
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "default_order_v1",
+          "row_count": 3,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "3"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

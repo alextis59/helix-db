@@ -1,0 +1,2621 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "errors.registry",
+  "title": "Every errors-v1 category and stable code has a structured fixture envelope",
+  "requirements": [
+    "GPU-004",
+    "QUERY-002",
+    "SEC-001",
+    "STORE-001"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "error",
+    "error-registry",
+    "structured-error"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "code-par-malformed-envelope",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "PAR_MALFORMED_ENVELOPE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_MALFORMED_ENVELOPE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-par-truncated-input",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "PAR_TRUNCATED_INPUT"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_TRUNCATED_INPUT",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-par-invalid-json",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "PAR_INVALID_JSON"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_JSON",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-par-invalid-cbor",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "PAR_INVALID_CBOR"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_CBOR",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-par-invalid-utf8",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "PAR_INVALID_UTF8"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_UTF8",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-par-invalid-typed-value",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "PAR_INVALID_TYPED_VALUE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-par-compression-failed",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "PAR_COMPRESSION_FAILED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_COMPRESSION_FAILED",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-unknown-command",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_UNKNOWN_COMMAND"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_UNKNOWN_COMMAND",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-unknown-option",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_UNKNOWN_OPTION"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_UNKNOWN_OPTION",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-unknown-operator",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_UNKNOWN_OPERATOR"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_UNKNOWN_OPERATOR",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-invalid-shape",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_INVALID_SHAPE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_INVALID_SHAPE",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-invalid-literal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_INVALID_LITERAL"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_INVALID_LITERAL",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-invalid-field-name",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_INVALID_FIELD_NAME"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_INVALID_FIELD_NAME",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-invalid-path",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_INVALID_PATH"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_INVALID_PATH",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-protected-field",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_PROTECTED_FIELD"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_PROTECTED_FIELD",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-duplicate-field",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_DUPLICATE_FIELD"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_DUPLICATE_FIELD",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-conflicting-paths",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_CONFLICTING_PATHS"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_CONFLICTING_PATHS",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-schema-mismatch",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_SCHEMA_MISMATCH"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_SCHEMA_MISMATCH",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-resource-not-found",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_RESOURCE_NOT_FOUND"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_RESOURCE_NOT_FOUND",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-val-unsupported-combination",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "VAL_UNSUPPORTED_COMBINATION"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_UNSUPPORTED_COMBINATION",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-mismatch",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_MISMATCH"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_MISMATCH",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-coercion-loss",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_COERCION_LOSS"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_COERCION_LOSS",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-numeric-overflow",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_NUMERIC_OVERFLOW"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_NUMERIC_OVERFLOW",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-numeric-underflow",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_NUMERIC_UNDERFLOW"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_NUMERIC_UNDERFLOW",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-invalid-special",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_INVALID_SPECIAL"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_INVALID_SPECIAL",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-temporal-range",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_TEMPORAL_RANGE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_TEMPORAL_RANGE",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-vector-dimension",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_VECTOR_DIMENSION"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_VECTOR_DIMENSION",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-vector-zero-norm",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_VECTOR_ZERO_NORM"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_VECTOR_ZERO_NORM",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-type-expression-missing",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "TYPE_EXPRESSION_MISSING"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_EXPRESSION_MISSING",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-con-write-conflict",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CON_WRITE_CONFLICT"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "conflict",
+        "code": "CON_WRITE_CONFLICT",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "new_snapshot",
+          "token": "present"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-con-idempotency-mismatch",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CON_IDEMPOTENCY_MISMATCH"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "conflict",
+        "code": "CON_IDEMPOTENCY_MISMATCH",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-con-transaction-state",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CON_TRANSACTION_STATE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "conflict",
+        "code": "CON_TRANSACTION_STATE",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-con-snapshot-expired",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CON_SNAPSHOT_EXPIRED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "conflict",
+        "code": "CON_SNAPSHOT_EXPIRED",
+        "phase": "snapshot",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "new_snapshot",
+          "token": "present"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-con-cursor-state",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CON_CURSOR_STATE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "conflict",
+        "code": "CON_CURSOR_STATE",
+        "phase": "cursor",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-con-stale-epoch",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CON_STALE_EPOCH"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "conflict",
+        "code": "CON_STALE_EPOCH",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "new_snapshot",
+          "token": "present"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-con-retry-exhausted",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CON_RETRY_EXHAUSTED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "conflict",
+        "code": "CON_RETRY_EXHAUSTED",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-unq-primary-duplicate",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "UNQ_PRIMARY_DUPLICATE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "uniqueness",
+        "code": "UNQ_PRIMARY_DUPLICATE",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-unq-secondary-duplicate",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "UNQ_SECONDARY_DUPLICATE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "uniqueness",
+        "code": "UNQ_SECONDARY_DUPLICATE",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-unq-generated-id-exhausted",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "UNQ_GENERATED_ID_EXHAUSTED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "uniqueness",
+        "code": "UNQ_GENERATED_ID_EXHAUSTED",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-auth-unauthenticated",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "AUTH_UNAUTHENTICATED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "authorization",
+        "code": "AUTH_UNAUTHENTICATED",
+        "phase": "authorize",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-auth-credential-expired",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "AUTH_CREDENTIAL_EXPIRED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "authorization",
+        "code": "AUTH_CREDENTIAL_EXPIRED",
+        "phase": "authorize",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-auth-forbidden",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "AUTH_FORBIDDEN"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "authorization",
+        "code": "AUTH_FORBIDDEN",
+        "phase": "authorize",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-auth-scope-denied",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "AUTH_SCOPE_DENIED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "authorization",
+        "code": "AUTH_SCOPE_DENIED",
+        "phase": "authorize",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-auth-policy-denied",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "AUTH_POLICY_DENIED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "authorization",
+        "code": "AUTH_POLICY_DENIED",
+        "phase": "authorize",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-cap-unsupported-feature",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CAP_UNSUPPORTED_FEATURE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "capability",
+        "code": "CAP_UNSUPPORTED_FEATURE",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-cap-unsupported-version",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CAP_UNSUPPORTED_VERSION"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "capability",
+        "code": "CAP_UNSUPPORTED_VERSION",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-cap-host-unavailable",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CAP_HOST_UNAVAILABLE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "capability",
+        "code": "CAP_HOST_UNAVAILABLE",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_capability_change",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-cap-storage-unavailable",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CAP_STORAGE_UNAVAILABLE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "capability",
+        "code": "CAP_STORAGE_UNAVAILABLE",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_capability_change",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-cap-gpu-unavailable",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CAP_GPU_UNAVAILABLE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "capability",
+        "code": "CAP_GPU_UNAVAILABLE",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_capability_change",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-cap-gpu-device-lost",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CAP_GPU_DEVICE_LOST"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "capability",
+        "code": "CAP_GPU_DEVICE_LOST",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_capability_change",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-cap-clock-unsafe",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CAP_CLOCK_UNSAFE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "capability",
+        "code": "CAP_CLOCK_UNSAFE",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_operator_action",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-cap-format-unsupported",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "CAP_FORMAT_UNSUPPORTED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "capability",
+        "code": "CAP_FORMAT_UNSUPPORTED",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-quota-limit-exceeded",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "QUOTA_LIMIT_EXCEEDED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-quota-rate-limited",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "QUOTA_RATE_LIMITED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_RATE_LIMITED",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_delay",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-quota-memory",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "QUOTA_MEMORY"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_MEMORY",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_delay",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-quota-storage",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "QUOTA_STORAGE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_STORAGE",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_operator_action",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-quota-concurrency",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "QUOTA_CONCURRENCY"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_CONCURRENCY",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_delay",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-quota-gpu",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "QUOTA_GPU"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_GPU",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_delay",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-quota-result",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "QUOTA_RESULT"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_RESULT",
+        "phase": "admit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-deadline-exceeded",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DEADLINE_EXCEEDED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "deadline",
+        "code": "DEADLINE_EXCEEDED",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-deadline-cancelled",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DEADLINE_CANCELLED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "deadline",
+        "code": "DEADLINE_CANCELLED",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-deadline-cursor-expired",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DEADLINE_CURSOR_EXPIRED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "deadline",
+        "code": "DEADLINE_CURSOR_EXPIRED",
+        "phase": "cursor",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-dur-io",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DUR_IO"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_IO",
+        "phase": "commit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_operator_action",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-dur-sync",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DUR_SYNC"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_SYNC",
+        "phase": "commit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_operator_action",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-dur-no-space",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DUR_NO_SPACE"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_NO_SPACE",
+        "phase": "commit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_operator_action",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-dur-corruption",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DUR_CORRUPTION"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_CORRUPTION",
+        "phase": "commit",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-dur-recovery-required",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DUR_RECOVERY_REQUIRED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_RECOVERY_REQUIRED",
+        "phase": "recover",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_operator_action",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-dur-ack-unknown",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DUR_ACK_UNKNOWN"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_ACK_UNKNOWN",
+        "phase": "acknowledge",
+        "outcome": "unknown",
+        "retry": {
+          "retryable": true,
+          "scope": "same_idempotency_key",
+          "token": "present"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unknown"
+        }
+      }
+    },
+    {
+      "id": "code-dur-backup-invalid",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DUR_BACKUP_INVALID"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_BACKUP_INVALID",
+        "phase": "backup",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_operator_action",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-dur-restore-invalid",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "DUR_RESTORE_INVALID"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "durability",
+        "code": "DUR_RESTORE_INVALID",
+        "phase": "restore",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": true,
+          "scope": "after_operator_action",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-int-invariant",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "INT_INVARIANT"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "internal",
+        "code": "INT_INVARIANT",
+        "phase": "internal",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-int-panic",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "INT_PANIC"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "internal",
+        "code": "INT_PANIC",
+        "phase": "internal",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-int-serialization",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "INT_SERIALIZATION"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "internal",
+        "code": "INT_SERIALIZATION",
+        "phase": "internal",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "code-int-unexpected",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.raise-error",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "INT_UNEXPECTED"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "internal",
+        "code": "INT_UNEXPECTED",
+        "phase": "internal",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

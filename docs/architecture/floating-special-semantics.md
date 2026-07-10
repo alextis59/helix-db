@@ -63,6 +63,19 @@ special: +Infinity | -Infinity | NaN
 
 For a nonzero finite value, trailing coefficient zeros are removed while the exponent can be increased within the decimal128 domain. Decimal quantum/declared scale is not part of the logical value; applications needing a separate scale store it explicitly. Decimal NaN sign, signaling state, and payload are not logical data and noncanonical physical encodings are rejected or canonicalized by an explicitly versioned import path before storage.
 
+The exact canonical finite tuple domain is:
+
+```text
+precision p = 34 decimal digits
+1 <= coefficient_digits <= 34
+coefficient has no leading or trailing zero
+-6176 <= exponent
+exponent + coefficient_digits - 1 <= 6144
+value = (-1)^sign * coefficient * 10^exponent
+```
+
+Thus the smallest positive subnormal is `1 × 10^-6176`, the smallest positive normal is `1 × 10^-6143`, and the largest finite value is `(10^34 - 1) × 10^6111`. Zero alone uses coefficient/exponent `0/0` with a retained sign. The adjusted normal exponent bounds are -6143 through 6144; the lower quantum exponent admits 33 subnormal decades. These parameters match the decimal128 precision/exponent characteristics documented by the [WG14 decimal floating proposal](https://www.open-std.org/jtc1/sc22/wg14/www/docs/n1016.htm) and the [decNumber decimal128 context](https://speleotrove.com/decimal/dncont.html).
+
 ## Three notions of identity
 
 The engine keeps these purposes separate:

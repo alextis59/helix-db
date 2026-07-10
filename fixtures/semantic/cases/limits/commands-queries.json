@@ -1,0 +1,2657 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "limits.commands-queries",
+  "title": "Below, at, and above every command/query/work limit",
+  "requirements": [
+    "QUERY-002",
+    "SEC-002"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "boundary",
+    "command-limit",
+    "limit"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "command-raw_bytes-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "command.raw_bytes"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108863"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "command.raw_bytes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "67108863"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "command-raw_bytes-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "command.raw_bytes"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "command.raw_bytes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "command-raw_bytes-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "command.raw_bytes"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108865"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "command.raw_bytes",
+          "maximum": 67108864,
+          "observed": 67108865,
+          "unit": "bytes"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "command-expanded_bytes-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "command.expanded_bytes"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108863"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "command.expanded_bytes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "67108863"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "command-expanded_bytes-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "command.expanded_bytes"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "command.expanded_bytes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "command-expanded_bytes-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "command.expanded_bytes"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108865"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "command.expanded_bytes",
+          "maximum": 67108864,
+          "observed": 67108865,
+          "unit": "bytes"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "batch-items-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "batch.items"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "1000"
+          },
+          {
+            "t": "int64",
+            "value": "999"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "batch.items"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "1000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "999"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "batch-items-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "batch.items"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "1000"
+          },
+          {
+            "t": "int64",
+            "value": "1000"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "batch.items"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "1000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "1000"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "batch-items-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "batch.items"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "1000"
+          },
+          {
+            "t": "int64",
+            "value": "1001"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_committed",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "batch.items",
+          "maximum": 1000,
+          "observed": 1001,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "pipeline-stages-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "pipeline.stages"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "256"
+          },
+          {
+            "t": "int64",
+            "value": "255"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "pipeline.stages"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "256"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "255"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "pipeline-stages-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "pipeline.stages"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "256"
+          },
+          {
+            "t": "int64",
+            "value": "256"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "pipeline.stages"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "256"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "256"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "pipeline-stages-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "pipeline.stages"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "256"
+          },
+          {
+            "t": "int64",
+            "value": "257"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "pipeline.stages",
+          "maximum": 256,
+          "observed": 257,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "ast-nodes-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "ast.nodes"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "4096"
+          },
+          {
+            "t": "int64",
+            "value": "4095"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "ast.nodes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "4096"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "4095"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "ast-nodes-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "ast.nodes"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "4096"
+          },
+          {
+            "t": "int64",
+            "value": "4096"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "ast.nodes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "4096"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "4096"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "ast-nodes-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "ast.nodes"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "4096"
+          },
+          {
+            "t": "int64",
+            "value": "4097"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "ast.nodes",
+          "maximum": 4096,
+          "observed": 4097,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "ast-depth-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "ast.depth"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "64"
+          },
+          {
+            "t": "int64",
+            "value": "63"
+          }
+        ],
+        "options": {
+          "unit": "levels",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "ast.depth"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "64"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "63"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "ast-depth-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "ast.depth"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "64"
+          },
+          {
+            "t": "int64",
+            "value": "64"
+          }
+        ],
+        "options": {
+          "unit": "levels",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "ast.depth"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "64"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "64"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "ast-depth-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "ast.depth"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "64"
+          },
+          {
+            "t": "int64",
+            "value": "65"
+          }
+        ],
+        "options": {
+          "unit": "levels",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "ast.depth",
+          "maximum": 64,
+          "observed": 65,
+          "unit": "levels"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "literal_list-items-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "literal_list.items"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "9999"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "literal_list.items"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "9999"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "literal_list-items-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "literal_list.items"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "literal_list.items"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "literal_list-items-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "literal_list.items"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "10001"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "literal_list.items",
+          "maximum": 10000,
+          "observed": 10001,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "sort-keys-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "sort.keys"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "64"
+          },
+          {
+            "t": "int64",
+            "value": "63"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "sort.keys"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "64"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "63"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "sort-keys-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "sort.keys"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "64"
+          },
+          {
+            "t": "int64",
+            "value": "64"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "sort.keys"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "64"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "64"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "sort-keys-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "sort.keys"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "64"
+          },
+          {
+            "t": "int64",
+            "value": "65"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "sort.keys",
+          "maximum": 64,
+          "observed": 65,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "projection-paths-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "projection.paths"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "9999"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "projection.paths"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "9999"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "projection-paths-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "projection.paths"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "projection.paths"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "projection-paths-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "projection.paths"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "10001"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "projection.paths",
+          "maximum": 10000,
+          "observed": 10001,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "regex-pattern_bytes-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "regex.pattern_bytes"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "65536"
+          },
+          {
+            "t": "int64",
+            "value": "65535"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "regex.pattern_bytes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "65536"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "65535"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "regex-pattern_bytes-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "regex.pattern_bytes"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "65536"
+          },
+          {
+            "t": "int64",
+            "value": "65536"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "regex.pattern_bytes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "65536"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "65536"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "regex-pattern_bytes-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "regex.pattern_bytes"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "65536"
+          },
+          {
+            "t": "int64",
+            "value": "65537"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "regex.pattern_bytes",
+          "maximum": 65536,
+          "observed": 65537,
+          "unit": "bytes"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "vector-top_k-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "vector.top_k"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "9999"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "vector.top_k"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "9999"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "vector-top_k-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "vector.top_k"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "vector.top_k"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "10000"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "vector-top_k-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "vector.top_k"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "10000"
+          },
+          {
+            "t": "int64",
+            "value": "10001"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "vector.top_k",
+          "maximum": 10000,
+          "observed": 10001,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "path-candidates-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "path.candidates"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "1000000"
+          },
+          {
+            "t": "int64",
+            "value": "999999"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "path.candidates"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "1000000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "999999"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "path-candidates-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "path.candidates"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "1000000"
+          },
+          {
+            "t": "int64",
+            "value": "1000000"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "path.candidates"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "1000000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "1000000"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "path-candidates-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "path.candidates"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "1000000"
+          },
+          {
+            "t": "int64",
+            "value": "1000001"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": false
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "path.candidates",
+          "maximum": 1000000,
+          "observed": 1000001,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

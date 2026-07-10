@@ -15,31 +15,33 @@ This document freezes portable hard limits for documents, nesting, fields, field
 
 All byte units are exact octets; KiB/MiB are powers of 1,024.
 
-| Limit | V1 maximum | Measurement |
-| --- | ---: | --- |
-| Canonical HDoc document | 16,777,216 bytes (16 MiB) | Complete uncompressed canonical HDoc, including header/tables/names/values/checksum/hash |
-| Container nesting depth | 100 | Root object is depth 1; each nested object/array adds 1 |
-| Fields in one object | 10,000 | Immediate unique entries, including protected fields present in that object |
-| Total fields in one document | 100,000 | Sum of entries across every nested object |
-| Field-name UTF-8 bytes | 1,024 | Canonical decoded UTF-8 bytes |
-| Field-name scalar values | 256 | Unicode scalar count |
-| Dotted path UTF-8 bytes | 4,096 | Complete decoded path text, including separators |
-| Dotted path segments | 100 | Field and explicit numeric-index segments |
-| Array elements | 1,000,000 | Immediate dense elements in one array |
-| Vector dimension | 4,096 | `N` in `vector<f16,N>`/`vector<f32,N>` |
-| String/binary `_id` payload | 1,024 bytes | UTF-8 bytes or generic binary bytes |
-| Raw command envelope | 67,108,864 bytes (64 MiB) | Transport bytes before decompression/decoding |
-| Expanded/decoded command | 67,108,864 bytes (64 MiB) | Complete uncompressed canonical normalized-command encoding |
-| Batch operations/documents | 1,000 | One insert/update/delete bulk command |
-| Aggregation stages | 256 | Parsed stages before and after normalization/expansion |
-| Filter/expression AST nodes | 4,096 | Operators, field predicates, expressions, and literals as defined below |
-| Filter/expression AST depth | 64 | Root node depth 1 |
-| Literal list items | 10,000 | One `$in`, `$nin`, `$all`, or equivalent bounded literal operand |
-| Sort keys | 64 | One logical sort specification |
-| Projection/output paths | 10,000 | One projection specification after normalization |
-| Regex pattern UTF-8 bytes | 65,536 | Decoded pattern text; engine step/memory limits remain additional |
-| Exact vector top-k `k` | 10,000 | Positive requested result count |
-| Path candidates per document | 1,000,000 | Values produced by one dotted traversal before predicate reduction |
+| Stable limit ID | Limit | V1 maximum | Measurement |
+| --- | --- | ---: | --- |
+| `document.canonical_bytes` | Canonical HDoc document | 16,777,216 bytes (16 MiB) | Complete uncompressed canonical HDoc, including header/tables/names/values/checksum/hash |
+| `document.depth` | Container nesting depth | 100 | Root object is depth 1; each nested object/array adds 1 |
+| `object.fields` | Fields in one object | 10,000 | Immediate unique entries, including protected fields present in that object |
+| `document.total_fields` | Total fields in one document | 100,000 | Sum of entries across every nested object |
+| `field_name.utf8_bytes` | Field-name UTF-8 bytes | 1,024 | Canonical decoded UTF-8 bytes |
+| `field_name.scalars` | Field-name scalar values | 256 | Unicode scalar count |
+| `path.utf8_bytes` | Dotted path UTF-8 bytes | 4,096 | Complete decoded path text, including separators |
+| `path.segments` | Dotted path segments | 100 | Field and explicit numeric-index segments |
+| `array.elements` | Array elements | 1,000,000 | Immediate dense elements in one array |
+| `vector.dimension` | Vector dimension | 4,096 | `N` in `vector<f16,N>`/`vector<f32,N>` |
+| `id.payload_bytes` | String/binary `_id` payload | 1,024 bytes | UTF-8 bytes or generic binary bytes |
+| `command.raw_bytes` | Raw command envelope | 67,108,864 bytes (64 MiB) | Transport bytes before decompression/decoding |
+| `command.expanded_bytes` | Expanded/decoded command | 67,108,864 bytes (64 MiB) | Complete uncompressed canonical normalized-command encoding |
+| `batch.items` | Batch operations/documents | 1,000 | One insert/update/delete bulk command |
+| `pipeline.stages` | Aggregation stages | 256 | Parsed stages before and after normalization/expansion |
+| `ast.nodes` | Filter/expression AST nodes | 4,096 | Operators, field predicates, expressions, and literals as defined below |
+| `ast.depth` | Filter/expression AST depth | 64 | Root node depth 1 |
+| `literal_list.items` | Literal list items | 10,000 | One `$in`, `$nin`, `$all`, or equivalent bounded literal operand |
+| `sort.keys` | Sort keys | 64 | One logical sort specification |
+| `projection.paths` | Projection/output paths | 10,000 | One projection specification after normalization |
+| `regex.pattern_bytes` | Regex pattern UTF-8 bytes | 65,536 | Decoded pattern text; engine step/memory limits remain additional |
+| `vector.top_k` | Exact vector top-k `k` | 10,000 | Positive requested result count |
+| `path.candidates` | Path candidates per document | 1,000,000 | Values produced by one dotted traversal before predicate reduction |
+
+Stable limit IDs are the `errors-v1` `details.limit_id`, fixture, metric, explain, quota-policy, and compatibility identifiers. They are never localized/reused; changing their measurement/maximum follows the `limits-v1` version/migration rules.
 
 The document/depth choices intentionally align with MongoDB's documented 16 MiB and 100-level BSON ceilings for easier bounded interchange, but all other limits/semantics remain HelixDB's explicit profile and require compatibility-matrix proof. See [MongoDB Limits and Thresholds](https://www.mongodb.com/docs/manual/reference/limits/).
 

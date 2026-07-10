@@ -91,6 +91,13 @@ const validateValue = (value, at, allowMissing = true) => {
       ) {
         fail('fixture.value.decimal_cohort', at, 'finite decimal coefficient is not canonical');
       }
+      if (value.class === 'finite' && value.coefficient !== '0') {
+        const exponent = BigInt(value.exponent);
+        const adjusted = exponent + BigInt(value.coefficient.length - 1);
+        if (exponent < -6176n || adjusted > 6144n) {
+          fail('fixture.value.decimal_range', at, 'decimal tuple is outside decimal128');
+        }
+      }
       return;
     case 'string':
       if (!value.value.isWellFormed()) {
@@ -218,7 +225,7 @@ const validateCollections = (collections, at) => {
   }
 };
 
-const validateFixture = (fixture) => {
+export const validateFixture = (fixture) => {
   assertCanonicalList(fixture.requirements, '$.requirements');
   assertCanonicalList(fixture.plan_items, '$.plan_items');
   assertCanonicalList(fixture.tags, '$.tags');
@@ -319,6 +326,10 @@ const validateFixture = (fixture) => {
   walkTypedValues(fixture);
 };
 
+const isMain =
+  process.argv[1] !== undefined && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
+
+if (isMain) {
 const validFiles = readdirSync(path.join(examples, 'valid'))
   .filter((name) => name.endsWith('.json'))
   .sort();
@@ -358,3 +369,4 @@ if (invalidFiles.length !== expectedSemanticFailures.size) {
 console.log(
   `PASS semantic examples: ${validFiles.length} accepted; ${invalidFiles.length} rejected with exact rules`,
 );
+}

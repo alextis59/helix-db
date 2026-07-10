@@ -1,0 +1,282 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "scalar.mixed-numeric",
+  "title": "Exact mixed numeric equality, comparison, and coercion boundaries",
+  "requirements": [
+    "DATA-001",
+    "QUERY-001",
+    "QUERY-002"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "mixed-numeric",
+    "numeric",
+    "scalar-edge"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "equal-int32-int64",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "int32",
+            "value": "1"
+          },
+          {
+            "t": "int64",
+            "value": "1"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": true
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "equal-int64-float",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "int64",
+            "value": "1"
+          },
+          {
+            "t": "float64",
+            "bits": "3ff0000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": true
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "equal-int32-decimal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "int32",
+            "value": "1"
+          },
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": true
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "different-decimal-float-tenth",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "-1"
+          },
+          {
+            "t": "float64",
+            "bits": "3fb999999999999a"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "add-exact-int-float",
+      "action": {
+        "kind": "value_operation",
+        "operation": "numeric.add",
+        "arguments": [
+          {
+            "t": "int64",
+            "value": "9007199254740992"
+          },
+          {
+            "t": "float64",
+            "bits": "3ff0000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "4340000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "reject-inexact-int-float",
+      "action": {
+        "kind": "value_operation",
+        "operation": "numeric.add",
+        "arguments": [
+          {
+            "t": "int64",
+            "value": "9007199254740993"
+          },
+          {
+            "t": "float64",
+            "bits": "3ff0000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_COERCION_LOSS",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "reject-decimal-float-mix",
+      "action": {
+        "kind": "value_operation",
+        "operation": "numeric.add",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "0"
+          },
+          {
+            "t": "float64",
+            "bits": "3ff0000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_MISMATCH",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

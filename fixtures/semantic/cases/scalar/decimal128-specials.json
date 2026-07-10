@@ -1,0 +1,567 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "scalar.decimal128-specials",
+  "title": "Decimal128 canonical coefficient, exponent, subnormal, and special edges",
+  "requirements": [
+    "DATA-001",
+    "QUERY-001"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "decimal128",
+    "numeric",
+    "scalar-edge",
+    "special-value"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "identity-negative-infinity",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "infinity",
+            "sign": "negative"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "infinity",
+          "sign": "negative"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-negative-zero",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "negative",
+            "coefficient": "0",
+            "exponent": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "finite",
+          "sign": "negative",
+          "coefficient": "0",
+          "exponent": "0"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-positive-zero",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "0",
+            "exponent": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "finite",
+          "sign": "positive",
+          "coefficient": "0",
+          "exponent": "0"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-smallest-subnormal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "-6176"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "finite",
+          "sign": "positive",
+          "coefficient": "1",
+          "exponent": "-6176"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-smallest-normal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "-6143"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "finite",
+          "sign": "positive",
+          "coefficient": "1",
+          "exponent": "-6143"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-one-tenth",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "-1"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "finite",
+          "sign": "positive",
+          "coefficient": "1",
+          "exponent": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-one",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "finite",
+          "sign": "positive",
+          "coefficient": "1",
+          "exponent": "0"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-max-finite",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "9999999999999999999999999999999999",
+            "exponent": "6111"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "finite",
+          "sign": "positive",
+          "coefficient": "9999999999999999999999999999999999",
+          "exponent": "6111"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-positive-infinity",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "infinity",
+            "sign": "positive"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "infinity",
+          "sign": "positive"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-nan",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "nan"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "nan"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "equal-signed-zero",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "negative",
+            "coefficient": "0",
+            "exponent": "0"
+          },
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "0",
+            "exponent": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": true
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "different-signed-zero-identity",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identical",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "negative",
+            "coefficient": "0",
+            "exponent": "0"
+          },
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "0",
+            "exponent": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "compare-subnormal-normal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.compare",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "-6176"
+          },
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "-6143"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "int32",
+          "value": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "add-one-tenth-one",
+      "action": {
+        "kind": "value_operation",
+        "operation": "numeric.add",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "1",
+            "exponent": "-1"
+          },
+          {
+            "t": "int32",
+            "value": "1"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "decimal128",
+          "class": "finite",
+          "sign": "positive",
+          "coefficient": "11",
+          "exponent": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "overflow-max-plus-max",
+      "action": {
+        "kind": "value_operation",
+        "operation": "numeric.add",
+        "arguments": [
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "9999999999999999999999999999999999",
+            "exponent": "6111"
+          },
+          {
+            "t": "decimal128",
+            "class": "finite",
+            "sign": "positive",
+            "coefficient": "9999999999999999999999999999999999",
+            "exponent": "6111"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_NUMERIC_OVERFLOW",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,521 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "scalar.vectors",
+  "title": "Vector family, dimension, finite-bit, equality, order, and metric edges",
+  "requirements": [
+    "DATA-001",
+    "GPU-002",
+    "GPU-003",
+    "INV-002",
+    "QUERY-001"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "f16",
+    "f32",
+    "scalar-edge",
+    "vector"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "identity-f16-negative-zero",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f16",
+            "dimension": 1,
+            "bits": [
+              "8000"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "vector",
+          "element": "f16",
+          "dimension": 1,
+          "bits": [
+            "8000"
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-f16-min-subnormal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f16",
+            "dimension": 1,
+            "bits": [
+              "0001"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "vector",
+          "element": "f16",
+          "dimension": 1,
+          "bits": [
+            "0001"
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-f16-max-finite",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f16",
+            "dimension": 1,
+            "bits": [
+              "7bff"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "vector",
+          "element": "f16",
+          "dimension": 1,
+          "bits": [
+            "7bff"
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-f32-negative-zero",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 1,
+            "bits": [
+              "80000000"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "vector",
+          "element": "f32",
+          "dimension": 1,
+          "bits": [
+            "80000000"
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-f32-min-subnormal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 1,
+            "bits": [
+              "00000001"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "vector",
+          "element": "f32",
+          "dimension": 1,
+          "bits": [
+            "00000001"
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-f32-max-finite",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 1,
+            "bits": [
+              "7f7fffff"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "vector",
+          "element": "f32",
+          "dimension": 1,
+          "bits": [
+            "7f7fffff"
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-f32-two-dimensional",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 2,
+            "bits": [
+              "3f800000",
+              "00000000"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "vector",
+          "element": "f32",
+          "dimension": 2,
+          "bits": [
+            "3f800000",
+            "00000000"
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "different-family",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f16",
+            "dimension": 1,
+            "bits": [
+              "3c00"
+            ]
+          },
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 1,
+            "bits": [
+              "3f800000"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "different-dimension",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 1,
+            "bits": [
+              "3f800000"
+            ]
+          },
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 2,
+            "bits": [
+              "3f800000",
+              "00000000"
+            ]
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "l2-unit-distance",
+      "action": {
+        "kind": "value_operation",
+        "operation": "vector.distance",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 2,
+            "bits": [
+              "3f800000",
+              "00000000"
+            ]
+          },
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 2,
+            "bits": [
+              "00000000",
+              "00000000"
+            ]
+          }
+        ],
+        "options": {
+          "metric": "l2"
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "3ff0000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "dot-unit",
+      "action": {
+        "kind": "value_operation",
+        "operation": "vector.distance",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 2,
+            "bits": [
+              "3f800000",
+              "00000000"
+            ]
+          },
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 2,
+            "bits": [
+              "3f800000",
+              "00000000"
+            ]
+          }
+        ],
+        "options": {
+          "metric": "dot"
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "3ff0000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "cosine-zero-norm",
+      "action": {
+        "kind": "value_operation",
+        "operation": "vector.distance",
+        "arguments": [
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 2,
+            "bits": [
+              "3f800000",
+              "00000000"
+            ]
+          },
+          {
+            "t": "vector",
+            "element": "f32",
+            "dimension": 2,
+            "bits": [
+              "00000000",
+              "00000000"
+            ]
+          }
+        ],
+        "options": {
+          "metric": "cosine"
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_VECTOR_ZERO_NORM",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

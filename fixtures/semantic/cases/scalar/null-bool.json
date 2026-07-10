@@ -1,0 +1,275 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "scalar.null-bool",
+  "title": "Null and Boolean identity, equality, and total ordering edges",
+  "requirements": [
+    "DATA-001",
+    "QUERY-001"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "bool",
+    "null",
+    "scalar-edge"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "identity-null",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "null"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "null"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-false",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "bool",
+            "value": false
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-true",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "bool",
+            "value": true
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": true
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "equal-null-null",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "null"
+          },
+          {
+            "t": "null"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": true
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "different-null-false",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "null"
+          },
+          {
+            "t": "bool",
+            "value": false
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "different-false-true",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "bool",
+            "value": false
+          },
+          {
+            "t": "bool",
+            "value": true
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "compare-null-false",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.compare",
+        "arguments": [
+          {
+            "t": "null"
+          },
+          {
+            "t": "bool",
+            "value": false
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "int32",
+          "value": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "compare-false-true",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.compare",
+        "arguments": [
+          {
+            "t": "bool",
+            "value": false
+          },
+          {
+            "t": "bool",
+            "value": true
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "int32",
+          "value": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

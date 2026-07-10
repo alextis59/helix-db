@@ -304,6 +304,22 @@ The registry implementation stores a default phase/outcome/retry record per code
 
 `DUR_ACK_UNKNOWN` always has `outcome: unknown` unless a later status lookup returns a separate conclusive success/error response. A selected write concern that fails before commit uses `not_committed`; after commit, the engine must not lie by reporting it as aborted.
 
+### Registry retry defaults
+
+Every code defaults to `retryable: false`, scope `never` unless listed below. “Retryable” remains conditional on satisfying the named scope, client deadline/attempt ceilings, idempotency invariants, and runtime advice; it never means immediate blind retry.
+
+| Retry scope | Codes with retryable registry default |
+| --- | --- |
+| `new_snapshot` | `CON_WRITE_CONFLICT`, `CON_SNAPSHOT_EXPIRED`, `CON_STALE_EPOCH` |
+| `same_idempotency_key` | `DUR_ACK_UNKNOWN` |
+| `after_capability_change` | `CAP_HOST_UNAVAILABLE`, `CAP_STORAGE_UNAVAILABLE`, `CAP_GPU_UNAVAILABLE`, `CAP_GPU_DEVICE_LOST` |
+| `after_delay` | `QUOTA_RATE_LIMITED`, `QUOTA_MEMORY`, `QUOTA_CONCURRENCY`, `QUOTA_GPU` |
+| `after_operator_action` | `CAP_CLOCK_UNSAFE`, `QUOTA_STORAGE`, `DUR_IO`, `DUR_SYNC`, `DUR_NO_SPACE`, `DUR_RECOVERY_REQUIRED`, `DUR_BACKUP_INVALID`, `DUR_RESTORE_INVALID` |
+
+`new_snapshot` and `same_idempotency_key` fixture expectations require a bound token/identity; environment/delay/operator scopes normally assert token absence unless a runtime supplies a code-specific opaque token. A runtime may narrow a listed code to nonretryable based on outcome/attempt/state. It may not broaden an unlisted code or an unknown write outcome into a fresh automatic write retry.
+
+[The populated error fixture matrix](../../fixtures/semantic/error-cases-v1.json) records one representative read-only phase/outcome/advice envelope per code. Actual phase/outcome remains operation-state-specific and later fault fixtures exercise mutation/commit/recovery variants.
+
 ## Redaction and disclosure rules
 
 - Client `message`, `details`, and `causes` never contain credentials, tokens, encryption material, document values, query literals, raw keys, raw command/input bytes, filesystem paths, stack traces, host addresses, tenant identifiers, or unescaped attacker-controlled text.

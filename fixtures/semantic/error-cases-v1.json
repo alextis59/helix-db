@@ -1,0 +1,673 @@
+{
+  "registry_schema": "helix.semantic-error-cases/1",
+  "error_registry": "errors-v1",
+  "semantic_profile": "helix-native-v1",
+  "cases": [
+    {
+      "category": "parse",
+      "code": "PAR_MALFORMED_ENVELOPE",
+      "phase": "decode",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "parse",
+      "code": "PAR_TRUNCATED_INPUT",
+      "phase": "decode",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "parse",
+      "code": "PAR_INVALID_JSON",
+      "phase": "decode",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "parse",
+      "code": "PAR_INVALID_CBOR",
+      "phase": "decode",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "parse",
+      "code": "PAR_INVALID_UTF8",
+      "phase": "decode",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "parse",
+      "code": "PAR_INVALID_TYPED_VALUE",
+      "phase": "decode",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "parse",
+      "code": "PAR_COMPRESSION_FAILED",
+      "phase": "decode",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_UNKNOWN_COMMAND",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_UNKNOWN_OPTION",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_UNKNOWN_OPERATOR",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_INVALID_SHAPE",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_INVALID_LITERAL",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_INVALID_FIELD_NAME",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_INVALID_PATH",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_PROTECTED_FIELD",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_DUPLICATE_FIELD",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_CONFLICTING_PATHS",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_SCHEMA_MISMATCH",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_RESOURCE_NOT_FOUND",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "validation",
+      "code": "VAL_UNSUPPORTED_COMBINATION",
+      "phase": "validate",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_MISMATCH",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_COERCION_LOSS",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_NUMERIC_OVERFLOW",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_NUMERIC_UNDERFLOW",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_INVALID_SPECIAL",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_TEMPORAL_RANGE",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_VECTOR_DIMENSION",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_VECTOR_ZERO_NORM",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "type",
+      "code": "TYPE_EXPRESSION_MISSING",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "conflict",
+      "code": "CON_WRITE_CONFLICT",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "new_snapshot",
+      "token": "present"
+    },
+    {
+      "category": "conflict",
+      "code": "CON_IDEMPOTENCY_MISMATCH",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "conflict",
+      "code": "CON_TRANSACTION_STATE",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "conflict",
+      "code": "CON_SNAPSHOT_EXPIRED",
+      "phase": "snapshot",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "new_snapshot",
+      "token": "present"
+    },
+    {
+      "category": "conflict",
+      "code": "CON_CURSOR_STATE",
+      "phase": "cursor",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "conflict",
+      "code": "CON_STALE_EPOCH",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "new_snapshot",
+      "token": "present"
+    },
+    {
+      "category": "conflict",
+      "code": "CON_RETRY_EXHAUSTED",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "uniqueness",
+      "code": "UNQ_PRIMARY_DUPLICATE",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "uniqueness",
+      "code": "UNQ_SECONDARY_DUPLICATE",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "uniqueness",
+      "code": "UNQ_GENERATED_ID_EXHAUSTED",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "authorization",
+      "code": "AUTH_UNAUTHENTICATED",
+      "phase": "authorize",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "authorization",
+      "code": "AUTH_CREDENTIAL_EXPIRED",
+      "phase": "authorize",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "authorization",
+      "code": "AUTH_FORBIDDEN",
+      "phase": "authorize",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "authorization",
+      "code": "AUTH_SCOPE_DENIED",
+      "phase": "authorize",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "authorization",
+      "code": "AUTH_POLICY_DENIED",
+      "phase": "authorize",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "capability",
+      "code": "CAP_UNSUPPORTED_FEATURE",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "capability",
+      "code": "CAP_UNSUPPORTED_VERSION",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "capability",
+      "code": "CAP_HOST_UNAVAILABLE",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_capability_change",
+      "token": "absent"
+    },
+    {
+      "category": "capability",
+      "code": "CAP_STORAGE_UNAVAILABLE",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_capability_change",
+      "token": "absent"
+    },
+    {
+      "category": "capability",
+      "code": "CAP_GPU_UNAVAILABLE",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_capability_change",
+      "token": "absent"
+    },
+    {
+      "category": "capability",
+      "code": "CAP_GPU_DEVICE_LOST",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_capability_change",
+      "token": "absent"
+    },
+    {
+      "category": "capability",
+      "code": "CAP_CLOCK_UNSAFE",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_operator_action",
+      "token": "absent"
+    },
+    {
+      "category": "capability",
+      "code": "CAP_FORMAT_UNSUPPORTED",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "quota",
+      "code": "QUOTA_LIMIT_EXCEEDED",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "quota",
+      "code": "QUOTA_RATE_LIMITED",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_delay",
+      "token": "absent"
+    },
+    {
+      "category": "quota",
+      "code": "QUOTA_MEMORY",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_delay",
+      "token": "absent"
+    },
+    {
+      "category": "quota",
+      "code": "QUOTA_STORAGE",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_operator_action",
+      "token": "absent"
+    },
+    {
+      "category": "quota",
+      "code": "QUOTA_CONCURRENCY",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_delay",
+      "token": "absent"
+    },
+    {
+      "category": "quota",
+      "code": "QUOTA_GPU",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_delay",
+      "token": "absent"
+    },
+    {
+      "category": "quota",
+      "code": "QUOTA_RESULT",
+      "phase": "admit",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "deadline",
+      "code": "DEADLINE_EXCEEDED",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "deadline",
+      "code": "DEADLINE_CANCELLED",
+      "phase": "execute",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "deadline",
+      "code": "DEADLINE_CURSOR_EXPIRED",
+      "phase": "cursor",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "durability",
+      "code": "DUR_IO",
+      "phase": "commit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_operator_action",
+      "token": "absent"
+    },
+    {
+      "category": "durability",
+      "code": "DUR_SYNC",
+      "phase": "commit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_operator_action",
+      "token": "absent"
+    },
+    {
+      "category": "durability",
+      "code": "DUR_NO_SPACE",
+      "phase": "commit",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_operator_action",
+      "token": "absent"
+    },
+    {
+      "category": "durability",
+      "code": "DUR_CORRUPTION",
+      "phase": "commit",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "durability",
+      "code": "DUR_RECOVERY_REQUIRED",
+      "phase": "recover",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_operator_action",
+      "token": "absent"
+    },
+    {
+      "category": "durability",
+      "code": "DUR_ACK_UNKNOWN",
+      "phase": "acknowledge",
+      "outcome": "unknown",
+      "retryable": true,
+      "scope": "same_idempotency_key",
+      "token": "present"
+    },
+    {
+      "category": "durability",
+      "code": "DUR_BACKUP_INVALID",
+      "phase": "backup",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_operator_action",
+      "token": "absent"
+    },
+    {
+      "category": "durability",
+      "code": "DUR_RESTORE_INVALID",
+      "phase": "restore",
+      "outcome": "not_applicable",
+      "retryable": true,
+      "scope": "after_operator_action",
+      "token": "absent"
+    },
+    {
+      "category": "internal",
+      "code": "INT_INVARIANT",
+      "phase": "internal",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "internal",
+      "code": "INT_PANIC",
+      "phase": "internal",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "internal",
+      "code": "INT_SERIALIZATION",
+      "phase": "internal",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    },
+    {
+      "category": "internal",
+      "code": "INT_UNEXPECTED",
+      "phase": "internal",
+      "outcome": "not_applicable",
+      "retryable": false,
+      "scope": "never",
+      "token": "absent"
+    }
+  ]
+}

@@ -1,0 +1,143 @@
+{
+  "registry_schema": "helix.semantic-operations/1",
+  "fixture_schema": "helix.semantic-fixture/1",
+  "semantic_profile": "helix-native-v1",
+  "operations": [
+    {
+      "id": "array.all",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Immediate semantic containment of every requested value"
+    },
+    {
+      "id": "array.elem-match",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Immediate element semantic equality match"
+    },
+    {
+      "id": "array.size",
+      "arity": {
+        "min": 1,
+        "max": 1
+      },
+      "description": "Exact immediate dense array length"
+    },
+    {
+      "id": "fixture.echo-order",
+      "arity": {
+        "min": 1,
+        "max": 1
+      },
+      "description": "Echo rows while exercising an explicit order expectation basis"
+    },
+    {
+      "id": "fixture.generate-boundary",
+      "arity": {
+        "min": 4,
+        "max": 4
+      },
+      "description": "Compact deterministic limit boundary generator"
+    },
+    {
+      "id": "fixture.raise-error",
+      "arity": {
+        "min": 1,
+        "max": 1
+      },
+      "description": "Emit one registered structured error for registry conformance"
+    },
+    {
+      "id": "numeric.add",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Checked numeric addition and promotion"
+    },
+    {
+      "id": "numeric.negate",
+      "arity": {
+        "min": 1,
+        "max": 1
+      },
+      "description": "Checked numeric unary negation"
+    },
+    {
+      "id": "path.exists",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Path presence without collapsing null"
+    },
+    {
+      "id": "path.resolve",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Single/fan-out path resolution with Missing"
+    },
+    {
+      "id": "string.contains",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Unicode scalar-sequence substring containment"
+    },
+    {
+      "id": "time.parse-timestamp",
+      "arity": {
+        "min": 1,
+        "max": 1
+      },
+      "description": "Strict timestamp parsing to UTC microseconds"
+    },
+    {
+      "id": "value.compare",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Total semantic ordering comparison returning -1/0/1"
+    },
+    {
+      "id": "value.equal",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Database semantic equality"
+    },
+    {
+      "id": "value.identical",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Exact typed payload/presentation identity"
+    },
+    {
+      "id": "value.identity",
+      "arity": {
+        "min": 1,
+        "max": 1
+      },
+      "description": "Exact lossless value round trip"
+    },
+    {
+      "id": "vector.distance",
+      "arity": {
+        "min": 2,
+        "max": 2
+      },
+      "description": "Reference l2/dot/cosine score"
+    }
+  ]
+}

@@ -1,0 +1,462 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "ordering.profiles",
+  "title": "Every exact, input, rank, pipeline, singleton, and explicit set order basis",
+  "requirements": [
+    "INV-002",
+    "QUERY-001"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "ordering",
+    "provenance",
+    "stable-order"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "explicit-sort",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo-order",
+        "arguments": [
+          {
+            "t": "array",
+            "values": [
+              {
+                "t": "string",
+                "value": "row-a"
+              },
+              {
+                "t": "string",
+                "value": "row-b"
+              }
+            ]
+          }
+        ],
+        "options": {
+          "basis": "explicit_sort"
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "array",
+          "values": [
+            {
+              "t": "string",
+              "value": "row-a"
+            },
+            {
+              "t": "string",
+              "value": "row-b"
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "explicit_sort",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                },
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                },
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "3"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "vector-rank",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo-order",
+        "arguments": [
+          {
+            "t": "array",
+            "values": [
+              {
+                "t": "string",
+                "value": "row-a"
+              },
+              {
+                "t": "string",
+                "value": "row-b"
+              }
+            ]
+          }
+        ],
+        "options": {
+          "basis": "vector_rank"
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "array",
+          "values": [
+            {
+              "t": "string",
+              "value": "row-a"
+            },
+            {
+              "t": "string",
+              "value": "row-b"
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "vector_rank",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "float64",
+                    "bits": "3ff0000000000000"
+                  }
+                },
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "float64",
+                    "bits": "4000000000000000"
+                  }
+                },
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "2"
+                  }
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "pipeline-ordinal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo-order",
+        "arguments": [
+          {
+            "t": "array",
+            "values": [
+              {
+                "t": "string",
+                "value": "row-a"
+              },
+              {
+                "t": "string",
+                "value": "row-b"
+              }
+            ]
+          }
+        ],
+        "options": {
+          "basis": "pipeline_ordinal"
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "array",
+          "values": [
+            {
+              "t": "string",
+              "value": "row-a"
+            },
+            {
+              "t": "string",
+              "value": "row-b"
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "pipeline_ordinal",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                },
+                {
+                  "kind": "index",
+                  "value": 0
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "value",
+                  "direction": "asc",
+                  "value": {
+                    "t": "int32",
+                    "value": "1"
+                  }
+                },
+                {
+                  "kind": "index",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "input-order",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo-order",
+        "arguments": [
+          {
+            "t": "array",
+            "values": [
+              {
+                "t": "string",
+                "value": "row-a"
+              },
+              {
+                "t": "string",
+                "value": "row-b"
+              }
+            ]
+          }
+        ],
+        "options": {
+          "basis": "input_order"
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "array",
+          "values": [
+            {
+              "t": "string",
+              "value": "row-a"
+            },
+            {
+              "t": "string",
+              "value": "row-b"
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "input_order",
+          "row_count": 2,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "index",
+                  "value": 0
+                }
+              ]
+            },
+            {
+              "components": [
+                {
+                  "kind": "index",
+                  "value": 1
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "singleton",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo-order",
+        "arguments": [
+          {
+            "t": "array",
+            "values": [
+              {
+                "t": "string",
+                "value": "only"
+              }
+            ]
+          }
+        ],
+        "options": {
+          "basis": "singleton"
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "array",
+          "values": [
+            {
+              "t": "string",
+              "value": "only"
+            }
+          ]
+        },
+        "order": {
+          "mode": "exact",
+          "basis": "singleton",
+          "row_count": 1,
+          "keys": [
+            {
+              "components": [
+                {
+                  "kind": "singleton",
+                  "value": "fixture-result"
+                }
+              ]
+            }
+          ]
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "explicit-set-semantics",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.echo-order",
+        "arguments": [
+          {
+            "t": "array",
+            "values": [
+              {
+                "t": "string",
+                "value": "row-a"
+              },
+              {
+                "t": "string",
+                "value": "row-b"
+              }
+            ]
+          }
+        ],
+        "options": {
+          "basis": "set_semantics"
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "array",
+          "values": [
+            {
+              "t": "string",
+              "value": "row-a"
+            },
+            {
+              "t": "string",
+              "value": "row-b"
+            }
+          ]
+        },
+        "order": {
+          "mode": "set",
+          "basis": "set_semantics",
+          "row_count": 2,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

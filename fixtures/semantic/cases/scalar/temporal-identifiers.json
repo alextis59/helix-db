@@ -1,0 +1,516 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "scalar.temporal-identifiers",
+  "title": "Timestamp/date and accepted identifier domain/order boundaries",
+  "requirements": [
+    "CORE-002",
+    "DATA-001",
+    "QUERY-001"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "date",
+    "identifier",
+    "object-id",
+    "scalar-edge",
+    "timestamp",
+    "uuid"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "identity-temporal-timestamp-min",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "timestamp",
+            "microseconds": "-62135596800000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "timestamp",
+          "microseconds": "-62135596800000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-temporal-timestamp-epoch",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "timestamp",
+            "microseconds": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "timestamp",
+          "microseconds": "0"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-temporal-timestamp-max",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "timestamp",
+            "microseconds": "253402300799999999"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "timestamp",
+          "microseconds": "253402300799999999"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-temporal-date-min",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "date",
+            "days": "-719162"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "date",
+          "days": "-719162"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-temporal-date-epoch",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "date",
+            "days": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "date",
+          "days": "0"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-temporal-date-max",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "date",
+            "days": "2932896"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "date",
+          "days": "2932896"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-id-uuid-min",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "uuid",
+            "value": "00000000-0000-0000-0000-000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "uuid",
+          "value": "00000000-0000-0000-0000-000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-id-uuid-max",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "uuid",
+            "value": "ffffffff-ffff-ffff-ffff-ffffffffffff"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "uuid",
+          "value": "ffffffff-ffff-ffff-ffff-ffffffffffff"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-id-objectid-min",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "objectId",
+            "value": "000000000000000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "objectId",
+          "value": "000000000000000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-id-objectid-max",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "objectId",
+            "value": "ffffffffffffffffffffffff"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "objectId",
+          "value": "ffffffffffffffffffffffff"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "date-not-timestamp",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "date",
+            "days": "0"
+          },
+          {
+            "t": "timestamp",
+            "microseconds": "0"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "parse-offset-to-epoch",
+      "action": {
+        "kind": "value_operation",
+        "operation": "time.parse-timestamp",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "1970-01-01T01:00:00+01:00"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "timestamp",
+          "microseconds": "0"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "parse-microsecond",
+      "action": {
+        "kind": "value_operation",
+        "operation": "time.parse-timestamp",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "1970-01-01T00:00:00.000001Z"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "timestamp",
+          "microseconds": "1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "reject-leap-second",
+      "action": {
+        "kind": "value_operation",
+        "operation": "time.parse-timestamp",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "2016-12-31T23:59:60Z"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "error",
+        "category": "type",
+        "code": "TYPE_TEMPORAL_RANGE",
+        "phase": "execute",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "compare-binary-uuid",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.compare",
+        "arguments": [
+          {
+            "t": "binary",
+            "subtype": 0,
+            "hex": "ff"
+          },
+          {
+            "t": "uuid",
+            "value": "00000000-0000-0000-0000-000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "int32",
+          "value": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "compare-uuid-objectid",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.compare",
+        "arguments": [
+          {
+            "t": "uuid",
+            "value": "ffffffff-ffff-ffff-ffff-ffffffffffff"
+          },
+          {
+            "t": "objectId",
+            "value": "000000000000000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "int32",
+          "value": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

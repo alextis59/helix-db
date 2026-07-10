@@ -1,0 +1,606 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "scalar.float64-specials",
+  "title": "Binary64 finite boundaries, signed zeros, infinities, and NaN payloads",
+  "requirements": [
+    "DATA-001",
+    "INV-002",
+    "QUERY-001"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "float64",
+    "numeric",
+    "scalar-edge",
+    "special-value"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "identity-negative-infinity",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "fff0000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "fff0000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-negative-max-finite",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "ffefffffffffffff"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "ffefffffffffffff"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-negative-zero",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "8000000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "8000000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-positive-zero",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "0000000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "0000000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-min-subnormal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "0000000000000001"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "0000000000000001"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-max-subnormal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "000fffffffffffff"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "000fffffffffffff"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-min-normal",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "0010000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "0010000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-one",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "3ff0000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "3ff0000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-max-finite",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "7fefffffffffffff"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "7fefffffffffffff"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-positive-infinity",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "7ff0000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "7ff0000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-signaling-nan",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "7ff0000000000001"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "7ff0000000000001"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-quiet-nan",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "7ff8000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "7ff8000000000000"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "identity-negative-nan-payload",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identity",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "fff8000000000001"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "float64",
+          "bits": "fff8000000000001"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "equal-signed-zero",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "8000000000000000"
+          },
+          {
+            "t": "float64",
+            "bits": "0000000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": true
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "different-signed-zero-payload",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identical",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "8000000000000000"
+          },
+          {
+            "t": "float64",
+            "bits": "0000000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "equal-nan-payloads",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.equal",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "7ff0000000000001"
+          },
+          {
+            "t": "float64",
+            "bits": "fff8000000000001"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": true
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "different-nan-payload-identity",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.identical",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "7ff0000000000001"
+          },
+          {
+            "t": "float64",
+            "bits": "fff8000000000001"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "bool",
+          "value": false
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "compare-negative-infinity-finite",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.compare",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "fff0000000000000"
+          },
+          {
+            "t": "float64",
+            "bits": "ffefffffffffffff"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "int32",
+          "value": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "compare-positive-infinity-nan",
+      "action": {
+        "kind": "value_operation",
+        "operation": "value.compare",
+        "arguments": [
+          {
+            "t": "float64",
+            "bits": "7ff0000000000000"
+          },
+          {
+            "t": "float64",
+            "bits": "7ff8000000000000"
+          }
+        ]
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "int32",
+          "value": "-1"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

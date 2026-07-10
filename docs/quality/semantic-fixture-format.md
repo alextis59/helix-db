@@ -139,7 +139,7 @@ Typed objects use a field-entry array because logical field presentation order i
 The JSON Schema validates tag shape, canonical spelling, component widths, and basic limits. Semantic lint additionally validates:
 
 - int32/int64/timestamp/date numeric domains;
-- decimal canonical cohort/exponent domain;
+- decimal canonical cohort/exponent domain (`-6176 <= exponent` and `exponent + coefficient_digits - 1 <= 6144`);
 - vector `dimension == bits.length` and finite component bits;
 - valid scalar strings/names, UTF-8 byte/scalar limits, depth/count/size limits;
 - unique object fields, root document `_id`, accepted ID types, semantic ID uniqueness/order;
@@ -348,7 +348,7 @@ Before `P01-018` closes:
 - canonical/source hash reproduction and local links/formatting pass;
 - schemas/examples/checker are immutable-hashed in task evidence.
 
-`P01-019` then populates the normative cases and manifest; `P01-020` implements the full independent validator/oracle. No optimized/runtime implementation may become the source of expected values.
+`P01-019` populates the normative [cases, manifest, and coverage ledger](../../fixtures/semantic/COVERAGE.md); `P01-020` implements the full independent validator/oracle. No optimized/runtime implementation may become the source of expected values.
 
 ## References
 

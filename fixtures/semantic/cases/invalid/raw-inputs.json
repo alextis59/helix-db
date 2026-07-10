@@ -1,0 +1,606 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "invalid.raw-inputs",
+  "title": "Malformed bytes, UTF-8, duplicate keys, typed payloads, and compression fail safely",
+  "requirements": [
+    "QUERY-002"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "duplicate-field",
+    "invalid-input",
+    "parse",
+    "raw-input",
+    "utf8"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "empty-input",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": ""
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_TRUNCATED_INPUT",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "truncated-object",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_TRUNCATED_INPUT",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "invalid-utf8",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "ff"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_UTF8",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "invalid-json-token",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2278223a4e614e7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_JSON",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "duplicate-json-field",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2266696e64223a22646f6373222c2266696c746572223a7b2278223a312c2278223a327d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_DUPLICATE_FIELD",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "invalid-typed-integer",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2266696e64223a22646f6373222c2266696c746572223a7b2278223a7b22246571223a7b222476616c7565223a7b2274223a22696e743634222c2276616c7565223a317d7d7d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "int32-above-maximum",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a22696e743332222c2276616c7565223a2232313437343833363438227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "int64-below-minimum",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a22696e743634222c2276616c7565223a222d39323233333732303336383534373735383039227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "decimal-below-quantum",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a22646563696d616c313238222c22636c617373223a2266696e697465222c227369676e223a22706f736974697665222c22636f656666696369656e74223a2231222c226578706f6e656e74223a222d36313737227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "decimal-above-adjusted-maximum",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a22646563696d616c313238222c22636c617373223a2266696e697465222c227369676e223a22706f736974697665222c22636f656666696369656e74223a2239393939393939393939393939393939393939393939393939393939393939393939222c226578706f6e656e74223a2236313132227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "timestamp-above-maximum",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a2274696d657374616d70222c226d6963726f7365636f6e6473223a22323533343032333030383030303030303030227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "date-above-maximum",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a2264617465222c2264617973223a2232393332383937227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "malformed-uuid",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a2275756964222c2276616c7565223a223030303030303030303030303030303030303030303030303030303030303030227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "malformed-objectid",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a226f626a6563744964222c2276616c7565223a2230303030227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "odd-binary-hex",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a2262696e617279222c2273756274797065223a302c22686578223a2230227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "nonfinite-vector-component",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a22766563746f72222c22656c656d656e74223a22663332222c2264696d656e73696f6e223a312c2262697473223a5b223766383030303030225d7d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_TYPED_VALUE",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "lone-surrogate-string",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "identity",
+        "bytes_hex": "7b2276616c7565223a7b222476616c7565223a7b2274223a22737472696e67222c2276616c7565223a225c7564383030227d7d7d"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_INVALID_UTF8",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "invalid-gzip",
+      "action": {
+        "kind": "raw_input",
+        "target": "command",
+        "encoding": "json",
+        "compression": "gzip",
+        "bytes_hex": "00"
+      },
+      "expect": {
+        "kind": "error",
+        "category": "parse",
+        "code": "PAR_COMPRESSION_FAILED",
+        "phase": "decode",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

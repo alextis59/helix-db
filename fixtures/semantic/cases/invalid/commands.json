@@ -1,0 +1,329 @@
+{
+  "fixture_schema": "helix.semantic-fixture/1",
+  "id": "invalid.commands",
+  "title": "Unknown, malformed, protected, conflicting, and unsupported commands fail explicitly",
+  "requirements": [
+    "QUERY-002"
+  ],
+  "plan_items": [
+    "P01-019"
+  ],
+  "profiles": {
+    "semantics": "helix-native-v1",
+    "limits": "limits-v1",
+    "collation": "binary_utf8_v1",
+    "errors": "errors-v1",
+    "default_order": "default_order_v1"
+  },
+  "tags": [
+    "command",
+    "error",
+    "invalid-command",
+    "validation"
+  ],
+  "initial_state": {
+    "collections": []
+  },
+  "steps": [
+    {
+      "id": "unknown-command",
+      "action": {
+        "kind": "command",
+        "command": {
+          "frobnicate": "docs"
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_UNKNOWN_COMMAND",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "unknown-operator",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {
+            "x": {
+              "$mystery": {
+                "$value": {
+                  "t": "int32",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_UNKNOWN_OPERATOR",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "unknown-option",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {},
+          "mysteryOption": true
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_UNKNOWN_OPTION",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "invalid-sort-direction",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {},
+          "sort": {
+            "x": 0
+          }
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_INVALID_LITERAL",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "protected-id-update",
+      "action": {
+        "kind": "command",
+        "command": {
+          "updateOne": "docs",
+          "filter": {
+            "_id": {
+              "$eq": {
+                "$value": {
+                  "t": "int32",
+                  "value": "1"
+                }
+              }
+            }
+          },
+          "update": {
+            "$set": {
+              "_id": {
+                "$value": {
+                  "t": "int32",
+                  "value": "2"
+                }
+              }
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_PROTECTED_FIELD",
+        "phase": "validate",
+        "outcome": "not_committed",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "conflicting-update-paths",
+      "action": {
+        "kind": "command",
+        "command": {
+          "updateOne": "docs",
+          "filter": {
+            "_id": {
+              "$eq": {
+                "$value": {
+                  "t": "int32",
+                  "value": "1"
+                }
+              }
+            }
+          },
+          "update": {
+            "$set": {
+              "a": {
+                "$value": {
+                  "t": "object",
+                  "fields": []
+                }
+              },
+              "a.b": {
+                "$value": {
+                  "t": "int32",
+                  "value": "1"
+                }
+              }
+            }
+          }
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_CONFLICTING_PATHS",
+        "phase": "validate",
+        "outcome": "not_committed",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "vector-sort-combination",
+      "action": {
+        "kind": "command",
+        "command": {
+          "find": "docs",
+          "filter": {
+            "embedding": {
+              "$vectorTopK": {
+                "vector": {
+                  "$value": {
+                    "t": "vector",
+                    "element": "f32",
+                    "dimension": 1,
+                    "bits": [
+                      "3f800000"
+                    ]
+                  }
+                },
+                "metric": "l2",
+                "k": 1
+              }
+            }
+          },
+          "sort": {
+            "_id": 1
+          }
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "validation",
+        "code": "VAL_UNSUPPORTED_COMBINATION",
+        "phase": "validate",
+        "outcome": "not_applicable",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "absent",
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    }
+  ]
+}

@@ -1,0 +1,401 @@
+{
+  "manifest_schema": "helix.semantic-corpus/1",
+  "fixture_schema": "helix.semantic-fixture/1",
+  "semantic_profile": "helix-native-v1",
+  "hash_profile": "sha256+jcs-rfc8785",
+  "generated_by": {
+    "tool": "generate-semantic-corpus",
+    "version": "1.0.0"
+  },
+  "counts": {
+    "fixtures": 17,
+    "steps": 313,
+    "successes": 183,
+    "errors": 130
+  },
+  "coverage": {
+    "CORE-002": [
+      "scalar.temporal-identifiers"
+    ],
+    "DATA-001": [
+      "limits.document-values",
+      "scalar.decimal128-specials",
+      "scalar.float64-specials",
+      "scalar.integers",
+      "scalar.mixed-numeric",
+      "scalar.null-bool",
+      "scalar.string-binary",
+      "scalar.temporal-identifiers",
+      "scalar.vectors",
+      "values.objects-arrays"
+    ],
+    "DATA-002": [
+      "presence.missing-null-paths",
+      "query.missing-array-nested",
+      "values.objects-arrays"
+    ],
+    "GPU-002": [
+      "scalar.vectors"
+    ],
+    "GPU-003": [
+      "scalar.vectors"
+    ],
+    "GPU-004": [
+      "errors.registry"
+    ],
+    "INV-002": [
+      "ordering.profiles",
+      "scalar.float64-specials",
+      "scalar.vectors"
+    ],
+    "QUERY-001": [
+      "ordering.profiles",
+      "presence.missing-null-paths",
+      "query.missing-array-nested",
+      "scalar.decimal128-specials",
+      "scalar.float64-specials",
+      "scalar.integers",
+      "scalar.mixed-numeric",
+      "scalar.null-bool",
+      "scalar.string-binary",
+      "scalar.temporal-identifiers",
+      "scalar.vectors",
+      "values.objects-arrays"
+    ],
+    "QUERY-002": [
+      "errors.registry",
+      "invalid.commands",
+      "invalid.raw-inputs",
+      "limits.commands-queries",
+      "limits.document-values",
+      "scalar.integers",
+      "scalar.mixed-numeric"
+    ],
+    "SEC-001": [
+      "errors.registry"
+    ],
+    "SEC-002": [
+      "limits.commands-queries",
+      "limits.document-values"
+    ],
+    "STORE-001": [
+      "errors.registry"
+    ]
+  },
+  "fixtures": [
+    {
+      "id": "errors.registry",
+      "path": "fixtures/semantic/cases/errors/registry.json",
+      "bytes": 62341,
+      "source_sha256": "d17ce274018b27850c01b25fc6728fe243c95cf940e6b1d6600efc639f68b661",
+      "canonical_sha256": "3c6c5aad95c6dc83607438e796a5046037b1aacd39dc21262976cc262be5ff50",
+      "requirements": [
+        "GPU-004",
+        "QUERY-002",
+        "SEC-001",
+        "STORE-001"
+      ],
+      "tags": [
+        "error",
+        "error-registry",
+        "structured-error"
+      ],
+      "steps": 74
+    },
+    {
+      "id": "invalid.commands",
+      "path": "fixtures/semantic/cases/invalid/commands.json",
+      "bytes": 7471,
+      "source_sha256": "2f1c6f578763ace0c5dfafa5b9193b15161f404fab49521aa5e16b5c7bb9ac3f",
+      "canonical_sha256": "1526e956f694af1abc86b510f21dfbbde5837ed0c389754177e0499b41544a19",
+      "requirements": [
+        "QUERY-002"
+      ],
+      "tags": [
+        "command",
+        "error",
+        "invalid-command",
+        "validation"
+      ],
+      "steps": 7
+    },
+    {
+      "id": "invalid.raw-inputs",
+      "path": "fixtures/semantic/cases/invalid/raw-inputs.json",
+      "bytes": 16262,
+      "source_sha256": "0500ce98382cfd4e0d3e6a27817fdc5f6743bd8ff086ddde93f4d5dcf9c74e1b",
+      "canonical_sha256": "2ce0b4d1a0dfb363801d014fe88662b437da908198c70f82fef43701181eec8b",
+      "requirements": [
+        "QUERY-002"
+      ],
+      "tags": [
+        "duplicate-field",
+        "invalid-input",
+        "parse",
+        "raw-input",
+        "utf8"
+      ],
+      "steps": 18
+    },
+    {
+      "id": "limits.commands-queries",
+      "path": "fixtures/semantic/cases/limits/commands-queries.json",
+      "bytes": 59436,
+      "source_sha256": "cb655502aa32bbf1eb0c3c21c9416b291c2732f2e1d070047d726eb698bbc319",
+      "canonical_sha256": "612b879c75c22b44e09c2db1e4100bc4a0e9766e239872230914d6cb949c673e",
+      "requirements": [
+        "QUERY-002",
+        "SEC-002"
+      ],
+      "tags": [
+        "boundary",
+        "command-limit",
+        "limit"
+      ],
+      "steps": 36
+    },
+    {
+      "id": "limits.document-values",
+      "path": "fixtures/semantic/cases/limits/document-values.json",
+      "bytes": 54726,
+      "source_sha256": "7488b899c5891125aa22ece2001dbf984ff7aa366eee5a3a3bef618084fa3d6f",
+      "canonical_sha256": "29b61d9bc86be00e97222116dadf91c07880912e9f39c1fa634be4286f7271e3",
+      "requirements": [
+        "DATA-001",
+        "QUERY-002",
+        "SEC-002"
+      ],
+      "tags": [
+        "boundary",
+        "document-limit",
+        "limit"
+      ],
+      "steps": 33
+    },
+    {
+      "id": "ordering.profiles",
+      "path": "fixtures/semantic/cases/ordering/profiles.json",
+      "bytes": 10190,
+      "source_sha256": "4855bf9e979871f0186274e5ae44979767f0a8e9f94f3e147903bbec8786a798",
+      "canonical_sha256": "22835b564cfc69bbc27d9cc73b00c8e97e6f5d6392367b624fed69b545a70b77",
+      "requirements": [
+        "INV-002",
+        "QUERY-001"
+      ],
+      "tags": [
+        "ordering",
+        "provenance",
+        "stable-order"
+      ],
+      "steps": 6
+    },
+    {
+      "id": "presence.missing-null-paths",
+      "path": "fixtures/semantic/cases/presence/missing-null-paths.json",
+      "bytes": 21491,
+      "source_sha256": "4cd2d9bf953c28dd3ac051d01d57a28dc1f7395998c2c42bb1ad65696e570fb5",
+      "canonical_sha256": "a0cef2b775caad0736305045d5fe4e80e6a22a0e8fec7a1d606aa451b5099b9f",
+      "requirements": [
+        "DATA-002",
+        "QUERY-001"
+      ],
+      "tags": [
+        "missing",
+        "nested-path",
+        "null",
+        "path-fanout"
+      ],
+      "steps": 9
+    },
+    {
+      "id": "query.missing-array-nested",
+      "path": "fixtures/semantic/cases/query/missing-array-nested.json",
+      "bytes": 36500,
+      "source_sha256": "5cab03c2b93ed826a8644a6bb6fbc20bf88ce704e1ef0e54813fde0bd376105d",
+      "canonical_sha256": "4c55ec2eb303f5525b3d5cf30badfe7532171d4ea7a27ccd050da96049d4a940",
+      "requirements": [
+        "DATA-002",
+        "QUERY-001"
+      ],
+      "tags": [
+        "array",
+        "command",
+        "missing",
+        "nested-path",
+        "null",
+        "query"
+      ],
+      "steps": 8
+    },
+    {
+      "id": "scalar.decimal128-specials",
+      "path": "fixtures/semantic/cases/scalar/decimal128-specials.json",
+      "bytes": 12944,
+      "source_sha256": "92ae5b4b0cbac419b8c3337bdf10a1247120cba7f82849013b1127104cb67ff9",
+      "canonical_sha256": "21fbcbc2418b6d1cf6f71e4472b5454988ad62168c35c136bdbf140e1d5563e6",
+      "requirements": [
+        "DATA-001",
+        "QUERY-001"
+      ],
+      "tags": [
+        "decimal128",
+        "numeric",
+        "scalar-edge",
+        "special-value"
+      ],
+      "steps": 15
+    },
+    {
+      "id": "scalar.float64-specials",
+      "path": "fixtures/semantic/cases/scalar/float64-specials.json",
+      "bytes": 13084,
+      "source_sha256": "55a7ec4ee2c96f1d3ae5b0e4f5ee1306d96671c099249e1b1c5403a156b421a0",
+      "canonical_sha256": "7d89f2c0de3ef6a2f5a3fc11da571f33cc0167951a90052afe63db1cff8b90e9",
+      "requirements": [
+        "DATA-001",
+        "INV-002",
+        "QUERY-001"
+      ],
+      "tags": [
+        "float64",
+        "numeric",
+        "scalar-edge",
+        "special-value"
+      ],
+      "steps": 19
+    },
+    {
+      "id": "scalar.integers",
+      "path": "fixtures/semantic/cases/scalar/integers.json",
+      "bytes": 10165,
+      "source_sha256": "7eaad5e906511765c2b7887fff030f6b78bad3dc909f4193e4d2b6db0d40d9b0",
+      "canonical_sha256": "f889187bb98c4f563a208f96f8e3ac7736944c03640db65cf38f487fcf355e05",
+      "requirements": [
+        "DATA-001",
+        "QUERY-001",
+        "QUERY-002"
+      ],
+      "tags": [
+        "integer",
+        "numeric",
+        "scalar-edge"
+      ],
+      "steps": 14
+    },
+    {
+      "id": "scalar.mixed-numeric",
+      "path": "fixtures/semantic/cases/scalar/mixed-numeric.json",
+      "bytes": 6133,
+      "source_sha256": "b60957b27028958d85389f8721e4687011104ef3261051dfca5285e66db066ae",
+      "canonical_sha256": "1e1f77ef78dcee700c15d72f1c7a5a295af3b41c4dad56efd6ac409e7bb082fe",
+      "requirements": [
+        "DATA-001",
+        "QUERY-001",
+        "QUERY-002"
+      ],
+      "tags": [
+        "mixed-numeric",
+        "numeric",
+        "scalar-edge"
+      ],
+      "steps": 7
+    },
+    {
+      "id": "scalar.null-bool",
+      "path": "fixtures/semantic/cases/scalar/null-bool.json",
+      "bytes": 5525,
+      "source_sha256": "922bca2fc9b7e04a688362da21c5fd5c56abb6d7f264c06793520cc1731ea708",
+      "canonical_sha256": "72bfc2cc6de53f86923c9cce724aa945c6ed1666752a22d6b7b3d95ef08d024c",
+      "requirements": [
+        "DATA-001",
+        "QUERY-001"
+      ],
+      "tags": [
+        "bool",
+        "null",
+        "scalar-edge"
+      ],
+      "steps": 8
+    },
+    {
+      "id": "scalar.string-binary",
+      "path": "fixtures/semantic/cases/scalar/string-binary.json",
+      "bytes": 10321,
+      "source_sha256": "e793ced930da09e09e723025008a902822ed7dc1364054670ec2e0608e5707c6",
+      "canonical_sha256": "db9ccad341a8909d8e319f1e6a1eedc5fd4a6bbe61a3bb9618784982ab1923e7",
+      "requirements": [
+        "DATA-001",
+        "QUERY-001"
+      ],
+      "tags": [
+        "binary",
+        "collation",
+        "scalar-edge",
+        "string",
+        "unicode"
+      ],
+      "steps": 15
+    },
+    {
+      "id": "scalar.temporal-identifiers",
+      "path": "fixtures/semantic/cases/scalar/temporal-identifiers.json",
+      "bytes": 11305,
+      "source_sha256": "e35f4bd0f0229994449ec011185fbc4689492b692b67b2babcd646d34c7bcc8f",
+      "canonical_sha256": "bdcad689b250aa960e47205b9d8e419e50f110a1b4fd57a78d3000ec6f04001b",
+      "requirements": [
+        "CORE-002",
+        "DATA-001",
+        "QUERY-001"
+      ],
+      "tags": [
+        "date",
+        "identifier",
+        "object-id",
+        "scalar-edge",
+        "timestamp",
+        "uuid"
+      ],
+      "steps": 16
+    },
+    {
+      "id": "scalar.vectors",
+      "path": "fixtures/semantic/cases/scalar/vectors.json",
+      "bytes": 11022,
+      "source_sha256": "44ef43fb4adf9b45a039af322cfcaf2abc5b0a932c7e10f6b085671818cc2fc1",
+      "canonical_sha256": "56937b75df75f80b551dc353dd6e21c8e04f7b3a936b7683901ab47264c7ae4c",
+      "requirements": [
+        "DATA-001",
+        "GPU-002",
+        "GPU-003",
+        "INV-002",
+        "QUERY-001"
+      ],
+      "tags": [
+        "f16",
+        "f32",
+        "scalar-edge",
+        "vector"
+      ],
+      "steps": 12
+    },
+    {
+      "id": "values.objects-arrays",
+      "path": "fixtures/semantic/cases/values/objects-arrays.json",
+      "bytes": 18315,
+      "source_sha256": "b13f66e858639a0c8ec5661bdbaaaff6ed6365fe8a31b8fe68d8319a0422e649",
+      "canonical_sha256": "ecc49ee4b20aa8a50bb5e109c76ee6e407b6e3c880071fa43c5d727d29b40721",
+      "requirements": [
+        "DATA-001",
+        "DATA-002",
+        "QUERY-001"
+      ],
+      "tags": [
+        "array",
+        "nested-array",
+        "object",
+        "value-edge"
+      ],
+      "steps": 16
+    }
+  ]
+}

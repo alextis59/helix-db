@@ -98,6 +98,7 @@ Every `int32` and `int64` value converts exactly to decimal128 because the integ
 Decimal arithmetic uses one engine-wide IEEE decimal128 context:
 
 - Precision is 34 decimal digits.
+- Adjusted normal exponents span -6143 through 6144; exact canonical coefficient/exponent and subnormal bounds are defined by `P01-004`.
 - The default rounding mode is round to nearest, ties to even.
 - No host locale influences parsing, formatting, rounding, or decimal point.
 - Exponent overflow is `NumericOverflow`; infinity is not silently substituted for a finite operation.
