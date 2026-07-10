@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 21
-- Open checklist items: 501
+- Completed checklist items: 22
+- Open checklist items: 500
 - Total checklist items: 522
 - Current phase: Phase 1 — Semantic contract and compatibility corpus
 - Next release gate: `G01` (`G02` may proceed in parallel)
@@ -153,7 +153,7 @@ Dependencies: `G00`.
 - [x] **P01-001** Specify the complete value model for null, Boolean, signed integers, floating point, decimal, string, binary, object, array, timestamp, date, UUID, ObjectId, and vectors.
 - [x] **P01-002** Define missing-field versus explicit-null behavior for reads, comparisons, sorting, projection, indexes, aggregation, and updates.
 - [x] **P01-003** Define integer width, coercion, overflow, underflow, decimal promotion, and mixed numeric comparison rules.
-- [ ] **P01-004** Define floating-point NaN, infinities, negative zero, equality, ordering, hashing, aggregation, and CPU/GPU tolerance rules.
+- [x] **P01-004** Define floating-point NaN, infinities, negative zero, equality, ordering, hashing, aggregation, and CPU/GPU tolerance rules.
 - [ ] **P01-005** Define timestamp precision, time-zone normalization, date conversion, logical expiry time, and clock-source requirements.
 - [ ] **P01-006** Define string byte representation, Unicode validation, normalization, binary ordering, and v1 collation scope.
 - [ ] **P01-007** Define object field ordering, canonical hashing, duplicate-key rejection, and import-only duplicate behavior.

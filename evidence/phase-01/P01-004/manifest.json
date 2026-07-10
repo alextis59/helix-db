@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-004",
+  "requirements": ["QUERY-001", "CORE-003", "INV-002", "GPU-002"],
+  "commit": "2f2627d8130342ee8caae020e35d7ba7051eaf89",
+  "recorded_at": "2026-07-10T17:38:37Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 2f2627d^ 2f2627d", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 2f2627d", "exit_code": 0 },
+    { "command": "sha256sum of five committed artifacts", "exit_code": 0 },
+    { "command": "node special-value coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node canonical NaN, signed-zero, and infinity check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/floating-special-semantics.md", "media_type": "text/markdown", "bytes": 15493, "sha256": "54e15ec61b4e2eb8d9e00040bdf6e7b2cf4757f7710f9b1a4b7c675c404f07e3" },
+    { "path": "docs/architecture/numeric-semantics.md", "media_type": "text/markdown", "bytes": 12901, "sha256": "c76b2a0405904a68f2e586520f54e3a155e6297c4803e3d716204ec7e0dd5fd9" },
+    { "path": "docs/adr/0002-exact-numeric-semantics.md", "media_type": "text/markdown", "bytes": 9075, "sha256": "bb1dbb23b4d7f8217e908185e81dcd97c5b8c7a569a3794143440e84cee78161" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 63804, "sha256": "0afb4f85cff95d339394cc9773c66106782a146876a4f10003952244b7d515c6" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 2781, "sha256": "611a87ab45681a4bd68337ed4846ceae94bb5e3aaa3bbdef8981b53d4ef1d05c" }
+  ],
+  "verdict": "pass"
+}
