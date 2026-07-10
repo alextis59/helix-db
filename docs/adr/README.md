@@ -18,6 +18,7 @@ The process is governed by [Specification and Change Control](../governance/chan
 | --- | --- | --- | --- | --- |
 | [0000](0000-template.md) | Template | Template | Project maintainers | N/A |
 | [0001](0001-public-product-identity.md) | Retain HelixDB as a temporary development identity | Accepted | Project maintainer | `P00-005`, `G00`; revisit at `P16-016` |
+| [0002](0002-exact-numeric-semantics.md) | Use exact mixed numeric comparison and checked arithmetic | Accepted | Query semantics owner | `P01-003`, `G01` |
 
 ## Naming and file rules
 
