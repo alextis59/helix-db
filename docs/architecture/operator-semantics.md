@@ -422,6 +422,8 @@ The executable corpus crosses every operator with:
 
 ## Compatibility boundary
 
+The current cross-surface classifications are published in the [v1 semantic and compatibility matrix](../compatibility/v1-semantic-compatibility-matrix.md). A specified native operator, executable oracle primitive, or exact MongoDB differential fixture is not by itself an implemented engine or adapter feature.
+
 Native semantics deliberately differ from MongoDB in null equality, object field-order equality, implicit array element matching/nested traversal, supported collations/regex/schema dialect, ID domain/default generation, and other recorded cases. The MongoDB adapter rewrites only proven forms and publishes the exact executable matrix; parsing familiar JSON never implies compatible behavior.
 
 ## Follow-up ownership

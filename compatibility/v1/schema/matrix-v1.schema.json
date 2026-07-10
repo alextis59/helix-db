@@ -1,0 +1,410 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "urn:helix-db:schema:semantic-compatibility-matrix:1",
+  "title": "HelixDB v1 semantic and compatibility matrix",
+  "type": "object",
+  "required": [
+    "matrix_schema",
+    "matrix_version",
+    "semantic_profile",
+    "publication_status",
+    "published_on",
+    "generator",
+    "requirements",
+    "references",
+    "inputs",
+    "claims",
+    "classification_definitions",
+    "native_rows",
+    "mongodb_experimental_cases",
+    "mongodb_unsupported",
+    "redis_unsupported",
+    "counts",
+    "verdict"
+  ],
+  "properties": {
+    "matrix_schema": { "const": "helix.semantic-compatibility-matrix/1" },
+    "matrix_version": { "const": "1.0.0" },
+    "semantic_profile": { "const": "helix-native-v1" },
+    "publication_status": { "const": "foundation_semantic_baseline" },
+    "published_on": { "const": "2026-07-10" },
+    "generator": {
+      "type": "object",
+      "required": ["name", "version"],
+      "properties": {
+        "name": { "const": "helix-semantic-compatibility-generator" },
+        "version": { "const": "1.0.0" }
+      },
+      "additionalProperties": false
+    },
+    "requirements": {
+      "const": ["COMPAT-001", "DATA-001", "DATA-002", "INV-010", "QUERY-001", "QUERY-002"]
+    },
+    "references": {
+      "type": "object",
+      "required": ["mongodb", "redis"],
+      "properties": {
+        "mongodb": {
+          "type": "object",
+          "required": [
+            "status",
+            "profile",
+            "server_product",
+            "server_version",
+            "server_git_version",
+            "image",
+            "image_id",
+            "client_product",
+            "client_version",
+            "harness_version"
+          ],
+          "properties": {
+            "status": { "const": "experimental_differential_only" },
+            "profile": { "const": "mongodb-6.0.5-initial-v1" },
+            "server_product": { "const": "MongoDB Community Server" },
+            "server_version": { "const": "6.0.5" },
+            "server_git_version": { "const": "c9a99c120371d4d4c52cbb15dac34a36ce8d3b1d" },
+            "image": { "const": "mongo@sha256:928347070dc089a596f869a22a4204c0feace3eb03470a6a2de6814f11fb7309" },
+            "image_id": { "const": "sha256:8b33e239cde686e9378f9d8941eafa167fdf73527e9e006ab1fe9174c9622797" },
+            "client_product": { "const": "MongoDB Shell" },
+            "client_version": { "const": "1.8.0" },
+            "harness_version": { "const": "1.0.1" }
+          },
+          "additionalProperties": false
+        },
+        "redis": {
+          "type": "object",
+          "required": ["status", "reference_product", "reference_version", "protocol_versions"],
+          "properties": {
+            "status": { "const": "not_tested" },
+            "reference_product": { "const": "none" },
+            "reference_version": { "type": "null" },
+            "protocol_versions": { "type": "array", "maxItems": 0 }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "inputs": {
+      "type": "object",
+      "required": [
+        "specifications",
+        "semantic_coverage",
+        "semantic_operations",
+        "semantic_errors",
+        "semantic_manifest",
+        "oracle_report",
+        "mongodb_cases",
+        "mongodb_observations",
+        "mongodb_report"
+      ],
+      "properties": {
+        "specifications": { "$ref": "#/$defs/source_identity" },
+        "semantic_coverage": { "$ref": "#/$defs/source_identity" },
+        "semantic_operations": { "$ref": "#/$defs/source_identity" },
+        "semantic_errors": { "$ref": "#/$defs/source_identity" },
+        "semantic_manifest": { "$ref": "#/$defs/source_identity" },
+        "oracle_report": { "$ref": "#/$defs/source_identity" },
+        "mongodb_cases": { "$ref": "#/$defs/source_identity" },
+        "mongodb_observations": { "$ref": "#/$defs/source_identity" },
+        "mongodb_report": { "$ref": "#/$defs/source_identity" }
+      },
+      "additionalProperties": false
+    },
+    "claims": {
+      "type": "object",
+      "required": [
+        "mongodb_product_claim",
+        "native_product_status",
+        "unlisted_native_behavior",
+        "native_unknown_behavior_error_profile",
+        "mongodb_adapter_status",
+        "mongodb_wire_versions",
+        "mongodb_driver_versions",
+        "exact_differential_relation_implies_adapter_support",
+        "unlisted_mongodb_behavior",
+        "current_unsupported_behavior",
+        "required_future_default_error",
+        "redis_product_claim",
+        "redis_adapter_status",
+        "redis_wire_versions",
+        "redis_client_versions",
+        "unlisted_redis_behavior"
+      ],
+      "properties": {
+        "native_product_status": { "const": "not_implemented" },
+        "unlisted_native_behavior": { "const": "unsupported" },
+        "native_unknown_behavior_error_profile": { "const": "errors-v1" },
+        "mongodb_product_claim": { "const": "prohibited" },
+        "mongodb_adapter_status": { "const": "not_implemented" },
+        "mongodb_wire_versions": { "type": "array", "maxItems": 0 },
+        "mongodb_driver_versions": { "type": "array", "maxItems": 0 },
+        "exact_differential_relation_implies_adapter_support": { "const": false },
+        "unlisted_mongodb_behavior": { "const": "unsupported" },
+        "current_unsupported_behavior": { "const": "no_adapter_endpoint" },
+        "required_future_default_error": { "const": "CAP_UNSUPPORTED_FEATURE" },
+        "redis_product_claim": { "const": "prohibited" },
+        "redis_adapter_status": { "const": "not_implemented" },
+        "redis_wire_versions": { "type": "array", "maxItems": 0 },
+        "redis_client_versions": { "type": "array", "maxItems": 0 },
+        "unlisted_redis_behavior": { "const": "unsupported" }
+      },
+      "additionalProperties": false
+    },
+    "classification_definitions": {
+      "type": "object",
+      "required": [
+        "oracle_executable",
+        "oracle_command",
+        "oracle_primitive",
+        "oracle_boundary",
+        "oracle_registry",
+        "contract_only",
+        "explicitly_unsupported_v1",
+        "deferred_post_v1",
+        "differential_exact",
+        "differential_different",
+        "adapter_rewrite"
+      ],
+      "properties": {
+        "oracle_executable": { "$ref": "#/$defs/definition" },
+        "oracle_command": { "$ref": "#/$defs/definition" },
+        "oracle_primitive": { "$ref": "#/$defs/definition" },
+        "oracle_boundary": { "$ref": "#/$defs/definition" },
+        "oracle_registry": { "$ref": "#/$defs/definition" },
+        "contract_only": { "$ref": "#/$defs/definition" },
+        "explicitly_unsupported_v1": { "$ref": "#/$defs/definition" },
+        "deferred_post_v1": { "$ref": "#/$defs/definition" },
+        "differential_exact": { "$ref": "#/$defs/definition" },
+        "differential_different": { "$ref": "#/$defs/definition" },
+        "adapter_rewrite": { "$ref": "#/$defs/definition" }
+      },
+      "additionalProperties": false
+    },
+    "native_rows": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/native_row" }
+    },
+    "mongodb_experimental_cases": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/mongodb_case" }
+    },
+    "mongodb_unsupported": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/adapter_unsupported" }
+    },
+    "redis_unsupported": {
+      "type": "array",
+      "minItems": 1,
+      "items": { "$ref": "#/$defs/adapter_unsupported" }
+    },
+    "counts": {
+      "type": "object",
+      "required": [
+        "native_rows",
+        "native_by_status",
+        "mongodb_experimental_cases",
+        "mongodb_experimental_by_relation",
+        "mongodb_adapter_supported",
+        "mongodb_unsupported_rows",
+        "redis_adapter_supported",
+        "redis_unsupported_rows",
+        "failed",
+        "skipped"
+      ],
+      "properties": {
+        "native_rows": { "$ref": "#/$defs/count" },
+        "native_by_status": {
+          "type": "object",
+          "required": [
+            "contract_only",
+            "deferred_post_v1",
+            "explicitly_unsupported_v1",
+            "oracle_boundary",
+            "oracle_command",
+            "oracle_executable",
+            "oracle_primitive",
+            "oracle_registry"
+          ],
+          "additionalProperties": { "$ref": "#/$defs/count" }
+        },
+        "mongodb_experimental_cases": { "$ref": "#/$defs/count" },
+        "mongodb_experimental_by_relation": {
+          "type": "object",
+          "required": ["different", "exact"],
+          "properties": {
+            "different": { "$ref": "#/$defs/count" },
+            "exact": { "$ref": "#/$defs/count" }
+          },
+          "additionalProperties": false
+        },
+        "mongodb_adapter_supported": { "const": 0 },
+        "mongodb_unsupported_rows": { "$ref": "#/$defs/count" },
+        "redis_adapter_supported": { "const": 0 },
+        "redis_unsupported_rows": { "$ref": "#/$defs/count" },
+        "failed": { "$ref": "#/$defs/count" },
+        "skipped": { "const": 0 }
+      },
+      "additionalProperties": false
+    },
+    "verdict": { "enum": ["pass", "fail"] }
+  },
+  "$defs": {
+    "count": { "type": "integer", "minimum": 0 },
+    "definition": { "type": "string", "minLength": 1, "maxLength": 1000 },
+    "stable_id": { "type": "string", "pattern": "^[a-z0-9][a-z0-9._-]{0,190}[a-z0-9]$" },
+    "requirement": { "type": "string", "pattern": "^[A-Z]+-[0-9]{3}$" },
+    "evidence": { "type": "string", "minLength": 1, "maxLength": 300 },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "source_identity": {
+      "type": "object",
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      },
+      "additionalProperties": false
+    },
+    "native_row": {
+      "type": "object",
+      "required": [
+        "id",
+        "domain",
+        "feature",
+        "release",
+        "semantic_status",
+        "implementation_status",
+        "requirements",
+        "evidence",
+        "note"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/stable_id" },
+        "domain": {
+          "enum": [
+            "value",
+            "primitive",
+            "query_operator",
+            "command",
+            "update",
+            "aggregation_stage",
+            "aggregation_expression",
+            "aggregation_accumulator",
+            "ordering",
+            "limit",
+            "error",
+            "native_exclusion"
+          ]
+        },
+        "feature": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "release": { "enum": ["v1_required", "v1_excluded", "post_v1", "v2"] },
+        "semantic_status": {
+          "enum": [
+            "oracle_executable",
+            "oracle_command",
+            "oracle_primitive",
+            "oracle_boundary",
+            "oracle_registry",
+            "contract_only",
+            "explicitly_unsupported_v1",
+            "deferred_post_v1"
+          ]
+        },
+        "implementation_status": { "enum": ["reference_only", "not_implemented", "not_applicable"] },
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/requirement" }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidence" }
+        },
+        "note": { "type": "string", "minLength": 1, "maxLength": 1500 }
+      },
+      "additionalProperties": false
+    },
+    "mongodb_case": {
+      "type": "object",
+      "required": [
+        "id",
+        "case_id",
+        "family",
+        "relation",
+        "translation",
+        "adapter_status",
+        "test_status",
+        "comparison",
+        "native_rows",
+        "mongodb_rows",
+        "requirements",
+        "evidence",
+        "note"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/stable_id" },
+        "case_id": { "$ref": "#/$defs/stable_id" },
+        "family": { "$ref": "#/$defs/stable_id" },
+        "relation": { "enum": ["exact", "different"] },
+        "translation": { "enum": ["direct", "adapter_rewrite"] },
+        "adapter_status": { "const": "unsupported" },
+        "test_status": { "enum": ["pass", "fail"] },
+        "comparison": { "enum": ["ordered_ids", "ordered_rows"] },
+        "native_rows": { "$ref": "#/$defs/count" },
+        "mongodb_rows": { "$ref": "#/$defs/count" },
+        "requirements": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/requirement" }
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidence" }
+        },
+        "note": { "type": "string", "minLength": 1, "maxLength": 1500 }
+      },
+      "additionalProperties": false
+    },
+    "adapter_unsupported": {
+      "type": "object",
+      "required": [
+        "id",
+        "category",
+        "feature",
+        "adapter_status",
+        "current_behavior",
+        "future_rejection_code",
+        "evidence",
+        "note"
+      ],
+      "properties": {
+        "id": { "$ref": "#/$defs/stable_id" },
+        "category": { "$ref": "#/$defs/stable_id" },
+        "feature": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "adapter_status": { "const": "unsupported" },
+        "current_behavior": { "const": "no_adapter_endpoint" },
+        "future_rejection_code": { "type": "string", "pattern": "^[A-Z]+_[A-Z0-9_]+$" },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/evidence" }
+        },
+        "note": { "type": "string", "minLength": 1, "maxLength": 1500 }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false
+}

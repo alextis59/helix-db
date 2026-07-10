@@ -106,5 +106,5 @@ Draft 2020-12 validation is additionally required for every case and the manifes
 - Compact boundaries do not replace real allocation/decompression/stream/atomicity tests.
 - `fixture.raise-error` does not replace real authorization, GPU loss, corruption, durability, or recovery fault injection.
 - The [`P01-021` initial MongoDB differential harness](../../differential/mongodb/README.md) binds this manifest and oracle report, retains all upstream rows, and passes 16/16 declared relations: 12 exact and four deliberate differences, with zero skips.
-- The published semantic/compatibility matrix is `P01-022`.
+- The [published `P01-022` v1 semantic/compatibility matrix](../../docs/compatibility/v1-semantic-compatibility-matrix.md) binds this corpus, distinguishes reference execution from product implementation, and applies a closed-world unsupported rule to the absent MongoDB adapter.
 - `G01` remains open until corpus, oracle, differential report, matrix, and independent review agree.

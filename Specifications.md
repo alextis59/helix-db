@@ -1884,7 +1884,9 @@ run same compatible query
 compare normalized results
 ```
 
-The initial executable profile is [`mongodb-6.0.5-initial-v1`](differential/mongodb/README.md). It pins the server image and `mongosh` client, binds the semantic corpus/oracle hashes, retains complete upstream Extended JSON observations, distinguishes direct forms from proposed adapter rewrites, and requires every declared exact or different relation to pass without skips. Its [result document](docs/compatibility/mongodb-initial-differential.md) is experimental evidence for `P01-021`, not the versioned compatibility matrix required by `P01-022` and `COMPAT-001`.
+The initial executable profile is [`mongodb-6.0.5-initial-v1`](differential/mongodb/README.md). It pins the server image and `mongosh` client, binds the semantic corpus/oracle hashes, retains complete upstream Extended JSON observations, distinguishes direct forms from proposed adapter rewrites, and requires every declared exact or different relation to pass without skips. Its [result document](docs/compatibility/mongodb-initial-differential.md) is experimental evidence for `P01-021`; the versioned [`helix.semantic-compatibility-matrix/1`](docs/compatibility/v1-semantic-compatibility-matrix.md) is the `P01-022` publication authority.
+
+The v1 matrix is closed-world. It MUST distinguish normative semantic status, independent-oracle executability, product implementation status, experimental upstream relation, and adapter support. An exact differential fixture MUST NOT imply adapter support. At the foundation milestone no MongoDB or Redis adapter, compatibility wire version, command, driver/client version, or product compatibility claim is supported; every unlisted native, MongoDB, and Redis behavior is explicitly unsupported.
 
 Every later compatibility profile MUST identify its exact upstream version and artifact digest, use deterministic ordering or explicitly classify order as outside the comparison, retain replayable observations, distinguish exact/different/unsupported/untested behavior, and create a new version rather than silently changing an accepted profile.
 
@@ -2348,7 +2350,7 @@ MongoDB-like and Redis-like adapters are translation layers over HelixDB semanti
 - Migration and rollback procedures.
 - Differential test coverage and the upstream version used as reference.
 
-The [initial MongoDB 6.0.5 differential result](docs/compatibility/mongodb-initial-differential.md) establishes the evidence shape and several semantic boundaries before an adapter exists. It does not authorize a MongoDB compatibility or wire-protocol claim.
+The [initial MongoDB 6.0.5 differential result](docs/compatibility/mongodb-initial-differential.md) establishes the evidence shape and several semantic boundaries before an adapter exists. The versioned [v1 semantic and compatibility matrix](docs/compatibility/v1-semantic-compatibility-matrix.md) publishes the current closed-world classifications. Neither document authorizes a MongoDB compatibility or wire-protocol claim.
 
 ## 28. Open architecture decisions
 

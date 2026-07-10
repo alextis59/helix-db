@@ -12,7 +12,7 @@
 
 The initial differential slice passed all 16 declared expectations against a digest-pinned MongoDB Community Server 6.0.5: 12 cases produced exact normalized results and four produced the deliberate differences already declared by the case profile. Fourteen cases used direct query forms and two used proposed adapter rewrites. Nothing failed or skipped.
 
-This supports a narrow conclusion for `EXP-013`: a small MongoDB-like query slice is tractable when HelixDB keeps native semantics authoritative, records semantic differences, and permits explicit adapter rewrites only where their preconditions are proven. It does not yet satisfy the experiment's “freeze a small green matrix” decision signal because `P01-022` has not published the versioned matrix and no adapter or engine exists.
+This supports a narrow conclusion for `EXP-013`: a small MongoDB-like query slice is tractable when HelixDB keeps native semantics authoritative, records semantic differences, and permits explicit adapter rewrites only where their preconditions are proven. The [P01-022 v1 matrix](v1-semantic-compatibility-matrix.md) now freezes these observations while keeping every adapter row unsupported; no adapter or engine exists.
 
 ## Exact rows in this dataset
 
@@ -63,4 +63,4 @@ No MongoDB-compatible product or protocol claim is authorized by this result. In
 - rewrite rows are design evidence, not implemented translation rules; and
 - the native HelixDB semantics remain those in the semantic corpus and ADRs.
 
-`P01-022` is the next authority: it must turn the semantic surface into a versioned exact/different/unsupported/untested matrix. `P07-022` then extends executable overlap across the implemented query engine, while `P22-*` owns adapters, protocol behavior, generated breadth, migration, and the first potentially user-facing compatibility subset.
+The [P01-022 matrix](v1-semantic-compatibility-matrix.md) is the current publication authority and uses a closed-world unsupported rule. `P07-022` extends executable overlap across the implemented query engine, while `P22-*` owns adapters, protocol behavior, generated breadth, migration, and the first potentially user-facing compatibility subset.

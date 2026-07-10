@@ -12,7 +12,7 @@
 
 This harness executes a small, declared query subset twice: once through the independent HelixDB semantic oracle and once against a pinned MongoDB Community Server. It retains the complete upstream Extended JSON rows, compares deterministic ordered results, and publishes both matches and intentional differences.
 
-The result proves only the 16 committed cases over the six committed documents. It does not prove general MongoDB compatibility, a working MongoDB adapter, wire-protocol compatibility, production readiness, or behavior outside this exact profile. The first user-facing semantic/compatibility matrix remains `P01-022`; broader generated and protocol coverage remains `P07-022` and `P22-*`.
+The result proves only the 16 committed cases over the six committed documents. It does not prove general MongoDB compatibility, a working MongoDB adapter, wire-protocol compatibility, production readiness, or behavior outside this exact profile. The [v1 semantic and compatibility matrix](../../docs/compatibility/v1-semantic-compatibility-matrix.md) publishes these rows as experimental with adapter support still `unsupported`; broader generated and protocol coverage remains `P07-022` and `P22-*`.
 
 ## Frozen profile
 
@@ -148,4 +148,4 @@ The executable observation is authoritative for this report; documentation expla
 - The harness executes the semantic oracle, not a built HelixDB engine. Engine/backend conformance begins in `P07-*`.
 - The two proposed rewrites do not define applicability checks, errors, explain output, or an adapter implementation.
 - `mongosh` is version-pinned but host-installed. A future hermetic toolchain may package the client separately.
-- `P01-022` must publish every exact, different, unsupported, and untested behavior before even a narrow user-facing compatibility statement is made.
+- The `P01-022` matrix is closed-world and currently authorizes zero MongoDB adapter rows; a later narrow claim requires a new tested matrix version.

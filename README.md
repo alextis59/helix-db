@@ -11,6 +11,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Implementation plan](ImplementationPlan.md) — complete checklisted implementation ledger.
 - [Reference semantic oracle](reference/semantic-oracle/README.md) — executable v1 fixture semantics and deterministic report.
 - [Initial MongoDB differential harness](differential/mongodb/README.md) — pinned upstream observations for the first declared overlap and differences.
+- [V1 semantic and compatibility matrix](docs/compatibility/v1-semantic-compatibility-matrix.md) — closed-world native maturity and explicit unsupported MongoDB surface.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

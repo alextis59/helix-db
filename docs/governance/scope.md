@@ -85,6 +85,8 @@ The project must not use “MongoDB-compatible,” “Redis-compatible,” “dr
 
 Unsupported commands, options, protocol versions, and semantic combinations must return explicit typed errors. They must not be accepted with approximate behavior.
 
+The current [v1 semantic and compatibility matrix](../compatibility/v1-semantic-compatibility-matrix.md) is closed-world: it authorizes zero MongoDB adapter rows, treats exact differential fixtures as experimental evidence only, and classifies every unlisted MongoDB behavior as unsupported.
+
 ## Scope-change rule
 
 A release-boundary change requires all of the following in one reviewed change:
