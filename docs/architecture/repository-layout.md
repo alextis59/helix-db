@@ -19,7 +19,7 @@ This document establishes stable, reviewable locations for source code, conforma
 | [`packages/`](../../packages/README.md) | Private npm workspace packages | `sdk-typescript/`, `browser-host/` | Reserved directories; not npm packages yet |
 | [`conformance/`](../../conformance/README.md) | Cross-backend suite definitions and fixture bindings | `semantics/`, `formats/`, `host/`, `compatibility/` | Semantic corpus binding only |
 | [`benchmarks/`](../../benchmarks/README.md) | Reproducible datasets, workloads, and reports | `datasets/`, `cpu-columnar/`, `webgpu/`, `reports/` | Empty contracts; no performance claims |
-| [`tests/`](../../tests/README.md) | Cross-crate/system tests | `crash/`, `differential/`, `browser/`, `distributed/` | Empty contracts; no system-test claims |
+| [`tests/`](../../tests/README.md) | Toolchain and cross-crate/system tests | `toolchain/`, `crash/`, `differential/`, `browser/`, `distributed/` | Build-profile checks plus empty system-test contracts |
 | [`docs/`](../README.md) | Project documentation | Architecture, governance, quality, compatibility, ADRs, and future document classes | Active documentation system |
 | [`examples/`](../../examples/README.md) | Minimal runnable usage and toolchain examples | Children are added with real examples | Empty contract; no functional examples |
 | [`evidence/releases/`](../../evidence/releases/README.md) | Immutable release proof indexes | One child per release candidate or published version | Empty contract; no release artifacts |

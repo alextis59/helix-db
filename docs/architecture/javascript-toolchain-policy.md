@@ -85,6 +85,12 @@ Playwright is selected for Chromium, Firefox, and WebKit. `P02-003` installs onl
 
 `P02-010` will pin/install the Playwright-coupled browser revisions, validate a real Vite/Wasm bundle, and retain reports. `P02-009` will define which browser/OS combinations gate every change versus nightly coverage. Branded Chrome/Edge and Safari are separate profiles; bundled Chromium/WebKit must not be mislabeled as those branded products.
 
+## Browser build profile added by P02-005
+
+The shared [`vite.config.ts`](../../vite.config.ts) establishes a framework-free production build boundary with a relative base, custom application type, explicit `HELIX_PUBLIC_` environment prefix, ES2022 transform target, external assets, hidden source maps, Oxc minification, and `dist/browser` output. The [build-profile policy](build-profiles.md) records why each option is selected.
+
+No input entry is configured yet. Resolving the configuration is a build-profile check, while emitting and executing a real bundle remains blocked on `P02-010` and `P02-016`. ES2022 is a deterministic emitted-language target, not a branded-browser/version support claim.
+
 ## Required selection checks
 
 ```bash

@@ -39,3 +39,90 @@ browser-wasm-target = "wasm32-unknown-unknown"
 component-wasm-target = "wasm32-wasip2"
 server-edge-wasm-target = "wasm32-wasip3"
 server-edge-wasm-status = "selected-unavailable-tier3"
+build-profile-contract = "P02-005"
+build-profiles = ["dev", "release", "wasm", "browser", "sanitizer", "coverage", "bench"]
+sanitizer-target = "x86_64-unknown-linux-gnuasan"
+coverage-rustflags = "-C instrument-coverage"
+browser-js-target = "es2022"
+
+[profile.dev]
+opt-level = 0
+debug = 2
+debug-assertions = true
+overflow-checks = true
+lto = false
+panic = "unwind"
+incremental = true
+codegen-units = 256
+strip = "none"
+
+[profile.test]
+opt-level = 0
+debug = 2
+debug-assertions = true
+overflow-checks = true
+lto = false
+incremental = true
+codegen-units = 256
+strip = "none"
+
+[profile.release]
+opt-level = 3
+debug = 1
+debug-assertions = false
+overflow-checks = true
+lto = "thin"
+panic = "unwind"
+incremental = false
+codegen-units = 1
+strip = "none"
+
+[profile.wasm]
+inherits = "release"
+opt-level = "s"
+debug = 1
+lto = "fat"
+panic = "abort"
+codegen-units = 1
+strip = "symbols"
+
+[profile.browser]
+inherits = "release"
+opt-level = "z"
+debug = 1
+lto = "fat"
+panic = "abort"
+codegen-units = 1
+strip = "symbols"
+
+[profile.sanitizer]
+inherits = "dev"
+opt-level = 1
+debug = 2
+debug-assertions = true
+overflow-checks = true
+lto = false
+incremental = false
+codegen-units = 1
+strip = "none"
+
+[profile.coverage]
+inherits = "dev"
+opt-level = 0
+debug = 2
+debug-assertions = true
+overflow-checks = true
+lto = false
+incremental = false
+codegen-units = 1
+strip = "none"
+
+[profile.bench]
+opt-level = 3
+debug = 1
+debug-assertions = false
+overflow-checks = true
+lto = "thin"
+incremental = false
+codegen-units = 1
+strip = "none"

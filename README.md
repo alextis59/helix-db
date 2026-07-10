@@ -16,6 +16,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Rust toolchain policy](docs/architecture/rust-toolchain-policy.md) — exact compiler/MSRV, components, formatter/linter, and Wasm target status.
 - [JavaScript/TypeScript toolchain policy](docs/architecture/javascript-toolchain-policy.md) — Node/npm window, lockfile, compiler, bundler, test runner, and browser harness.
 - [Repository layout](docs/architecture/repository-layout.md) — tracked source, conformance, benchmark, test, example, and evidence boundaries.
+- [Build profiles](docs/architecture/build-profiles.md) — native, Wasm, browser, sanitizer, coverage, and benchmark build contracts.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

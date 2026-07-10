@@ -38,7 +38,7 @@ The toolchain file uses rustup's `minimal` profile, which supplies `rustc`, the 
 
 Rustdoc is shipped with `rustc`; repository documentation builds use `cargo doc` with `RUSTDOCFLAGS="-D warnings"`. The [rustup component documentation](https://rust-lang.github.io/rustup/concepts/components.html) defines these component roles, while the [profile documentation](https://rust-lang.github.io/rustup/concepts/profiles.html) confirms the minimal profile's small compiler/Cargo baseline.
 
-`rust-analyzer`, Miri, LLVM coverage tools, sanitizer runtimes, dependency-policy tools, and external documentation generators are not P02-002 requirements. Later tasks select them only when their CI/test/coverage purpose and versioning policy are defined.
+`rust-analyzer`, Miri, LLVM coverage reporting tools, generic nightly sanitizer runtimes, dependency-policy tools, and external documentation generators are not P02-002 requirements. `P02-005` adds the stable Linux ASan standard-library target described below; later tasks select reporting and additional diagnostic tools only when their CI/test/coverage purpose and versioning policy are defined.
 
 ## Formatter baseline
 
@@ -89,6 +89,14 @@ helix-core
 ```
 
 `helix-host-native` and `helix-server` are native-only boundaries. `helix-gpu` will receive separate browser/native compilation and validation when its host bindings and feature profiles exist. A host crate compiling accidentally for bare Wasm would not prove a valid capability implementation.
+
+## Native diagnostic target added by P02-005
+
+The toolchain also installs `x86_64-unknown-linux-gnuasan` for the bounded Linux AddressSanitizer lane. The [official target documentation](https://doc.rust-lang.org/nightly/rustc/platform-support/x86_64-unknown-linux-gnuasan.html) classifies it as Tier 2, describes a fully ASan-instrumented standard library distributed through rustup, and states that produced binaries run on Linux without external requirements.
+
+This target is diagnostic, not a supported deployment platform. It avoids an unpinned nightly and unstable `-Zbuild-std` path for the initial x86_64 Linux lane. Other hosts, architectures, ThreadSanitizer, MemorySanitizer, and mixed-language instrumentation require their own explicit CI capability entries under `P02-009`; absence of those lanes is never represented as a sanitizer pass.
+
+The exact profile and invocation are defined in [Build Profiles](build-profiles.md). Updating or removing this target follows the same exact-toolchain and clean-replay rules as the Wasm targets.
 
 ## Required checks
 

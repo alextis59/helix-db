@@ -26,9 +26,10 @@
     "packages/*"
   ],
   "scripts": {
-    "toolchain:types": "tsc --build --pretty false",
+    "toolchain:types": "tsc --build --pretty false && tsc --project tsconfig.tools.json --pretty false",
     "toolchain:test-runner": "vitest run --passWithNoTests",
-    "toolchain:browser-harness": "playwright test --list --pass-with-no-tests"
+    "toolchain:browser-harness": "playwright test --list --pass-with-no-tests",
+    "toolchain:browser-profile": "node tests/toolchain/check-browser-profile.mjs"
   },
   "devDependencies": {
     "@playwright/test": "1.61.1",
