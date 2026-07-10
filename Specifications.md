@@ -426,6 +426,8 @@ Accepted root `_id` types, UUID/ObjectId representation and generation, immutabi
 
 Vector family/dimension, finite elements and checked casts, normalization, L2/cosine/dot reference metrics, exact top-k/ties, eligibility, and CPU/GPU candidate tolerance are defined by [Vector Types, Metrics, Normalization, and Tolerance Semantics](docs/architecture/vector-semantics.md) and [ADR 0007](docs/adr/0007-exact-vector-results-with-cpu-reranking.md). Those documents are normative refinements of the vector/query contract.
 
+Portable document/depth/field/name/path/array/vector/command limits, exact measurement/counting, lower-quota negotiation, and atomic rejection are defined by [Portable V1 Semantic and Command Limits](docs/architecture/limits-v1.md) and [ADR 0008](docs/adr/0008-use-one-portable-v1-limit-profile.md). Those documents are normative refinements of all v1 value/command contracts.
+
 ### 7.3 Canonical binary document format
 
 The required distinction between absent fields and present null values, including observable read, filter, sort, projection, index, sidecar, aggregation, update, and recovery behavior, is defined by [Missing and Null Semantics](docs/architecture/missing-null-semantics.md). That document is a normative refinement of this section and `DATA-002`.

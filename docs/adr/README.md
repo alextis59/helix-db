@@ -24,6 +24,7 @@ The process is governed by [Specification and Change Control](../governance/chan
 | [0005](0005-explicit-array-matching.md) | Use explicit whole-array and element matching | Accepted | Query semantics owner | `P01-008`, `G01` |
 | [0006](0006-default-to-uuidv7-identifiers.md) | Default native generated identifiers to UUIDv7 | Accepted | Query semantics owner | `P01-009`, `G01` |
 | [0007](0007-exact-vector-results-with-cpu-reranking.md) | Keep vector results exact with CPU reference reranking | Accepted | Query semantics owner | `P01-010`, `G01` |
+| [0008](0008-use-one-portable-v1-limit-profile.md) | Use one portable v1 limit profile | Accepted | Query semantics owner | `P01-011`, `G01` |
 
 ## Naming and file rules
 
