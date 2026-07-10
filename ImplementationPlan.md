@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 11
-- Open checklist items: 510
+- Completed checklist items: 12
+- Open checklist items: 509
 - Total checklist items: 521
 - Current phase: Phase 0 — Governance and project baseline
 - Next release gate: `G00`
@@ -135,7 +135,7 @@ Objective: establish authoritative scope, decision processes, evidence rules, an
 - [x] **P00-010** Create a requirement traceability ledger mapping every `INV-*`, `PLAT-*`, `CORE-*`, `DATA-*`, `QUERY-*`, `STORE-*`, `GPU-*`, `DIST-*`, `CACHE-*`, `SYNC-*`, `SEC-*`, `OPS-*`, `QUAL-*`, and `COMPAT-*` item to tests and artifacts.
 - [x] **P00-011** Define the repository contribution workflow, review requirements, branch policy, release approval policy, and ownership boundaries.
 - [x] **P00-012** Define evidence-retention conventions for test reports, benchmark reports, format fixtures, crash histories, compatibility matrices, and release proofs.
-- [ ] **P00-013** Define severity levels and stop-ship rules for correctness, data loss, security, compatibility, and performance regressions.
+- [x] **P00-013** Define severity levels and stop-ship rules for correctness, data loss, security, compatibility, and performance regressions.
 - [ ] **P00-014** Define a documentation structure for architecture, formats, APIs, operations, security, testing, compatibility, and release notes.
 - [ ] **P00-015** Review the existing license and document third-party dependency, shader, benchmark-data, and generated-code licensing rules.
 - [ ] **P00-016** Create initial threat-model, performance-claim, and compatibility-claim templates.
