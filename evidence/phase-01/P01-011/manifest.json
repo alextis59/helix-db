@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-011",
+  "requirements": ["DATA-001", "QUERY-001", "QUERY-002", "SEC-002"],
+  "commit": "5fe3146b5835ea4abe0cac82d114373d63044ee1",
+  "recorded_at": "2026-07-10T19:09:08Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 5fe3146^ 5fe3146", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 5fe3146", "exit_code": 0 },
+    { "command": "sha256sum of four committed artifacts", "exit_code": 0 },
+    { "command": "node limit coverage/table-row check recorded in README.md", "exit_code": 0 },
+    { "command": "node constant/vector/field-name check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/limits-v1.md", "media_type": "text/markdown", "bytes": 15788, "sha256": "dd827dd227e8c6524dd847c40098522c257ab609f1cd12631eeea50e366f968d" },
+    { "path": "docs/adr/0008-use-one-portable-v1-limit-profile.md", "media_type": "text/markdown", "bytes": 6542, "sha256": "11637f563deb2cca49bc484f0895378b98a2a2264c6f04bda6e01273e2001711" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 66595, "sha256": "5bb34f7236c6a149e72832ba89bb387d9c7e4e6df0b861bcda11e2cb9b6fe011" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 3723, "sha256": "6222769bd39cf1ad5898cac3755d82faed8fa30f5e708372899b0f165d95580d" }
+  ],
+  "verdict": "pass"
+}

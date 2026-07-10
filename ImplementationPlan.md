@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 28
-- Open checklist items: 494
+- Completed checklist items: 29
+- Open checklist items: 493
 - Total checklist items: 522
 - Current phase: Phase 1 — Semantic contract and compatibility corpus
 - Next release gate: `G01` (`G02` may proceed in parallel)
@@ -160,7 +160,7 @@ Dependencies: `G00`.
 - [x] **P01-008** Define array equality, ordering, path traversal, `$all`, `$size`, `$elemMatch`, and nested-array semantics.
 - [x] **P01-009** Define `_id` accepted types, automatic generation, immutability, ordering, and collision handling.
 - [x] **P01-010** Define vector dimension, element type, normalization, distance metric, invalid-value, and tolerance semantics.
-- [ ] **P01-011** Set document-size, nesting-depth, field-count, field-name, path-length, array-length, vector-dimension, and command-size limits.
+- [x] **P01-011** Set document-size, nesting-depth, field-count, field-name, path-length, array-length, vector-dimension, and command-size limits.
 - [ ] **P01-012** Specify v1 comparison, logical, element/type, array, string, cache/time, and vector operator truth tables.
 - [ ] **P01-013** Specify insert, replace, update, upsert, delete, projection, sort, limit, skip, and cursor semantics.
 - [ ] **P01-014** Specify `$set`, `$unset`, `$inc`, array mutation, conflict, path-creation, and atomicity behavior for supported updates.
