@@ -1,0 +1,29 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-009",
+  "requirements": ["DATA-001", "QUERY-001"],
+  "commit": "5f031e007d8fa1a26803b044efb539c4e6bab2b2",
+  "recorded_at": "2026-07-10T18:52:30Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0", "uuid_standard": "RFC 9562" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 5f031e0^ 5f031e0", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 5f031e0", "exit_code": 0 },
+    { "command": "sha256sum of four committed artifacts", "exit_code": 0 },
+    { "command": "node identifier semantic coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node UUIDv7 layout/order check recorded in README.md", "exit_code": 0 },
+    { "command": "node ObjectId layout check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": "docs/architecture/identifier-semantics.md", "media_type": "text/markdown", "bytes": 16379, "sha256": "451de51bbb1b76e20def1dc64178e6bea104ee35b27d6e3055fe9894377cbc2c" },
+    { "path": "docs/adr/0006-default-to-uuidv7-identifiers.md", "media_type": "text/markdown", "bytes": 7419, "sha256": "e310feed69fa79dd7ab31b4a7123708454368a2632783aa12e869e0f4b4edeb3" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 65781, "sha256": "853f40c9747948475d6df34a88c3799dc655bb9bd76316ac3e7340c326de23c9" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 3408, "sha256": "39f6c4650dfc4377c2ecf143faa75feec253998fa43ba2ef59cbfe9373041e63" }
+  ],
+  "verdict": "pass"
+}

@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 26
-- Open checklist items: 496
+- Completed checklist items: 27
+- Open checklist items: 495
 - Total checklist items: 522
 - Current phase: Phase 1 — Semantic contract and compatibility corpus
 - Next release gate: `G01` (`G02` may proceed in parallel)
@@ -158,7 +158,7 @@ Dependencies: `G00`.
 - [x] **P01-006** Define string byte representation, Unicode validation, normalization, binary ordering, and v1 collation scope.
 - [x] **P01-007** Define object field ordering, canonical hashing, duplicate-key rejection, and import-only duplicate behavior.
 - [x] **P01-008** Define array equality, ordering, path traversal, `$all`, `$size`, `$elemMatch`, and nested-array semantics.
-- [ ] **P01-009** Define `_id` accepted types, automatic generation, immutability, ordering, and collision handling.
+- [x] **P01-009** Define `_id` accepted types, automatic generation, immutability, ordering, and collision handling.
 - [ ] **P01-010** Define vector dimension, element type, normalization, distance metric, invalid-value, and tolerance semantics.
 - [ ] **P01-011** Set document-size, nesting-depth, field-count, field-name, path-length, array-length, vector-dimension, and command-size limits.
 - [ ] **P01-012** Specify v1 comparison, logical, element/type, array, string, cache/time, and vector operator truth tables.
