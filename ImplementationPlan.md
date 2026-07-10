@@ -1,7 +1,7 @@
 # HelixDB Complete Implementation Plan
 
 - Status: Active planning baseline
-- Last updated: 2026-07-09
+- Last updated: 2026-07-10
 - Scope: Complete implementation from repository bootstrap through production distributed release
 - Normative source: [Specifications.md](Specifications.md)
 - Design analysis: [Study.md](Study.md)
@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 4
-- Open checklist items: 517
+- Completed checklist items: 5
+- Open checklist items: 516
 - Total checklist items: 521
 - Current phase: Phase 0 — Governance and project baseline
 - Next release gate: `G00`
@@ -128,7 +128,7 @@ Objective: establish authoritative scope, decision processes, evidence rules, an
 - [x] **P00-003** Publish the technical and feasibility study with experiments and risks.
 - [x] **P00-004** Establish this complete implementation checklist with stable task IDs and gates.
 - [ ] **P00-005** Approve the HelixDB product name, repository identity, and terminology used by formats, crates, packages, binaries, and protocols.
-- [ ] **P00-006** Approve v1, v2, and long-term scope boundaries, including explicit non-goals and compatibility claim language.
+- [x] **P00-006** Approve v1, v2, and long-term scope boundaries, including explicit non-goals and compatibility claim language.
 - [ ] **P00-007** Designate `Specifications.md` as normative and document how accepted changes update specifications, study conclusions, and this plan.
 - [ ] **P00-008** Create an architecture-decision-record template and index covering context, options, decision, consequences, compatibility, and rollback.
 - [ ] **P00-009** Assign owners and deadlines for every open architecture decision in Specification section 28.
