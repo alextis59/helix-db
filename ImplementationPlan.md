@@ -33,16 +33,16 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 17
-- Open checklist items: 505
+- Completed checklist items: 18
+- Open checklist items: 504
 - Total checklist items: 522
-- Current phase: Phase 0 — Governance and project baseline
-- Next release gate: `G00`
+- Current phase: Phase 1 — Semantic contract and compatibility corpus
+- Next release gate: `G01` (`G02` may proceed in parallel)
 
 | Phase | Deliverable | Release track | Status |
 | --- | --- | --- | --- |
-| 0 | Governance and project baseline | Foundation | In progress |
-| 1 | Semantic contract and compatibility corpus | Foundation | Not started |
+| 0 | Governance and project baseline | Foundation | Completed |
+| 1 | Semantic contract and compatibility corpus | Foundation | In progress |
 | 2 | Workspace, toolchain, and CI | Foundation | Not started |
 | 3 | HDoc format and codec | Research prototype | Not started |
 | 4 | Wasm core and host capability ABI | Research prototype | Not started |
@@ -140,7 +140,7 @@ Objective: establish authoritative scope, decision processes, evidence rules, an
 - [x] **P00-015** Review the existing license and document third-party dependency, shader, benchmark-data, and generated-code licensing rules.
 - [x] **P00-016** Create initial threat-model, performance-claim, and compatibility-claim templates.
 - [x] **P00-017** Record a policy that persistent formats and public protocols are versioned from their first committed fixture.
-- [ ] **G00** Close the governance gate after scope, ownership, change control, evidence policy, and requirement traceability are approved.
+- [x] **G00** Close the governance gate after scope, ownership, change control, evidence policy, and requirement traceability are approved.
 
 Evidence required for `G00`: accepted scope record, ADR index, requirement ledger, ownership map, and review of all source-document links.
 
