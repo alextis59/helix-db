@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 19
-- Open checklist items: 503
+- Completed checklist items: 20
+- Open checklist items: 502
 - Total checklist items: 522
 - Current phase: Phase 1 — Semantic contract and compatibility corpus
 - Next release gate: `G01` (`G02` may proceed in parallel)
@@ -151,7 +151,7 @@ Objective: define observable document and query behavior before encoding, indexi
 Dependencies: `G00`.
 
 - [x] **P01-001** Specify the complete value model for null, Boolean, signed integers, floating point, decimal, string, binary, object, array, timestamp, date, UUID, ObjectId, and vectors.
-- [ ] **P01-002** Define missing-field versus explicit-null behavior for reads, comparisons, sorting, projection, indexes, aggregation, and updates.
+- [x] **P01-002** Define missing-field versus explicit-null behavior for reads, comparisons, sorting, projection, indexes, aggregation, and updates.
 - [ ] **P01-003** Define integer width, coercion, overflow, underflow, decimal promotion, and mixed numeric comparison rules.
 - [ ] **P01-004** Define floating-point NaN, infinities, negative zero, equality, ordering, hashing, aggregation, and CPU/GPU tolerance rules.
 - [ ] **P01-005** Define timestamp precision, time-zone normalization, date conversion, logical expiry time, and clock-source requirements.

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-002",
+  "requirements": [
+    "DATA-002",
+    "QUERY-001"
+  ],
+  "commit": "7ee095c2d97f1b3bafdf2c2ba804a03ff3b00124",
+  "recorded_at": "2026-07-10T17:26:32Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "node": "22.19.0"
+    }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 7ee095c^ 7ee095c", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 7ee095c", "exit_code": 0 },
+    { "command": "git show 7ee095c:docs/architecture/missing-null-semantics.md | sha256sum", "exit_code": 0 },
+    { "command": "git show 7ee095c:Specifications.md | sha256sum", "exit_code": 0 },
+    { "command": "node semantic coverage check recorded in README.md", "exit_code": 0 },
+    { "command": "node formatting and local-link check recorded in README.md", "exit_code": 0 }
+  ],
+  "artifacts": [
+    {
+      "path": "docs/architecture/missing-null-semantics.md",
+      "media_type": "text/markdown",
+      "bytes": 13003,
+      "sha256": "9463defd269b0a7d62916e0a8188a44b3b0978a076fc8af60b90e35ef6bf3b72"
+    },
+    {
+      "path": "Specifications.md",
+      "media_type": "text/markdown",
+      "bytes": 63241,
+      "sha256": "9b642dbe93287da729fcb852c19f5c268630eba1366429beb0fe46da85852462"
+    }
+  ],
+  "verdict": "pass"
+}
