@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 38
-- Open checklist items: 484
+- Completed checklist items: 39
+- Open checklist items: 483
 - Total checklist items: 522
 - Current phase: Phase 1 — Semantic contract and compatibility corpus
 - Next release gate: `G01` (`G02` may proceed in parallel)
@@ -170,7 +170,7 @@ Dependencies: `G00`.
 - [x] **P01-018** Design a language-neutral semantic-fixture schema with input documents, commands, expected values, expected ordering, and expected errors.
 - [x] **P01-019** Populate fixtures for all scalar edge cases, missing/null combinations, arrays, nested paths, invalid commands, and limit boundaries.
 - [x] **P01-020** Build a reference semantic interpreter or executable oracle independent of optimized physical operators.
-- [ ] **P01-021** Build the initial MongoDB differential harness for the declared overlapping semantic subset.
+- [x] **P01-021** Build the initial MongoDB differential harness for the declared overlapping semantic subset.
 - [ ] **P01-022** Publish a versioned v1 semantic and compatibility matrix with every unsupported behavior explicit.
 - [ ] **G01** Close the semantic gate after fixtures and the reference oracle agree, open semantic decisions are resolved, and the v1 subset is frozen.
 
