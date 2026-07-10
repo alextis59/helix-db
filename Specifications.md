@@ -602,6 +602,8 @@ Required commands:
 
 ### 8.3 Required query operators
 
+The normalized grammar, type brackets, total sort rank, validation/nonmatch boundary, and complete truth tables for the required v1 operator families are defined by [V1 Query Operator Grammar and Truth Tables](docs/architecture/operator-semantics.md). That document is a normative refinement of this query contract.
+
 Comparison:
 
 ```text
@@ -660,7 +662,7 @@ Example vector query:
   "filter": {
     "category": "laptops",
     "embedding": {
-      "$vectorNear": {
+      "$vectorTopK": {
         "vector": [0.12, -0.03, 0.44],
         "metric": "cosine",
         "k": 50
@@ -669,6 +671,8 @@ Example vector query:
   }
 }
 ```
+
+The vector array in this compact example is illustrative SDK rendering. Native JSON must obtain an exact vector family/dimension from a versioned typed wrapper or an unambiguous declared field/index schema; an ordinary array is not inferred as a vector.
 
 ### 8.4 Aggregation pipeline
 
