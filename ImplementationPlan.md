@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 45
-- Open checklist items: 477
+- Completed checklist items: 46
+- Open checklist items: 476
 - Total checklist items: 522
 - Current phase: Phase 2 — Workspace, toolchain, and continuous integration
 - Next release gate: `G02`
@@ -186,7 +186,7 @@ Dependencies: `G00`; may proceed in parallel with Phase 1.
 - [x] **P02-002** Select and pin the Rust toolchain, minimum supported version, Wasm targets, formatter, linter, and documentation tools.
 - [x] **P02-003** Select the JavaScript/TypeScript package manager, lockfile policy, Node.js support window, bundler, test runner, and browser harness.
 - [x] **P02-004** Create directories for crates, shaders, packages, conformance fixtures, benchmarks, tests, documentation, examples, and release evidence.
-- [ ] **P02-005** Configure native debug, native release, Wasm, browser, sanitizer, coverage, and benchmark build profiles.
+- [x] **P02-005** Configure native debug, native release, Wasm, browser, sanitizer, coverage, and benchmark build profiles.
 - [ ] **P02-006** Configure strict formatting, linting, warnings, unsafe-code review, dependency-policy, and license checks.
 - [ ] **P02-007** Add unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed-test commands with stable names.
 - [ ] **P02-008** Establish deterministic fixture generation with committed seeds and artifact schemas.
