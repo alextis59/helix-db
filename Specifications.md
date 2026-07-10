@@ -570,6 +570,8 @@ Example:
 
 Native command lifecycle, atomic write units, target selection, ID/upsert behavior, result counts, projection, stable sort/ties, skip/limit, idempotency, and snapshot cursor semantics are defined by [V1 CRUD, Projection, Sort, Pagination, and Cursor Semantics](docs/architecture/crud-query-semantics.md). That document is a normative refinement of this API contract.
 
+Supported modifier operators, single-valued path creation/indexing, pre-image conflict detection, numeric increments, dense array mutation, upsert application, modification counts, and atomic post-image publication are defined by [V1 Update Operator, Path, Conflict, and Atomicity Semantics](docs/architecture/update-semantics.md). That document is a normative refinement of the update API contract.
+
 Required commands:
 
 ```json
