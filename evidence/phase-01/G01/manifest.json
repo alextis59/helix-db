@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "gate_id": "G01",
+  "reviewed_commit": "79c54e99754a31075ce47d6cd33d4a291be53449",
+  "recorded_at": "2026-07-10T22:49:56Z",
+  "requirements": [
+    "CACHE-002",
+    "COMPAT-001",
+    "CORE-002",
+    "CORE-003",
+    "DATA-001",
+    "DATA-002",
+    "GPU-002",
+    "GPU-003",
+    "GPU-004",
+    "INV-002",
+    "INV-007",
+    "INV-010",
+    "QUERY-001",
+    "QUERY-002",
+    "SEC-001",
+    "SEC-002",
+    "STORE-001"
+  ],
+  "accepted_adrs": ["0002", "0003", "0004", "0005", "0006", "0007", "0008", "0009", "0010", "0011"],
+  "task_evidence": {
+    "directory": "evidence/phase-01",
+    "tasks": 22,
+    "distinct_source_commits": 22,
+    "artifact_records": 167,
+    "verifier_records": 7,
+    "verdict_required": "pass"
+  },
+  "primary_artifacts": [
+    {
+      "path": "fixtures/semantic/manifest.json",
+      "bytes": 10974,
+      "sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8"
+    },
+    {
+      "path": "fixtures/semantic/oracle-report-v1.json",
+      "bytes": 4863,
+      "sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+    },
+    {
+      "path": "differential/mongodb/cases-v1.json",
+      "bytes": 13825,
+      "sha256": "c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5"
+    },
+    {
+      "path": "differential/mongodb/upstream-observations-v1.json",
+      "bytes": 34775,
+      "sha256": "462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8"
+    },
+    {
+      "path": "differential/mongodb/report-v1.json",
+      "bytes": 11604,
+      "sha256": "6a04b5d3cf93662ed9727de9dd5753d646acff12b914b785f6604cd61ef5b019"
+    },
+    {
+      "path": "compatibility/v1/matrix-v1.json",
+      "bytes": 217132,
+      "sha256": "1f116e0e6702526854d22c4e473530817139ca36f7423653ecc76c8324916a60"
+    },
+    {
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "bytes": 103065,
+      "sha256": "c64d0421eac5a1d678dd5c716cc6f791f3774af13ba93b1f10a199cb1c7ae1d2"
+    }
+  ],
+  "verification": {
+    "implementation_plan_items": 522,
+    "phase_01_tasks": 22,
+    "semantic_adrs": 10,
+    "semantic_documents": 17,
+    "requirements": 44,
+    "gate_requirements": 17,
+    "markdown_files": 86,
+    "local_links": 682,
+    "corpus_fixtures": 17,
+    "corpus_steps": 313,
+    "oracle_assertions": 382,
+    "oracle_failed": 0,
+    "oracle_skipped": 0,
+    "mongodb_cases": 16,
+    "mongodb_exact": 12,
+    "mongodb_different": 4,
+    "mongodb_failed": 0,
+    "mongodb_skipped": 0,
+    "matrix_native_rows": 263,
+    "mongodb_adapter_supported": 0,
+    "redis_adapter_supported": 0,
+    "closed_world_rules": 3,
+    "live_replay": true,
+    "residual_containers": 0
+  },
+  "commands": [
+    {
+      "command": "node --check evidence/phase-01/G01/verify.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-01/G01/verify.mjs 79c54e99754a31075ce47d6cd33d4a291be53449",
+      "exit_code": 0
+    }
+  ],
+  "review": "evidence/phase-01/G01/review.md",
+  "verifier": {
+    "path": "evidence/phase-01/G01/verify.mjs",
+    "bytes": 18469,
+    "sha256": "eb823484a4a078f255fd0ba5643fd80451632a13bc71672c86ac9138185c5446"
+  },
+  "verdict": "pass"
+}
