@@ -414,6 +414,8 @@ The canonical document format should preserve enough type information to avoid J
 
 ### 7.3 Canonical binary document format
 
+The required distinction between absent fields and present null values, including observable read, filter, sort, projection, index, sidecar, aggregation, update, and recovery behavior, is defined by [Missing and Null Semantics](docs/architecture/missing-null-semantics.md). That document is a normative refinement of this section and `DATA-002`.
+
 HelixDB should define its own binary JSON format, tentatively called **HDoc**.
 
 Each HDoc document contains:
