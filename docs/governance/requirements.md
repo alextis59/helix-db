@@ -23,7 +23,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | Requirement | Summary | Implementation tasks | Planned tests and evidence | Status |
 | --- | --- | --- | --- | --- |
 | `INV-001` | HDoc rows are authoritative; indexes and sidecars are rebuildable. | `P03-*`, `P08-*`, `P09-*`, `P15-*` | Golden HDoc hashes, delete/rebuild proof, restore without derived files, `G03`, `G09`, `G15` | Planned |
-| `INV-002` | CPU defines reference semantics; GPU returns exact results or verified candidates. | `P01-010`, `P07-*`, `P09-*`, `P10-*`, `P24-003`–`P24-004` | Semantic corpus, CPU/column differential, CPU/GPU replay corpus, `G07`, `G09`, `G10` | In progress |
+| `INV-002` | CPU defines reference semantics; GPU returns exact results or verified candidates. | `P01-010`, `P01-017`, `P07-*`, `P09-*`, `P10-*`, `P24-003`–`P24-004` | Semantic corpus, CPU/column differential, CPU/GPU replay corpus, `G07`, `G09`, `G10` | In progress |
 | `INV-003` | GPU is never required for correctness, durability, recovery, or availability. | `P10-016`, `P10-017`, `P10-026`, `P11-010`, `P16-005`, `P24-004` | GPU-disabled workflows, unsupported-device matrix, device-loss histories, `G10`, `G16` | Planned |
 | `INV-004` | Deterministic logic stays in the Wasm core; ambient resources are host capabilities. | `P04-*`, `P13-013`, `P13-021`–`P13-024` | Host conformance, capability-denial, deterministic replay, ABI benchmarks, `G04`, `G13` | Planned |
 | `INV-005` | Durable and evictable storage classes have explicit, separate policies. | `P20-001`–`P20-009`, `P24-007` | Storage-class transition matrix, eviction invariant, TTL histories, `G20` | Planned |

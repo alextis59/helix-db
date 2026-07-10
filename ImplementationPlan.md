@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 34
-- Open checklist items: 488
+- Completed checklist items: 35
+- Open checklist items: 487
 - Total checklist items: 522
 - Current phase: Phase 1 — Semantic contract and compatibility corpus
 - Next release gate: `G01` (`G02` may proceed in parallel)
@@ -166,7 +166,7 @@ Dependencies: `G00`.
 - [x] **P01-014** Specify `$set`, `$unset`, `$inc`, array mutation, conflict, path-creation, and atomicity behavior for supported updates.
 - [x] **P01-015** Specify v1 aggregation behavior for `$match`, `$project`, `$sort`, `$limit`, `$skip`, `$count`, `$group`, and `$unwind`.
 - [x] **P01-016** Define stable error categories for parse, validation, type, conflict, uniqueness, authorization, capability, quota, deadline, durability, and internal failures.
-- [ ] **P01-017** Define deterministic result ordering where no explicit sort is supplied and document when order is intentionally unspecified.
+- [x] **P01-017** Define deterministic result ordering where no explicit sort is supplied and document when order is intentionally unspecified.
 - [ ] **P01-018** Design a language-neutral semantic-fixture schema with input documents, commands, expected values, expected ordering, and expected errors.
 - [ ] **P01-019** Populate fixtures for all scalar edge cases, missing/null combinations, arrays, nested paths, invalid commands, and limit boundaries.
 - [ ] **P01-020** Build a reference semantic interpreter or executable oracle independent of optimized physical operators.

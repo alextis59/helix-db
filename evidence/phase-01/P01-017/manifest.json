@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "task_id": "P01-017",
+  "requirements": ["QUERY-001", "INV-002"],
+  "accepted_adrs": ["0010"],
+  "commit": "25dc994148437491d72ccc78fb252671828fbc39",
+  "recorded_at": "2026-07-10T20:04:34Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": { "git": "2.34.1", "node": "22.19.0" }
+  },
+  "commands": [
+    { "command": "git status --porcelain=v1", "exit_code": 0 },
+    { "command": "git diff --check 25dc994148437491d72ccc78fb252671828fbc39^ 25dc994148437491d72ccc78fb252671828fbc39", "exit_code": 0 },
+    { "command": "git diff-tree --no-commit-id --name-status -r 25dc994148437491d72ccc78fb252671828fbc39", "exit_code": 0 },
+    { "command": "node evidence/phase-01/P01-017/verify.mjs 25dc994148437491d72ccc78fb252671828fbc39", "exit_code": 0 },
+    { "command": "sha256sum of seven committed ordering artifacts", "exit_code": 0 }
+  ],
+  "verification": {
+    "contract_sections": 14,
+    "command_stage_surfaces": 17,
+    "ordinal_forms": 6,
+    "id_classes": 5,
+    "unspecified_surfaces": 7,
+    "physical_permutations": 3
+  },
+  "artifacts": [
+    { "path": "docs/architecture/default-ordering-semantics.md", "media_type": "text/markdown", "bytes": 20822, "sha256": "d33636eeaa46bf5daee8adcb54e56799f32b6f75776e2bbfd5d1b48744db4172" },
+    { "path": "docs/adr/0010-use-id-order-as-the-native-default.md", "media_type": "text/markdown", "bytes": 8553, "sha256": "5d1d40b5b0b76bbbc761b6249a80ce8258eb5657f826a27c3573808f122e3777" },
+    { "path": "Specifications.md", "media_type": "text/markdown", "bytes": 70868, "sha256": "1024b3e2e717defc4a690ac172f51271afdab95a5a20467bd5eebf8d38d60cba" },
+    { "path": "docs/architecture/crud-query-semantics.md", "media_type": "text/markdown", "bytes": 21415, "sha256": "e72d1ea5f4353b0861a55d798bb31575177ada287b05dd5c5aed8f2eb1de6455" },
+    { "path": "docs/architecture/aggregation-semantics.md", "media_type": "text/markdown", "bytes": 17567, "sha256": "fc9a416878dce81181d40e90c1e4dfc909c7c8c97fb1ffa72349eea9ca398b6e" },
+    { "path": "docs/architecture/identifier-semantics.md", "media_type": "text/markdown", "bytes": 16399, "sha256": "c0296c0279ce17631f433f24d807380794e5484987a468d7ce3dcf4b087ba5d9" },
+    { "path": "docs/adr/README.md", "media_type": "text/markdown", "bytes": 4069, "sha256": "c4e8f79c9870f05a987839a0541d8a299845230e08a4ce6afd46cb4f65ebf52f" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-01/P01-017/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 10804,
+    "sha256": "7baaab809b1adc2487ae839a19773e695977d387ce04fdacbf245488211533f5"
+  },
+  "verdict": "pass"
+}
