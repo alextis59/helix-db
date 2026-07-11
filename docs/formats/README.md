@@ -15,12 +15,13 @@ support claim exists; each document states its own maturity boundary and owning 
 | Format | Version | Status | Machine companion | Owner task |
 | --- | --- | --- | --- | --- |
 | [HDoc envelope](hdoc-v1.md) | 1.0 outer envelope | Accepted outer layout; incomplete byte format | [Envelope registry](hdoc-v1-envelope.json) | `P03-002` |
-| [HDoc logical type tags](hdoc-v1-type-tags.md) | 1.x one-byte tag registry | Accepted type identity; payloads incomplete | [Type-tag registry](hdoc-v1-type-tags.json) | `P03-003` |
+| [HDoc logical type tags](hdoc-v1-type-tags.md) | 1.x one-byte tag registry | Accepted type identity | [Type-tag registry](hdoc-v1-type-tags.json) | `P03-003` |
+| [HDoc noncontainer payloads](hdoc-v1-payloads.md) | 1.0 payload registry | Accepted scalar/byte/vector payloads; containers incomplete | [Payload registry](hdoc-v1-payloads.json) | `P03-004` |
 
-HDoc payloads, internal tables, hash framing, compression, dictionary, golden vectors, codec
-implementations, fuzzing, and migrations remain the subsequent `P03-*` work listed in the format
-documents. No WAL, MANIFEST, SST, VLOG, CSEG, IDX, backup, or public protocol format has been
-specified here yet.
+HDoc internal/container tables, hash framing, compression, dictionary, complete golden documents,
+codec implementations, fuzzing, and migrations remain the subsequent `P03-*` work listed in the
+format documents. No WAL, MANIFEST, SST, VLOG, CSEG, IDX, backup, or public protocol format has
+been specified here yet.
 
 ## Format document rule
 

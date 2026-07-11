@@ -19,12 +19,13 @@ directory, canonical top-level body order, footer placement, repeated footer fie
 slot. Every integer in this document is unsigned little-endian unless explicitly described as raw
 octets.
 
-This is not yet permission to emit a valid persistent HDoc. The stable logical tags and extension
-ranges are now fixed by the [HDoc 1.x type-tag registry](hdoc-v1-type-tags.md). The following byte
-contracts remain open and are required before the first golden document or writer:
+This is not yet permission to emit a valid persistent HDoc. The stable logical tags/extension
+ranges and exact noncontainer bytes are now fixed by the
+[HDoc 1.x type-tag registry](hdoc-v1-type-tags.md) and
+[HDoc 1.0 payload registry](hdoc-v1-payloads.md). The following byte contracts remain open and are
+required before the first complete golden document or writer:
 
-- canonical scalar/vector/container payloads (`P03-004`);
-- field, name, object, array, and container table entries (`P03-005`);
+- field, name, object, array, container, and value-area table entries (`P03-005`);
 - the first nonzero content-hash profile and exact typed-hash framing (`P03-006`); and
 - compression codecs, block tables, settings, and rejection fixtures (`P03-007`).
 
@@ -537,7 +538,7 @@ fields based on its own format version.
 | Task | May define | Must not change without superseding P03-002 |
 | --- | --- | --- |
 | [`P03-003`](hdoc-v1-type-tags.md) | Stable value type tags and reserved tag ranges | Header/directory/footer offsets or section kinds |
-| `P03-004` | Canonical bytes inside `value_area` | Envelope endianness, lengths, placement, or footer |
+| [`P03-004`](hdoc-v1-payloads.md) | Canonical noncontainer bytes inside `value_area` | Envelope endianness, lengths, placement, or footer |
 | `P03-005` | Field/name/container entries and `item_count` meanings | Absolute offset base, entry stride, top-level order |
 | `P03-006` | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
 | `P03-007` | Nonzero codec/profile IDs and internal bounded block grammar | Directory stride, logical/stored length fields, canonical limit |
@@ -572,6 +573,7 @@ bytes. P03-016/P03-018 must eventually include at least:
 - [Implementation plan Phase 3](../../ImplementationPlan.md#phase-3--hdoc-format-codec-and-path-dictionary)
 - [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)
 - [HDoc 1.x logical type tags](hdoc-v1-type-tags.md)
+- [HDoc 1.0 canonical noncontainer payloads](hdoc-v1-payloads.md)
 - [Logical value model](../architecture/value-model.md)
 - [Object semantics and typed content hashes](../architecture/object-semantics.md)
 - [Portable v1 limits](../architecture/limits-v1.md)

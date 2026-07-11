@@ -1,6 +1,6 @@
 # HDoc 1.x Logical Type Tag Registry
 
-- Status: Accepted type-identity registry; payload bytes remain incomplete
+- Status: Accepted type-identity registry; container bytes remain incomplete
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner with Query semantics review
 - Format identity: HDoc major `1`, initial minor `0`
@@ -17,12 +17,13 @@
 This document assigns the one-byte HDoc tag for every required stored logical value type and
 reserves the rest of the byte space. It defines type identity, tag stability, unknown-tag
 rejection, extension allocation classes, and the relationship between tags, semantic comparison,
-typed hashing, fixtures, and later payload/table work.
+typed hashing, fixtures, and subordinate payload/table work.
 
-It does not define the bytes following a tag. Canonical scalar/vector payloads remain `P03-004`;
-field/name/object/array/container records remain `P03-005`. The parent envelope therefore remains
-an incomplete byte format, and hash profile zero remains invalid until `P03-006`. A tag plus
-invented host bytes is not a valid HDoc value.
+This registry does not itself define the bytes following a tag. Canonical noncontainer bytes are
+now fixed by the [HDoc 1.0 payload registry](hdoc-v1-payloads.md); field/name/object/array/container
+records remain `P03-005`. The parent envelope therefore remains an incomplete byte format, and
+hash profile zero remains invalid until `P03-006`. A tag plus invented host bytes is not a valid
+HDoc value.
 
 ## Tag field contract
 
@@ -98,9 +99,9 @@ parameter.
 `null` has one tag. It is a present stored value and is never encoded by `0x00`, absence, a zero
 offset, or the missing path state.
 
-`bool` has one tag for both false and true. Separate “false” and “true” tags are forbidden; P03-004
-defines the canonical payload. Host truthiness, integer zero/one, and strings cannot select this
-tag implicitly.
+`bool` has one tag for both false and true. Separate “false” and “true” tags are forbidden; the
+[payload registry](hdoc-v1-payloads.md) defines the canonical byte. Host truthiness, integer
+zero/one, and strings cannot select this tag implicitly.
 
 ### Numeric types
 
@@ -116,8 +117,8 @@ decimal128 0x06
 Mathematically equal values may compare equal under the accepted numeric rules while retaining
 different tags and typed content hashes. A writer does not choose the smallest width, promote an
 integer because of host representation, turn decimal into float, or normalize a float into an
-integer tag. P03-004 defines exact bits/tuples, including float NaN payload preservation and
-canonical decimal cohorts.
+integer tag. The [payload registry](hdoc-v1-payloads.md) defines exact bits/tuples, including float
+NaN payload preservation and canonical decimal cohorts.
 
 ### String and binary
 
@@ -142,8 +143,8 @@ element's own tag.
 ### Temporal values
 
 `timestamp` and `date` remain distinct. A date is not a timestamp at midnight, and a timestamp is
-not a locale/timezone string. P03-004 maps accepted UTC microseconds and calendar-date domains to
-payload bytes without changing their tags.
+not a locale/timezone string. The [payload registry](hdoc-v1-payloads.md) maps accepted UTC
+microseconds and calendar-date domains to payload bytes without changing their tags.
 
 ### Identifiers
 
@@ -160,10 +161,10 @@ vector<f32,N> 0x0f
 vector<f16,N> 0x10
 ```
 
-Dimension `N`, element bytes, finite-element validation, and alignment are payload work under
-P03-004. Different dimensions share the family tag because the dimension is per-value metadata;
-different element representations do not. CPU widening/fallback during calculation never changes
-the stored tag.
+Dimension `N`, element bytes, finite-element validation, and alignment are fixed by the
+[payload registry](hdoc-v1-payloads.md). Different dimensions share the family tag because the
+dimension is per-value metadata; different element representations do not. CPU widening/fallback
+during calculation never changes the stored tag.
 
 ## Missing is deliberately untagged
 
@@ -313,7 +314,7 @@ The 16 core assignments are stable for HDoc major 1. A minor/profile cannot rein
 reader supporting 1.x may add a registered type only through required feature negotiation; an older
 reader rejects it before value exposure.
 
-No valid HDoc golden fixture exists at P03-003 because payloads/tables/hash framing are incomplete.
+No valid HDoc golden fixture exists after P03-004 because tables/hash framing remain incomplete.
 Before P03-016, this registry can be superseded without stored-data migration, but the superseding
 change must preserve the historical decision. After fixtures/data exist:
 
@@ -329,7 +330,7 @@ change must preserve the historical decision. After fixtures/data exist:
 
 | Task | Owns next | Cannot change from P03-003 |
 | --- | --- | --- |
-| `P03-004` | Canonical scalar/vector payload bytes and validation | Tag values or logical meanings |
+| [`P03-004`](hdoc-v1-payloads.md) | Canonical noncontainer payload bytes and validation | Tag values or logical meanings |
 | `P03-005` | Field/array/container record positions for the one-byte tag | Tag width/assignments |
 | `P03-006` | Typed-hash framing including tag and payload | Tag identity or unknown-tag rule |
 | `P03-008`–`P03-010` | Encoder/decoder/owned/borrowed implementation | Closed-world registry semantics |
@@ -368,4 +369,5 @@ Later golden/property/fuzz suites must include:
 - [Temporal semantics](../architecture/temporal-semantics.md)
 - [Identifier semantics](../architecture/identifier-semantics.md)
 - [Vector semantics](../architecture/vector-semantics.md)
+- [HDoc 1.0 canonical noncontainer payloads](hdoc-v1-payloads.md)
 - [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)

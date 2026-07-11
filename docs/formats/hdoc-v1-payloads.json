@@ -1,0 +1,813 @@
+{
+  "schema": "helix.hdoc-payload-registry/1",
+  "format": {
+    "name": "HDoc",
+    "major_version": 1,
+    "minor_version": 0,
+    "type_tag_registry": "docs/formats/hdoc-v1-type-tags.json",
+    "containing_length_owner": "P03-005",
+    "integer_byte_order": "little-endian",
+    "opaque_sequence_order": "exact-as-documented",
+    "complete_noncontainer_payload_format": true,
+    "complete_container_payload_format": false,
+    "container_completion_owner": "P03-005",
+    "complete_hdoc_format": false
+  },
+  "payloads": [
+    {
+      "tag": 1,
+      "tag_hex": "0x01",
+      "tag_name": "null",
+      "logical_type": "null",
+      "alignment_bytes": 1,
+      "length": {
+        "kind": "fixed",
+        "bytes": 0
+      },
+      "encoding": "empty",
+      "validation": "exactly-zero-payload-bytes"
+    },
+    {
+      "tag": 2,
+      "tag_hex": "0x02",
+      "tag_name": "bool",
+      "logical_type": "bool",
+      "alignment_bytes": 1,
+      "length": {
+        "kind": "fixed",
+        "bytes": 1
+      },
+      "encoding": "u8-boolean",
+      "validation": "0x00-false-or-0x01-true-only"
+    },
+    {
+      "tag": 3,
+      "tag_hex": "0x03",
+      "tag_name": "int32",
+      "logical_type": "int32",
+      "alignment_bytes": 4,
+      "length": {
+        "kind": "fixed",
+        "bytes": 4
+      },
+      "encoding": "i32-le-twos-complement",
+      "validation": "all-signed-32-bit-values"
+    },
+    {
+      "tag": 4,
+      "tag_hex": "0x04",
+      "tag_name": "int64",
+      "logical_type": "int64",
+      "alignment_bytes": 8,
+      "length": {
+        "kind": "fixed",
+        "bytes": 8
+      },
+      "encoding": "i64-le-twos-complement",
+      "validation": "all-signed-64-bit-values"
+    },
+    {
+      "tag": 5,
+      "tag_hex": "0x05",
+      "tag_name": "float64",
+      "logical_type": "float64",
+      "alignment_bytes": 8,
+      "length": {
+        "kind": "fixed",
+        "bytes": 8
+      },
+      "encoding": "ieee-754-binary64-bits-le",
+      "validation": "all-64-bit-patterns-admitted-and-preserved"
+    },
+    {
+      "tag": 6,
+      "tag_hex": "0x06",
+      "tag_name": "decimal128",
+      "logical_type": "decimal128",
+      "alignment_bytes": 8,
+      "length": {
+        "kind": "fixed",
+        "bytes": 16
+      },
+      "encoding": "ieee-754-decimal128-bid-canonical-le",
+      "validation": "decode-canonicalize-reencode-byte-equality"
+    },
+    {
+      "tag": 7,
+      "tag_hex": "0x07",
+      "tag_name": "string",
+      "logical_type": "string",
+      "alignment_bytes": 1,
+      "length": {
+        "kind": "containing-value-length",
+        "minimum_bytes": 0,
+        "maximum": "document-bound"
+      },
+      "encoding": "canonical-utf8-bytes-without-prefix-or-terminator",
+      "validation": "complete-shortest-form-utf8-scalar-sequence"
+    },
+    {
+      "tag": 8,
+      "tag_hex": "0x08",
+      "tag_name": "binary",
+      "logical_type": "binary",
+      "alignment_bytes": 1,
+      "length": {
+        "kind": "containing-value-length",
+        "minimum_bytes": 1,
+        "maximum": "document-bound",
+        "formula": "1 + data_bytes"
+      },
+      "encoding": "subtype-u8-followed-by-exact-data-bytes",
+      "validation": "assigned-subtype-and-exact-data-bytes"
+    },
+    {
+      "tag": 11,
+      "tag_hex": "0x0b",
+      "tag_name": "timestamp",
+      "logical_type": "timestamp",
+      "alignment_bytes": 8,
+      "length": {
+        "kind": "fixed",
+        "bytes": 8
+      },
+      "encoding": "i64-le-unix-microseconds",
+      "validation": "inclusive--62135596800000000-through-253402300799999999"
+    },
+    {
+      "tag": 12,
+      "tag_hex": "0x0c",
+      "tag_name": "date",
+      "logical_type": "date",
+      "alignment_bytes": 4,
+      "length": {
+        "kind": "fixed",
+        "bytes": 4
+      },
+      "encoding": "i32-le-days-from-1970-01-01",
+      "validation": "inclusive--719162-through-2932896"
+    },
+    {
+      "tag": 13,
+      "tag_hex": "0x0d",
+      "tag_name": "uuid",
+      "logical_type": "uuid",
+      "alignment_bytes": 1,
+      "length": {
+        "kind": "fixed",
+        "bytes": 16
+      },
+      "encoding": "rfc-9562-network-order-octets",
+      "validation": "all-128-bit-payloads-preserved"
+    },
+    {
+      "tag": 14,
+      "tag_hex": "0x0e",
+      "tag_name": "object_id",
+      "logical_type": "objectId",
+      "alignment_bytes": 1,
+      "length": {
+        "kind": "fixed",
+        "bytes": 12
+      },
+      "encoding": "exact-objectid-octets",
+      "validation": "all-96-bit-payloads-preserved"
+    },
+    {
+      "tag": 15,
+      "tag_hex": "0x0f",
+      "tag_name": "vector_f32",
+      "logical_type": "vector<f32,N>",
+      "alignment_bytes": 4,
+      "length": {
+        "kind": "dimensioned",
+        "prefix_bytes": 4,
+        "element_bytes": 4,
+        "minimum_bytes": 8,
+        "maximum_bytes": 16388,
+        "formula": "4 + 4 * N"
+      },
+      "encoding": "u32-le-dimension-followed-by-N-binary32-bits-le",
+      "validation": "1-through-4096-elements-and-every-element-finite"
+    },
+    {
+      "tag": 16,
+      "tag_hex": "0x10",
+      "tag_name": "vector_f16",
+      "logical_type": "vector<f16,N>",
+      "alignment_bytes": 4,
+      "length": {
+        "kind": "dimensioned",
+        "prefix_bytes": 4,
+        "element_bytes": 2,
+        "minimum_bytes": 6,
+        "maximum_bytes": 8196,
+        "formula": "4 + 2 * N"
+      },
+      "encoding": "u32-le-dimension-followed-by-N-binary16-bits-le",
+      "validation": "1-through-4096-elements-and-every-element-finite"
+    }
+  ],
+  "binary_subtypes": {
+    "width_bits": 8,
+    "assigned": [
+      {
+        "subtype": 0,
+        "subtype_hex": "0x00",
+        "name": "generic",
+        "semantics": "exact-uninterpreted-octets"
+      }
+    ],
+    "reserved_ranges": [
+      {
+        "start": 1,
+        "end": 63,
+        "start_hex": "0x01",
+        "end_hex": "0x3f",
+        "class": "future-standard-subtypes",
+        "read_behavior": "reject-unassigned",
+        "write_behavior": "forbidden-until-registered",
+        "allocation_owner": "accepted-format-change"
+      },
+      {
+        "start": 64,
+        "end": 127,
+        "start_hex": "0x40",
+        "end_hex": "0x7f",
+        "class": "registered-semantic-extensions",
+        "read_behavior": "reject-unless-feature-and-registry-understood",
+        "write_behavior": "forbidden-until-registered",
+        "allocation_owner": "P03-015-or-successor"
+      },
+      {
+        "start": 128,
+        "end": 239,
+        "start_hex": "0x80",
+        "end_hex": "0xef",
+        "class": "experimental-private",
+        "read_behavior": "reject-in-supported-hdoc",
+        "write_behavior": "forbidden-in-supported-hdoc",
+        "allocation_owner": "explicit-experimental-profile-only"
+      },
+      {
+        "start": 240,
+        "end": 254,
+        "start_hex": "0xf0",
+        "end_hex": "0xfe",
+        "class": "future-control",
+        "read_behavior": "reject",
+        "write_behavior": "forbidden",
+        "allocation_owner": "future-major-format-only"
+      },
+      {
+        "start": 255,
+        "end": 255,
+        "start_hex": "0xff",
+        "end_hex": "0xff",
+        "class": "permanently-invalid",
+        "read_behavior": "reject",
+        "write_behavior": "forbidden",
+        "allocation_owner": "none"
+      }
+    ],
+    "unknown_behavior": "reject-before-value-exposure"
+  },
+  "decimal128_bid": {
+    "profile_id": "hdoc-decimal128-bid-canonical-v1",
+    "bytes": 16,
+    "stored_byte_order": "little-endian-unsigned-128",
+    "coefficient_encoding": "binary-integer-decimal",
+    "precision_digits": 34,
+    "logical_exponent_min": -6176,
+    "logical_adjusted_exponent_max": 6144,
+    "wire_quantum_exponent_min": -6176,
+    "wire_quantum_exponent_max": 6111,
+    "exponent_bias": 6176,
+    "coefficient_limit_exclusive": "10000000000000000000000000000000000",
+    "finite_formula": "B = (sign << 127) | ((wire_exponent + 6176) << 113) | wire_coefficient",
+    "canonicalization": {
+      "zero": "coefficient=0, logical_exponent=0, preserve sign",
+      "nonzero": "remove all trailing coefficient zeros while incrementing logical_exponent",
+      "high_exponent_shift": "max(0, logical_exponent - 6111)",
+      "wire_coefficient": "logical_coefficient * 10^high_exponent_shift",
+      "wire_exponent": "logical_exponent - high_exponent_shift",
+      "decoder_rule": "decode-to-logical-tuple-then-reencode-and-require-byte-equality"
+    },
+    "finite_normal_form_only": true,
+    "specials": [
+      {
+        "class": "positive-infinity",
+        "bits_hex": "78000000000000000000000000000000",
+        "payload_hex": "00000000000000000000000000000078"
+      },
+      {
+        "class": "negative-infinity",
+        "bits_hex": "f8000000000000000000000000000000",
+        "payload_hex": "000000000000000000000000000000f8"
+      },
+      {
+        "class": "canonical-quiet-nan",
+        "bits_hex": "7c000000000000000000000000000000",
+        "payload_hex": "0000000000000000000000000000007c"
+      }
+    ],
+    "rejection_rules": [
+      "coefficient-at-least-10^34",
+      "steering-form-finite-encoding",
+      "logical-cohort-alias",
+      "nonzero-zero-exponent-alias",
+      "noncanonical-infinity-bits",
+      "negative-or-signaling-or-payload-nan",
+      "out-of-domain-logical-tuple",
+      "bytes-not-equal-to-canonical-reencoding"
+    ]
+  },
+  "vector_profiles": [
+    {
+      "tag_name": "vector_f32",
+      "family": "f32",
+      "dimension_encoding": "u32-le",
+      "dimension_minimum": 1,
+      "dimension_maximum": 4096,
+      "element_encoding": "ieee-754-binary32-bits-le",
+      "element_bytes": 4,
+      "exponent_bits": 8,
+      "fraction_bits": 23,
+      "nonfinite_exponent": 255,
+      "preserve_zero_sign": true
+    },
+    {
+      "tag_name": "vector_f16",
+      "family": "f16",
+      "dimension_encoding": "u32-le",
+      "dimension_minimum": 1,
+      "dimension_maximum": 4096,
+      "element_encoding": "ieee-754-binary16-bits-le",
+      "element_bytes": 2,
+      "exponent_bits": 5,
+      "fraction_bits": 10,
+      "nonfinite_exponent": 31,
+      "preserve_zero_sign": true
+    }
+  ],
+  "rules": [
+    {
+      "id": "containing-length-is-authoritative",
+      "rule": "P03-005 supplies one exact containing value_length; strings and binary values carry no second length prefix."
+    },
+    {
+      "id": "no-host-layout-copy",
+      "rule": "Writers and readers use explicit byte operations and never copy or cast a host struct as a payload."
+    },
+    {
+      "id": "minimal-alignment-padding",
+      "rule": "P03-005 places each payload at its listed alignment and permits only the minimum zero padding outside payload bytes."
+    },
+    {
+      "id": "type-identity-preserved",
+      "rule": "Payload shape, magnitude, text, or byte count never retags a logical value."
+    },
+    {
+      "id": "float64-bits-preserved",
+      "rule": "All binary64 bits, including signed zero and every NaN sign, signaling state, and payload, round trip unchanged."
+    },
+    {
+      "id": "decimal128-one-encoding",
+      "rule": "Every admitted decimal logical tuple or special has exactly one canonical 16-byte BID payload."
+    },
+    {
+      "id": "string-exact-utf8",
+      "rule": "A string payload is its complete canonical UTF-8 bytes with no normalization, prefix, terminator, repair, or alternate encoding."
+    },
+    {
+      "id": "binary-subtype-first",
+      "rule": "A binary payload starts with one assigned subtype byte followed by exact uninterpreted data bytes."
+    },
+    {
+      "id": "temporal-exact-integers",
+      "rule": "Timestamp and date payloads are range-checked signed little-endian counts in their accepted Unix-relative units."
+    },
+    {
+      "id": "identifier-opaque-order",
+      "rule": "UUID and ObjectId payloads preserve their documented canonical opaque byte order rather than host field layout."
+    },
+    {
+      "id": "vector-dimension-and-bits",
+      "rule": "A vector payload carries its exact positive u32 dimension followed by the exact finite element bits in order."
+    },
+    {
+      "id": "exact-length-no-trailing-bytes",
+      "rule": "The containing value_length must equal the payload rule exactly; no payload admits ignored trailing bytes."
+    },
+    {
+      "id": "unknown-subtype-fails-closed",
+      "rule": "An unassigned binary subtype is rejected before value exposure and is never guessed from its data."
+    },
+    {
+      "id": "atomic-validation",
+      "rule": "No logical value or borrowed view is exposed until the complete HDoc structure, payloads, checksum, canonicality, limits, and typed content hash validate."
+    }
+  ],
+  "test_vectors": [
+    {
+      "id": "null",
+      "type": "null",
+      "logical": "null",
+      "payload_hex": ""
+    },
+    {
+      "id": "bool-false",
+      "type": "bool",
+      "logical": "false",
+      "payload_hex": "00"
+    },
+    {
+      "id": "bool-true",
+      "type": "bool",
+      "logical": "true",
+      "payload_hex": "01"
+    },
+    {
+      "id": "int32-min",
+      "type": "int32",
+      "logical": "-2147483648",
+      "payload_hex": "00000080"
+    },
+    {
+      "id": "int32-max",
+      "type": "int32",
+      "logical": "2147483647",
+      "payload_hex": "ffffff7f"
+    },
+    {
+      "id": "int64-min",
+      "type": "int64",
+      "logical": "-9223372036854775808",
+      "payload_hex": "0000000000000080"
+    },
+    {
+      "id": "int64-max",
+      "type": "int64",
+      "logical": "9223372036854775807",
+      "payload_hex": "ffffffffffffff7f"
+    },
+    {
+      "id": "float64-positive-zero",
+      "type": "float64",
+      "logical": "bits:0x0000000000000000",
+      "payload_hex": "0000000000000000"
+    },
+    {
+      "id": "float64-negative-zero",
+      "type": "float64",
+      "logical": "bits:0x8000000000000000",
+      "payload_hex": "0000000000000080"
+    },
+    {
+      "id": "float64-one",
+      "type": "float64",
+      "logical": "bits:0x3ff0000000000000",
+      "payload_hex": "000000000000f03f"
+    },
+    {
+      "id": "float64-positive-infinity",
+      "type": "float64",
+      "logical": "bits:0x7ff0000000000000",
+      "payload_hex": "000000000000f07f"
+    },
+    {
+      "id": "float64-negative-infinity",
+      "type": "float64",
+      "logical": "bits:0xfff0000000000000",
+      "payload_hex": "000000000000f0ff"
+    },
+    {
+      "id": "float64-canonical-quiet-nan",
+      "type": "float64",
+      "logical": "bits:0x7ff8000000000000",
+      "payload_hex": "000000000000f87f"
+    },
+    {
+      "id": "float64-signaling-nan-payload-one",
+      "type": "float64",
+      "logical": "bits:0x7ff0000000000001",
+      "payload_hex": "010000000000f07f"
+    },
+    {
+      "id": "decimal128-positive-zero",
+      "type": "decimal128",
+      "logical": "zero(sign=0)",
+      "payload_hex": "00000000000000000000000000004030"
+    },
+    {
+      "id": "decimal128-negative-zero",
+      "type": "decimal128",
+      "logical": "zero(sign=1)",
+      "payload_hex": "000000000000000000000000000040b0"
+    },
+    {
+      "id": "decimal128-one",
+      "type": "decimal128",
+      "logical": "finite(sign=0,coefficient=1,exponent=0)",
+      "payload_hex": "01000000000000000000000000004030"
+    },
+    {
+      "id": "decimal128-negative-12345",
+      "type": "decimal128",
+      "logical": "finite(sign=1,coefficient=12345,exponent=0)",
+      "payload_hex": "393000000000000000000000000040b0"
+    },
+    {
+      "id": "decimal128-12-34",
+      "type": "decimal128",
+      "logical": "finite(sign=0,coefficient=1234,exponent=-2)",
+      "payload_hex": "d2040000000000000000000000003c30"
+    },
+    {
+      "id": "decimal128-smallest-positive",
+      "type": "decimal128",
+      "logical": "finite(sign=0,coefficient=1,exponent=-6176)",
+      "payload_hex": "01000000000000000000000000000000"
+    },
+    {
+      "id": "decimal128-largest-positive",
+      "type": "decimal128",
+      "logical": "finite(sign=0,coefficient=9999999999999999999999999999999999,exponent=6111)",
+      "payload_hex": "ffffffff638e8d37c087adbe09edff5f"
+    },
+    {
+      "id": "decimal128-high-exponent-clamped",
+      "type": "decimal128",
+      "logical": "finite(sign=0,coefficient=1,exponent=6144)",
+      "payload_hex": "000000000a5bc138938d44c64d31fe5f"
+    },
+    {
+      "id": "decimal128-positive-infinity",
+      "type": "decimal128",
+      "logical": "+Infinity",
+      "payload_hex": "00000000000000000000000000000078"
+    },
+    {
+      "id": "decimal128-negative-infinity",
+      "type": "decimal128",
+      "logical": "-Infinity",
+      "payload_hex": "000000000000000000000000000000f8"
+    },
+    {
+      "id": "decimal128-nan",
+      "type": "decimal128",
+      "logical": "NaN",
+      "payload_hex": "0000000000000000000000000000007c"
+    },
+    {
+      "id": "string-empty",
+      "type": "string",
+      "logical": "UTF-8 empty",
+      "payload_hex": ""
+    },
+    {
+      "id": "string-nul",
+      "type": "string",
+      "logical": "UTF-8 U+0000",
+      "payload_hex": "00"
+    },
+    {
+      "id": "string-decomposed-e-acute",
+      "type": "string",
+      "logical": "UTF-8 U+0065 U+0301",
+      "payload_hex": "65cc81"
+    },
+    {
+      "id": "string-slightly-smiling-face",
+      "type": "string",
+      "logical": "UTF-8 U+1F642",
+      "payload_hex": "f09f9982"
+    },
+    {
+      "id": "binary-generic-empty",
+      "type": "binary",
+      "logical": "subtype=0,data=",
+      "payload_hex": "00"
+    },
+    {
+      "id": "binary-generic-00ff",
+      "type": "binary",
+      "logical": "subtype=0,data=00ff",
+      "payload_hex": "0000ff"
+    },
+    {
+      "id": "timestamp-epoch",
+      "type": "timestamp",
+      "logical": "0 microseconds",
+      "payload_hex": "0000000000000000"
+    },
+    {
+      "id": "timestamp-min",
+      "type": "timestamp",
+      "logical": "-62135596800000000 microseconds",
+      "payload_hex": "0040d400014023ff"
+    },
+    {
+      "id": "timestamp-max",
+      "type": "timestamp",
+      "logical": "253402300799999999 microseconds",
+      "payload_hex": "ff5f73cc0c448403"
+    },
+    {
+      "id": "date-epoch",
+      "type": "date",
+      "logical": "0 days",
+      "payload_hex": "00000000"
+    },
+    {
+      "id": "date-min",
+      "type": "date",
+      "logical": "-719162 days",
+      "payload_hex": "c606f5ff"
+    },
+    {
+      "id": "date-max",
+      "type": "date",
+      "logical": "2932896 days",
+      "payload_hex": "a0c02c00"
+    },
+    {
+      "id": "uuid-rfc-example",
+      "type": "uuid",
+      "logical": "f81d4fae-7dec-11d0-a765-00a0c91e6bf6",
+      "payload_hex": "f81d4fae7dec11d0a76500a0c91e6bf6"
+    },
+    {
+      "id": "objectid-example",
+      "type": "objectId",
+      "logical": "507f1f77bcf86cd799439011",
+      "payload_hex": "507f1f77bcf86cd799439011"
+    },
+    {
+      "id": "vector-f32-bits",
+      "type": "vector<f32,N>",
+      "logical": "N=3,bits=[0x3f800000,0x80000000,0x00000001]",
+      "payload_hex": "030000000000803f0000008001000000"
+    },
+    {
+      "id": "vector-f16-bits",
+      "type": "vector<f16,N>",
+      "logical": "N=3,bits=[0x3c00,0x8000,0x0001]",
+      "payload_hex": "03000000003c00800100"
+    }
+  ],
+  "rejection_vectors": [
+    {
+      "id": "bool-other-byte",
+      "type": "bool",
+      "payload_hex": "02",
+      "reason": "boolean-byte-not-0-or-1"
+    },
+    {
+      "id": "string-overlong-nul",
+      "type": "string",
+      "payload_hex": "c080",
+      "reason": "noncanonical-utf8"
+    },
+    {
+      "id": "binary-missing-subtype",
+      "type": "binary",
+      "payload_hex": "",
+      "reason": "binary-payload-shorter-than-one-byte"
+    },
+    {
+      "id": "binary-unassigned-subtype",
+      "type": "binary",
+      "payload_hex": "01",
+      "reason": "unassigned-binary-subtype"
+    },
+    {
+      "id": "decimal128-cohort-alias-for-one",
+      "type": "decimal128",
+      "payload_hex": "0a000000000000000000000000003e30",
+      "reason": "not-canonical-decimal-reencoding"
+    },
+    {
+      "id": "decimal128-zero-exponent-alias",
+      "type": "decimal128",
+      "payload_hex": "00000000000000000000000000000000",
+      "reason": "zero-must-use-logical-exponent-zero"
+    },
+    {
+      "id": "decimal128-negative-nan",
+      "type": "decimal128",
+      "payload_hex": "000000000000000000000000000000fc",
+      "reason": "only-canonical-positive-quiet-nan"
+    },
+    {
+      "id": "timestamp-below-min",
+      "type": "timestamp",
+      "payload_hex": "ff3fd400014023ff",
+      "reason": "timestamp-out-of-range"
+    },
+    {
+      "id": "timestamp-above-max",
+      "type": "timestamp",
+      "payload_hex": "006073cc0c448403",
+      "reason": "timestamp-out-of-range"
+    },
+    {
+      "id": "date-below-min",
+      "type": "date",
+      "payload_hex": "c506f5ff",
+      "reason": "date-out-of-range"
+    },
+    {
+      "id": "date-above-max",
+      "type": "date",
+      "payload_hex": "a1c02c00",
+      "reason": "date-out-of-range"
+    },
+    {
+      "id": "uuid-short",
+      "type": "uuid",
+      "payload_hex": "00",
+      "reason": "uuid-length-not-16"
+    },
+    {
+      "id": "objectid-long",
+      "type": "objectId",
+      "payload_hex": "00000000000000000000000000",
+      "reason": "objectid-length-not-12"
+    },
+    {
+      "id": "vector-zero-dimension",
+      "type": "vector<f32,N>",
+      "payload_hex": "00000000",
+      "reason": "dimension-out-of-range"
+    },
+    {
+      "id": "vector-f32-length-mismatch",
+      "type": "vector<f32,N>",
+      "payload_hex": "01000000",
+      "reason": "payload-length-does-not-equal-4-plus-4N"
+    },
+    {
+      "id": "vector-f32-infinity",
+      "type": "vector<f32,N>",
+      "payload_hex": "010000000000807f",
+      "reason": "nonfinite-vector-element"
+    },
+    {
+      "id": "vector-f16-nan",
+      "type": "vector<f16,N>",
+      "payload_hex": "01000000007e",
+      "reason": "nonfinite-vector-element"
+    }
+  ],
+  "external_reference_snapshots": [
+    {
+      "id": "mongodb-decimal128-specification",
+      "repository": "mongodb/specifications",
+      "commit": "d75d82b18b6f267dc00e75103105d48980181ef1",
+      "path": "source/bson-decimal128/decimal128.md",
+      "role": "BID coefficient and little-endian interchange baseline"
+    },
+    {
+      "id": "mongodb-decimal128-special-corpus",
+      "repository": "mongodb/specifications",
+      "commit": "d75d82b18b6f267dc00e75103105d48980181ef1",
+      "path": "source/bson-corpus/tests/decimal128-1.json",
+      "role": "independent BID zero, special, and ordinary payload vectors"
+    },
+    {
+      "id": "mongodb-decimal128-boundary-corpus",
+      "repository": "mongodb/specifications",
+      "commit": "d75d82b18b6f267dc00e75103105d48980181ef1",
+      "path": "source/bson-corpus/tests/decimal128-5.json",
+      "role": "independent BID clamped and subnormal boundary vectors"
+    },
+    {
+      "id": "libbson-decimal128-reference",
+      "repository": "mongodb/mongo-c-driver",
+      "commit": "d9691e85a8b5f70eca91a1a94d249a5accdc785a",
+      "path": "src/libbson/src/bson/bson-decimal128.c",
+      "role": "independent BID exponent, coefficient, special, and byte-order implementation"
+    },
+    {
+      "id": "rfc-9562",
+      "url": "https://www.rfc-editor.org/rfc/rfc9562",
+      "role": "UUID 16-octet network-order format"
+    },
+    {
+      "id": "ieee-754-2019",
+      "url": "https://standards.ieee.org/ieee/754/6210/",
+      "role": "binary and decimal floating interchange format authority"
+    },
+    {
+      "id": "unicode-utf8",
+      "url": "https://www.unicode.org/versions/latest/core-spec/chapter-3/",
+      "role": "canonical well-formed UTF-8 authority"
+    }
+  ],
+  "fixture_boundary": {
+    "payload_vectors_are_normative": true,
+    "complete_hdoc_vectors": false,
+    "complete_hdoc_vector_owner": "P03-016"
+  }
+}

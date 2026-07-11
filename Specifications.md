@@ -472,8 +472,15 @@ The one-byte `type_tag` assignments are fixed by the
 [machine-readable registry](docs/formats/hdoc-v1-type-tags.json). Tags `0x01`–`0x10` cover the 16
 stored logical types. Missing has no stored tag; the semantic fixture umbrella vector type expands
 to distinct f32/f16 vector tags; unknown/unassigned tags fail closed; and reserved assignments are
-never inferred or reused. Payload bytes and field/container record positions remain
-`P03-004`/`P03-005`.
+never inferred or reused.
+
+The exact noncontainer bytes are fixed by the
+[HDoc 1.0 Canonical Noncontainer Payload Encoding](docs/formats/hdoc-v1-payloads.md) and its
+[machine-readable registry](docs/formats/hdoc-v1-payloads.json). It defines empty null, strict
+Boolean bytes, fixed little-endian integers/binary64/temporal counts, canonical decimal128 BID,
+exact UTF-8 and subtype-prefixed binary, RFC-order UUID/opaque ObjectId bytes, and dimensioned
+finite f32/f16 vectors. Every payload has one exact length/alignment/canonicality rule. Field,
+array, object, and value-area record positions remain `P03-005`.
 
 Design requirements:
 
@@ -498,7 +505,9 @@ Footer Format](docs/formats/hdoc-v1.md) and its
 [machine-readable companion](docs/formats/hdoc-v1-envelope.json). It fixes the 64-byte header,
 32-byte directory entries, body section registry/order, structural/feature flags, length/count/CRC
 slots, and 64-byte footer while deliberately keeping the complete byte format invalid until
-`P03-003`–`P03-007` assign the subordinate registries and the first nonzero hash profile.
+`P03-005`–`P03-007` assign the remaining container/table, hash, and compression registries and the
+first nonzero hash profile. The type-tag and noncontainer-payload registries are already fixed by
+`P03-003`/`P03-004` but do not form a complete HDoc on their own.
 
 ### 7.4 Field path dictionary
 

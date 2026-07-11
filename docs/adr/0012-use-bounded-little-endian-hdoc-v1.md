@@ -413,7 +413,7 @@ partially decoded value, repair bytes silently, or trust a derived index/sidecar
 
 - P03-002 fixes exact header/footer fields, widths, section directory, and magic/version bytes.
 - P03-003 assigns stable type tags and extension ranges.
-- P03-004 fixes every logical payload encoding.
+- P03-004 fixes every noncontainer logical payload encoding and base binary subtype.
 - P03-005 fixes field/nested tables, section order, and overlap rules.
 - P03-006 fixes the BLAKE3 domain/framing and exact checksum/hash fields/vectors.
 - P03-007 selects compression codecs and deterministic profiles.
@@ -469,7 +469,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   checksum, content-hash, compression, extension, rejection, and rollback decisions in this ADR.
 - [x] Freeze exact header/footer and feature/version fields under `P03-002`.
 - [x] Freeze stable type tags and extension ranges under `P03-003`.
-- [ ] Freeze payload encodings under `P03-004`.
+- [x] Freeze canonical noncontainer payload encodings and binary-subtype ranges under `P03-004`.
 - [ ] Freeze table/offset/section/padding rules under `P03-005`.
 - [ ] Reproduce RFC CRC-32C and official BLAKE3 vectors; freeze domain/framing and corruption
   diagnostics under `P03-006`.
@@ -502,7 +502,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] `P03-002`: assign exact magic, header/footer, directory, version, flag, algorithm, and feature
   fields.
 - [x] `P03-003`: publish stable type-tag and reserved-extension registries.
-- [ ] `P03-004`: publish exact canonical scalar/container payload bytes.
+- [x] `P03-004`: publish exact canonical scalar, byte-sequence, temporal, identifier, and vector
+  payload bytes.
 - [ ] `P03-005`: publish the complete offset/section/alignment/overlap grammar.
 - [ ] `P03-006`: publish exact CRC coverage and BLAKE3 domain/framing vectors.
 - [ ] `P03-007`: select compression algorithms/settings after dependency and benchmark review.
@@ -525,6 +526,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [Versioned error semantics](../architecture/error-semantics.md)
 - [HDoc 1.0 envelope format](../formats/hdoc-v1.md)
 - [HDoc 1.x logical type tags](../formats/hdoc-v1-type-tags.md)
+- [HDoc 1.0 canonical noncontainer payloads](../formats/hdoc-v1-payloads.md)
 - [RFC 3385: Internet Checksum Considered Harmful?](https://www.rfc-editor.org/rfc/rfc3385)
 - [RFC 3720: iSCSI CRC-32C parameters and examples](https://www.rfc-editor.org/rfc/rfc3720)
 - [BLAKE3 official implementation and test vectors](https://github.com/BLAKE3-team/BLAKE3)
