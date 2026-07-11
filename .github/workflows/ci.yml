@@ -83,6 +83,22 @@ jobs:
           corepack npm run wgsl:check
       - name: Run aggregate tests
         run: corepack npm test
+      - name: Collect semantic replay and dependency reports
+        if: always() && matrix.node == '22.23.1'
+        run: corepack npm run artifacts:test-replay
+      - name: Retain semantic replay and dependency reports
+        if: always() && matrix.node == '22.23.1'
+        id: upload-semantic-replay
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: test-replays-semantic-node-${{ matrix.node }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/retention/test-replays/semantic/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+          overwrite: false
+          include-hidden-files: false
+          archive: true
 
   native:
     name: Native / ${{ matrix.id }}
@@ -121,6 +137,22 @@ jobs:
         env:
           RUSTDOCFLAGS: -D warnings
         run: cargo doc --frozen --workspace --no-deps --all-features
+      - name: Collect Rust coverage replay
+        if: always() && matrix.id == 'linux-x64'
+        run: corepack npm run artifacts:coverage-replay
+      - name: Retain Rust coverage replay
+        if: always() && matrix.id == 'linux-x64'
+        id: upload-coverage-replay
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: test-replays-coverage-${{ matrix.id }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/retention/test-replays/coverage/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+          overwrite: false
+          include-hidden-files: false
+          archive: true
 
   portable:
     name: Portable Rust / ${{ matrix.target }}
@@ -199,3 +231,19 @@ jobs:
         run: corepack npm run wgsl:validate
       - name: Build and execute the browser bundle smoke
         run: corepack npm run ci:browser-smoke -- ${{ matrix.engine }}
+      - name: Collect browser execution and validation reports
+        if: always()
+        run: corepack npm run artifacts:browser-report -- ${{ matrix.engine }}
+      - name: Retain browser execution and validation reports
+        if: always()
+        id: upload-browser-reports
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: browser-reports-${{ matrix.engine }}-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/retention/browser-reports/${{ matrix.engine }}/
+          if-no-files-found: error
+          retention-days: 30
+          compression-level: 9
+          overwrite: false
+          include-hidden-files: false
+          archive: true

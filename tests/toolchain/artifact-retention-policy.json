@@ -1,0 +1,147 @@
+{
+  "schema": "helix.artifact-retention-policy/1",
+  "plan_item": "P02-015",
+  "output_root": "dist/retention",
+  "schemas": {
+    "policy": "tests/toolchain/schema/artifact-retention-policy-v1.schema.json",
+    "bundle": "tests/toolchain/schema/retained-artifact-bundle-v1.schema.json",
+    "browser_execution": "tests/toolchain/schema/browser-execution-report-v1.schema.json"
+  },
+  "service": {
+    "provider": "github-actions",
+    "action_repository": "actions/upload-artifact",
+    "action_version": "7.0.1",
+    "action_sha": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a",
+    "artifact_model": "immutable-unless-deleted",
+    "maximum_ci_retention_days": 90,
+    "workflow_permission": "contents:read",
+    "if_no_files_found": "error",
+    "overwrite": false,
+    "include_hidden_files": false,
+    "archive": true,
+    "compression_level": 9
+  },
+  "profiles": [
+    {
+      "id": "golden-formats",
+      "state": "reserved",
+      "current_scope": "No persistent HelixDB format or golden vector exists.",
+      "activation_task": "P03-016",
+      "ci_retention_days": 90,
+      "durable_retention": "permanent-by-format-version",
+      "promotion_required": true,
+      "sensitivity": "public-repository-data-only",
+      "maximum_bundle_bytes": 67108864,
+      "producers": []
+    },
+    {
+      "id": "test-replays",
+      "state": "active",
+      "current_scope": "Foundation semantic-conformance and Rust coverage replay evidence.",
+      "activation_task": null,
+      "ci_retention_days": 30,
+      "durable_retention": "permanent-when-used-by-gate-or-release",
+      "promotion_required": true,
+      "sensitivity": "public-repository-data-only",
+      "maximum_bundle_bytes": 8388608,
+      "producers": [
+        {
+          "variant": "semantic",
+          "command": [
+            "node",
+            "tests/toolchain/collect-retained-artifacts.mjs",
+            "test-replays",
+            "semantic"
+          ],
+          "upstream_command": ["node", "tests/run-suite.mjs", "conformance"],
+          "output": "dist/retention/test-replays/semantic",
+          "artifact_name_prefix": "test-replays-semantic-node",
+          "required_sources": [
+            "fixtures/semantic/manifest.json",
+            "fixtures/semantic/oracle-report-v1.json",
+            "compatibility/v1/matrix-v1.json",
+            "differential/mongodb/report-v1.json"
+          ],
+          "required_generated": []
+        },
+        {
+          "variant": "coverage",
+          "command": [
+            "node",
+            "tests/toolchain/collect-retained-artifacts.mjs",
+            "test-replays",
+            "coverage"
+          ],
+          "upstream_command": ["node", "tests/toolchain/check-rust-coverage.mjs", "run"],
+          "output": "dist/retention/test-replays/coverage",
+          "artifact_name_prefix": "test-replays-coverage",
+          "required_sources": [
+            "tests/toolchain/rust-coverage-policy.json",
+            "rust-toolchain.toml",
+            "Cargo.lock"
+          ],
+          "required_generated": ["dist/coverage/rust-coverage.json"]
+        }
+      ]
+    },
+    {
+      "id": "crash-matrices",
+      "state": "reserved",
+      "current_scope": "No storage engine, fault point, crash history, or recovery matrix exists.",
+      "activation_task": "P05-021",
+      "ci_retention_days": 90,
+      "durable_retention": "permanent-by-persistent-format-and-release-line",
+      "promotion_required": true,
+      "sensitivity": "redacted-public-or-access-controlled",
+      "maximum_bundle_bytes": 536870912,
+      "producers": []
+    },
+    {
+      "id": "browser-reports",
+      "state": "active",
+      "current_scope": "Internal toolchain bundle smoke in pinned Chromium, Firefox, and WebKit.",
+      "activation_task": null,
+      "ci_retention_days": 30,
+      "durable_retention": "supported-platform-lifetime-when-used-by-release",
+      "promotion_required": true,
+      "sensitivity": "public-repository-data-only",
+      "maximum_bundle_bytes": 67108864,
+      "producers": [
+        {
+          "variant": "engine",
+          "command": [
+            "node",
+            "tests/toolchain/collect-retained-artifacts.mjs",
+            "browser-reports",
+            "{engine}"
+          ],
+          "upstream_command": ["node", "tests/toolchain/run-browser-smoke.mjs", "{engine}"],
+          "output": "dist/retention/browser-reports/{engine}",
+          "artifact_name_prefix": "browser-reports",
+          "required_sources": [
+            "playwright.config.ts",
+            "tests/browser/bundle-smoke.spec.ts",
+            "tests/toolchain/dependency-report-policy.json"
+          ],
+          "required_generated": [
+            "dist/validation/wasm-browser-smoke.json",
+            "dist/validation/browser-bundle-smoke.json",
+            "dist/validation/browser-execution-{engine}.json"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "packaged-releases",
+      "state": "reserved",
+      "current_scope": "No release candidate, package, container, SBOM, signature, or provenance artifact exists.",
+      "activation_task": "P16-010",
+      "ci_retention_days": 90,
+      "durable_retention": "permanent-in-release-and-provenance-stores",
+      "promotion_required": true,
+      "sensitivity": "public-release-material-only",
+      "maximum_bundle_bytes": 2147483648,
+      "producers": []
+    }
+  ]
+}

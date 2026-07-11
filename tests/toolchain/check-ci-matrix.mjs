@@ -58,7 +58,7 @@ same(
 assert(matrix.schema === 'helix.ci-matrix/3', 'CI matrix schema mismatch');
 same(
   matrix.plan_items,
-  ['P02-009', 'P02-010', 'P02-011', 'P02-012', 'P02-013', 'P02-014'],
+  ['P02-009', 'P02-010', 'P02-011', 'P02-012', 'P02-013', 'P02-014', 'P02-015'],
   'CI matrix task history',
 );
 same(
@@ -235,6 +235,11 @@ expectFailure(
 
 same(
   {
+    'artifacts:browser-report': packageJson.scripts['artifacts:browser-report'],
+    'artifacts:coverage-replay': packageJson.scripts['artifacts:coverage-replay'],
+    'artifacts:policy': packageJson.scripts['artifacts:policy'],
+    'artifacts:test': packageJson.scripts['artifacts:test'],
+    'artifacts:test-replay': packageJson.scripts['artifacts:test-replay'],
     'benchmark:baseline': packageJson.scripts['benchmark:baseline'],
     'benchmark:check': packageJson.scripts['benchmark:check'],
     'benchmark:schemas': packageJson.scripts['benchmark:schemas'],
@@ -252,6 +257,14 @@ same(
     'wgsl:validate': packageJson.scripts['wgsl:validate'],
   },
   {
+    'artifacts:browser-report':
+      'node tests/toolchain/collect-retained-artifacts.mjs browser-reports',
+    'artifacts:coverage-replay':
+      'node tests/toolchain/collect-retained-artifacts.mjs test-replays coverage',
+    'artifacts:policy': 'node tests/toolchain/check-retained-artifacts.mjs policy',
+    'artifacts:test': 'node tests/toolchain/test-artifact-retention-contract.mjs',
+    'artifacts:test-replay':
+      'node tests/toolchain/collect-retained-artifacts.mjs test-replays semantic',
     'benchmark:baseline': 'node benchmarks/run-baseline.mjs',
     'benchmark:check': 'node benchmarks/check-benchmark-artifacts.mjs report',
     'benchmark:schemas': 'node benchmarks/check-benchmark-artifacts.mjs schemas',
@@ -303,6 +316,38 @@ assert(
     'PASS benchmark schemas: 3 strict schemas, workload harness.sha256-buffer/1, 1 deterministic dataset',
   ),
   'benchmark schema contract did not pass',
+);
+assert(
+  runNode(['tests/toolchain/check-retained-artifacts.mjs', 'policy']).includes(
+    'PASS artifact retention policy: 3 strict schemas, 5 profiles, 2 active, 3 reserved',
+  ),
+  'artifact retention policy did not pass',
+);
+assert(
+  runNode(['tests/toolchain/test-artifact-retention-contract.mjs']).includes(
+    'PASS artifact retention rejection canaries: 34 policy/profile/producer/reservation/engine/bundle/browser mutations rejected with exact reasons',
+  ),
+  'artifact retention rejection canaries did not pass',
+);
+expectFailure(
+  ['tests/toolchain/check-retained-artifacts.mjs'],
+  'usage: node tests/toolchain/check-retained-artifacts.mjs',
+);
+expectFailure(
+  ['tests/toolchain/check-retained-artifacts.mjs', 'unknown'],
+  'usage: node tests/toolchain/check-retained-artifacts.mjs',
+);
+expectFailure(
+  ['tests/toolchain/collect-retained-artifacts.mjs'],
+  'usage: node tests/toolchain/collect-retained-artifacts.mjs',
+);
+expectFailure(
+  ['tests/toolchain/collect-retained-artifacts.mjs', 'golden-formats', 'v1'],
+  'usage: node tests/toolchain/collect-retained-artifacts.mjs',
+);
+expectFailure(
+  ['tests/toolchain/run-browser-smoke.mjs', 'chrome'],
+  'usage: node tests/toolchain/run-browser-smoke.mjs',
 );
 expectFailure(
   ['benchmarks/check-benchmark-artifacts.mjs'],
@@ -357,6 +402,11 @@ const workflowPaths = [
 const actionUses = [];
 let checkoutHardeningCount = 0;
 let setupHardeningCount = 0;
+let artifactMissingFailureCount = 0;
+let artifactRetentionCount = 0;
+let artifactNoOverwriteCount = 0;
+let artifactHiddenExclusionCount = 0;
+let artifactArchiveCount = 0;
 for (const workflowPath of workflowPaths) {
   const workflow = readText(workflowPath);
   assert(workflow.endsWith('\n'), `${workflowPath}: missing terminal newline`);
@@ -397,10 +447,26 @@ for (const workflowPath of workflowPaths) {
   actionUses.push(...workflow.matchAll(/uses: ([^@\s]+)@([0-9a-f]{40})/g));
   checkoutHardeningCount += [...workflow.matchAll(/persist-credentials: false/g)].length;
   setupHardeningCount += [...workflow.matchAll(/package-manager-cache: false/g)].length;
+  artifactMissingFailureCount += [...workflow.matchAll(/if-no-files-found: error/g)].length;
+  artifactRetentionCount += [...workflow.matchAll(/retention-days: 30/g)].length;
+  artifactNoOverwriteCount += [...workflow.matchAll(/overwrite: false/g)].length;
+  artifactHiddenExclusionCount += [...workflow.matchAll(/include-hidden-files: false/g)].length;
+  artifactArchiveCount += [...workflow.matchAll(/archive: true/g)].length;
 }
-assert(actionUses.length === 19, `workflow action-use count mismatch: ${actionUses.length}`);
+assert(actionUses.length === 22, `workflow action-use count mismatch: ${actionUses.length}`);
 assert(checkoutHardeningCount === 9, `checkout hardening count: ${checkoutHardeningCount}`);
 assert(setupHardeningCount === 9, `setup-node hardening count: ${setupHardeningCount}`);
+assert(
+  artifactMissingFailureCount === 4,
+  `artifact missing-file hardening: ${artifactMissingFailureCount}`,
+);
+assert(artifactRetentionCount === 4, `artifact retention count: ${artifactRetentionCount}`);
+assert(artifactNoOverwriteCount === 4, `artifact overwrite hardening: ${artifactNoOverwriteCount}`);
+assert(
+  artifactHiddenExclusionCount === 4,
+  `artifact hidden-file hardening: ${artifactHiddenExclusionCount}`,
+);
+assert(artifactArchiveCount === 4, `artifact archive count: ${artifactArchiveCount}`);
 for (const use of actionUses) {
   const action = Object.values(matrix.actions).find(({ repository: name }) => name === use[1]);
   assert(action && action.sha === use[2], `unapproved action pin: ${use[1]}@${use[2]}`);
@@ -427,6 +493,17 @@ for (const marker of [
   "if: matrix.engine == 'chromium'",
   'corepack npm run wgsl:validate',
   `corepack npm run ci:browser-smoke -- ${githubExpression('matrix.engine')}`,
+  "if: always() && matrix.node == '22.23.1'",
+  'corepack npm run artifacts:test-replay',
+  `name: test-replays-semantic-node-${githubExpression('matrix.node')}-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,
+  'path: dist/retention/test-replays/semantic/',
+  "if: always() && matrix.id == 'linux-x64'",
+  'corepack npm run artifacts:coverage-replay',
+  `name: test-replays-coverage-${githubExpression('matrix.id')}-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,
+  'path: dist/retention/test-replays/coverage/',
+  `corepack npm run artifacts:browser-report -- ${githubExpression('matrix.engine')}`,
+  `name: browser-reports-${githubExpression('matrix.engine')}-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,
+  `path: dist/retention/browser-reports/${githubExpression('matrix.engine')}/`,
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }
@@ -457,6 +534,7 @@ for (const marker of [
   'retention-days: 30',
   'overwrite: false',
   'include-hidden-files: false',
+  'archive: true',
 ]) {
   assert(benchmark.includes(marker), `benchmark workflow marker absent: ${marker}`);
 }
@@ -476,6 +554,7 @@ for (const marker of [
   'source-based coverage',
   'non-gating benchmark',
   'upload-artifact',
+  'artifact retention',
   'https://docs.github.com/en/actions/reference/runners/github-hosted-runners',
   'https://playwright.dev/docs/ci',
   'does not prove',
@@ -489,7 +568,7 @@ process.stdout.write(
 process.stdout.write('PASS platforms: Linux/Windows/macOS and x64/arm64 with 2 portable targets\n');
 process.stdout.write('PASS JavaScript/browser: 2 Node lines and 3 real bundle-smoke engines\n');
 process.stdout.write(
-  'PASS workflow policy: 19 full-SHA action uses, read-only permissions, fixed runners\n',
+  'PASS workflow policy: 22 full-SHA action uses, read-only permissions, fixed runners\n',
 );
 process.stdout.write(
   'PASS portable artifacts: core module plus pinned-validator WASIp2 component\n',
@@ -505,5 +584,8 @@ process.stdout.write(
 );
 process.stdout.write(
   'PASS benchmark baseline: scheduled/manual only, integrity-gated raw artifact retention\n',
+);
+process.stdout.write(
+  'PASS artifact retention: semantic/coverage/browser bundles uploaded on all outcomes; 3 future classes reserved\n',
 );
 process.stdout.write('PASS matrix rejection: unknown emitter/runtime lanes fail\n');

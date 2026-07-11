@@ -113,8 +113,9 @@ A successful runtime check writes ignored
 `dist/validation/wgsl-fixtures.json` using `helix.wgsl-validation-report/1`. The report binds the
 manifest digest, Playwright/browser/backend/adapter identities, reviewed launch flags, per-fixture
 source digests and normalized compiler messages, pipeline outcomes, and totals. It is a local
-diagnostic output until artifact retention is established by `P02-015`; durable task evidence
-records the exact source commit and replay result separately.
+diagnostic output. The Chromium lane copies it into the strict browser-report bundle and retains
+that bundle for 30 days on every outcome. A task, gate, or release still promotes the exact report
+and source commit under the [durable-retention policy](../quality/artifact-retention.md).
 
 ## Local commands
 

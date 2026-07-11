@@ -198,11 +198,13 @@ overwrite, excludes hidden files, and retains each run/attempt artifact for 30 d
 produces an immutable artifact and SHA-256 artifact digest as described by its
 [official documentation](https://github.com/actions/upload-artifact/tree/v7.0.1).
 
-This is the narrow retention exception owned by `P02-014`. `P02-015` still owns the general policy
-and workflows for golden formats, test replays, crash matrices, browser reports, and packaged
-releases. A result supporting a published performance claim must be promoted to the longer-lived
-evidence location required by the [evidence guide](../../evidence/README.md#benchmark-specific-rules);
-the 30-day observational artifact alone is insufficient.
+This benchmark remains the separate result contract owned by `P02-014`. The general
+[artifact-retention policy](artifact-retention.md) established by `P02-015` uses the same pinned
+service controls for semantic, coverage, and browser diagnostics and reserves future golden-format,
+crash-matrix, and packaged-release profiles. A result supporting a published performance claim
+must be promoted to the longer-lived evidence location required by the
+[evidence guide](../../evidence/README.md#benchmark-specific-rules); the 30-day observational
+artifact alone is insufficient.
 
 ## Failure and review rules
 

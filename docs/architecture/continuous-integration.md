@@ -3,13 +3,14 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-014`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-015`
 - Governing gate: `G02`
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
 - Component validator authority: [`helix.wasm-tools/2`](../../.github/ci/wasm-tools.json)
 - Gating workflow: [`ci.yml`](../../.github/workflows/ci.yml)
 - Nightly workflow: [`ci-nightly.yml`](../../.github/workflows/ci-nightly.yml)
 - Observational benchmark workflow: [`benchmark-baseline.yml`](../../.github/workflows/benchmark-baseline.yml)
+- Retention authority: [`helix.artifact-retention-policy/1`](../../tests/toolchain/artifact-retention-policy.json)
 
 ## Purpose and claim boundary
 
@@ -48,11 +49,30 @@ The `benchmark-baseline-linux-x64` lane is a scheduled/manual, non-gating benchm
 
 Non-gating does not mean best effort. A schema, dataset, digest, execution, report, or upload failure makes the job fail visibly; `continue-on-error` is forbidden. The [benchmark result contract](../quality/benchmark-results.md) fixes its workload, complete stage inventory, claim boundary, failure retention, output hashes, and absence of a performance threshold.
 
+## Diagnostic artifact retention
+
+The gating workflow collects three active classes after their upstream checks: semantic replay plus
+Node 22 dependency reports, compiler-matched Linux x64 coverage, and one report bundle for each real
+browser engine. Collection and upload use `if: always()`, so a failing upstream check remains red
+while its available structured diagnostics and bounded failure attachments are preserved. The
+collector also exits nonzero when a required output is absent or invalid; retention never converts
+a failed lane into a passing one.
+
+Every active bundle has a strict manifest binding the source commit, environment, fixed commands,
+source hashes, complete payload inventory, byte sizes, SHA-256 hashes, failure list, retention rule,
+and non-claim. CI artifacts expire after 30 days. Anything used for a task, gate, product claim, or
+release must be promoted before expiry to committed evidence or an approved immutable store under
+the [artifact-retention and durable-promotion contract](../quality/artifact-retention.md).
+
+Golden-format, crash-matrix, and packaged-release profiles are deliberately reserved until
+`P03-016`, `P05-021`, and `P16-010`. The policy rejects producers for those classes today rather
+than uploading empty placeholders that could be mistaken for proof.
+
 ## Workflow security and reproducibility
 
 - Workflow permissions are `contents: read`; no job receives write, package, deployment, OIDC, or artifact-attestation permission.
 - Checkout credentials do not persist.
-- `actions/checkout` 7.0.0, `actions/setup-node` 6.4.0, and observational-only `actions/upload-artifact` 7.0.1 use full immutable commit SHAs, recorded with their reviewed release versions in the matrix.
+- `actions/checkout` 7.0.0, `actions/setup-node` 6.4.0, and `actions/upload-artifact` 7.0.1 use full immutable commit SHAs, recorded with their reviewed release versions in the matrix.
 - Setup Node's automatic package cache is disabled. Clean installs use the repository lock and deny lifecycle scripts.
 - Workflows use fixed runner labels, fixed Node versions, the exact `rust-toolchain.toml`, frozen Cargo operations, bounded timeouts, and fail-fast disabled so every matrix failure is visible.
 - No third-party community action, service, container, mutable cache, or secret is used. P02-010 adds two explicit downloads: the matrix-selected Playwright browser revision from its documented CDN and the official Bytecode Alliance `wasm-tools` Linux x64 release archive. Neither occurs through an npm lifecycle script. P02-011 reuses Chromium's bundled Dawn/SwiftShader implementation and adds no download or dependency.
@@ -60,7 +80,8 @@ Non-gating does not mean best effort. A schema, dataset, digest, execution, repo
 - SwiftShader is enabled only for small, committed, hash-bound repository fixtures. The validator accepts no external WGSL, URL, stdin, or environment-provided source; Chromium's documented lower-security software-renderer path is never exposed as a product interface.
 - Every Node lane verifies the integrity-bound 91-package license/source/duplicate inventory. Node 22.23.1 alone performs the explicit npm advisory query and verifies all installed registry signatures plus available SLSA provenance attestations; missing/invalid signatures, any advisory, or network/malformed-response failure is gating.
 - The Linux x64 native lane resolves `llvm-profdata`/`llvm-cov` from the exact Rust toolchain, separates explicitly marked unit-test code from product source, and enforces the [workspace, semantic-critical, and recovery-critical coverage policy](../quality/code-coverage-policy.md). The current empty product denominator is reported as an expiring boundary-skeleton exception, never as 100% coverage.
-- General test/release artifact retention remains `P02-015` work. The narrow `P02-014` exception uploads exactly the ignored benchmark `raw.json` and raw-linked `summary.json` on the scheduled/manual observational job, with missing-file failure, no overwrite, and 30-day retention. Compact validation, dependency, and coverage outputs remain local unless separately promoted to evidence.
+- The retention service fails on missing files, never overwrites, excludes hidden files, archives at compression level 9, and retains diagnostic bundles for 30 days. Artifact names include the variant, run ID, and attempt. General CI uploads cover the exact semantic/dependency, coverage, and browser bundle directories; the `P02-014` benchmark workflow separately uploads only its raw-linked two-file result.
+- Active foundation outputs accept only public repository data and sanitized diagnostics. Crash evidence is preclassified for redacted public or access-controlled storage, and release uploads may contain only public release material. Secrets, signing keys, raw customer/tenant data, and unredacted sensitive evidence are never public CI payloads.
 
 An action update requires confirming the tag-to-SHA mapping from the official action repository, reviewing release and runtime changes, updating both workflows and the machine authority together, and replaying all local CI-contract canaries. A full SHA prevents tag movement from changing accepted code but does not eliminate the need to review the action source and transitive runtime.
 
@@ -79,16 +100,23 @@ corepack npm run coverage:check
 corepack npm run benchmark:schemas
 corepack npm run test:benchmark
 corepack npm run benchmark:check
+corepack npm run artifacts:policy
+corepack npm run artifacts:test
+corepack npm run artifacts:test-replay
+corepack npm run artifacts:coverage-replay
 corepack npm run wgsl:check
 corepack npm run browser:install
 corepack npm run wgsl:validate
 corepack npm run ci:browser-smoke -- chromium
+corepack npm run artifacts:browser-report -- chromium
 corepack npm run ci:browser-smoke -- firefox
+corepack npm run artifacts:browser-report -- firefox
 corepack npm run ci:browser-smoke -- webkit
+corepack npm run artifacts:browser-report -- webkit
 corepack npm run toolchain:types
 ```
 
-Local checks validate exact matrix/workflow/action/validator configuration, lane identities, emitted JSON, registry signatures and provenance observations, lock/tarball license and duplicate reports, compiler-matched coverage reporting and thresholds, strict benchmark schemas/raw linkage, both Wasm forms, WGSL manifest hashes/compiler outcomes, bundle output, and real browser execution on Linux x64. GitHub itself remains the authority for hosted workflow parsing, artifact-service behavior, and Windows/macOS/arm64 provisioning. Therefore local evidence does not prove a hosted matrix or upload passed; the first hosted green results and independent review remain required inputs to `G02`.
+Local checks validate exact matrix/workflow/action/validator configuration, lane identities, emitted JSON, registry signatures and provenance observations, lock/tarball license and duplicate reports, compiler-matched coverage reporting and thresholds, strict benchmark schemas/raw linkage, retained-bundle inventories and byte identities, both Wasm forms, WGSL manifest hashes/compiler outcomes, bundle output, and real browser execution on Linux x64. GitHub itself remains the authority for hosted workflow parsing, artifact IDs/URLs/digests, artifact-service behavior, and Windows/macOS/arm64 provisioning. Therefore local evidence does not prove a hosted matrix or upload passed; the first hosted green results and independent review remain required inputs to `G02`.
 
 ## Change policy
 

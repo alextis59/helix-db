@@ -1,0 +1,121 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.helix-db.invalid/toolchain/browser-execution-report-v1.schema.json",
+  "title": "HelixDB browser execution report version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_item",
+    "recorded_at",
+    "selection",
+    "playwright_version",
+    "browser_identities",
+    "stats",
+    "tests",
+    "failures",
+    "verdict"
+  ],
+  "properties": {
+    "schema": { "const": "helix.browser-execution-report/1" },
+    "plan_item": { "const": "P02-015" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "selection": { "enum": ["chromium", "firefox", "webkit", "all"] },
+    "playwright_version": { "const": "1.61.1" },
+    "browser_identities": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 3,
+      "items": { "$ref": "#/$defs/browserIdentity" }
+    },
+    "stats": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["duration_ms", "expected", "skipped", "unexpected", "flaky"],
+      "properties": {
+        "duration_ms": { "type": "integer", "minimum": 0, "maximum": 3600000 },
+        "expected": { "type": "integer", "minimum": 0, "maximum": 1000 },
+        "skipped": { "type": "integer", "minimum": 0, "maximum": 1000 },
+        "unexpected": { "type": "integer", "minimum": 0, "maximum": 1000 },
+        "flaky": { "type": "integer", "minimum": 0, "maximum": 1000 }
+      }
+    },
+    "tests": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1000,
+      "items": { "$ref": "#/$defs/test" }
+    },
+    "failures": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+    },
+    "verdict": { "enum": ["pass", "fail"] }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "browserIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["engine", "revision", "browser_version", "launcher_bytes", "launcher_sha256"],
+      "properties": {
+        "engine": { "enum": ["chromium", "firefox", "webkit"] },
+        "revision": { "type": "string", "pattern": "^[0-9]+$" },
+        "browser_version": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "launcher_bytes": { "type": "integer", "minimum": 1, "maximum": 1073741824 },
+        "launcher_sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "test": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "file",
+        "line",
+        "column",
+        "title",
+        "project",
+        "status",
+        "expected_status",
+        "retry",
+        "duration_ms",
+        "errors",
+        "attachments"
+      ],
+      "properties": {
+        "file": { "type": "string", "pattern": "^tests/browser/" },
+        "line": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "column": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "title": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "project": { "enum": ["chromium", "firefox", "webkit"] },
+        "status": { "enum": ["passed", "failed", "timedOut", "skipped", "interrupted"] },
+        "expected_status": { "enum": ["passed", "failed", "skipped"] },
+        "retry": { "type": "integer", "minimum": 0, "maximum": 100 },
+        "duration_ms": { "type": "integer", "minimum": 0, "maximum": 3600000 },
+        "errors": {
+          "type": "array",
+          "maxItems": 20,
+          "items": { "type": "string", "minLength": 1, "maxLength": 2000 }
+        },
+        "attachments": {
+          "type": "array",
+          "maxItems": 50,
+          "items": { "$ref": "#/$defs/attachment" }
+        }
+      }
+    },
+    "attachment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "content_type", "path", "bytes", "sha256"],
+      "properties": {
+        "name": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "content_type": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "path": { "type": "string", "pattern": "^test-results/" },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 67108864 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

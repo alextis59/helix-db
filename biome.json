@@ -23,6 +23,7 @@
       "tests/**/*.mjs",
       "tests/**/*.ts",
       "tests/toolchain/*.json",
+      "tests/toolchain/schema/*.json",
       "!package-lock.json",
       "!!evidence",
       "!!target",

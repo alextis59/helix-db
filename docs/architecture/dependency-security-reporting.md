@@ -110,9 +110,12 @@ platform-optional packages absent on Linux remain protected by lock SRI and the 
 license refresh; registry-signature verification is repeated when a platform selects them.
 
 The raw `npm-audit.json`, raw `npm-signatures.json`, deterministic inventory, and compact dated
-observation are written under ignored `dist/dependency`. The first baseline is retained in task
-evidence. Routine CI prints report hashes; `P02-015` adds hosted artifact upload/expiry rather than
-letting this task invent an incomplete retention system.
+observation are written under ignored `dist/dependency`. The separately invoked license refresh
+also writes its full result there. The first baseline is retained in task evidence. The Node 22 CI
+lane copies the four routine outputs into its strict semantic-replay bundle, records their byte
+identities, and retains the bundle for 30 days even when
+the upstream lane fails. A gate or release must still promote the exact report under the
+[durable-retention policy](../quality/artifact-retention.md); the expiring hosted copy is diagnostic.
 
 ## Downloaded tools and browser binaries
 
@@ -129,9 +132,10 @@ vulnerabilities.”
 
 Playwright's default Chromium, Chromium headless shell, Firefox, WebKit, and FFmpeg revisions are
 recorded and checked against the exact installed `playwright-core` manifest when available. Their
-download behavior remains coupled to the SHA-512-pinned npm package and upstream installer. There
-is no repository-owned standalone browser digest yet, and the report preserves that limitation for
-`P02-015`/release work.
+download behavior remains coupled to the SHA-512-pinned npm package and upstream installer. Each
+retained execution report additionally hashes the exact launcher entrypoint returned by Playwright.
+That identity detects a changed invoked entrypoint but is not a complete browser-distribution
+inventory or SBOM; packaged-release work must resolve that separate boundary under `P16-010`.
 
 ## CI and local commands
 

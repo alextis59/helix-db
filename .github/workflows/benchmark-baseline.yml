@@ -55,3 +55,4 @@ jobs:
           compression-level: 9
           overwrite: false
           include-hidden-files: false
+          archive: true

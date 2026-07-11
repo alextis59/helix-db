@@ -1,0 +1,157 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.helix-db.invalid/toolchain/artifact-retention-policy-v1.schema.json",
+  "title": "HelixDB artifact retention policy version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "plan_item", "output_root", "schemas", "service", "profiles"],
+  "properties": {
+    "schema": { "const": "helix.artifact-retention-policy/1" },
+    "plan_item": { "const": "P02-015" },
+    "output_root": { "const": "dist/retention" },
+    "schemas": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["policy", "bundle", "browser_execution"],
+      "properties": {
+        "policy": { "const": "tests/toolchain/schema/artifact-retention-policy-v1.schema.json" },
+        "bundle": { "const": "tests/toolchain/schema/retained-artifact-bundle-v1.schema.json" },
+        "browser_execution": {
+          "const": "tests/toolchain/schema/browser-execution-report-v1.schema.json"
+        }
+      }
+    },
+    "service": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "action_repository",
+        "action_version",
+        "action_sha",
+        "artifact_model",
+        "maximum_ci_retention_days",
+        "workflow_permission",
+        "if_no_files_found",
+        "overwrite",
+        "include_hidden_files",
+        "archive",
+        "compression_level"
+      ],
+      "properties": {
+        "provider": { "const": "github-actions" },
+        "action_repository": { "const": "actions/upload-artifact" },
+        "action_version": { "const": "7.0.1" },
+        "action_sha": { "const": "043fb46d1a93c77aae656e7c1c64a875d1fc6a0a" },
+        "artifact_model": { "const": "immutable-unless-deleted" },
+        "maximum_ci_retention_days": { "const": 90 },
+        "workflow_permission": { "const": "contents:read" },
+        "if_no_files_found": { "const": "error" },
+        "overwrite": { "const": false },
+        "include_hidden_files": { "const": false },
+        "archive": { "const": true },
+        "compression_level": { "const": 9 }
+      }
+    },
+    "profiles": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": { "$ref": "#/$defs/profile" }
+    }
+  },
+  "$defs": {
+    "nullableTask": {
+      "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^P[0-9]{2}-[0-9]{3}$" }]
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "variant",
+        "command",
+        "upstream_command",
+        "output",
+        "artifact_name_prefix",
+        "required_sources",
+        "required_generated"
+      ],
+      "properties": {
+        "variant": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "command": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        },
+        "upstream_command": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        },
+        "output": { "type": "string", "pattern": "^dist/retention/" },
+        "artifact_name_prefix": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "required_sources": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        },
+        "required_generated": {
+          "type": "array",
+          "maxItems": 20,
+          "uniqueItems": true,
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        }
+      }
+    },
+    "profile": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "state",
+        "current_scope",
+        "activation_task",
+        "ci_retention_days",
+        "durable_retention",
+        "promotion_required",
+        "sensitivity",
+        "maximum_bundle_bytes",
+        "producers"
+      ],
+      "properties": {
+        "id": {
+          "enum": [
+            "golden-formats",
+            "test-replays",
+            "crash-matrices",
+            "browser-reports",
+            "packaged-releases"
+          ]
+        },
+        "state": { "enum": ["active", "reserved"] },
+        "current_scope": { "type": "string", "minLength": 30, "maxLength": 300 },
+        "activation_task": { "$ref": "#/$defs/nullableTask" },
+        "ci_retention_days": { "type": "integer", "minimum": 1, "maximum": 90 },
+        "durable_retention": { "type": "string", "minLength": 20, "maxLength": 100 },
+        "promotion_required": { "const": true },
+        "sensitivity": {
+          "enum": [
+            "public-repository-data-only",
+            "redacted-public-or-access-controlled",
+            "public-release-material-only"
+          ]
+        },
+        "maximum_bundle_bytes": { "type": "integer", "minimum": 1048576, "maximum": 2147483648 },
+        "producers": {
+          "type": "array",
+          "maxItems": 4,
+          "items": { "$ref": "#/$defs/producer" }
+        }
+      }
+    }
+  }
+}

@@ -199,8 +199,8 @@ const validatePolicy = () => {
     {
       playwright_browsers: {
         coverage:
-          'exact-package-coupled revisions; upstream installer verification; no standalone repository digest',
-        revalidate_by: 'P02-015',
+          'exact-package-coupled revisions; retained launcher entrypoint identity and structured execution report; no complete browser-distribution SBOM',
+        revalidate_by: 'P16-010',
       },
       wasm_tools: {
         coverage: 'pinned-release-and-license-files; no binary-transitive advisory feed',

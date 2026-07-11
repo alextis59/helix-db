@@ -1,0 +1,148 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.helix-db.invalid/toolchain/retained-artifact-bundle-v1.schema.json",
+  "title": "HelixDB retained artifact bundle version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_item",
+    "profile",
+    "variant",
+    "status",
+    "recorded_at",
+    "execution_id",
+    "source_control",
+    "environment",
+    "retention",
+    "producer",
+    "source_inputs",
+    "artifacts",
+    "failures",
+    "claim_boundary",
+    "verdict"
+  ],
+  "properties": {
+    "schema": { "const": "helix.retained-artifact-bundle/1" },
+    "plan_item": { "const": "P02-015" },
+    "profile": {
+      "enum": ["test-replays", "browser-reports"]
+    },
+    "variant": {
+      "enum": ["semantic", "coverage", "chromium", "firefox", "webkit"]
+    },
+    "status": { "enum": ["complete", "failed"] },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "execution_id": { "type": "string", "minLength": 8, "maxLength": 160 },
+    "source_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "dirty"],
+      "properties": {
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "dirty": { "type": "boolean" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "provider",
+        "platform",
+        "architecture",
+        "node",
+        "github_run_id",
+        "github_run_attempt"
+      ],
+      "properties": {
+        "provider": { "enum": ["local", "github-actions"] },
+        "platform": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "architecture": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "node": { "type": "string", "pattern": "^v[0-9]+\\.[0-9]+\\.[0-9]+" },
+        "github_run_id": {
+          "oneOf": [
+            { "type": "null" },
+            { "type": "string", "pattern": "^[0-9]+$", "maxLength": 40 }
+          ]
+        },
+        "github_run_attempt": {
+          "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 1, "maximum": 1000000 }]
+        }
+      }
+    },
+    "retention": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["ci_days", "durable", "promotion_required", "sensitivity"],
+      "properties": {
+        "ci_days": { "type": "integer", "minimum": 1, "maximum": 90 },
+        "durable": { "type": "string", "minLength": 20, "maxLength": 100 },
+        "promotion_required": { "const": true },
+        "sensitivity": { "type": "string", "minLength": 20, "maxLength": 100 }
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["command", "upstream_command", "exit_code"],
+      "properties": {
+        "command": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        },
+        "upstream_command": {
+          "type": "array",
+          "minItems": 3,
+          "maxItems": 6,
+          "items": { "type": "string", "minLength": 1, "maxLength": 200 }
+        },
+        "exit_code": { "type": "integer", "minimum": 0, "maximum": 255 }
+      }
+    },
+    "source_inputs": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 30,
+      "items": { "$ref": "#/$defs/fileIdentity" }
+    },
+    "artifacts": {
+      "type": "array",
+      "maxItems": 100,
+      "items": { "$ref": "#/$defs/artifact" }
+    },
+    "failures": {
+      "type": "array",
+      "maxItems": 50,
+      "items": { "type": "string", "minLength": 1, "maxLength": 1000 }
+    },
+    "claim_boundary": { "type": "string", "minLength": 40, "maxLength": 500 },
+    "verdict": { "enum": ["pass", "fail"] }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "fileIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 2147483648 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "media_type", "role", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 300 },
+        "media_type": { "type": "string", "minLength": 3, "maxLength": 100 },
+        "role": { "type": "string", "pattern": "^[a-z][a-z0-9-]*$" },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 2147483648 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    }
+  }
+}

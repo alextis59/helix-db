@@ -26,6 +26,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Dependency security reporting](docs/architecture/dependency-security-reporting.md) — integrity-bound license/duplicate inventory and explicit vulnerability/signature/provenance observations.
 - [Rust product coverage policy](docs/quality/code-coverage-policy.md) — compiler-matched reports, explicit test exclusions, and semantic/recovery thresholds.
 - [Benchmark result contract](docs/quality/benchmark-results.md) — strict workload/raw/summary schemas and a retained, non-gating integrity-only baseline.
+- [Artifact retention and durable promotion](docs/quality/artifact-retention.md) — strict replay/browser bundles, failure preservation, expiry, sensitivity, and permanent evidence promotion.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

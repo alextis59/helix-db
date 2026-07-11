@@ -170,9 +170,10 @@ test coverage. Evidence must preserve this distinction.
 - one top-level pass verdict.
 
 The report is capped at 2 MiB. Raw profiles, merged profile data, binaries, and the raw LLVM export
-remain ignored diagnostics. `P02-015` owns CI artifact retention; `P16-*` and `P24-*` own release
-evidence packaging. Until then, a report may be promoted only through a task evidence manifest
-that binds its exact source commit and digest.
+remain ignored diagnostics. The Linux x64 lane copies the strict report into a source-bound replay
+bundle and retains it for 30 days on every outcome. `P16-*` and `P24-*` own release evidence
+packaging; a task, gate, or release must promote the report under the
+[durable-retention policy](artifact-retention.md), binding its exact source commit and digest.
 
 ## CI placement
 

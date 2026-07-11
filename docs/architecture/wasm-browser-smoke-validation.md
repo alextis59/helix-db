@@ -3,11 +3,11 @@
 - Status: Accepted foundation artifact-validation contract; no database or release support claim
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-010`, validator licensing extended by `P02-012`
+- Plan items: `P02-010`, validator licensing extended by `P02-012`, reporting retained by `P02-015`
 - Governing requirements: `PLAT-001`, `PLAT-002`, `PLAT-003`, `INV-003`, `INV-004`, `INV-007`, `CORE-001`, `CORE-003`, `QUAL-001`
 - Governing gate: `G02`
 - Component-validator authority: [`helix.wasm-tools/2`](../../.github/ci/wasm-tools.json)
-- CI matrix authority: [`helix.ci-matrix/2`](../../.github/ci/matrix.json)
+- CI matrix authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
 
 ## Purpose and maturity boundary
 
@@ -59,9 +59,16 @@ The committed app under `tests/browser/smoke-app/` is an internal toolchain fixt
 - one hidden source map with no emitted `sourceMappingURL`; and
 - one external `.wasm` asset whose bytes must equal the independently validated Rust output.
 
-The bundle checker rejects extra/missing output, symlinks, an inlined or changed Wasm file, an exposed source-map URL, invalid source-map JSON, or non-relative HTML assets. It emits a timestamp-free report under ignored `dist/validation`; `P02-015` owns CI upload and retention.
+The bundle checker rejects extra/missing output, symlinks, an inlined or changed Wasm file, an exposed source-map URL, invalid source-map JSON, or non-relative HTML assets. It emits a timestamp-free report under ignored `dist/validation`; each browser lane copies that report into its strict 30-day diagnostic bundle.
 
 Playwright serves only the built output on fixed loopback `127.0.0.1:4173`. Each pinned engine fetches the emitted `.wasm` with `application/wasm`, validates, compiles, and instantiates it; computes its SHA-256 using Web Crypto; asserts zero imports and exact foundation exports; and fails on browser console, page, or request errors. Descriptor results are normalized to portable `name`/`kind` fields because engines may expose additional proposal metadata.
+
+The runner requests Playwright's line and JSON reporters, normalizes the raw JSON into closed
+`helix.browser-execution-report/1`, and deletes the raw reporter file. The retained report binds
+test status, duration, errors, bounded attachment hashes, the coupled browser revision/version, and
+the exact launcher-entrypoint byte count and SHA-256 without recording repository/home paths. The
+launcher identity is not a complete browser-distribution digest or SBOM and does not broaden this
+toolchain-smoke result into browser support.
 
 The [Playwright browser guide](https://playwright.dev/docs/browsers) states that each Playwright version needs its coupled browser revisions. The [CI guide](https://playwright.dev/docs/ci) requires installing browsers/dependencies before execution and recommends one worker for reproducibility. CI therefore installs only the matrix-selected engine with `playwright install --with-deps` after the lifecycle-suppressed locked npm install.
 
@@ -90,7 +97,7 @@ corepack npm run toolchain:types
 - Changing Rust, validator, Vite, Playwright, browser revision, target, WIT, output shape, imports, exports, or hashes requires focused review and regenerated evidence.
 - An engine-specific extra descriptor field is normalized only when the portable semantic fields agree; engine-specific validation/compile/instantiate failure is not normalized away.
 - Network unavailability is a failed provisioning attempt, not proof that validation was skipped safely.
-- Browser screenshots/traces are retained on local failure. Durable CI upload, expiry, and failure-report policy remain `P02-015`.
+- Browser screenshots, traces, videos, or other attachments named by the structured report are copied from bounded `test-results/` paths. CI collects and uploads the full per-engine bundle on every outcome for 30 days; a gate or release must promote it under the [durable-retention policy](../quality/artifact-retention.md).
 
 ## Non-claims and next owners
 

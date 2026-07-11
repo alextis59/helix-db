@@ -31,6 +31,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Dependency security reporting](architecture/dependency-security-reporting.md) | Deterministic lock/license/duplicate inventory plus dated vulnerability, signature, and provenance observations |
 | [Rust product code coverage policy](quality/code-coverage-policy.md) | Compiler-matched LLVM reporting, explicit product/test classification, and workspace/critical thresholds |
 | [Benchmark result and retention contract](quality/benchmark-results.md) | Versioned workload/raw/summary schemas, complete stage reporting, and the non-gating retained baseline |
+| [CI artifact retention and durable promotion](quality/artifact-retention.md) | Versioned replay/browser bundles, reserved future classes, failure uploads, expiry, sensitivity, and durable evidence promotion |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 

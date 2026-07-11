@@ -29,6 +29,11 @@
     "fsevents": false
   },
   "scripts": {
+    "artifacts:browser-report": "node tests/toolchain/collect-retained-artifacts.mjs browser-reports",
+    "artifacts:coverage-replay": "node tests/toolchain/collect-retained-artifacts.mjs test-replays coverage",
+    "artifacts:policy": "node tests/toolchain/check-retained-artifacts.mjs policy",
+    "artifacts:test": "node tests/toolchain/test-artifact-retention-contract.mjs",
+    "artifacts:test-replay": "node tests/toolchain/collect-retained-artifacts.mjs test-replays semantic",
     "benchmark:baseline": "node benchmarks/run-baseline.mjs",
     "benchmark:check": "node benchmarks/check-benchmark-artifacts.mjs report",
     "benchmark:schemas": "node benchmarks/check-benchmark-artifacts.mjs schemas",
