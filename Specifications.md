@@ -639,8 +639,18 @@ stored bytes with its slot zeroed; a domain-separated BLAKE3-256 hash identifies
 version, IDs, introduction versions, and path bytes. The production writer, validating borrowed
 reader, and explicit predecessor/successor lineage proof are implemented under `P03-013`.
 
-`P03-014` owns mutable registration, resolution, durable snapshot publication, caching, and version
-pinning. A later dictionary-enabled HDoc profile records the exact dictionary identity/version
+`P03-014` implements mutable registration, resolution, durable snapshot handoff, recovery, and
+version pinning. Registration is a two-stage optimistic operation: preparation validates the whole
+request, resolves existing/duplicate paths, assigns first-request-order IDs in one next version,
+and emits a complete candidate bound to the base identity/version/content hash; publication
+rechecks that exact base and the P03-013 successor relationship before atomically replacing the
+authoritative pin. Stale candidates fail with `CON_WRITE_CONFLICT`. The first nonempty batch
+ensures `_id` is ID 1. Immutable pins own exact snapshot bytes and bidirectional resolution indexes,
+so later registration cannot reinterpret an older consumer. Recovery accepts only a validated
+genesis-to-current successor chain. Storage phases own the physical sync/manifest transaction
+around the candidate bytes; no ambient I/O enters the portable document crate.
+
+A later dictionary-enabled HDoc profile records the exact dictionary identity/version
 needed to interpret collection path IDs; base HDoc remains self-contained with document-local
 exact-name IDs and bytes until `P03-015` defines that record and negotiation. The two namespaces are
 never guessed or silently reused. Query compilation resolves dotted paths into appropriate
@@ -2518,7 +2528,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), and [standalone path dictionary](docs/formats/path-dictionary-v1.md) implemented by `P03-008`–`P03-013`; immutable fixtures continue at `P03-016`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), and [path-dictionary format/lifecycle](docs/formats/path-dictionary-v1.md) implemented by `P03-008`–`P03-014`; immutable fixtures continue at `P03-016`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

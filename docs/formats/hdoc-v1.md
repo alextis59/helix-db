@@ -667,7 +667,7 @@ fields based on its own format version.
 | [`P03-006`](hdoc-v1-integrity.md) | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
 | [`P03-007`](hdoc-v1-compression.md) | Nonzero codec/profile IDs, bounded block grammar, and logical-coordinate derivation | Directory stride, logical/stored length fields, canonical limit |
 | [`P03-012`](hdoc-v1-tagged-json.md) | Lossless debug/SDK-boundary rendering and strict detached import | HDoc bytes, stored tags, validation order, or public wire grammar |
-| [`P03-013`](path-dictionary-v1.md) complete; `P03-014`–`P03-015` | Dictionary lifecycle and HDoc reference records/negotiation | Existing flag/feature bit meanings or ID reuse |
+| [`P03-013`–`P03-014`](path-dictionary-v1.md) complete; `P03-015` | Dictionary format/lifecycle and remaining HDoc reference records/negotiation | Existing flag/feature bit meanings or ID reuse |
 
 Later tasks may fill their reserved registries but cannot silently reinterpret zero, a reserved bit,
 or an existing ID.

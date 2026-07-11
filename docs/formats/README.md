@@ -21,11 +21,11 @@ support claim exists; each document states its own maturity boundary and owning 
 | [HDoc CRC and typed-content hashing](hdoc-v1-integrity.md) | 1.0 integrity/profile registry | Accepted CRC-32C coverage and BLAKE3 profile 1 | [Integrity registry](hdoc-v1-integrity.json) | `P03-006` |
 | [HDoc bounded section compression](hdoc-v1-compression.md) | 1.0 codec/profile registry | Accepted LZ4 profile `1/1`, 32 KiB blocks, coordinates, and selection | [Compression registry](hdoc-v1-compression.json) | `P03-007` |
 | [HDoc lossless tagged JSON](hdoc-v1-tagged-json.md) | `helix.hdoc-tagged-json/1` | Implemented canonical debug/SDK-boundary rendering and strict detached import | None; reuses semantic fixture value shapes | `P03-012` |
-| [Collection field-path dictionary](path-dictionary-v1.md) | `helix.path-dictionary/1.0` | Implemented canonical snapshot writer, validating reader, and non-reuse lineage proof | [Dictionary registry](path-dictionary-v1.json) | `P03-013` |
+| [Collection field-path dictionary](path-dictionary-v1.md) | `helix.path-dictionary/1.0` | Implemented canonical snapshots, non-reuse proof, atomic registration/resolution/recovery, and version pins | [Dictionary registry](path-dictionary-v1.json) | `P03-013`–`P03-014` |
 
 HDoc's byte grammar, Rust writer/reader/value/lookup path, lossless tagged conversion, and the
-standalone collection dictionary snapshot format are implemented. Dictionary lifecycle/HDoc
-references, immutable golden documents, independent readers, fuzzing, and migrations remain
+standalone collection dictionary format/lifecycle are implemented. HDoc dictionary references,
+immutable golden documents, independent readers, fuzzing, and migrations remain
 subsequent `P03-*` work. No WAL, MANIFEST, SST, VLOG, CSEG, IDX, backup, or public
 protocol format has been specified here yet.
 

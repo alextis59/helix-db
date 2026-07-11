@@ -17,12 +17,17 @@ use blake3::Hasher;
 use crc::{CRC_32_ISCSI, Crc};
 
 mod path_dictionary;
+mod path_dictionary_state;
 mod tagged_json;
 
 pub use path_dictionary::{
     EncodedPathDictionary, PATH_DICTIONARY_FORMAT, PathDictionaryCheck, PathDictionaryEntry,
     PathDictionaryError, PathDictionaryInput, PathDictionaryInputEntry, PathDictionaryView,
     decode_path_dictionary, encode_path_dictionary, validate_path_dictionary_successor,
+};
+pub use path_dictionary_state::{
+    CollectionPathDictionary, PathDictionaryLifecycleError, PathDictionaryPin,
+    PathDictionaryRegistration, PathDictionarySnapshot, PreparedPathDictionaryUpdate,
 };
 pub use tagged_json::{
     HDOC_TAGGED_JSON_PROFILE, JsonImportError, JsonImportLimitId, import_tagged_json,
@@ -32,7 +37,7 @@ pub use tagged_json::{
 pub const COMPONENT_NAME: &str = "helix-doc";
 
 /// Current implementation maturity.
-pub const MATURITY: &str = "path-dictionary-format";
+pub const MATURITY: &str = "path-dictionary-lifecycle";
 
 /// Internal `HelixDB` crates this portable leaf is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
@@ -7564,7 +7569,7 @@ mod tests {
     #[test]
     fn metadata_error_codes_and_internal_guards_are_stable() -> Result<(), EncodeError> {
         assert_eq!(COMPONENT_NAME, "helix-doc");
-        assert_eq!(MATURITY, "path-dictionary-format");
+        assert_eq!(MATURITY, "path-dictionary-lifecycle");
         assert!(INTERNAL_DEPENDENCIES.is_empty());
         assert_eq!(CompressionMode::default(), CompressionMode::Canonical);
         assert_eq!(

@@ -375,10 +375,18 @@ domain-separated BLAKE3 hash identifies logical snapshot content. One snapshot i
 million retained paths and 64 MiB. The codec validates the whole artifact before exposing borrowed
 paths and returns redacted staged corruption diagnostics.
 
-This resolves the durable low-level representation, but not the mutable lifecycle. Concurrent path
-registration, authoritative publication/recovery, cache behavior, and version pinning remain
-`P03-014`; HDoc reference records and capability negotiation remain `P03-015`. Until those steps,
-base HDoc stays self-contained and no numeric dictionary ID is accepted as document meaning.
+`P03-014` now resolves the portable mutable lifecycle with optimistic prepare/publish updates.
+Preparation validates the full request, resolves existing/duplicate paths idempotently, assigns
+new IDs in stable request order within one version, and emits a canonical candidate bound to the
+base identity, version, and content hash. Publication rechecks that base plus successor lineage;
+stale concurrent work fails rather than rebasing to different IDs. Immutable pins retain exact
+snapshot bytes and fast path/ID indexes, so later versions cannot change an existing consumer.
+Recovery validates the full genesis-to-current chain before accepting an authoritative pin.
+
+This separation is useful: portable core owns deterministic state transition and validation, while
+later storage code owns candidate write/sync/manifest publication. HDoc reference records and
+capability negotiation remain `P03-015`. Until then, base HDoc stays self-contained and no numeric
+dictionary ID is accepted as document meaning.
 
 ### 6.4 Sidecar lifecycle
 

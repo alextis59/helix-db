@@ -5,7 +5,7 @@ import { fileURLToPath } from 'node:url';
 export const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const authorityPath = 'docs/development/bootstrap.json';
 export const claimBoundary =
-  'This contract documents foundation setup and validation; HelixDB now includes safe deterministic HDoc encoding, whole-envelope validation, borrowed and owned logical values, allocation-free exact-name and nested-path lookup, strict lossless tagged JSON conversion, and canonical collection field-path dictionary snapshots with non-reuse lineage validation, while query, storage, durability, GPU execution, network service, public protocol/SDK, compatibility, security, performance, and release functionality remain unimplemented.';
+  'This contract documents foundation setup and validation; HelixDB now includes safe deterministic HDoc encoding, whole-envelope validation, borrowed and owned logical values, allocation-free exact-name and nested-path lookup, strict lossless tagged JSON conversion, and canonical collection field-path dictionary snapshots with atomic registration, resolution, recovery, and version pins, while query, storage, durability, GPU execution, network service, public protocol/SDK, compatibility, security, performance, and release functionality remain unimplemented.';
 export const expectedPackageManager =
   'npm@11.18.0+sha512.4faecce0be70366d1c67b1012c4adc1246354a6cc45bf589f92003073b05518d547403df1475c542d67a4845e22b4fafcd7cac0af02c7a96cc6814f09eb003fb';
 
@@ -383,6 +383,7 @@ export const validateBootstrapSources = (contract, sources = loadBootstrapSource
       'P03-011',
       'P03-012',
       'P03-013',
+      'P03-014',
     ],
     'bootstrap CI task history',
   );

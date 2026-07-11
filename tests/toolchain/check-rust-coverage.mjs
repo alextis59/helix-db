@@ -190,7 +190,7 @@ const validatePolicy = () => {
     'empty product-scope exception',
   );
   assert(
-    policy.active_product_scope.allowed_status === 'path-dictionary-format' &&
+    policy.active_product_scope.allowed_status === 'path-dictionary-lifecycle' &&
       policy.active_product_scope.requires_database_functionality === true &&
       policy.active_product_scope.activated_by === 'P03-008' &&
       policy.active_product_scope.reason.length >= 150,
@@ -321,7 +321,7 @@ assert(
 const sourceRecords = validatePolicy();
 if (mode === 'policy') {
   process.stdout.write(
-    'PASS Rust coverage policy: 3 threshold groups, explicit test-code exclusions, compiler-matched LLVM tools, and active HDoc tagged JSON scope\n',
+    'PASS Rust coverage policy: 3 threshold groups, explicit test-code exclusions, compiler-matched LLVM tools, and active path dictionary lifecycle scope\n',
   );
   process.exit(0);
 }

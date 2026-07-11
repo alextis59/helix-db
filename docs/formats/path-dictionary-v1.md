@@ -1,6 +1,6 @@
 # Collection Field-Path Dictionary 1.0
 
-- Status: Implemented canonical writer, validating reader, and lineage proof
+- Status: Implemented canonical codec, lineage proof, registration, resolution, recovery, and pins
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner
 - Format identity: `helix.path-dictionary/1.0`
@@ -17,10 +17,46 @@ limits, validation order, integrity, semantic identity, and the cross-snapshot r
 ID reuse or reinterpretation.
 
 `P03-013` implements complete snapshot encoding/decoding and explicit successor validation in
-`helix-doc`. `P03-014` still owns concurrent registration, resolution APIs, durable snapshot
-selection, caching, and version pinning. `P03-015` owns HDoc dictionary-reference records and
+`helix-doc`. `P03-014` implements optimistic atomic registration/publication, resolution indexes,
+durable snapshot handoff, complete-chain recovery, and immutable version pins. `P03-015` owns HDoc dictionary-reference records and
 reader/writer negotiation. Base HDoc 1.0 remains self-contained and does not emit the reserved
 dictionary feature bit yet.
+
+## Implemented registration and publication lifecycle
+
+`CollectionPathDictionary` owns one authoritative `PathDictionaryPin`. A new collection starts at
+the canonical empty version-zero snapshot. `prepare_registration(paths)` validates every requested
+path before changing state, resolves existing and duplicate requests idempotently, assigns new IDs
+in first-request order, and creates at most one next version for the complete batch. The first
+nonempty batch inserts `_id` at ID 1 automatically unless it was explicitly requested.
+
+Preparation returns `PreparedPathDictionaryUpdate` containing:
+
+- exact base dictionary identity, version, and semantic content hash;
+- request-order ID/introduction-version results, including duplicates;
+- a completely encoded and validated candidate snapshot suitable for durable staging; and
+- an explicit changed/no-op version result.
+
+`publish(update)` compares all three base coordinates with the still-authoritative pin. Drift from
+another publication fails atomically as `CON_WRITE_CONFLICT`; it never rebases or silently assigns
+different IDs. A changed candidate must pass the P03-013 predecessor/successor validator again.
+An idempotent no-op must have bytes exactly equal to the current snapshot. Only then is the
+authoritative pin replaced. `register_paths` is the single-owner prepare-plus-publish convenience;
+concurrent callers use the split durable-staging boundary.
+
+## Resolution and version pinning
+
+`PathDictionaryPin` owns exact validated snapshot bytes, a dense ID-indexed entry vector, and an
+exact-path ordered map. `resolve_path` and `resolve_id` allocate nothing and never consult newer
+state. Introduction-version lookup is equally pinned. Cloning a pin preserves the exact identity,
+version, content hash, bytes, and resolution result after the collection publishes later versions.
+
+`PathDictionarySnapshot::from_bytes` and `PathDictionaryPin::from_snapshot` validate externally
+retained bytes. A standalone pin proves one snapshot but cannot prove historical non-reuse.
+`CollectionPathDictionary::recover` therefore requires a nonempty genesis-to-current chain,
+requires version zero first, validates every snapshot, and proves every adjacent successor before
+exposing the final authoritative pin. The core performs no ambient filesystem I/O: storage phases
+own durable write/sync/manifest selection and pass exact snapshots into this recovery primitive.
 
 ## Logical model and invariants
 
@@ -161,8 +197,8 @@ between two otherwise valid artifacts.
 A recovery path validates each candidate snapshot and its relationship to the previously
 authoritative snapshot before publication. An interrupted append may leave an unreferenced valid
 candidate, but cannot replace the prior authoritative version until durability metadata commits.
-That lifecycle is implemented under `P03-014` and storage phases; this format supplies the exact
-validation primitive.
+The in-memory preparation/publication and chain-validation lifecycle is implemented under
+`P03-014`; storage phases own physical write/sync/manifest selection around these exact primitives.
 
 Readers reject unsupported versions and unknown flags. They never repair paths, renumber IDs,
 accept a different dictionary identity, or infer lineage from filename/order. A future compaction
@@ -177,6 +213,11 @@ access, checksum/hash separation, every validation stage, invalid paths/IDs/vers
 path/snapshot limits, and successor identity/version/prefix/backdating failures. `P03-016` owns
 immutable golden bytes, `P03-017` an independent reader, and `P03-018`–`P03-019` property/fuzz and
 malformed-corpus expansion.
+
+Lifecycle tests additionally prove request-order/duplicate registration, automatic and explicit
+`_id`, unchanged state before publish, stale-writer conflict, invalid-path rollback, exact no-op
+publication, old-pin stability, bidirectional/introduction-version resolution, full-chain recovery,
+missing genesis, skipped successor, corrupt snapshot, and defensive invalid-candidate rejection.
 
 ## References
 

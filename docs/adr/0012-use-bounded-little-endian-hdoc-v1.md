@@ -254,8 +254,8 @@ Object presentation order is part of the ordered stored document and therefore c
 bytes. It is not part of object mapping equality or the canonical typed content hash. A path-
 dictionary encoding MUST resolve to the same exact field-name bytes and content hash; dictionary
 numeric IDs never become object meaning. The
-[P03-013 format](../formats/path-dictionary-v1.md) and P03-014 through P03-015 define the
-dictionary's own authoritative version, recovery, and negotiation rules.
+[P03-013 format and P03-014 lifecycle](../formats/path-dictionary-v1.md), followed by P03-015 HDoc
+negotiation, define the dictionary's authoritative version, recovery, and reference rules.
 
 ### CRC-32C stored-byte checksum
 
@@ -493,6 +493,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   reusing the semantic-fixture value model while keeping public protocol/SDK grammar out of scope.
 - [x] Implement canonical collection path-dictionary snapshots and explicit append-only non-reuse
   lineage validation under `P03-013`.
+- [x] Implement atomic dictionary registration/publication, bidirectional resolution, complete-chain
+  recovery, and immutable version pins under `P03-014`.
 - [ ] Commit immutable positive, boundary, noncanonical, unknown-feature/version, checksum, hash,
   overlap, truncation, padding, compression-bomb, and limit golden vectors under `P03-016`.
 - [ ] Prove Rust and TypeScript readers produce identical logical values and hashes under
@@ -506,8 +508,9 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 
 ## Implementation impact
 
-- Format and codec work: `P03-002`–`P03-013`, `helix-doc`, format fixtures, and fuzz targets.
-- Dictionary lifecycle/evolution work: `P03-014`–`P03-019`.
+- Format, codec, and dictionary lifecycle work: `P03-002`–`P03-014`, `helix-doc`, format fixtures,
+  and fuzz targets.
+- Dictionary reference/evolution work: `P03-015`–`P03-019`.
 - Experiments/gate: `P03-020`, `P03-021`, `EXP-001`, `EXP-002`, and `G03`.
 - Later authoritative consumers: storage, WAL/value-log/SST, replication, backup/restore,
   migration, browser persistence, SDK/protocols, and compatibility adapters.
@@ -537,8 +540,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   duplicate/Unicode/type/limit rejection, exact HDoc-size validation, and active coverage.
 - [x] `P03-013`: implement the canonical collection path-dictionary format, stable dense IDs,
   consecutive versions, exact stored/logical integrity, and predecessor/successor non-reuse proof.
-- [ ] `P03-014`: implement mutable registration, resolution, authoritative snapshot publication,
-  recovery, caching, and version pinning.
+- [x] `P03-014`: implement mutable registration, optimistic authoritative publication, exact
+  resolution indexes, complete-chain recovery, and immutable version pinning.
 - [ ] `P03-015`: publish the HDoc reader/writer/feature migration matrix.
 - [ ] `P03-016`–`P03-021`: freeze independent fixtures, fuzz/corruption evidence, and experiment
   conclusions before `G03`.

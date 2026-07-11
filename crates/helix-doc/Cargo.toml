@@ -1,6 +1,6 @@
 [package]
 name = "helix-doc"
-description = "Portable deterministic HDoc encoding, validation, lookup, and lossless tagged JSON conversion for HelixDB"
+description = "Portable deterministic HDoc and collection path-dictionary semantics for HelixDB"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,7 +12,7 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "path-dictionary-format"
+status = "path-dictionary-lifecycle"
 database-functionality = true
 
 [dependencies]

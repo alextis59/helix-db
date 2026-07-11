@@ -445,7 +445,7 @@ and typed hash before deriving a new artifact and retains the source until its r
 | `P03-010` (complete) | Borrowed and owned logical-value exposure after typed-hash validation | Exact typed payload/container identity |
 | `P03-011` (complete) | Exact-name and dotted-path lookup after whole-document validation | Exact typed payload/container identity and validation order |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Tagged rendering/import after complete logical validation | Exact typed payload/container identity and validation order |
-| [`P03-013`](path-dictionary-v1.md) complete; `P03-014`–`P03-015` | Dictionary lifecycle, HDoc references, extensions, and migration negotiation | Resolved names/content identity or ID reuse |
+| [`P03-013`–`P03-014`](path-dictionary-v1.md) complete; `P03-015` | Dictionary format/lifecycle, HDoc references, extensions, and migration negotiation | Resolved names/content identity or ID reuse |
 | `P03-016` | Immutable complete positive/malformed HDoc files | Existing registry vectors/expectations |
 | `P03-017`–`P03-019` | Independent codecs, properties, corruption tests, fuzzing | Exact outputs and fail-closed behavior |
 | `P03-020`–`P03-021` | Integrity-inclusive format/compression performance | Correctness, coverage, or authentication boundary |
