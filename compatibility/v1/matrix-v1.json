@@ -39,8 +39,8 @@
   "inputs": {
     "specifications": {
       "path": "Specifications.md",
-      "bytes": 74908,
-      "sha256": "ad9b6a2fa6d1c27517544da9ede8be5021c60a8f7268269b997fec81b9c56b6f"
+      "bytes": 75817,
+      "sha256": "cc0489c6ffc111afcfe29c723b15a725de5eea116d937fe76c8a8b63d2706a30"
     },
     "semantic_coverage": {
       "path": "fixtures/semantic/coverage-v1.json",

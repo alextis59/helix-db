@@ -459,8 +459,8 @@ Field table entry:
 field_id: u32
 field_name_offset: u32
 type_tag: u8
-value_offset: u32/u64
-value_length: u32/u64
+value_offset: u32
+value_length: u32
 flags: u16
 ```
 
@@ -473,6 +473,14 @@ Design requirements:
 - Explicit distinction between missing field and field with `null`.
 - Duplicate object keys should be rejected by default.
 - Compatibility mode may preserve duplicate keys only for import tools, not normal writes.
+
+The accepted physical baseline is [ADR 0012](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md):
+little-endian metadata and numeric payloads, absolute checked `u32` offsets, at most 8-byte
+alignment with zero padding, the exact portable 16 MiB uncompressed limit, CRC-32C stored-byte
+integrity, BLAKE3-256 canonical typed content identity, bounded optional compression, and
+fail-closed version/extension handling. The subordinate `P03-002`–`P03-007` format documents must
+assign exact fields, tags, payloads, tables, hash framing, and compression profiles before the
+first writer or immutable fixture.
 
 ### 7.4 Field path dictionary
 
@@ -2354,13 +2362,16 @@ The [initial MongoDB 6.0.5 differential result](docs/compatibility/mongodb-initi
 
 ## 28. Open architecture decisions
 
-The transcript establishes direction but intentionally leaves several implementation choices open. Each item below requires an architecture decision record before the dependent release gate closes.
+The transcript establishes direction but intentionally leaves several implementation choices open.
+Each item below requires an architecture decision record before the dependent release gate closes.
+Accepted baselines remain linked in the table for traceability; unlinked or explicitly partial
+items remain open.
 
 | Decision | Required before | Decision criteria |
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| HDoc checksum, compression, endianness, alignment, and canonical hash rules | Phase 0 exit | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) (baseline accepted; exact subordinate encodings remain `P03-002`–`P03-007`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

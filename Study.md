@@ -213,6 +213,14 @@ Before HDoc v1 is frozen, the project needs explicit answers for:
 
 A compact binary layout cannot compensate for ambiguous semantics. The recommended first artifact is a language-neutral corpus containing encoded values, canonical JSON-like renderings, comparison outcomes, and invalid inputs.
 
+Those semantic questions are now frozen by the Phase 1 gate. [ADR 0012](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md)
+selects the HDoc v1 physical baseline: little-endian checked `u32` addressing under the portable
+16 MiB limit, deterministic alignment/padding, separate CRC-32C stored-byte integrity and
+BLAKE3-256 canonical typed content identity, bounded optional compression, and fail-closed
+version/extension rules. Exact header, tag, payload, table, hash-framing, and compression-profile
+bytes remain the dependency-ordered `P03-002`–`P03-007` work rather than being guessed by the
+first codec implementation.
+
 ### 6.3 Field-path dictionaries
 
 Path dictionaries can reduce repeated names and give sidecar columns stable identifiers, but they introduce collection-level state. The system must define:
