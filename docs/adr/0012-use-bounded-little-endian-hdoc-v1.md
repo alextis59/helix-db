@@ -332,7 +332,7 @@ base section. Every accepted compression profile satisfies these invariants:
 The uncompressed base remains mandatory. Profile `1/1` is the only assigned compressed v1 profile;
 unknown pairs fail before allocation/decompression, and the complete compressed envelope must be
 smaller than the canonical-logical envelope. `P03-008` satisfied the production dependency,
-advisory, and writer gate; validating decompression remains gated on `P03-009`.
+advisory, and writer gate; `P03-009` now satisfies the bounded validating-decompression gate.
 
 ### Version and extension strategy
 
@@ -480,8 +480,10 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] Select and validate deterministic bounded compression profile `1/1` under `P03-007`.
 - [x] Implement the bounded deterministic encoder under `P03-008`, including portable limits,
   exact typed hashing/CRC/compression, and registry-vector replay.
-- [ ] Implement the validating decoder and independent owned/borrowed paths under
-  `P03-009`–`P03-012`.
+- [x] Implement the bounded validating decoder under `P03-009`, including trust-ordered outer
+  validation, fresh-output decompression, structural/payload/hash checks, and exact byte
+  canonicality.
+- [ ] Implement independent owned/borrowed paths and rendering under `P03-010`–`P03-012`.
 - [ ] Commit immutable positive, boundary, noncanonical, unknown-feature/version, checksum, hash,
   overlap, truncation, padding, compression-bomb, and limit golden vectors under `P03-016`.
 - [ ] Prove Rust and TypeScript readers produce identical logical values and hashes under
@@ -516,6 +518,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   coordinates, and canonical selection after dependency/security/portability review.
 - [x] `P03-008`: implement the safe deterministic canonical writer, dependency gates, portable
   limits, native/Wasm replay, and active semantic-critical coverage.
+- [x] `P03-009`: implement the bounded validating reader, stable redacted diagnostics, malformed
+  and mutation replay, exact canonical rebuild, native/Wasm/ASan proof, and active coverage.
 - [ ] `P03-015`: publish the HDoc reader/writer/feature migration matrix.
 - [ ] `P03-016`–`P03-021`: freeze independent fixtures, fuzz/corruption evidence, and experiment
   conclusions before `G03`.

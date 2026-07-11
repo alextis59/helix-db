@@ -1,6 +1,6 @@
 [package]
 name = "helix-doc"
-description = "Portable deterministic HDoc encoding and canonical semantics for HelixDB"
+description = "Portable deterministic HDoc encoding, validation, and canonical semantics for HelixDB"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,7 +12,7 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "hdoc-encoder"
+status = "hdoc-codec"
 database-functionality = true
 
 [dependencies]

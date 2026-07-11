@@ -1,6 +1,6 @@
 # Rust Workspace and Initial Crate Boundaries
 
-- Status: Active boundaries; `helix-doc` encoder implemented
+- Status: Active boundaries; `helix-doc` codec implemented
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner
 - Plan item: `P02-001`
@@ -10,16 +10,16 @@
 - Development identity: [ADR 0001](../adr/0001-public-product-identity.md)
 
 This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
-unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-encoder` /
-`database-functionality = true` metadata now that `P03-008` has implemented deterministic encoding;
-the other seven crates remain `boundary-skeleton` components. Public names and package coordinates
-remain blocked by `P16-016`.
+unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-codec` /
+`database-functionality = true` metadata now that `P03-008` and `P03-009` have implemented
+deterministic encoding and whole-envelope validation; the other seven crates remain
+`boundary-skeleton` components. Public names and package coordinates remain blocked by `P16-016`.
 
 ## Boundary inventory
 
 | Crate | Responsibility boundary | Allowed direct internal dependencies | Current maturity |
 | --- | --- | --- | --- |
-| `helix-doc` | Logical values, HDoc codec, canonical value semantics | None | Safe deterministic HDoc encoder; decoder/views pending |
+| `helix-doc` | Logical values, HDoc codec, canonical value semantics | None | Safe deterministic HDoc encoder and validating decoder; owned/borrowed values and views pending |
 | `helix-query` | Query syntax, normalization, logical plans, CPU reference behavior | `helix-doc` | Boundary skeleton |
 | `helix-storage` | Deterministic WAL/MVCC/manifest/memtable/immutable-file algorithms; no ambient I/O | `helix-doc` | Boundary skeleton |
 | `helix-columnar` | Rebuildable field dictionaries, typed sidecars, and CPU column operators | `helix-doc`, `helix-query` | Boundary skeleton |
@@ -90,7 +90,7 @@ The evidence verifier independently reads Cargo metadata, requires exactly these
 `0.0.0` packages, compares every direct internal dependency/feature edge with the table above,
 rejects cycles and forbidden edges, and confirms each crate's current maturity markers. Historical
 `P02-001` evidence remains source-bound to the all-skeleton state; current checks admit only the
-documented `helix-doc` encoder transition.
+documented `helix-doc` codec transition.
 
 ## Change rule
 

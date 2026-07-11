@@ -441,7 +441,7 @@ and typed hash before deriving a new artifact and retains the source until its r
 | Task | Owns next | Cannot change from P03-006 |
 | --- | --- | --- |
 | [`P03-007`](hdoc-v1-compression.md) | Compressed block/codec profiles, coordinates, and stored vectors | CRC coverage or decoded typed hash |
-| `P03-008`–`P03-009` | Production encoder/decoder integrity implementation | Algorithms, profile, frames, failure order |
+| `P03-008`–`P03-009` (complete) | Production encoder/decoder integrity implementation | Algorithms, profile, frames, failure order |
 | `P03-013`–`P03-015` | Dictionary/extensions/migration negotiation | Resolved names/content identity or ID reuse |
 | `P03-016` | Immutable complete positive/malformed HDoc files | Existing registry vectors/expectations |
 | `P03-017`–`P03-019` | Independent codecs, properties, corruption tests, fuzzing | Exact outputs and fail-closed behavior |

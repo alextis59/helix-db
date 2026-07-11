@@ -1,9 +1,10 @@
-//! Safe, deterministic `HDoc` 1.0 encoding.
+//! Safe, deterministic `HDoc` 1.0 encoding and validation.
 //!
 //! The encoder accepts a transient borrowed input tree, validates the complete tree and portable
 //! limits, and publishes bytes only after canonical tables, typed content identity, optional
-//! bounded compression, and stored-byte integrity have all succeeded. The production validating
-//! decoder and decoded owned/borrowed value APIs remain separate later plan items.
+//! bounded compression, and stored-byte integrity have all succeeded. The decoder validates an
+//! exact stored envelope, bounded decompression, canonical structure/payloads, typed identity, and
+//! byte canonicality before returning metadata. Decoded owned/borrowed values remain a later API.
 
 use std::collections::BTreeSet;
 use std::error::Error;
@@ -16,7 +17,7 @@ use crc::{CRC_32_ISCSI, Crc};
 pub const COMPONENT_NAME: &str = "helix-doc";
 
 /// Current implementation maturity.
-pub const MATURITY: &str = "hdoc-encoder";
+pub const MATURITY: &str = "hdoc-codec";
 
 /// Internal `HelixDB` crates this portable leaf is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
@@ -293,6 +294,192 @@ impl fmt::Display for EncodeError {
 }
 
 impl Error for EncodeError {}
+
+/// Stable validation stage attached to a rejected `HDoc` artifact.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub enum DecodeCheck {
+    /// Fixed header magic and fields.
+    Header,
+    /// Declared and supplied envelope lengths.
+    Length,
+    /// Required or optional feature negotiation.
+    Feature,
+    /// Stored-byte CRC-32C.
+    Checksum,
+    /// Top-level section directory and stored placement.
+    Directory,
+    /// Fixed footer fields and header copies.
+    Footer,
+    /// Derived canonical-logical section placement.
+    LogicalLayout,
+    /// Compression-stream fixed header.
+    CompressionHeader,
+    /// Compression block table and range coverage.
+    CompressionTable,
+    /// One bounded raw or LZ4 block.
+    CompressionBlock,
+    /// Canonical block, section, and whole-document compression selection.
+    CompressionCanonicality,
+    /// Field-table records and object spans.
+    FieldTable,
+    /// Name records, bytes, ordering, grammar, and use counts.
+    NamePool,
+    /// Container descriptors, dense-array records, and tree ownership.
+    ContainerTables,
+    /// Canonical value occurrence order and byte coverage.
+    ValueArea,
+    /// One tag-specific noncontainer payload.
+    Payload,
+    /// Portable semantic or resource limits in existing bytes.
+    Limit,
+    /// Required root `_id` semantics and protected metadata.
+    RootId,
+    /// Canonical typed-content BLAKE3 identity.
+    TypedContentHash,
+}
+
+impl DecodeCheck {
+    /// Returns the stable redacted validation-stage identifier.
+    #[must_use]
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::Header => "header",
+            Self::Length => "length",
+            Self::Feature => "feature",
+            Self::Checksum => "checksum",
+            Self::Directory => "directory",
+            Self::Footer => "footer",
+            Self::LogicalLayout => "logical-layout",
+            Self::CompressionHeader => "compression-header",
+            Self::CompressionTable => "compression-table",
+            Self::CompressionBlock => "compression-block",
+            Self::CompressionCanonicality => "compression-canonicality",
+            Self::FieldTable => "field-table",
+            Self::NamePool => "name-pool",
+            Self::ContainerTables => "container-tables",
+            Self::ValueArea => "value-area",
+            Self::Payload => "payload",
+            Self::Limit => "limit",
+            Self::RootId => "root-id",
+            Self::TypedContentHash => "typed-content-hash",
+        }
+    }
+}
+
+/// Safe decoder failure with bounded metadata and no field names or values.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum DecodeError {
+    /// The untyped input does not carry the complete `HDoc` magic.
+    FormatUnsupported,
+    /// The artifact declares an unsupported format generation.
+    UnsupportedVersion {
+        /// Declared major generation.
+        major: u16,
+        /// Declared minor generation.
+        minor: u16,
+    },
+    /// A required feature, section version, codec, or profile is not implemented.
+    UnsupportedFeature {
+        /// Stage that encountered the unsupported identity.
+        check: DecodeCheck,
+        /// Bounded numeric feature or profile identity.
+        identifier: u64,
+    },
+    /// Existing bytes violate the known `HDoc` 1.0 grammar.
+    Corruption {
+        /// Validation stage that rejected the bytes.
+        check: DecodeCheck,
+        /// Bounded byte offset associated with the check.
+        offset: u32,
+    },
+}
+
+impl DecodeError {
+    /// Returns the stable public error-family code for this failure.
+    #[must_use]
+    pub const fn code(&self) -> &'static str {
+        match self {
+            Self::FormatUnsupported | Self::UnsupportedFeature { .. } => "CAP_FORMAT_UNSUPPORTED",
+            Self::UnsupportedVersion { .. } => "CAP_UNSUPPORTED_VERSION",
+            Self::Corruption { .. } => "DUR_CORRUPTION",
+        }
+    }
+
+    /// Returns the redacted validation stage when one is available.
+    #[must_use]
+    pub const fn check(&self) -> Option<DecodeCheck> {
+        match self {
+            Self::UnsupportedFeature { check, .. } | Self::Corruption { check, .. } => Some(*check),
+            Self::FormatUnsupported | Self::UnsupportedVersion { .. } => None,
+        }
+    }
+}
+
+impl fmt::Display for DecodeError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::FormatUnsupported => formatter.write_str(self.code()),
+            Self::UnsupportedVersion { major, minor } => {
+                write!(formatter, "{}: {major}.{minor}", self.code())
+            }
+            Self::UnsupportedFeature { check, identifier } => {
+                write!(
+                    formatter,
+                    "{}: {} {identifier}",
+                    self.code(),
+                    check.as_str()
+                )
+            }
+            Self::Corruption { check, offset } => {
+                write!(formatter, "{}: {} at {offset}", self.code(), check.as_str())
+            }
+        }
+    }
+}
+
+impl Error for DecodeError {}
+
+/// A completely validated `HDoc` envelope without decoded value/view exposure.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct DecodedHDoc<'a> {
+    bytes: &'a [u8],
+    content_hash: [u8; 32],
+    canonical_length: u32,
+    field_count: u32,
+    compressed_sections: u8,
+}
+
+impl<'a> DecodedHDoc<'a> {
+    /// Returns the exact validated CRC-covered stored bytes.
+    #[must_use]
+    pub const fn as_bytes(&self) -> &'a [u8] {
+        self.bytes
+    }
+
+    /// Returns the canonical typed logical-tree BLAKE3-256 identity.
+    #[must_use]
+    pub const fn content_hash(&self) -> &[u8; 32] {
+        &self.content_hash
+    }
+
+    /// Returns the complete uncompressed canonical `HDoc` length.
+    #[must_use]
+    pub const fn canonical_length(&self) -> u32 {
+        self.canonical_length
+    }
+
+    /// Returns the total recursive object-field count.
+    #[must_use]
+    pub const fn field_count(&self) -> u32 {
+        self.field_count
+    }
+
+    /// Returns the number of base sections stored with compression profile 1/1.
+    #[must_use]
+    pub const fn compressed_section_count(&self) -> u8 {
+        self.compressed_sections
+    }
+}
 
 /// Fully staged `HDoc` bytes and their logical identity.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -1630,6 +1817,1367 @@ const fn bounded_usize_to_u64(value: usize) -> u64 {
     value as u64
 }
 
+#[derive(Clone, Copy, Default)]
+struct DirectoryEntry {
+    flags: u16,
+    stored_offset: u32,
+    stored_length: u32,
+    logical_length: u32,
+    item_count: u32,
+    codec_id: u16,
+    codec_profile_id: u16,
+}
+
+struct ParsedEnvelope {
+    entries: [DirectoryEntry; 4],
+    logical_offsets: [u32; 4],
+    total_length: u32,
+    canonical_length: u32,
+    field_count: u32,
+    footer_hash: [u8; 32],
+    compressed_sections: u8,
+}
+
+/// Validates and decodes one complete `HDoc` 1.0 envelope atomically.
+///
+/// The returned wrapper exposes only validated stored bytes and bounded metadata. Owned logical
+/// values and borrowed field/value views remain separate later API layers.
+///
+/// # Errors
+///
+/// Returns a redacted [`DecodeError`] for unsupported format capabilities or any checksum,
+/// structural, compression, payload, limit, canonicality, or typed-hash failure.
+pub fn decode(bytes: &[u8]) -> Result<DecodedHDoc<'_>, DecodeError> {
+    let envelope = parse_envelope(bytes)?;
+    let logical_sections = decode_logical_sections(bytes, &envelope)?;
+    let content_hash = validate_logical_sections(&logical_sections, &envelope)?;
+    validate_canonical_envelope(bytes, &logical_sections, &envelope, envelope.footer_hash)?;
+    if content_hash != envelope.footer_hash {
+        return Err(corruption(DecodeCheck::TypedContentHash, 0));
+    }
+    Ok(DecodedHDoc {
+        bytes,
+        content_hash,
+        canonical_length: envelope.canonical_length,
+        field_count: envelope.field_count,
+        compressed_sections: envelope.compressed_sections,
+    })
+}
+
+#[allow(
+    clippy::too_many_lines,
+    reason = "the normative envelope trust order is kept in one auditable fail-closed sequence"
+)]
+fn parse_envelope(bytes: &[u8]) -> Result<ParsedEnvelope, DecodeError> {
+    if bytes.get(..8) != Some(HEADER_MAGIC.as_slice()) {
+        return Err(DecodeError::FormatUnsupported);
+    }
+    if bytes.len() < bounded_u64_to_usize(HEADER_BYTES) {
+        return Err(corruption(DecodeCheck::Header, bytes.len()));
+    }
+
+    let major = validated_u16(bytes, 8);
+    let minor = validated_u16(bytes, 10);
+    if major != 1 || minor != 0 {
+        return Err(DecodeError::UnsupportedVersion { major, minor });
+    }
+    let header_bytes = validated_u16(bytes, 12);
+    let directory_entry_bytes = validated_u16(bytes, 14);
+    let document_flags = validated_u32(bytes, 16);
+    let total_length = validated_u32(bytes, 20);
+    let canonical_length = validated_u32(bytes, 24);
+    let field_count = validated_u32(bytes, 28);
+    let expected_checksum = validated_u32(bytes, 32);
+    let section_count = validated_u16(bytes, 36);
+    let reserved = validated_u16(bytes, 38);
+    let directory_offset = validated_u32(bytes, 40);
+    let footer_offset = validated_u32(bytes, 44);
+    let required_features = validated_u64(bytes, 48);
+    let optional_features = validated_u64(bytes, 56);
+
+    if total_length < 256
+        || total_length > canonical_length
+        || u64::from(canonical_length) > MAX_CANONICAL_BYTES
+        || !total_length.is_multiple_of(8)
+        || !canonical_length.is_multiple_of(8)
+        || bounded_u64_to_usize(u64::from(total_length)) != bytes.len()
+        || footer_offset.checked_add(bounded_u64_to_u32(FOOTER_BYTES)) != Some(total_length)
+        || !footer_offset.is_multiple_of(8)
+    {
+        return Err(corruption(DecodeCheck::Length, 20));
+    }
+    validate_checksum(bytes, expected_checksum)?;
+
+    let unknown_required = required_features & !1;
+    if unknown_required != 0 {
+        return Err(unsupported(DecodeCheck::Feature, unknown_required));
+    }
+    if optional_features != 0 {
+        return Err(unsupported(DecodeCheck::Feature, optional_features << 32));
+    }
+    let unsupported_flags = document_flags & !1;
+    if unsupported_flags != 0 {
+        return Err(unsupported(
+            DecodeCheck::Feature,
+            u64::from(unsupported_flags) << 32,
+        ));
+    }
+    if !(4..=32).contains(&section_count) {
+        return Err(corruption(DecodeCheck::Header, 36));
+    }
+    if section_count != SECTION_COUNT {
+        return Err(unsupported(
+            DecodeCheck::Directory,
+            u64::from(section_count),
+        ));
+    }
+    let expected_header_bytes = HEADER_BYTES + u64::from(section_count) * DIRECTORY_ENTRY_BYTES;
+    if directory_entry_bytes != bounded_u64_to_u16(DIRECTORY_ENTRY_BYTES)
+        || u64::from(header_bytes) != expected_header_bytes
+        || u64::from(directory_offset) != HEADER_BYTES
+        || reserved != 0
+    {
+        return Err(corruption(DecodeCheck::Header, 12));
+    }
+    if u64::from(field_count) > MAX_DOCUMENT_FIELDS {
+        return Err(corruption(DecodeCheck::Limit, 28));
+    }
+
+    let mut entries = [DirectoryEntry::default(); 4];
+    let mut stored_cursor = u64::from(header_bytes);
+    let mut compressed_sections = 0_u8;
+    for (index, entry_slot) in entries.iter_mut().enumerate() {
+        let directory = bounded_u64_to_usize(HEADER_BYTES)
+            + index * bounded_u64_to_usize(DIRECTORY_ENTRY_BYTES);
+        let kind = validated_u16(bytes, directory);
+        let flags = validated_u16(bytes, directory + 2);
+        let stored_offset = validated_u32(bytes, directory + 4);
+        let stored_length = validated_u32(bytes, directory + 8);
+        let logical_length = validated_u32(bytes, directory + 12);
+        let item_count = validated_u32(bytes, directory + 16);
+        let codec_id = validated_u16(bytes, directory + 20);
+        let codec_profile_id = validated_u16(bytes, directory + 22);
+        let section_version = validated_u16(bytes, directory + 24);
+        let reserved_0 = validated_u16(bytes, directory + 26);
+        let reserved_1 = validated_u32(bytes, directory + 28);
+        let expected_kind = bounded_usize_to_u16(index + 1);
+        if kind != expected_kind {
+            return Err(corruption(DecodeCheck::Directory, directory));
+        }
+        if section_version != 1 {
+            let identifier = (u64::from(kind) << 32) | u64::from(section_version);
+            return Err(unsupported(DecodeCheck::Directory, identifier));
+        }
+        if reserved_0 != 0 || reserved_1 != 0 || (flags & !7) != 0 || (flags & 6) != 6 {
+            return Err(corruption(DecodeCheck::Directory, directory + 2));
+        }
+        let compressed = flags & 1 != 0;
+        if compressed {
+            if codec_id != 1 || codec_profile_id != 1 {
+                let identifier = (u64::from(codec_id) << 32) | u64::from(codec_profile_id);
+                return Err(unsupported(DecodeCheck::CompressionHeader, identifier));
+            }
+            if logical_length == 0 || stored_length >= logical_length {
+                return Err(corruption(DecodeCheck::Directory, directory + 8));
+            }
+            compressed_sections += 1;
+        } else if flags != 6
+            || codec_id != 0
+            || codec_profile_id != 0
+            || stored_length != logical_length
+        {
+            return Err(corruption(DecodeCheck::Directory, directory + 2));
+        }
+        let expected_offset = align8_decode(stored_cursor, DecodeCheck::Directory, directory + 4)?;
+        if u64::from(stored_offset) != expected_offset {
+            return Err(corruption(DecodeCheck::Directory, directory + 4));
+        }
+        require_zero_range(
+            bytes,
+            stored_cursor,
+            expected_offset,
+            DecodeCheck::Directory,
+        )?;
+        let stored_end = expected_offset
+            .checked_add(u64::from(stored_length))
+            .ok_or(corruption(DecodeCheck::Directory, directory + 8))?;
+        if stored_end > u64::from(footer_offset) {
+            return Err(corruption(DecodeCheck::Directory, directory + 8));
+        }
+        stored_cursor = stored_end;
+        *entry_slot = DirectoryEntry {
+            flags,
+            stored_offset,
+            stored_length,
+            logical_length,
+            item_count,
+            codec_id,
+            codec_profile_id,
+        };
+    }
+    let expected_footer = align8_decode(stored_cursor, DecodeCheck::Directory, 44)?;
+    if expected_footer != u64::from(footer_offset) {
+        return Err(corruption(DecodeCheck::Directory, 44));
+    }
+    require_zero_range(
+        bytes,
+        stored_cursor,
+        expected_footer,
+        DecodeCheck::Directory,
+    )?;
+    let has_compression = compressed_sections != 0;
+    if document_flags != u32::from(has_compression)
+        || required_features != u64::from(has_compression)
+    {
+        return Err(corruption(DecodeCheck::Feature, 16));
+    }
+
+    let footer = bounded_u64_to_usize(u64::from(footer_offset));
+    if bytes.get(footer..footer + 8) != Some(FOOTER_MAGIC.as_slice())
+        || validated_u16(bytes, footer + 8) != 64
+        || validated_u16(bytes, footer + 10) != 1
+        || validated_u16(bytes, footer + 12) != 1
+        || validated_u16(bytes, footer + 14) != 1
+        || validated_u32(bytes, footer + 16) != 32
+        || validated_u32(bytes, footer + 20) != total_length
+        || validated_u32(bytes, footer + 24) != canonical_length
+        || validated_u32(bytes, footer + 28) != field_count
+    {
+        return Err(corruption(DecodeCheck::Footer, footer));
+    }
+    let footer_hash = validated_array::<32>(bytes, footer + 32);
+
+    let mut logical_offsets = [0_u32; 4];
+    let mut logical_cursor = u64::from(header_bytes);
+    for (index, entry) in entries.iter().enumerate() {
+        logical_cursor = align8_bounded(logical_cursor);
+        logical_offsets[index] = bounded_u64_to_u32(logical_cursor);
+        logical_cursor = logical_cursor
+            .checked_add(u64::from(entry.logical_length))
+            .ok_or(corruption(DecodeCheck::LogicalLayout, 24))?;
+    }
+    let logical_footer = align8_decode(logical_cursor, DecodeCheck::LogicalLayout, 24)?;
+    let derived_canonical = logical_footer
+        .checked_add(FOOTER_BYTES)
+        .ok_or(corruption(DecodeCheck::LogicalLayout, 24))?;
+    if derived_canonical != u64::from(canonical_length) {
+        return Err(corruption(DecodeCheck::LogicalLayout, 24));
+    }
+
+    Ok(ParsedEnvelope {
+        entries,
+        logical_offsets,
+        total_length,
+        canonical_length,
+        field_count,
+        footer_hash,
+        compressed_sections,
+    })
+}
+
+fn validate_checksum(bytes: &[u8], expected: u32) -> Result<(), DecodeError> {
+    let mut digest = CRC32C.digest();
+    digest.update(
+        bytes
+            .get(..32)
+            .ok_or(corruption(DecodeCheck::Checksum, 0))?,
+    );
+    digest.update(&[0; 4]);
+    digest.update(
+        bytes
+            .get(36..)
+            .ok_or(corruption(DecodeCheck::Checksum, 36))?,
+    );
+    if digest.finalize() != expected {
+        return Err(corruption(DecodeCheck::Checksum, 32));
+    }
+    Ok(())
+}
+
+fn decode_logical_sections(
+    bytes: &[u8],
+    envelope: &ParsedEnvelope,
+) -> Result<[Vec<u8>; 4], DecodeError> {
+    let mut sections = [Vec::new(), Vec::new(), Vec::new(), Vec::new()];
+    for (index, entry) in envelope.entries.iter().copied().enumerate() {
+        let start = bounded_u64_to_usize(u64::from(entry.stored_offset));
+        let end = start
+            .checked_add(bounded_u64_to_usize(u64::from(entry.stored_length)))
+            .ok_or(corruption(DecodeCheck::Directory, start))?;
+        let stored = bytes
+            .get(start..end)
+            .ok_or(corruption(DecodeCheck::Directory, start))?;
+        if entry.flags & 1 == 0 {
+            sections[index] = stored.to_vec();
+        } else {
+            sections[index] = decode_compressed_section(stored, entry)?;
+        }
+    }
+    Ok(sections)
+}
+
+#[derive(Clone, Copy)]
+struct CompressionDescriptor {
+    logical_offset: usize,
+    logical_length: usize,
+    stored_offset: usize,
+    stored_length: usize,
+    raw: bool,
+}
+
+#[allow(
+    clippy::too_many_lines,
+    reason = "header, table, and bounded block passes intentionally remain visibly ordered"
+)]
+fn decode_compressed_section(stored: &[u8], entry: DirectoryEntry) -> Result<Vec<u8>, DecodeError> {
+    if stored.len() < 32
+        || stored.get(..8) != Some(COMPRESSION_MAGIC.as_slice())
+        || read_u16(stored, 8, DecodeCheck::CompressionHeader)? != 1
+        || read_u16(stored, 10, DecodeCheck::CompressionHeader)? != 32
+        || read_u16(stored, 12, DecodeCheck::CompressionHeader)? != 24
+        || read_u8(stored, 14, DecodeCheck::CompressionHeader)? != 15
+        || read_u8(stored, 15, DecodeCheck::CompressionHeader)? != 0
+        || read_u32(stored, 20, DecodeCheck::CompressionHeader)? != entry.logical_length
+        || read_u32(stored, 28, DecodeCheck::CompressionHeader)? != 0
+        || entry.codec_id != 1
+        || entry.codec_profile_id != 1
+    {
+        return Err(corruption(DecodeCheck::CompressionHeader, 0));
+    }
+    let block_count = read_u32(stored, 16, DecodeCheck::CompressionHeader)?;
+    let expected_blocks = entry
+        .logical_length
+        .div_ceil(bounded_usize_to_u32(COMPRESSION_BLOCK_BYTES));
+    let table_length = u64::from(block_count)
+        .checked_mul(24)
+        .ok_or(corruption(DecodeCheck::CompressionTable, 16))?;
+    let expected_payload_offset = 32_u64
+        .checked_add(table_length)
+        .ok_or(corruption(DecodeCheck::CompressionTable, 16))?;
+    let payload_offset = read_u32(stored, 24, DecodeCheck::CompressionHeader)?;
+    if block_count == 0
+        || block_count != expected_blocks
+        || block_count > 512
+        || u64::from(payload_offset) != expected_payload_offset
+        || expected_payload_offset > bounded_usize_to_u64(stored.len())
+    {
+        return Err(corruption(DecodeCheck::CompressionTable, 16));
+    }
+
+    let mut descriptors = Vec::with_capacity(bounded_u64_to_usize(u64::from(block_count)));
+    let mut logical_cursor = 0_u64;
+    let mut stored_cursor = expected_payload_offset;
+    for index in 0..bounded_u64_to_usize(u64::from(block_count)) {
+        let descriptor = 32 + index * 24;
+        let logical_offset = read_u32(stored, descriptor, DecodeCheck::CompressionTable)?;
+        let logical_length = read_u32(stored, descriptor + 4, DecodeCheck::CompressionTable)?;
+        let stored_offset = read_u32(stored, descriptor + 8, DecodeCheck::CompressionTable)?;
+        let stored_length = read_u32(stored, descriptor + 12, DecodeCheck::CompressionTable)?;
+        let flags = read_u16(stored, descriptor + 16, DecodeCheck::CompressionTable)?;
+        let reserved_0 = read_u16(stored, descriptor + 18, DecodeCheck::CompressionTable)?;
+        let reserved_1 = read_u32(stored, descriptor + 20, DecodeCheck::CompressionTable)?;
+        let remaining = u64::from(entry.logical_length)
+            .checked_sub(logical_cursor)
+            .ok_or(corruption(DecodeCheck::CompressionTable, descriptor))?;
+        let expected_logical_length = remaining.min(bounded_usize_to_u64(COMPRESSION_BLOCK_BYTES));
+        let raw = flags & 1 != 0;
+        if u64::from(logical_offset) != logical_cursor
+            || u64::from(logical_length) != expected_logical_length
+            || u64::from(stored_offset) != stored_cursor
+            || stored_length == 0
+            || u64::from(stored_length) > bounded_usize_to_u64(COMPRESSION_BLOCK_BYTES)
+            || flags & !1 != 0
+            || reserved_0 != 0
+            || reserved_1 != 0
+            || (raw && stored_length != logical_length)
+            || (!raw && stored_length >= logical_length)
+        {
+            return Err(corruption(DecodeCheck::CompressionTable, descriptor));
+        }
+        logical_cursor = logical_cursor
+            .checked_add(u64::from(logical_length))
+            .ok_or(corruption(DecodeCheck::CompressionTable, descriptor))?;
+        stored_cursor = stored_cursor
+            .checked_add(u64::from(stored_length))
+            .ok_or(corruption(DecodeCheck::CompressionTable, descriptor))?;
+        if stored_cursor > bounded_usize_to_u64(stored.len()) {
+            return Err(corruption(DecodeCheck::CompressionTable, descriptor));
+        }
+        descriptors.push(CompressionDescriptor {
+            logical_offset: bounded_u64_to_usize(u64::from(logical_offset)),
+            logical_length: bounded_u64_to_usize(u64::from(logical_length)),
+            stored_offset: bounded_u64_to_usize(u64::from(stored_offset)),
+            stored_length: bounded_u64_to_usize(u64::from(stored_length)),
+            raw,
+        });
+    }
+    if logical_cursor != u64::from(entry.logical_length)
+        || stored_cursor != bounded_usize_to_u64(stored.len())
+    {
+        return Err(corruption(DecodeCheck::CompressionTable, 16));
+    }
+
+    let mut output = vec![0_u8; bounded_u64_to_usize(u64::from(entry.logical_length))];
+    for descriptor in descriptors {
+        let logical_end = descriptor.logical_offset + descriptor.logical_length;
+        let stored_end = descriptor.stored_offset + descriptor.stored_length;
+        let input = &stored[descriptor.stored_offset..stored_end];
+        let target = &mut output[descriptor.logical_offset..logical_end];
+        if descriptor.raw {
+            target.copy_from_slice(input);
+        } else {
+            let decoded = lz4_flex::block::decompress_into(input, target)
+                .map_err(|_| corruption(DecodeCheck::CompressionBlock, descriptor.stored_offset))?;
+            if decoded != descriptor.logical_length {
+                return Err(corruption(
+                    DecodeCheck::CompressionBlock,
+                    descriptor.stored_offset,
+                ));
+            }
+        }
+    }
+    Ok(output)
+}
+
+#[derive(Clone, Copy)]
+struct NameRecord {
+    absolute_offset: u32,
+    local_offset: usize,
+    length: u16,
+}
+
+#[derive(Clone, Copy)]
+struct ValueReference {
+    tag: u8,
+    offset: u32,
+    length: u32,
+}
+
+#[derive(Clone, Copy)]
+struct FieldRecord {
+    field_id: u32,
+    name_offset: u32,
+    name_length: u16,
+    value: ValueReference,
+    presentation_ordinal: u32,
+}
+
+#[derive(Clone, Copy)]
+struct ContainerRecord {
+    tag: u8,
+    depth: u16,
+    item_start: usize,
+    item_count: usize,
+    recursive_fields: u32,
+    parent_id: u32,
+    parent_slot: u32,
+}
+
+fn validate_logical_sections(
+    sections: &[Vec<u8>; 4],
+    envelope: &ParsedEnvelope,
+) -> Result<[u8; 32], DecodeError> {
+    let expected_field_bytes = u64::from(envelope.field_count)
+        .checked_mul(FIELD_ENTRY_BYTES)
+        .ok_or(corruption(DecodeCheck::FieldTable, 0))?;
+    if expected_field_bytes != bounded_usize_to_u64(sections[0].len())
+        || envelope.entries[0].item_count != envelope.field_count
+    {
+        return Err(corruption(DecodeCheck::FieldTable, 0));
+    }
+    if envelope.entries[1].item_count > envelope.field_count {
+        return Err(corruption(DecodeCheck::NamePool, 0));
+    }
+    let names = parse_names(
+        &sections[1],
+        envelope.logical_offsets[1],
+        envelope.entries[1].item_count,
+    )?;
+    let fields = parse_fields(&sections[0], envelope.field_count)?;
+    let (containers, arrays) = parse_containers_and_arrays(
+        &sections[3],
+        envelope.logical_offsets[0],
+        envelope.logical_offsets[3],
+        envelope.field_count,
+        envelope.entries[3].item_count,
+    )?;
+    let root_id_field =
+        validate_records_and_tree(sections, envelope, &names, &fields, &arrays, &containers)?;
+    validate_value_area(
+        &sections[2],
+        envelope.logical_offsets[2],
+        envelope.entries[2].item_count,
+        &fields,
+        &arrays,
+        &containers,
+    )?;
+    validate_decoded_root_id(
+        &fields[root_id_field],
+        &sections[2],
+        envelope.logical_offsets[2],
+    )?;
+    hash_decoded_document(
+        &sections[1],
+        &sections[2],
+        envelope.logical_offsets[2],
+        envelope.logical_offsets[3],
+        &names,
+        &fields,
+        &arrays,
+        &containers,
+    )
+}
+
+fn parse_names(
+    section: &[u8],
+    logical_offset: u32,
+    count: u32,
+) -> Result<Vec<NameRecord>, DecodeError> {
+    let table_length = u64::from(count)
+        .checked_mul(NAME_RECORD_BYTES)
+        .ok_or(corruption(DecodeCheck::NamePool, 0))?;
+    if table_length > bounded_usize_to_u64(section.len()) {
+        return Err(corruption(DecodeCheck::NamePool, 0));
+    }
+    let mut records = Vec::with_capacity(bounded_u64_to_usize(u64::from(count)));
+    let mut expected_absolute = u64::from(logical_offset) + table_length;
+    let section_end = u64::from(logical_offset) + bounded_usize_to_u64(section.len());
+    let mut previous: Option<&[u8]> = None;
+    for index in 0..bounded_u64_to_usize(u64::from(count)) {
+        let record_offset = index * bounded_u64_to_usize(NAME_RECORD_BYTES);
+        let absolute_offset = read_u32(section, record_offset, DecodeCheck::NamePool)?;
+        let length = read_u16(section, record_offset + 4, DecodeCheck::NamePool)?;
+        let scalar_count = read_u16(section, record_offset + 6, DecodeCheck::NamePool)?;
+        let end = expected_absolute
+            .checked_add(u64::from(length))
+            .ok_or(corruption(DecodeCheck::NamePool, record_offset))?;
+        if u64::from(absolute_offset) != expected_absolute
+            || length == 0
+            || u64::from(length) > MAX_FIELD_NAME_BYTES
+            || scalar_count == 0
+            || u64::from(scalar_count) > MAX_FIELD_NAME_SCALARS
+            || end > section_end
+        {
+            return Err(corruption(DecodeCheck::NamePool, record_offset));
+        }
+        let local_offset = bounded_u64_to_usize(expected_absolute - u64::from(logical_offset));
+        let local_end = local_offset + usize::from(length);
+        let bytes = section
+            .get(local_offset..local_end)
+            .ok_or(corruption(DecodeCheck::NamePool, local_offset))?;
+        let Ok(name) = std::str::from_utf8(bytes) else {
+            return Err(corruption(DecodeCheck::NamePool, local_offset));
+        };
+        if name.chars().count() != usize::from(scalar_count)
+            || !valid_decoded_field_name(name)
+            || previous.is_some_and(|candidate| candidate >= bytes)
+        {
+            return Err(corruption(DecodeCheck::NamePool, local_offset));
+        }
+        records.push(NameRecord {
+            absolute_offset,
+            local_offset,
+            length,
+        });
+        previous = Some(bytes);
+        expected_absolute = end;
+    }
+    if expected_absolute != section_end {
+        return Err(corruption(DecodeCheck::NamePool, section.len()));
+    }
+    Ok(records)
+}
+
+fn valid_decoded_field_name(name: &str) -> bool {
+    !name.is_empty()
+        && !name.starts_with('$')
+        && !name.contains('.')
+        && !name
+            .chars()
+            .any(|character| matches!(character, '\0'..='\u{1f}' | '\u{7f}'))
+}
+
+fn parse_fields(section: &[u8], count: u32) -> Result<Vec<FieldRecord>, DecodeError> {
+    let mut fields = Vec::with_capacity(bounded_u64_to_usize(u64::from(count)));
+    for index in 0..bounded_u64_to_usize(u64::from(count)) {
+        let offset = index * bounded_u64_to_usize(FIELD_ENTRY_BYTES);
+        let tag = read_u8(section, offset + 10, DecodeCheck::FieldTable)?;
+        if read_u8(section, offset + 11, DecodeCheck::FieldTable)? != 0 || !assigned_tag(tag) {
+            return Err(corruption(DecodeCheck::FieldTable, offset + 10));
+        }
+        fields.push(FieldRecord {
+            field_id: read_u32(section, offset, DecodeCheck::FieldTable)?,
+            name_offset: read_u32(section, offset + 4, DecodeCheck::FieldTable)?,
+            name_length: read_u16(section, offset + 8, DecodeCheck::FieldTable)?,
+            value: ValueReference {
+                tag,
+                offset: read_u32(section, offset + 12, DecodeCheck::FieldTable)?,
+                length: read_u32(section, offset + 16, DecodeCheck::FieldTable)?,
+            },
+            presentation_ordinal: read_u32(section, offset + 20, DecodeCheck::FieldTable)?,
+        });
+    }
+    Ok(fields)
+}
+
+#[allow(
+    clippy::too_many_lines,
+    reason = "descriptor and array suffix validation share one canonical cursor audit"
+)]
+fn parse_containers_and_arrays(
+    section: &[u8],
+    field_logical_offset: u32,
+    container_logical_offset: u32,
+    field_count: u32,
+    container_count: u32,
+) -> Result<(Vec<ContainerRecord>, Vec<ValueReference>), DecodeError> {
+    if container_count == 0 {
+        return Err(corruption(DecodeCheck::ContainerTables, 0));
+    }
+    let descriptor_bytes = u64::from(container_count)
+        .checked_mul(CONTAINER_DESCRIPTOR_BYTES)
+        .ok_or(corruption(DecodeCheck::ContainerTables, 0))?;
+    if descriptor_bytes > bounded_usize_to_u64(section.len()) {
+        return Err(corruption(DecodeCheck::ContainerTables, 0));
+    }
+    let suffix_bytes = bounded_usize_to_u64(section.len()) - descriptor_bytes;
+    if !suffix_bytes.is_multiple_of(ARRAY_ENTRY_BYTES) {
+        return Err(corruption(
+            DecodeCheck::ContainerTables,
+            bounded_u64_to_usize(descriptor_bytes),
+        ));
+    }
+    let array_count = suffix_bytes / ARRAY_ENTRY_BYTES;
+    let mut arrays = Vec::with_capacity(bounded_u64_to_usize(array_count));
+    for index in 0..bounded_u64_to_usize(array_count) {
+        let offset = bounded_u64_to_usize(descriptor_bytes)
+            + index * bounded_u64_to_usize(ARRAY_ENTRY_BYTES);
+        let tag = read_u8(section, offset, DecodeCheck::ContainerTables)?;
+        if !assigned_tag(tag)
+            || read_u8(section, offset + 1, DecodeCheck::ContainerTables)? != 0
+            || read_u16(section, offset + 2, DecodeCheck::ContainerTables)? != 0
+        {
+            return Err(corruption(DecodeCheck::ContainerTables, offset));
+        }
+        arrays.push(ValueReference {
+            tag,
+            offset: read_u32(section, offset + 4, DecodeCheck::ContainerTables)?,
+            length: read_u32(section, offset + 8, DecodeCheck::ContainerTables)?,
+        });
+    }
+
+    let mut containers = Vec::with_capacity(bounded_u64_to_usize(u64::from(container_count)));
+    let mut field_cursor = 0_u64;
+    let mut array_cursor = 0_u64;
+    for index in 0..bounded_u64_to_usize(u64::from(container_count)) {
+        let offset = index * bounded_u64_to_usize(CONTAINER_DESCRIPTOR_BYTES);
+        let container_id = read_u32(section, offset, DecodeCheck::ContainerTables)?;
+        let tag = read_u8(section, offset + 4, DecodeCheck::ContainerTables)?;
+        let flags = read_u8(section, offset + 5, DecodeCheck::ContainerTables)?;
+        let depth = read_u16(section, offset + 6, DecodeCheck::ContainerTables)?;
+        let item_offset = read_u32(section, offset + 8, DecodeCheck::ContainerTables)?;
+        let item_count = read_u32(section, offset + 12, DecodeCheck::ContainerTables)?;
+        let recursive_fields = read_u32(section, offset + 16, DecodeCheck::ContainerTables)?;
+        let parent_id = read_u32(section, offset + 20, DecodeCheck::ContainerTables)?;
+        let parent_slot = read_u32(section, offset + 24, DecodeCheck::ContainerTables)?;
+        let reserved = read_u32(section, offset + 28, DecodeCheck::ContainerTables)?;
+        if container_id != bounded_usize_to_u32(index)
+            || !matches!(tag, 9 | 10)
+            || flags != 0
+            || reserved != 0
+            || depth == 0
+            || recursive_fields > field_count
+        {
+            return Err(corruption(DecodeCheck::ContainerTables, offset));
+        }
+        if u64::from(depth) > MAX_DEPTH {
+            return Err(corruption(DecodeCheck::Limit, offset + 6));
+        }
+        if index == 0 {
+            if tag != 9 || depth != 1 || parent_id != ROOT_SENTINEL || parent_slot != ROOT_SENTINEL
+            {
+                return Err(corruption(DecodeCheck::ContainerTables, offset));
+            }
+        } else if parent_id == ROOT_SENTINEL || parent_slot == ROOT_SENTINEL {
+            return Err(corruption(DecodeCheck::ContainerTables, offset + 20));
+        }
+        let (expected_item_offset, item_start, maximum) = if tag == 9 {
+            (
+                u64::from(field_logical_offset) + field_cursor * FIELD_ENTRY_BYTES,
+                field_cursor,
+                MAX_OBJECT_FIELDS,
+            )
+        } else {
+            (
+                u64::from(container_logical_offset)
+                    + descriptor_bytes
+                    + array_cursor * ARRAY_ENTRY_BYTES,
+                array_cursor,
+                MAX_ARRAY_ELEMENTS,
+            )
+        };
+        if u64::from(item_count) > maximum {
+            return Err(corruption(DecodeCheck::Limit, offset + 12));
+        }
+        if u64::from(item_offset) != expected_item_offset {
+            return Err(corruption(DecodeCheck::ContainerTables, offset + 8));
+        }
+        let end = item_start
+            .checked_add(u64::from(item_count))
+            .ok_or(corruption(DecodeCheck::ContainerTables, offset + 12))?;
+        if (tag == 9 && end > u64::from(field_count)) || (tag == 10 && end > array_count) {
+            return Err(corruption(DecodeCheck::ContainerTables, offset + 12));
+        }
+        if tag == 9 {
+            field_cursor = end;
+        } else {
+            array_cursor = end;
+        }
+        containers.push(ContainerRecord {
+            tag,
+            depth,
+            item_start: bounded_u64_to_usize(item_start),
+            item_count: bounded_u64_to_usize(u64::from(item_count)),
+            recursive_fields,
+            parent_id,
+            parent_slot,
+        });
+    }
+    if field_cursor != u64::from(field_count) || array_cursor != array_count {
+        return Err(corruption(DecodeCheck::ContainerTables, section.len()));
+    }
+    Ok((containers, arrays))
+}
+
+#[allow(
+    clippy::too_many_lines,
+    reason = "record ownership, breadth-first reachability, and recursive counts form one audit"
+)]
+fn validate_records_and_tree(
+    sections: &[Vec<u8>; 4],
+    envelope: &ParsedEnvelope,
+    names: &[NameRecord],
+    fields: &[FieldRecord],
+    arrays: &[ValueReference],
+    containers: &[ContainerRecord],
+) -> Result<usize, DecodeError> {
+    let mut name_uses = vec![0_u32; names.len()];
+    let mut root_id_field = None;
+    for (container_id, container) in containers.iter().enumerate() {
+        if container.tag != 9 {
+            continue;
+        }
+        let mut previous_id = None;
+        let mut ordinals = vec![false; container.item_count];
+        for slot in 0..container.item_count {
+            let field_index = container.item_start + slot;
+            let field = fields
+                .get(field_index)
+                .ok_or(corruption(DecodeCheck::FieldTable, field_index * 24))?;
+            let name_index = bounded_u64_to_usize(u64::from(field.field_id));
+            let name = names
+                .get(name_index)
+                .ok_or(corruption(DecodeCheck::FieldTable, field_index * 24))?;
+            if previous_id.is_some_and(|candidate| candidate >= field.field_id)
+                || field.name_offset != name.absolute_offset
+                || field.name_length != name.length
+            {
+                return Err(corruption(DecodeCheck::FieldTable, field_index * 24));
+            }
+            previous_id = Some(field.field_id);
+            let ordinal = bounded_u64_to_usize(u64::from(field.presentation_ordinal));
+            let ordinal_slot = ordinals
+                .get_mut(ordinal)
+                .ok_or(corruption(DecodeCheck::FieldTable, field_index * 24 + 20))?;
+            if *ordinal_slot {
+                return Err(corruption(DecodeCheck::FieldTable, field_index * 24 + 20));
+            }
+            *ordinal_slot = true;
+            name_uses[name_index] = name_uses[name_index]
+                .checked_add(1)
+                .ok_or(corruption(DecodeCheck::NamePool, name.local_offset))?;
+            if container_id == 0 {
+                let name_bytes = name_bytes(&sections[1], name)?;
+                if matches!(name_bytes, b"_v" | b"_ts") {
+                    return Err(corruption(DecodeCheck::RootId, field_index * 24));
+                }
+                if name_bytes == b"_id" {
+                    root_id_field = Some(field_index);
+                }
+            }
+        }
+    }
+    if name_uses.contains(&0) {
+        return Err(corruption(DecodeCheck::NamePool, 0));
+    }
+    let root_id_field = root_id_field.ok_or(corruption(DecodeCheck::RootId, 0))?;
+
+    let mut next_child = 1_usize;
+    let mut noncontainer_values = 0_u64;
+    for (container_id, container) in containers.iter().enumerate() {
+        for slot in 0..container.item_count {
+            let reference = container_reference(container, slot, fields, arrays)?;
+            if matches!(reference.tag, 9 | 10) {
+                let child = containers
+                    .get(next_child)
+                    .ok_or(corruption(DecodeCheck::ContainerTables, container_id * 32))?;
+                let expected_offset = u64::from(envelope.logical_offsets[3])
+                    + bounded_usize_to_u64(next_child) * CONTAINER_DESCRIPTOR_BYTES;
+                if u64::from(reference.offset) != expected_offset
+                    || u64::from(reference.length) != CONTAINER_DESCRIPTOR_BYTES
+                    || child.tag != reference.tag
+                    || child.parent_id != bounded_usize_to_u32(container_id)
+                    || child.parent_slot != bounded_usize_to_u32(slot)
+                    || child.depth != container.depth.checked_add(1).unwrap_or(0)
+                {
+                    return Err(corruption(DecodeCheck::ContainerTables, container_id * 32));
+                }
+                next_child += 1;
+            } else {
+                noncontainer_values = noncontainer_values
+                    .checked_add(1)
+                    .ok_or(corruption(DecodeCheck::ValueArea, 0))?;
+            }
+        }
+    }
+    if next_child != containers.len()
+        || noncontainer_values != u64::from(envelope.entries[2].item_count)
+    {
+        return Err(corruption(DecodeCheck::ContainerTables, 0));
+    }
+
+    let mut recursive = vec![0_u32; containers.len()];
+    for index in (0..containers.len()).rev() {
+        let container = &containers[index];
+        let mut count = if container.tag == 9 {
+            bounded_usize_to_u32(container.item_count)
+        } else {
+            0
+        };
+        for slot in 0..container.item_count {
+            let reference = container_reference(container, slot, fields, arrays)?;
+            if matches!(reference.tag, 9 | 10) {
+                let child_index = decoded_child_index(reference, envelope.logical_offsets[3])?;
+                let child_count = *recursive
+                    .get(child_index)
+                    .ok_or(corruption(DecodeCheck::ContainerTables, index * 32))?;
+                count = count
+                    .checked_add(child_count)
+                    .ok_or(corruption(DecodeCheck::ContainerTables, index * 32 + 16))?;
+            }
+        }
+        if count != container.recursive_fields {
+            return Err(corruption(DecodeCheck::ContainerTables, index * 32 + 16));
+        }
+        recursive[index] = count;
+    }
+    if recursive.first().copied() != Some(envelope.field_count) {
+        return Err(corruption(DecodeCheck::ContainerTables, 16));
+    }
+    Ok(root_id_field)
+}
+
+fn container_reference(
+    container: &ContainerRecord,
+    slot: usize,
+    fields: &[FieldRecord],
+    arrays: &[ValueReference],
+) -> Result<ValueReference, DecodeError> {
+    let index = container
+        .item_start
+        .checked_add(slot)
+        .ok_or(corruption(DecodeCheck::ContainerTables, 0))?;
+    if container.tag == 9 {
+        fields
+            .get(index)
+            .map(|field| field.value)
+            .ok_or(corruption(DecodeCheck::FieldTable, index * 24))
+    } else {
+        arrays
+            .get(index)
+            .copied()
+            .ok_or(corruption(DecodeCheck::ContainerTables, index * 12))
+    }
+}
+
+fn decoded_child_index(
+    reference: ValueReference,
+    container_logical_offset: u32,
+) -> Result<usize, DecodeError> {
+    let relative = reference
+        .offset
+        .checked_sub(container_logical_offset)
+        .ok_or(corruption(DecodeCheck::ContainerTables, 0))?;
+    if !relative.is_multiple_of(bounded_u64_to_u32(CONTAINER_DESCRIPTOR_BYTES)) {
+        return Err(corruption(DecodeCheck::ContainerTables, 0));
+    }
+    Ok(bounded_u64_to_usize(
+        u64::from(relative) / CONTAINER_DESCRIPTOR_BYTES,
+    ))
+}
+
+fn validate_value_area(
+    section: &[u8],
+    logical_offset: u32,
+    expected_count: u32,
+    fields: &[FieldRecord],
+    arrays: &[ValueReference],
+    containers: &[ContainerRecord],
+) -> Result<(), DecodeError> {
+    let mut cursor = u64::from(logical_offset);
+    let section_end = cursor + bounded_usize_to_u64(section.len());
+    let mut count = 0_u64;
+    for container in containers {
+        for slot in 0..container.item_count {
+            let reference = container_reference(container, slot, fields, arrays)?;
+            if matches!(reference.tag, 9 | 10) {
+                continue;
+            }
+            let alignment = payload_alignment_for_tag(reference.tag)
+                .ok_or(corruption(DecodeCheck::Payload, 0))?;
+            let aligned = align_decode(cursor, alignment, DecodeCheck::ValueArea)?;
+            if u64::from(reference.offset) != aligned {
+                return Err(corruption(DecodeCheck::ValueArea, 0));
+            }
+            require_zero_range(
+                section,
+                cursor - u64::from(logical_offset),
+                aligned - u64::from(logical_offset),
+                DecodeCheck::ValueArea,
+            )?;
+            let end = aligned
+                .checked_add(u64::from(reference.length))
+                .ok_or(corruption(DecodeCheck::ValueArea, 0))?;
+            if end > section_end {
+                return Err(corruption(DecodeCheck::ValueArea, 0));
+            }
+            let local = bounded_u64_to_usize(aligned - u64::from(logical_offset));
+            let local_end = bounded_u64_to_usize(end - u64::from(logical_offset));
+            let payload = section
+                .get(local..local_end)
+                .ok_or(corruption(DecodeCheck::Payload, local))?;
+            validate_payload(reference.tag, payload, local)?;
+            cursor = end;
+            count = count
+                .checked_add(1)
+                .ok_or(corruption(DecodeCheck::ValueArea, local))?;
+        }
+    }
+    if cursor != section_end || count != u64::from(expected_count) {
+        return Err(corruption(DecodeCheck::ValueArea, section.len()));
+    }
+    Ok(())
+}
+
+fn validate_payload(tag: u8, payload: &[u8], offset: usize) -> Result<(), DecodeError> {
+    let valid = match tag {
+        1 => payload.is_empty(),
+        2 => payload.len() == 1 && matches!(payload.first(), Some(0 | 1)),
+        3 => payload.len() == 4,
+        4 | 5 => payload.len() == 8,
+        6 => validate_decimal_payload(payload),
+        7 => std::str::from_utf8(payload).is_ok(),
+        8 => payload.first() == Some(&0),
+        11 => {
+            payload.len() == 8
+                && read_i64(payload, 0, DecodeCheck::Payload)
+                    .is_ok_and(|value| (TIMESTAMP_MIN..=TIMESTAMP_MAX).contains(&value))
+        }
+        12 => {
+            payload.len() == 4
+                && read_i32(payload, 0, DecodeCheck::Payload)
+                    .is_ok_and(|value| (DATE_MIN..=DATE_MAX).contains(&value))
+        }
+        13 => payload.len() == 16,
+        14 => payload.len() == 12,
+        15 => validate_vector_payload(payload, 4, 23, 0xff),
+        16 => validate_vector_payload(payload, 2, 10, 0x1f),
+        _ => false,
+    };
+    if !valid {
+        return Err(corruption(DecodeCheck::Payload, offset));
+    }
+    Ok(())
+}
+
+fn validate_decimal_payload(payload: &[u8]) -> bool {
+    let Ok(bytes) = <[u8; 16]>::try_from(payload) else {
+        return false;
+    };
+    let bits = u128::from_le_bytes(bytes);
+    let logical = match bits {
+        0x7800_0000_0000_0000_0000_0000_0000_0000 => Decimal128::PositiveInfinity,
+        0xf800_0000_0000_0000_0000_0000_0000_0000 => Decimal128::NegativeInfinity,
+        0x7c00_0000_0000_0000_0000_0000_0000_0000 => Decimal128::NaN,
+        _ => {
+            let negative = bits >> 127 != 0;
+            let coefficient_mask = (1_u128 << 113) - 1;
+            let mut coefficient = bits & coefficient_mask;
+            let biased_bits = (bits >> 113) & 0x3fff;
+            #[allow(
+                clippy::cast_possible_truncation,
+                reason = "the preceding 14-bit mask proves the conversion is lossless"
+            )]
+            let biased = biased_bits as u16;
+            let mut exponent = i32::from(biased) - 6_176;
+            if coefficient == 0 {
+                Decimal128::Zero { negative }
+            } else {
+                if exponent == 6_111 {
+                    while coefficient.is_multiple_of(10) {
+                        coefficient /= 10;
+                        exponent += 1;
+                    }
+                }
+                Decimal128::Finite {
+                    negative,
+                    coefficient,
+                    exponent,
+                }
+            }
+        }
+    };
+    decimal_bytes(logical).is_ok_and(|canonical| canonical == bytes)
+}
+
+fn validate_vector_payload(payload: &[u8], width: usize, shift: u32, mask: u32) -> bool {
+    if payload.len() < 4 || !matches!(width, 2 | 4) {
+        return false;
+    }
+    let count = u32::from_le_bytes([payload[0], payload[1], payload[2], payload[3]]);
+    if count == 0 || u64::from(count) > MAX_VECTOR_DIMENSION {
+        return false;
+    }
+    let expected = bounded_u64_to_usize(u64::from(count)) * width + 4;
+    if payload.len() != expected {
+        return false;
+    }
+    payload[4..].chunks_exact(width).all(|element| {
+        let bits = if width == 4 {
+            u32::from_le_bytes([element[0], element[1], element[2], element[3]])
+        } else {
+            u32::from(u16::from_le_bytes([element[0], element[1]]))
+        };
+        (bits >> shift) & mask != mask
+    })
+}
+
+fn validate_decoded_root_id(
+    field: &FieldRecord,
+    value_section: &[u8],
+    value_logical_offset: u32,
+) -> Result<(), DecodeError> {
+    let accepted = match field.value.tag {
+        3 | 4 | 13 | 14 => true,
+        7 => u64::from(field.value.length) <= MAX_ID_PAYLOAD_BYTES,
+        8 => field.value.length > 0 && u64::from(field.value.length - 1) <= MAX_ID_PAYLOAD_BYTES,
+        _ => false,
+    };
+    if !accepted {
+        return Err(corruption(DecodeCheck::RootId, 0));
+    }
+    let start = field
+        .value
+        .offset
+        .checked_sub(value_logical_offset)
+        .ok_or(corruption(DecodeCheck::RootId, 0))?;
+    let end = start
+        .checked_add(field.value.length)
+        .ok_or(corruption(DecodeCheck::RootId, 0))?;
+    if value_section
+        .get(bounded_u64_to_usize(u64::from(start))..bounded_u64_to_usize(u64::from(end)))
+        .is_none()
+    {
+        return Err(corruption(DecodeCheck::RootId, 0));
+    }
+    Ok(())
+}
+
+#[allow(
+    clippy::too_many_arguments,
+    reason = "the hash pass receives the four already-validated table slices and coordinate roots"
+)]
+fn hash_decoded_document(
+    name_section: &[u8],
+    value_section: &[u8],
+    value_logical_offset: u32,
+    container_logical_offset: u32,
+    names: &[NameRecord],
+    fields: &[FieldRecord],
+    arrays: &[ValueReference],
+    containers: &[ContainerRecord],
+) -> Result<[u8; 32], DecodeError> {
+    let mut digests = vec![[0_u8; 32]; containers.len()];
+    for index in (0..containers.len()).rev() {
+        let container = &containers[index];
+        let mut hasher = Hasher::new();
+        if container.tag == 9 {
+            let end = container.item_start.saturating_add(container.item_count);
+            let container_fields = fields.get(container.item_start..end).ok_or(corruption(
+                DecodeCheck::TypedContentHash,
+                container.item_start * 24,
+            ))?;
+            let mut body_length = 4_u64;
+            let mut object_entries = Vec::with_capacity(container_fields.len());
+            for field in container_fields {
+                let name = names
+                    .get(bounded_u64_to_usize(u64::from(field.field_id)))
+                    .ok_or(corruption(DecodeCheck::TypedContentHash, 0))?;
+                body_length = body_length
+                    .checked_add(36 + u64::from(name.length))
+                    .ok_or(corruption(DecodeCheck::TypedContentHash, 0))?;
+                object_entries.push((field.value, name_bytes(name_section, name)?));
+            }
+            hash_frame_prefix(&mut hasher, 9, body_length);
+            hasher.update(&bounded_usize_to_u32(container.item_count).to_le_bytes());
+            for (value, bytes) in object_entries {
+                hasher.update(&bounded_usize_to_u32(bytes.len()).to_le_bytes());
+                hasher.update(bytes);
+                let digest = decoded_value_digest(
+                    value,
+                    value_section,
+                    value_logical_offset,
+                    container_logical_offset,
+                    &digests,
+                )?;
+                hasher.update(&digest);
+            }
+        } else {
+            let body_length = 4_u64
+                .checked_add(
+                    bounded_usize_to_u64(container.item_count)
+                        .checked_mul(36)
+                        .ok_or(corruption(DecodeCheck::TypedContentHash, 0))?,
+                )
+                .ok_or(corruption(DecodeCheck::TypedContentHash, 0))?;
+            hash_frame_prefix(&mut hasher, 10, body_length);
+            hasher.update(&bounded_usize_to_u32(container.item_count).to_le_bytes());
+            let end = container.item_start.saturating_add(container.item_count);
+            let references = arrays.get(container.item_start..end).ok_or(corruption(
+                DecodeCheck::TypedContentHash,
+                container.item_start * 12,
+            ))?;
+            for (slot, reference) in references.iter().copied().enumerate() {
+                hasher.update(&bounded_usize_to_u32(slot).to_le_bytes());
+                let digest = decoded_value_digest(
+                    reference,
+                    value_section,
+                    value_logical_offset,
+                    container_logical_offset,
+                    &digests,
+                )?;
+                hasher.update(&digest);
+            }
+        }
+        digests[index].copy_from_slice(hasher.finalize().as_bytes());
+    }
+    digests
+        .first()
+        .copied()
+        .ok_or(corruption(DecodeCheck::TypedContentHash, 0))
+}
+
+fn decoded_value_digest(
+    reference: ValueReference,
+    value_section: &[u8],
+    value_logical_offset: u32,
+    container_logical_offset: u32,
+    digests: &[[u8; 32]],
+) -> Result<[u8; 32], DecodeError> {
+    if matches!(reference.tag, 9 | 10) {
+        let child = decoded_child_index(reference, container_logical_offset)?;
+        return digests
+            .get(child)
+            .copied()
+            .ok_or(corruption(DecodeCheck::TypedContentHash, 0));
+    }
+    let start = reference
+        .offset
+        .checked_sub(value_logical_offset)
+        .ok_or(corruption(DecodeCheck::TypedContentHash, 0))?;
+    let end = start
+        .checked_add(reference.length)
+        .ok_or(corruption(DecodeCheck::TypedContentHash, 0))?;
+    let payload = value_section
+        .get(bounded_u64_to_usize(u64::from(start))..bounded_u64_to_usize(u64::from(end)))
+        .ok_or(corruption(DecodeCheck::TypedContentHash, 0))?;
+    let mut hasher = Hasher::new();
+    hash_frame_prefix(&mut hasher, reference.tag, u64::from(reference.length));
+    hasher.update(payload);
+    Ok(*hasher.finalize().as_bytes())
+}
+
+fn name_bytes<'a>(section: &'a [u8], name: &NameRecord) -> Result<&'a [u8], DecodeError> {
+    let end = name
+        .local_offset
+        .checked_add(usize::from(name.length))
+        .ok_or(corruption(DecodeCheck::NamePool, name.local_offset))?;
+    section
+        .get(name.local_offset..end)
+        .ok_or(corruption(DecodeCheck::NamePool, name.local_offset))
+}
+
+fn validate_canonical_envelope(
+    bytes: &[u8],
+    sections: &[Vec<u8>; 4],
+    envelope: &ParsedEnvelope,
+    content_hash: [u8; 32],
+) -> Result<(), DecodeError> {
+    let candidates = [
+        compression_stream(&sections[0]),
+        compression_stream(&sections[1]),
+        compression_stream(&sections[2]),
+        compression_stream(&sections[3]),
+    ];
+    let use_compression = envelope.compressed_sections != 0;
+    if use_compression {
+        let mut selected = 0_u8;
+        for (index, candidate) in candidates.iter().enumerate() {
+            let compressed = envelope.entries[index].flags & 1 != 0;
+            if compressed != candidate.is_some() {
+                return Err(corruption(DecodeCheck::CompressionCanonicality, index));
+            }
+            if let Some(candidate) = candidate {
+                selected = selected
+                    .checked_add(1)
+                    .ok_or(corruption(DecodeCheck::CompressionCanonicality, index))?;
+                let start = bounded_u64_to_usize(u64::from(envelope.entries[index].stored_offset));
+                let end = start + candidate.len();
+                if bytes.get(start..end) != Some(candidate.as_slice()) {
+                    return Err(corruption(DecodeCheck::CompressionCanonicality, start));
+                }
+            }
+        }
+        if selected != envelope.compressed_sections
+            || measure_stored_length(sections, &candidates) >= u64::from(envelope.canonical_length)
+        {
+            return Err(corruption(DecodeCheck::CompressionCanonicality, 0));
+        }
+    }
+    let Ok(rebuilt) = build_envelope(
+        sections,
+        &candidates,
+        [
+            envelope.entries[0].item_count,
+            envelope.entries[1].item_count,
+            envelope.entries[2].item_count,
+            envelope.entries[3].item_count,
+        ],
+        envelope.field_count,
+        content_hash,
+        envelope.canonical_length,
+        use_compression,
+    ) else {
+        return Err(corruption(DecodeCheck::CompressionCanonicality, 0));
+    };
+    if rebuilt.len() != bounded_u64_to_usize(u64::from(envelope.total_length)) || rebuilt != bytes {
+        return Err(corruption(DecodeCheck::CompressionCanonicality, 0));
+    }
+    Ok(())
+}
+
+const fn assigned_tag(tag: u8) -> bool {
+    matches!(tag, 1..=16)
+}
+
+const fn payload_alignment_for_tag(tag: u8) -> Option<u64> {
+    match tag {
+        3 | 12 | 15 | 16 => Some(4),
+        4 | 5 | 6 | 11 => Some(8),
+        1 | 2 | 7 | 8 | 13 | 14 => Some(1),
+        _ => None,
+    }
+}
+
+fn align_decode(value: u64, alignment: u64, check: DecodeCheck) -> Result<u64, DecodeError> {
+    let mask = alignment.checked_sub(1).ok_or(corruption(check, 0))?;
+    value
+        .checked_add(mask)
+        .map(|candidate| candidate & !mask)
+        .ok_or(corruption(check, 0))
+}
+
+fn validated_array<const N: usize>(input: &[u8], offset: usize) -> [u8; N] {
+    let mut output = [0_u8; N];
+    output.copy_from_slice(&input[offset..offset + N]);
+    output
+}
+
+fn validated_u16(input: &[u8], offset: usize) -> u16 {
+    u16::from_le_bytes(validated_array(input, offset))
+}
+
+fn validated_u32(input: &[u8], offset: usize) -> u32 {
+    u32::from_le_bytes(validated_array(input, offset))
+}
+
+fn validated_u64(input: &[u8], offset: usize) -> u64 {
+    u64::from_le_bytes(validated_array(input, offset))
+}
+
+fn read_u8(input: &[u8], offset: usize, check: DecodeCheck) -> Result<u8, DecodeError> {
+    input.get(offset).copied().ok_or(corruption(check, offset))
+}
+
+fn read_u16(input: &[u8], offset: usize, check: DecodeCheck) -> Result<u16, DecodeError> {
+    Ok(u16::from_le_bytes(read_array::<2>(input, offset, check)?))
+}
+
+fn read_u32(input: &[u8], offset: usize, check: DecodeCheck) -> Result<u32, DecodeError> {
+    Ok(u32::from_le_bytes(read_array::<4>(input, offset, check)?))
+}
+
+fn read_i32(input: &[u8], offset: usize, check: DecodeCheck) -> Result<i32, DecodeError> {
+    Ok(i32::from_le_bytes(read_array::<4>(input, offset, check)?))
+}
+
+fn read_i64(input: &[u8], offset: usize, check: DecodeCheck) -> Result<i64, DecodeError> {
+    Ok(i64::from_le_bytes(read_array::<8>(input, offset, check)?))
+}
+
+fn read_array<const N: usize>(
+    input: &[u8],
+    offset: usize,
+    check: DecodeCheck,
+) -> Result<[u8; N], DecodeError> {
+    let end = offset.checked_add(N).ok_or(corruption(check, offset))?;
+    let slice = input.get(offset..end).ok_or(corruption(check, offset))?;
+    let mut output = [0_u8; N];
+    output.copy_from_slice(slice);
+    Ok(output)
+}
+
+fn align8_decode(value: u64, check: DecodeCheck, offset: usize) -> Result<u64, DecodeError> {
+    value
+        .checked_add(7)
+        .map(|candidate| candidate & !7)
+        .ok_or(corruption(check, offset))
+}
+
+fn require_zero_range(
+    bytes: &[u8],
+    start: u64,
+    end: u64,
+    check: DecodeCheck,
+) -> Result<(), DecodeError> {
+    let start = bounded_u64_to_usize(start);
+    let end = bounded_u64_to_usize(end);
+    let padding = bytes.get(start..end).ok_or(corruption(check, start))?;
+    if let Some(relative) = padding.iter().position(|byte| *byte != 0) {
+        return Err(corruption(check, start + relative));
+    }
+    Ok(())
+}
+
+fn corruption(check: DecodeCheck, offset: usize) -> DecodeError {
+    let offset = u32::try_from(offset).unwrap_or(u32::MAX);
+    DecodeError::Corruption { check, offset }
+}
+
+const fn unsupported(check: DecodeCheck, identifier: u64) -> DecodeError {
+    DecodeError::UnsupportedFeature { check, identifier }
+}
+
 // helix-coverage: exclude-start unit-tests
 #[cfg(test)]
 mod tests {
@@ -1748,6 +3296,132 @@ mod tests {
         output
     }
 
+    fn decoder_scalar_hdoc() -> Result<EncodedHDoc, EncodeError> {
+        let fields = [
+            EncodeField::new("b", EncodeValue::Int64(1)),
+            EncodeField::new("_id", EncodeValue::Uuid([0; 16])),
+            EncodeField::new("a", EncodeValue::Bool(true)),
+        ];
+        encode_with_options(EncodeDocument::new(&fields), disabled())
+    }
+
+    fn decoder_nested_hdoc() -> Result<EncodedHDoc, EncodeError> {
+        let empty_fields = [];
+        let nested_fields = [EncodeField::new("a", EncodeValue::Bool(true))];
+        let array = [
+            EncodeValue::Null,
+            EncodeValue::Object(EncodeObject::new(&nested_fields)),
+        ];
+        let fields = [
+            EncodeField::new("z", EncodeValue::Object(EncodeObject::new(&empty_fields))),
+            EncodeField::new("_id", EncodeValue::ObjectId([0; 12])),
+            EncodeField::new("a", EncodeValue::Array(&array)),
+        ];
+        encode_with_options(EncodeDocument::new(&fields), disabled())
+    }
+
+    fn decoder_all_types_hdoc() -> Result<EncodedHDoc, EncodeError> {
+        let empty_fields = [];
+        let array_values = [EncodeValue::Null];
+        let vector_f32 = [0x3f80_0000, 0x8000_0000, 1];
+        let vector_f16 = [0x3c00, 0x8000, 1];
+        let fields = [
+            EncodeField::new("_id", EncodeValue::Uuid([0; 16])),
+            EncodeField::new("t01", EncodeValue::Null),
+            EncodeField::new("t02", EncodeValue::Bool(true)),
+            EncodeField::new("t03", EncodeValue::Int32(i32::MIN)),
+            EncodeField::new("t04", EncodeValue::Int64(i64::MAX)),
+            EncodeField::new("t05", EncodeValue::Float64Bits(0x7ff0_0000_0000_0001)),
+            EncodeField::new(
+                "t06",
+                EncodeValue::Decimal128(Decimal128::Finite {
+                    negative: true,
+                    coefficient: 12_345,
+                    exponent: -2,
+                }),
+            ),
+            EncodeField::new("t07", EncodeValue::String("e\u{301}")),
+            EncodeField::new("t08", EncodeValue::Binary(&[0, 0xff])),
+            EncodeField::new("t09", EncodeValue::Object(EncodeObject::new(&empty_fields))),
+            EncodeField::new("t10", EncodeValue::Array(&array_values)),
+            EncodeField::new("t11", EncodeValue::Timestamp(TIMESTAMP_MIN)),
+            EncodeField::new("t12", EncodeValue::Date(DATE_MAX)),
+            EncodeField::new("t13", EncodeValue::Uuid([0xff; 16])),
+            EncodeField::new("t14", EncodeValue::ObjectId([0xff; 12])),
+            EncodeField::new("t15", EncodeValue::VectorF32(&vector_f32)),
+            EncodeField::new("t16", EncodeValue::VectorF16(&vector_f16)),
+        ];
+        encode_with_options(EncodeDocument::new(&fields), disabled())
+    }
+
+    fn refresh_hdoc_checksum(bytes: &mut [u8]) {
+        bytes[32..36].fill(0);
+        let checksum = CRC32C.checksum(bytes);
+        put_u32(bytes, 32, checksum);
+    }
+
+    fn mutate_hdoc(base: &[u8], action: impl FnOnce(&mut [u8])) -> Vec<u8> {
+        let mut candidate = base.to_vec();
+        action(&mut candidate);
+        refresh_hdoc_checksum(&mut candidate);
+        candidate
+    }
+
+    fn expect_decode_check(bytes: &[u8], expected: DecodeCheck) {
+        assert_eq!(
+            decode(bytes).err().and_then(|error| error.check()),
+            Some(expected)
+        );
+    }
+
+    fn expect_result_check<T>(result: Result<T, DecodeError>, expected: DecodeCheck) {
+        assert_eq!(result.err().and_then(|error| error.check()), Some(expected));
+    }
+
+    fn synthetic_envelope(field_count: u32) -> ParsedEnvelope {
+        ParsedEnvelope {
+            entries: [DirectoryEntry::default(); 4],
+            logical_offsets: [0; 4],
+            total_length: 256,
+            canonical_length: 256,
+            field_count,
+            footer_hash: [0; 32],
+            compressed_sections: 0,
+        }
+    }
+
+    fn field_locations(
+        bytes: &[u8],
+        expected_name: &[u8],
+    ) -> Result<(usize, usize, FieldRecord), DecodeError> {
+        let envelope = parse_envelope(bytes)?;
+        if envelope.compressed_sections != 0 {
+            return Err(corruption(DecodeCheck::FieldTable, 0));
+        }
+        let sections = decode_logical_sections(bytes, &envelope)?;
+        let names = parse_names(
+            &sections[1],
+            envelope.logical_offsets[1],
+            envelope.entries[1].item_count,
+        )?;
+        let fields = parse_fields(&sections[0], envelope.field_count)?;
+        for (index, field) in fields.iter().copied().enumerate() {
+            let name = names
+                .get(bounded_u64_to_usize(u64::from(field.field_id)))
+                .ok_or_else(|| corruption(DecodeCheck::NamePool, 0))?;
+            if name_bytes(&sections[1], name)? == expected_name {
+                let record = bounded_u64_to_usize(u64::from(envelope.entries[0].stored_offset))
+                    + index * bounded_u64_to_usize(FIELD_ENTRY_BYTES);
+                return Ok((
+                    record,
+                    bounded_u64_to_usize(u64::from(field.value.offset)),
+                    field,
+                ));
+            }
+        }
+        Err(corruption(DecodeCheck::FieldTable, 0))
+    }
+
     #[test]
     fn exact_root_envelopes_are_deterministic_and_presentation_sensitive() -> Result<(), EncodeError>
     {
@@ -1790,6 +3464,18 @@ mod tests {
         assert_eq!(
             first.content_hash(),
             fixture_hex(INTEGRITY_FIXTURE, "root-scalars", "digest_hex")?.as_slice()
+        );
+        assert_eq!(
+            decode(first.as_bytes())
+                .map_err(|_| EncodeError::ArithmeticOverflow)?
+                .content_hash(),
+            first.content_hash()
+        );
+        assert_eq!(
+            decode(second.as_bytes())
+                .map_err(|_| EncodeError::ArithmeticOverflow)?
+                .content_hash(),
+            second.content_hash()
         );
         assert_eq!(first.clone().into_bytes(), first.as_bytes());
         Ok(())
@@ -1836,6 +3522,12 @@ mod tests {
                 "container_tables_hex"
             )?
         );
+        assert_eq!(
+            decode(aligned.as_bytes())
+                .map_err(|_| EncodeError::ArithmeticOverflow)?
+                .content_hash(),
+            aligned.content_hash()
+        );
 
         let inner_fields = [EncodeField::new("a", EncodeValue::Bool(true))];
         let nested_values = [
@@ -1864,6 +3556,12 @@ mod tests {
                 fixture_hex(RECORD_FIXTURE, "nested-object-array", property)?
             );
         }
+        assert_eq!(
+            decode(nested.as_bytes())
+                .map_err(|_| EncodeError::ArithmeticOverflow)?
+                .content_hash(),
+            nested.content_hash()
+        );
         Ok(())
     }
 
@@ -1925,6 +3623,18 @@ mod tests {
         let uncompressed = encode_with_options(EncodeDocument::new(&fields), disabled())?;
         assert_eq!(uncompressed.as_bytes().len(), 4472);
         assert_eq!(uncompressed.content_hash(), canonical.content_hash());
+        assert_eq!(
+            decode(canonical.as_bytes())
+                .map_err(|_| EncodeError::ArithmeticOverflow)?
+                .content_hash(),
+            canonical.content_hash()
+        );
+        assert_eq!(
+            decode(uncompressed.as_bytes())
+                .map_err(|_| EncodeError::ArithmeticOverflow)?
+                .content_hash(),
+            uncompressed.content_hash()
+        );
         Ok(())
     }
 
@@ -2226,6 +3936,9 @@ mod tests {
             EncodeField::new("t16", EncodeValue::VectorF16(&vector_f16)),
         ];
         let encoded = encode_with_options(EncodeDocument::new(&fields), disabled())?;
+        let decoded = decode(encoded.as_bytes()).map_err(|_| EncodeError::ArithmeticOverflow)?;
+        assert_eq!(decoded.content_hash(), encoded.content_hash());
+        assert_eq!(decoded.field_count(), 17);
         assert_eq!(&encoded.as_bytes()[28..32], &17_u32.to_le_bytes());
         let expected_tags = [13, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16];
         for (index, expected) in expected_tags.iter().enumerate() {
@@ -2553,7 +4266,10 @@ mod tests {
                 EncodeField::new("_id", EncodeValue::Int32(1)),
                 EncodeField::new("deep", EncodeValue::Array(nested)),
             ];
-            assert!(encode_with_options(EncodeDocument::new(&root_fields), disabled()).is_ok());
+            assert!(
+                encode_with_options(EncodeDocument::new(&root_fields), disabled())
+                    .is_ok_and(|encoded| decode(encoded.as_bytes()).is_ok())
+            );
         });
         with_nested_arrays(99, &mut |nested| {
             let root_fields = [
@@ -2578,6 +4294,8 @@ mod tests {
         let exact = encode_with_options(EncodeDocument::new(&root_fields), disabled())?;
         assert_eq!(exact.canonical_length(), 16_777_216);
         assert_eq!(exact.as_bytes().len(), 16_777_216);
+        let decoded = decode(exact.as_bytes()).map_err(|_| EncodeError::ArithmeticOverflow)?;
+        assert_eq!(decoded.canonical_length(), 16_777_216);
         drop(exact);
         oversized_value.push('x');
         let root_fields = [
@@ -2596,9 +4314,992 @@ mod tests {
     }
 
     #[test]
+    fn validating_decoder_accepts_exact_base_and_compressed_profiles() -> Result<(), Box<dyn Error>>
+    {
+        let base_fields = [
+            EncodeField::new("s", EncodeValue::String("")),
+            EncodeField::new("_id", EncodeValue::Uuid([0; 16])),
+            EncodeField::new("n", EncodeValue::Null),
+        ];
+        let base = encode_with_options(EncodeDocument::new(&base_fields), disabled())?;
+        let decoded = decode(base.as_bytes())?;
+        assert_eq!(decoded.as_bytes(), base.as_bytes());
+        assert_eq!(decoded.content_hash(), base.content_hash());
+        assert_eq!(decoded.canonical_length(), 408);
+        assert_eq!(decoded.field_count(), 3);
+        assert_eq!(decoded.compressed_section_count(), 0);
+        assert_eq!(decoded, decoded.clone());
+
+        let repeated = "a".repeat(4_096);
+        let compressed_fields = [
+            EncodeField::new("_id", EncodeValue::ObjectId([0; 12])),
+            EncodeField::new("payload", EncodeValue::String(&repeated)),
+        ];
+        let compressed = encode(EncodeDocument::new(&compressed_fields))?;
+        let decoded_compressed = decode(compressed.as_bytes())?;
+        assert_eq!(decoded_compressed.as_bytes(), compressed.as_bytes());
+        assert_eq!(decoded_compressed.content_hash(), compressed.content_hash());
+        assert_eq!(decoded_compressed.canonical_length(), 4_480);
+        assert_eq!(decoded_compressed.field_count(), 2);
+        assert_eq!(decoded_compressed.compressed_section_count(), 1);
+
+        let mut wrong_magic = base.as_bytes().to_vec();
+        wrong_magic[0] ^= 1;
+        assert_eq!(decode(&wrong_magic), Err(DecodeError::FormatUnsupported));
+        assert_eq!(
+            DecodeError::FormatUnsupported.code(),
+            "CAP_FORMAT_UNSUPPORTED"
+        );
+        assert_eq!(DecodeError::FormatUnsupported.check(), None);
+        assert_eq!(
+            DecodeError::FormatUnsupported.to_string(),
+            "CAP_FORMAT_UNSUPPORTED"
+        );
+        let version = DecodeError::UnsupportedVersion { major: 2, minor: 0 };
+        assert_eq!(version.code(), "CAP_UNSUPPORTED_VERSION");
+        assert_eq!(version.check(), None);
+        assert_eq!(version.to_string(), "CAP_UNSUPPORTED_VERSION: 2.0");
+        let feature = unsupported(DecodeCheck::Feature, 2);
+        assert_eq!(feature.code(), "CAP_FORMAT_UNSUPPORTED");
+        assert_eq!(feature.check(), Some(DecodeCheck::Feature));
+        assert_eq!(feature.to_string(), "CAP_FORMAT_UNSUPPORTED: feature 2");
+        let corrupt = corruption(DecodeCheck::Checksum, 32);
+        assert_eq!(corrupt.code(), "DUR_CORRUPTION");
+        assert_eq!(corrupt.check(), Some(DecodeCheck::Checksum));
+        assert_eq!(corrupt.to_string(), "DUR_CORRUPTION: checksum at 32");
+        Ok(())
+    }
+
+    #[test]
+    #[allow(
+        clippy::too_many_lines,
+        reason = "the fail-closed envelope mutation matrix is audited as one ordered trust sequence"
+    )]
+    fn decoder_rejects_header_length_feature_checksum_directory_and_footer_mutations()
+    -> Result<(), Box<dyn Error>> {
+        let encoded = decoder_scalar_hdoc()?;
+        let base = encoded.as_bytes();
+        for length in 0..base.len() {
+            assert!(
+                decode(&base[..length]).is_err(),
+                "truncation {length} passed"
+            );
+        }
+        let mut trailing = base.to_vec();
+        trailing.push(0);
+        expect_decode_check(&trailing, DecodeCheck::Length);
+
+        for index in (0..base.len()).filter(|index| !(32..36).contains(index)) {
+            let flipped = mutate_hdoc(base, |bytes| bytes[index] ^= 0x80);
+            assert!(decode(&flipped).is_err(), "bit flip at byte {index} passed");
+        }
+
+        let wrong_major = mutate_hdoc(base, |bytes| put_u16(bytes, 8, 2));
+        assert_eq!(
+            decode(&wrong_major),
+            Err(DecodeError::UnsupportedVersion { major: 2, minor: 0 })
+        );
+        let wrong_minor = mutate_hdoc(base, |bytes| put_u16(bytes, 10, 1));
+        assert_eq!(
+            decode(&wrong_minor),
+            Err(DecodeError::UnsupportedVersion { major: 1, minor: 1 })
+        );
+        for candidate in [
+            mutate_hdoc(base, |bytes| put_u16(bytes, 12, 200)),
+            mutate_hdoc(base, |bytes| put_u16(bytes, 14, 24)),
+            mutate_hdoc(base, |bytes| put_u16(bytes, 38, 1)),
+            mutate_hdoc(base, |bytes| put_u32(bytes, 40, 72)),
+            mutate_hdoc(base, |bytes| put_u16(bytes, 36, 3)),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::Header);
+        }
+        let extra_section = mutate_hdoc(base, |bytes| put_u16(bytes, 36, 5));
+        assert_eq!(
+            decode(&extra_section),
+            Err(unsupported(DecodeCheck::Directory, 5))
+        );
+        let unknown_required = mutate_hdoc(base, |bytes| put_u64(bytes, 48, 2));
+        assert_eq!(
+            decode(&unknown_required),
+            Err(unsupported(DecodeCheck::Feature, 2))
+        );
+        let unknown_optional = mutate_hdoc(base, |bytes| put_u64(bytes, 56, 1));
+        assert_eq!(
+            decode(&unknown_optional),
+            Err(unsupported(DecodeCheck::Feature, 1_u64 << 32))
+        );
+        let unsupported_flag = mutate_hdoc(base, |bytes| put_u32(bytes, 16, 2));
+        assert_eq!(
+            decode(&unsupported_flag),
+            Err(unsupported(DecodeCheck::Feature, 2_u64 << 32))
+        );
+        let feature_mismatch = mutate_hdoc(base, |bytes| put_u64(bytes, 48, 1));
+        expect_decode_check(&feature_mismatch, DecodeCheck::Feature);
+
+        for candidate in [
+            mutate_hdoc(base, |bytes| put_u32(bytes, 20, 256)),
+            mutate_hdoc(base, |bytes| put_u32(bytes, 24, 16_777_224)),
+            mutate_hdoc(base, |bytes| put_u32(bytes, 44, 0)),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::Length);
+        }
+        let too_many_fields = mutate_hdoc(base, |bytes| put_u32(bytes, 28, 100_001));
+        expect_decode_check(&too_many_fields, DecodeCheck::Limit);
+
+        let mut wrong_checksum = base.to_vec();
+        wrong_checksum[200] ^= 1;
+        expect_decode_check(&wrong_checksum, DecodeCheck::Checksum);
+        let mut unknown_feature_with_bad_crc = base.to_vec();
+        put_u64(&mut unknown_feature_with_bad_crc, 48, 2);
+        expect_decode_check(&unknown_feature_with_bad_crc, DecodeCheck::Checksum);
+
+        let wrong_kind = mutate_hdoc(base, |bytes| put_u16(bytes, 64, 2));
+        expect_decode_check(&wrong_kind, DecodeCheck::Directory);
+        let unknown_section_version = mutate_hdoc(base, |bytes| put_u16(bytes, 64 + 24, 2));
+        assert_eq!(
+            decode(&unknown_section_version),
+            Err(unsupported(DecodeCheck::Directory, (1_u64 << 32) | 2))
+        );
+        for candidate in [
+            mutate_hdoc(base, |bytes| put_u16(bytes, 64 + 2, 0x16)),
+            mutate_hdoc(base, |bytes| put_u16(bytes, 64 + 26, 1)),
+            mutate_hdoc(base, |bytes| put_u32(bytes, 64 + 28, 1)),
+            mutate_hdoc(base, |bytes| put_u32(bytes, 64 + 4, 200)),
+            mutate_hdoc(base, |bytes| put_u32(bytes, 64 + 8, 71)),
+            mutate_hdoc(base, |bytes| put_u16(bytes, 64 + 20, 1)),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::Directory);
+        }
+        let nonzero_padding = mutate_hdoc(base, |bytes| bytes[293] = 1);
+        expect_decode_check(&nonzero_padding, DecodeCheck::Directory);
+
+        let footer = bounded_u64_to_usize(u64::from(read_u32(base, 44, DecodeCheck::Footer)?));
+        let bad_footer = mutate_hdoc(base, |bytes| bytes[footer] ^= 1);
+        expect_decode_check(&bad_footer, DecodeCheck::Footer);
+        let logical_mismatch = mutate_hdoc(base, |bytes| {
+            put_u32(bytes, 24, encoded.canonical_length() + 8);
+            put_u32(bytes, footer + 24, encoded.canonical_length() + 8);
+        });
+        expect_decode_check(&logical_mismatch, DecodeCheck::LogicalLayout);
+        let hash_mismatch = mutate_hdoc(base, |bytes| bytes[footer + 32] ^= 1);
+        expect_decode_check(&hash_mismatch, DecodeCheck::TypedContentHash);
+
+        let checks = [
+            DecodeCheck::Header,
+            DecodeCheck::Length,
+            DecodeCheck::Feature,
+            DecodeCheck::Checksum,
+            DecodeCheck::Directory,
+            DecodeCheck::Footer,
+            DecodeCheck::LogicalLayout,
+            DecodeCheck::CompressionHeader,
+            DecodeCheck::CompressionTable,
+            DecodeCheck::CompressionBlock,
+            DecodeCheck::CompressionCanonicality,
+            DecodeCheck::FieldTable,
+            DecodeCheck::NamePool,
+            DecodeCheck::ContainerTables,
+            DecodeCheck::ValueArea,
+            DecodeCheck::Payload,
+            DecodeCheck::Limit,
+            DecodeCheck::RootId,
+            DecodeCheck::TypedContentHash,
+        ];
+        assert_eq!(checks.len(), 19);
+        assert_eq!(checks[0].as_str(), "header");
+        assert_eq!(checks[18].as_str(), "typed-content-hash");
+        assert!(checks.iter().all(|check| !check.as_str().is_empty()));
+        Ok(())
+    }
+
+    #[test]
+    #[allow(
+        clippy::too_many_lines,
+        reason = "the inner-grammar mutation corpus stays grouped by names, records, tree, and payload"
+    )]
+    fn decoder_rejects_name_record_tree_value_and_payload_mutations() -> Result<(), Box<dyn Error>>
+    {
+        let scalar = decoder_scalar_hdoc()?;
+        let scalar_envelope = parse_envelope(scalar.as_bytes())?;
+        let field_start = bounded_u64_to_usize(u64::from(scalar_envelope.entries[0].stored_offset));
+        let name_start = bounded_u64_to_usize(u64::from(scalar_envelope.entries[1].stored_offset));
+        let name_suffix = name_start
+            + bounded_u64_to_usize(u64::from(scalar_envelope.entries[1].item_count))
+                * bounded_u64_to_usize(NAME_RECORD_BYTES);
+        let first_name_offset = read_u32(scalar.as_bytes(), name_start, DecodeCheck::NamePool)?;
+        for candidate in [
+            mutate_hdoc(scalar.as_bytes(), |bytes| {
+                put_u32(bytes, field_start, scalar_envelope.entries[1].item_count);
+            }),
+            mutate_hdoc(scalar.as_bytes(), |bytes| {
+                bytes[field_start + 11] = 1;
+            }),
+            mutate_hdoc(scalar.as_bytes(), |bytes| {
+                bytes[field_start + 10] = 0;
+            }),
+            mutate_hdoc(scalar.as_bytes(), |bytes| {
+                put_u32(bytes, field_start + 24 + 20, 1);
+            }),
+            mutate_hdoc(scalar.as_bytes(), |bytes| {
+                put_u32(bytes, field_start + 4, 0);
+            }),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::FieldTable);
+        }
+        for candidate in [
+            mutate_hdoc(scalar.as_bytes(), |bytes| {
+                put_u32(bytes, name_start, first_name_offset + 1);
+            }),
+            mutate_hdoc(scalar.as_bytes(), |bytes| {
+                put_u16(bytes, name_start + 6, 0);
+            }),
+            mutate_hdoc(scalar.as_bytes(), |bytes| {
+                bytes[name_suffix] = b'$';
+            }),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::NamePool);
+        }
+
+        let missing_id = mutate_hdoc(scalar.as_bytes(), |bytes| {
+            bytes[name_suffix + 2] = b'x';
+        });
+        expect_decode_check(&missing_id, DecodeCheck::RootId);
+
+        let protected_fields = [
+            EncodeField::new("_id", EncodeValue::Int32(1)),
+            EncodeField::new("_x", EncodeValue::Bool(true)),
+        ];
+        let protected = encode_with_options(EncodeDocument::new(&protected_fields), disabled())?;
+        let (_, _, protected_field) = field_locations(protected.as_bytes(), b"_x")?;
+        let protected_name = bounded_u64_to_usize(u64::from(protected_field.name_offset));
+        let protected_mutation = mutate_hdoc(protected.as_bytes(), |bytes| {
+            bytes[protected_name + 1] = b'v';
+        });
+        expect_decode_check(&protected_mutation, DecodeCheck::RootId);
+
+        let oversized_binary = vec![0x5a; 1_025];
+        let oversized_id_fields = [
+            EncodeField::new("_id", EncodeValue::Int32(1)),
+            EncodeField::new("_ix", EncodeValue::Binary(&oversized_binary)),
+        ];
+        let oversized_id =
+            encode_with_options(EncodeDocument::new(&oversized_id_fields), disabled())?;
+        let (_, _, original_id) = field_locations(oversized_id.as_bytes(), b"_id")?;
+        let (_, _, replacement_id) = field_locations(oversized_id.as_bytes(), b"_ix")?;
+        let oversized_id_mutation = mutate_hdoc(oversized_id.as_bytes(), |bytes| {
+            bytes[bounded_u64_to_usize(u64::from(original_id.name_offset)) + 2] = b'a';
+            bytes[bounded_u64_to_usize(u64::from(replacement_id.name_offset)) + 2] = b'd';
+        });
+        expect_decode_check(&oversized_id_mutation, DecodeCheck::RootId);
+
+        let nested_name_fields = [EncodeField::new("x", EncodeValue::Bool(true))];
+        let unused_name_fields = [
+            EncodeField::new("_id", EncodeValue::Int32(1)),
+            EncodeField::new(
+                "a",
+                EncodeValue::Object(EncodeObject::new(&nested_name_fields)),
+            ),
+        ];
+        let unused_name =
+            encode_with_options(EncodeDocument::new(&unused_name_fields), disabled())?;
+        let (_, _, used_a) = field_locations(unused_name.as_bytes(), b"a")?;
+        let (nested_x_record, _, _) = field_locations(unused_name.as_bytes(), b"x")?;
+        let unused_name_mutation = mutate_hdoc(unused_name.as_bytes(), |bytes| {
+            put_u32(bytes, nested_x_record, used_a.field_id);
+            put_u32(bytes, nested_x_record + 4, used_a.name_offset);
+            put_u16(bytes, nested_x_record + 8, used_a.name_length);
+        });
+        expect_decode_check(&unused_name_mutation, DecodeCheck::NamePool);
+
+        let nested = decoder_nested_hdoc()?;
+        let nested_envelope = parse_envelope(nested.as_bytes())?;
+        let container_start =
+            bounded_u64_to_usize(u64::from(nested_envelope.entries[3].stored_offset));
+        let descriptor_count =
+            bounded_u64_to_usize(u64::from(nested_envelope.entries[3].item_count));
+        let array_suffix =
+            container_start + descriptor_count * bounded_u64_to_usize(CONTAINER_DESCRIPTOR_BYTES);
+        let (array_field_record, _, array_field) = field_locations(nested.as_bytes(), b"a")?;
+        for candidate in [
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                put_u32(bytes, container_start, 1);
+            }),
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                bytes[container_start + 4] = 10;
+            }),
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                put_u32(bytes, container_start + 28, 1);
+            }),
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                put_u32(bytes, container_start + 16, 0);
+            }),
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                put_u32(bytes, container_start + 32 + 8, 0);
+            }),
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                put_u32(bytes, container_start + 32 + 20, 1);
+            }),
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                put_u32(
+                    bytes,
+                    array_field_record + 12,
+                    bounded_usize_to_u32(container_start),
+                );
+            }),
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                bytes[array_suffix + 1] = 1;
+            }),
+            mutate_hdoc(nested.as_bytes(), |bytes| {
+                put_u32(bytes, 64 + 3 * 32 + 16, 0);
+            }),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::ContainerTables);
+        }
+        let excessive_depth = mutate_hdoc(nested.as_bytes(), |bytes| {
+            put_u16(bytes, container_start + 32 + 6, 101);
+        });
+        expect_decode_check(&excessive_depth, DecodeCheck::Limit);
+        let excessive_array = mutate_hdoc(nested.as_bytes(), |bytes| {
+            put_u32(bytes, container_start + 32 + 12, 1_000_001);
+        });
+        expect_decode_check(&excessive_array, DecodeCheck::Limit);
+        assert_eq!(array_field.value.tag, 10);
+
+        let (_, bool_payload, _) = field_locations(scalar.as_bytes(), b"a")?;
+        let (int_record, int_payload, int_field) = field_locations(scalar.as_bytes(), b"b")?;
+        let nonzero_value_padding = mutate_hdoc(scalar.as_bytes(), |bytes| {
+            bytes[int_payload - 1] = 1;
+        });
+        expect_decode_check(&nonzero_value_padding, DecodeCheck::ValueArea);
+        let wrong_value_offset = mutate_hdoc(scalar.as_bytes(), |bytes| {
+            put_u32(bytes, int_record + 12, int_field.value.offset + 1);
+        });
+        expect_decode_check(&wrong_value_offset, DecodeCheck::ValueArea);
+        let invalid_bool = mutate_hdoc(scalar.as_bytes(), |bytes| {
+            bytes[bool_payload] = 2;
+        });
+        expect_decode_check(&invalid_bool, DecodeCheck::Payload);
+
+        let (id_record, id_payload, _) = field_locations(scalar.as_bytes(), b"_id")?;
+        let zero_decimal = decimal_bytes(Decimal128::Zero { negative: false })?;
+        let invalid_id_type = mutate_hdoc(scalar.as_bytes(), |bytes| {
+            bytes[id_record + 10] = 6;
+            bytes[id_payload..id_payload + 16].copy_from_slice(&zero_decimal);
+        });
+        expect_decode_check(&invalid_id_type, DecodeCheck::RootId);
+
+        let all_types = decoder_all_types_hdoc()?;
+        let (bool_record, bool_offset, _) = field_locations(all_types.as_bytes(), b"t02")?;
+        let (_, string_offset, _) = field_locations(all_types.as_bytes(), b"t07")?;
+        let (_, binary_offset, _) = field_locations(all_types.as_bytes(), b"t08")?;
+        let (_, decimal_offset, _) = field_locations(all_types.as_bytes(), b"t06")?;
+        let (_, timestamp_offset, _) = field_locations(all_types.as_bytes(), b"t11")?;
+        let (_, date_offset, _) = field_locations(all_types.as_bytes(), b"t12")?;
+        let (_, vector_f32_offset, _) = field_locations(all_types.as_bytes(), b"t15")?;
+        let (vector_f16_record, vector_f16_offset, _) =
+            field_locations(all_types.as_bytes(), b"t16")?;
+        for candidate in [
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                bytes[bool_offset] = 2;
+            }),
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                bytes[string_offset] = 0xff;
+            }),
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                bytes[binary_offset] = 1;
+            }),
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                bytes[decimal_offset..decimal_offset + 16].fill(0);
+            }),
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                bytes[timestamp_offset..timestamp_offset + 8]
+                    .copy_from_slice(&(TIMESTAMP_MAX + 1).to_le_bytes());
+            }),
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                bytes[date_offset..date_offset + 4].copy_from_slice(&(DATE_MAX + 1).to_le_bytes());
+            }),
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                put_u32(bytes, vector_f32_offset + 4, 0x7f80_0000);
+            }),
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                put_u16(bytes, vector_f16_offset + 4, 0x7c00);
+            }),
+            mutate_hdoc(all_types.as_bytes(), |bytes| {
+                put_u32(bytes, vector_f16_record + 16, 9);
+            }),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::Payload);
+        }
+        let unknown_tag = mutate_hdoc(all_types.as_bytes(), |bytes| {
+            bytes[bool_record + 10] = 17;
+        });
+        expect_decode_check(&unknown_tag, DecodeCheck::FieldTable);
+        Ok(())
+    }
+
+    #[test]
+    #[allow(
+        clippy::too_many_lines,
+        reason = "compression trust-order and canonicality mutations are reviewed as one matrix"
+    )]
+    fn decoder_bounds_decompression_and_rejects_noncanonical_streams() -> Result<(), Box<dyn Error>>
+    {
+        let compressed = fixture_hex(
+            COMPRESSION_FIXTURE,
+            "large-string-value-area-lz4",
+            "hdoc_hex",
+        )?;
+        let decoded = decode(&compressed)?;
+        assert_eq!(decoded.as_bytes(), compressed);
+        assert_eq!(decoded.canonical_length(), 4_472);
+        assert_eq!(decoded.compressed_section_count(), 1);
+
+        let directory = 64 + 2 * 32;
+        let stream_start = bounded_u64_to_usize(u64::from(read_u32(
+            &compressed,
+            directory + 4,
+            DecodeCheck::Directory,
+        )?));
+        let payload_offset = bounded_u64_to_usize(u64::from(read_u32(
+            &compressed,
+            stream_start + 24,
+            DecodeCheck::CompressionHeader,
+        )?));
+        let block_payload = stream_start + payload_offset;
+
+        let unknown_codec = mutate_hdoc(&compressed, |bytes| {
+            put_u16(bytes, directory + 20, 2);
+        });
+        assert_eq!(
+            decode(&unknown_codec),
+            Err(unsupported(
+                DecodeCheck::CompressionHeader,
+                (2_u64 << 32) | 1
+            ))
+        );
+        for candidate in [
+            mutate_hdoc(&compressed, |bytes| {
+                bytes[stream_start] ^= 1;
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u16(bytes, stream_start + 8, 2);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u16(bytes, stream_start + 10, 24);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u16(bytes, stream_start + 12, 16);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                bytes[stream_start + 14] = 14;
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                bytes[stream_start + 15] = 1;
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 20, 4_111);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 28, 1);
+            }),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::CompressionHeader);
+        }
+        for candidate in [
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 16, 0);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 24, 55);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 32, 1);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 36, 4_110);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 40, 57);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 44, 0);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u16(bytes, stream_start + 48, 2);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u16(bytes, stream_start + 50, 1);
+            }),
+            mutate_hdoc(&compressed, |bytes| {
+                put_u32(bytes, stream_start + 52, 1);
+            }),
+        ] {
+            expect_decode_check(&candidate, DecodeCheck::CompressionTable);
+        }
+
+        let invalid_lz4 = mutate_hdoc(&compressed, |bytes| {
+            bytes[block_payload] = 0x10;
+            bytes[block_payload + 1] = b'A';
+            bytes[block_payload + 2] = 0;
+            bytes[block_payload + 3] = 0;
+        });
+        expect_decode_check(&invalid_lz4, DecodeCheck::CompressionBlock);
+
+        let canonical_payload_length = bounded_u64_to_usize(u64::from(read_u32(
+            &compressed,
+            stream_start + 44,
+            DecodeCheck::CompressionTable,
+        )?));
+        assert_eq!(canonical_payload_length, 31);
+        let canonical_payload = compressed
+            .get(block_payload..block_payload + canonical_payload_length)
+            .ok_or_else(|| corruption(DecodeCheck::CompressionBlock, block_payload))?
+            .to_vec();
+        let mut alternate = compressed.clone();
+        alternate[block_payload] = 0x2a;
+        alternate[block_payload + 1] = 0;
+        alternate[block_payload + 2] = 0;
+        alternate[block_payload + 3] = 2;
+        alternate[block_payload + 4] = 0;
+        alternate[block_payload + 5..block_payload + 32].copy_from_slice(&canonical_payload[4..]);
+        put_u32(&mut alternate, directory + 8, 88);
+        put_u32(&mut alternate, stream_start + 44, 32);
+        refresh_hdoc_checksum(&mut alternate);
+        expect_decode_check(&alternate, DecodeCheck::CompressionCanonicality);
+
+        let mut mixed_data = vec![0_u8; 32_751];
+        mixed_data.extend_from_slice(&splitmix_bytes(257));
+        let mixed_fields = [
+            EncodeField::new("_id", EncodeValue::Uuid([0; 16])),
+            EncodeField::new("data", EncodeValue::Binary(&mixed_data)),
+        ];
+        let mixed = encode(EncodeDocument::new(&mixed_fields))?;
+        let mixed_envelope = parse_envelope(mixed.as_bytes())?;
+        let mixed_entry = mixed_envelope.entries[2];
+        assert_eq!(mixed_entry.flags, 7);
+        let mixed_stream = bounded_u64_to_usize(u64::from(mixed_entry.stored_offset));
+        assert_eq!(
+            read_u32(
+                mixed.as_bytes(),
+                mixed_stream + 16,
+                DecodeCheck::CompressionHeader,
+            )?,
+            2
+        );
+        assert_eq!(
+            read_u16(
+                mixed.as_bytes(),
+                mixed_stream + 32 + 24 + 16,
+                DecodeCheck::CompressionTable,
+            )?,
+            1
+        );
+        assert_eq!(
+            decode(mixed.as_bytes())?.content_hash(),
+            mixed.content_hash()
+        );
+        Ok(())
+    }
+
+    #[test]
+    #[allow(
+        clippy::too_many_lines,
+        reason = "each assertion proves a distinct decoder guard fails closed without panicking"
+    )]
+    fn decoder_defensive_rejection_paths_fail_closed() -> Result<(), Box<dyn Error>> {
+        let scalar = decoder_scalar_hdoc()?;
+        let base = scalar.as_bytes();
+        let last_directory = 64 + 3 * 32;
+        let last_length = read_u32(base, last_directory + 8, DecodeCheck::Directory)?;
+
+        let compressed = fixture_hex(
+            COMPRESSION_FIXTURE,
+            "large-string-value-area-lz4",
+            "hdoc_hex",
+        )?;
+        let compressed_directory = 64 + 2 * 32;
+        let compressed_logical = read_u32(
+            &compressed,
+            compressed_directory + 12,
+            DecodeCheck::Directory,
+        )?;
+        let invalid_compressed_length = mutate_hdoc(&compressed, |bytes| {
+            put_u32(bytes, compressed_directory + 8, compressed_logical);
+        });
+        expect_decode_check(&invalid_compressed_length, DecodeCheck::Directory);
+
+        let section_overruns_footer = mutate_hdoc(base, |bytes| {
+            put_u32(bytes, last_directory + 8, last_length + 64);
+            put_u32(bytes, last_directory + 12, last_length + 64);
+        });
+        expect_decode_check(&section_overruns_footer, DecodeCheck::Directory);
+        let footer_position_mismatch = mutate_hdoc(base, |bytes| {
+            put_u32(bytes, last_directory + 8, last_length - 8);
+            put_u32(bytes, last_directory + 12, last_length - 8);
+        });
+        expect_decode_check(&footer_position_mismatch, DecodeCheck::Directory);
+
+        let array_values = [EncodeValue::Null];
+        let padded_fields = [
+            EncodeField::new("_id", EncodeValue::Int32(1)),
+            EncodeField::new("array", EncodeValue::Array(&array_values)),
+        ];
+        let padded = encode_with_options(EncodeDocument::new(&padded_fields), disabled())?;
+        let padded_envelope = parse_envelope(padded.as_bytes())?;
+        let last_entry = padded_envelope.entries[3];
+        let padding_start = bounded_u64_to_usize(
+            u64::from(last_entry.stored_offset) + u64::from(last_entry.stored_length),
+        );
+        assert!(
+            padding_start
+                < bounded_u64_to_usize(u64::from(read_u32(
+                    padded.as_bytes(),
+                    44,
+                    DecodeCheck::Footer,
+                )?))
+        );
+        let nonzero_footer_padding = mutate_hdoc(padded.as_bytes(), |bytes| {
+            bytes[padding_start] = 1;
+        });
+        expect_decode_check(&nonzero_footer_padding, DecodeCheck::Directory);
+        expect_result_check(
+            align8_decode(u64::MAX, DecodeCheck::LogicalLayout, 24),
+            DecodeCheck::LogicalLayout,
+        );
+
+        let stream_start = bounded_u64_to_usize(u64::from(read_u32(
+            &compressed,
+            compressed_directory + 4,
+            DecodeCheck::Directory,
+        )?));
+        let descriptor_stored_length = read_u32(
+            &compressed,
+            stream_start + 44,
+            DecodeCheck::CompressionTable,
+        )?;
+        let stream_overrun = mutate_hdoc(&compressed, |bytes| {
+            put_u32(bytes, stream_start + 44, descriptor_stored_length + 1);
+        });
+        expect_decode_check(&stream_overrun, DecodeCheck::CompressionTable);
+        let stream_trailing_byte = mutate_hdoc(&compressed, |bytes| {
+            put_u32(bytes, stream_start + 44, descriptor_stored_length - 1);
+        });
+        expect_decode_check(&stream_trailing_byte, DecodeCheck::CompressionTable);
+
+        let short_logical = vec![b'A'; 99];
+        let short_stream = lz4_flex::block::compress(&short_logical);
+        assert!(short_stream.len() < 100);
+        let mut mismatched_stream = vec![0_u8; 56 + short_stream.len()];
+        mismatched_stream[..8].copy_from_slice(COMPRESSION_MAGIC);
+        put_u16(&mut mismatched_stream, 8, 1);
+        put_u16(&mut mismatched_stream, 10, 32);
+        put_u16(&mut mismatched_stream, 12, 24);
+        mismatched_stream[14] = 15;
+        put_u32(&mut mismatched_stream, 16, 1);
+        put_u32(&mut mismatched_stream, 20, 100);
+        put_u32(&mut mismatched_stream, 24, 56);
+        put_u32(&mut mismatched_stream, 36, 100);
+        put_u32(&mut mismatched_stream, 40, 56);
+        put_u32(
+            &mut mismatched_stream,
+            44,
+            bounded_usize_to_u32(short_stream.len()),
+        );
+        mismatched_stream[56..].copy_from_slice(&short_stream);
+        let mismatched_entry = DirectoryEntry {
+            flags: 7,
+            stored_offset: 0,
+            stored_length: bounded_usize_to_u32(mismatched_stream.len()),
+            logical_length: 100,
+            item_count: 0,
+            codec_id: 1,
+            codec_profile_id: 1,
+        };
+        expect_result_check(
+            decode_compressed_section(&mismatched_stream, mismatched_entry),
+            DecodeCheck::CompressionBlock,
+        );
+
+        let empty_sections = [Vec::new(), Vec::new(), Vec::new(), Vec::new()];
+        let mut envelope = synthetic_envelope(1);
+        expect_result_check(
+            validate_logical_sections(&empty_sections, &envelope),
+            DecodeCheck::FieldTable,
+        );
+        envelope.entries[0].item_count = 1;
+        envelope.entries[1].item_count = 2;
+        let mut one_field_sections = [vec![0; 24], Vec::new(), Vec::new(), Vec::new()];
+        expect_result_check(
+            validate_logical_sections(&one_field_sections, &envelope),
+            DecodeCheck::NamePool,
+        );
+        expect_result_check(parse_names(&[], 0, 1), DecodeCheck::NamePool);
+
+        let mut invalid_utf8_name = vec![0_u8; 9];
+        put_u32(&mut invalid_utf8_name, 0, 108);
+        put_u16(&mut invalid_utf8_name, 4, 1);
+        put_u16(&mut invalid_utf8_name, 6, 1);
+        invalid_utf8_name[8] = 0xff;
+        expect_result_check(
+            parse_names(&invalid_utf8_name, 100, 1),
+            DecodeCheck::NamePool,
+        );
+        let mut trailing_name = vec![0_u8; 10];
+        put_u32(&mut trailing_name, 0, 108);
+        put_u16(&mut trailing_name, 4, 1);
+        put_u16(&mut trailing_name, 6, 1);
+        trailing_name[8] = b'a';
+        expect_result_check(parse_names(&trailing_name, 100, 1), DecodeCheck::NamePool);
+
+        expect_result_check(
+            parse_containers_and_arrays(&[], 0, 0, 0, 1),
+            DecodeCheck::ContainerTables,
+        );
+        expect_result_check(
+            parse_containers_and_arrays(&[0; 33], 0, 0, 0, 1),
+            DecodeCheck::ContainerTables,
+        );
+        let nested = decoder_nested_hdoc()?;
+        let nested_envelope = parse_envelope(nested.as_bytes())?;
+        let container_start =
+            bounded_u64_to_usize(u64::from(nested_envelope.entries[3].stored_offset));
+        let sentinel_parent = mutate_hdoc(nested.as_bytes(), |bytes| {
+            put_u32(bytes, container_start + 32 + 20, ROOT_SENTINEL);
+        });
+        expect_decode_check(&sentinel_parent, DecodeCheck::ContainerTables);
+
+        let mut excessive_items = vec![0_u8; 32];
+        excessive_items[4] = 9;
+        put_u16(&mut excessive_items, 6, 1);
+        put_u32(&mut excessive_items, 12, 2);
+        put_u32(&mut excessive_items, 16, 1);
+        put_u32(&mut excessive_items, 20, ROOT_SENTINEL);
+        put_u32(&mut excessive_items, 24, ROOT_SENTINEL);
+        expect_result_check(
+            parse_containers_and_arrays(&excessive_items, 0, 0, 1, 1),
+            DecodeCheck::ContainerTables,
+        );
+        put_u32(&mut excessive_items, 12, 0);
+        put_u32(&mut excessive_items, 16, 0);
+        expect_result_check(
+            parse_containers_and_arrays(&excessive_items, 0, 0, 1, 1),
+            DecodeCheck::ContainerTables,
+        );
+
+        let name_section = b"_id".to_vec();
+        one_field_sections[1] = name_section.clone();
+        let names = [NameRecord {
+            absolute_offset: 0,
+            local_offset: 0,
+            length: 3,
+        }];
+        let id_field = FieldRecord {
+            field_id: 0,
+            name_offset: 0,
+            name_length: 3,
+            value: ValueReference {
+                tag: 3,
+                offset: 0,
+                length: 4,
+            },
+            presentation_ordinal: 0,
+        };
+        let root = ContainerRecord {
+            tag: 9,
+            depth: 1,
+            item_start: 0,
+            item_count: 1,
+            recursive_fields: 1,
+            parent_id: ROOT_SENTINEL,
+            parent_slot: ROOT_SENTINEL,
+        };
+        let mut tree_envelope = synthetic_envelope(1);
+        expect_result_check(
+            validate_records_and_tree(
+                &one_field_sections,
+                &tree_envelope,
+                &names,
+                &[id_field],
+                &[],
+                &[root],
+            ),
+            DecodeCheck::ContainerTables,
+        );
+        tree_envelope.field_count = 2;
+        tree_envelope.entries[2].item_count = 1;
+        expect_result_check(
+            validate_records_and_tree(
+                &one_field_sections,
+                &tree_envelope,
+                &names,
+                &[id_field],
+                &[],
+                &[root],
+            ),
+            DecodeCheck::ContainerTables,
+        );
+        expect_result_check(
+            decoded_child_index(
+                ValueReference {
+                    tag: 9,
+                    offset: 1,
+                    length: 32,
+                },
+                0,
+            ),
+            DecodeCheck::ContainerTables,
+        );
+
+        let out_of_bounds_value = FieldRecord {
+            value: ValueReference {
+                tag: 7,
+                offset: 0,
+                length: 1,
+            },
+            ..id_field
+        };
+        expect_result_check(
+            validate_value_area(&[], 0, 1, &[out_of_bounds_value], &[], &[root]),
+            DecodeCheck::ValueArea,
+        );
+        expect_result_check(
+            validate_value_area(&[], 0, 1, &[], &[], &[]),
+            DecodeCheck::ValueArea,
+        );
+        expect_result_check(validate_payload(17, &[], 0), DecodeCheck::Payload);
+
+        assert!(!validate_decimal_payload(&[]));
+        for bits in [
+            0x7800_0000_0000_0000_0000_0000_0000_0000_u128,
+            0xf800_0000_0000_0000_0000_0000_0000_0000,
+            0x7c00_0000_0000_0000_0000_0000_0000_0000,
+        ] {
+            assert!(validate_decimal_payload(&bits.to_le_bytes()));
+        }
+        let reducible_decimal = ((12_287_u128) << 113) | 0x0a;
+        assert!(validate_decimal_payload(&reducible_decimal.to_le_bytes()));
+        assert!(!validate_vector_payload(&[], 4, 23, 0xff));
+        assert!(!validate_vector_payload(&[0; 4], 4, 23, 0xff));
+
+        let string_id = FieldRecord {
+            value: ValueReference {
+                tag: 7,
+                offset: 0,
+                length: 0,
+            },
+            ..id_field
+        };
+        assert!(validate_decoded_root_id(&string_id, &[], 0).is_ok());
+        expect_result_check(
+            validate_decoded_root_id(&id_field, &[], 0),
+            DecodeCheck::RootId,
+        );
+
+        expect_result_check(
+            hash_decoded_document(&[], &[], 0, 0, &[], &[], &[], &[root]),
+            DecodeCheck::TypedContentHash,
+        );
+        let bad_digest_field = FieldRecord {
+            field_id: 0,
+            name_offset: 0,
+            name_length: 1,
+            value: ValueReference {
+                tag: 7,
+                offset: 1,
+                length: 1,
+            },
+            presentation_ordinal: 0,
+        };
+        let short_name = [NameRecord {
+            absolute_offset: 0,
+            local_offset: 0,
+            length: 1,
+        }];
+        expect_result_check(
+            hash_decoded_document(
+                b"a",
+                &[],
+                0,
+                0,
+                &short_name,
+                &[bad_digest_field],
+                &[],
+                &[root],
+            ),
+            DecodeCheck::TypedContentHash,
+        );
+        let array_container = ContainerRecord {
+            tag: 10,
+            depth: 1,
+            item_start: 0,
+            item_count: 1,
+            recursive_fields: 0,
+            parent_id: ROOT_SENTINEL,
+            parent_slot: ROOT_SENTINEL,
+        };
+        expect_result_check(
+            hash_decoded_document(&[], &[], 0, 0, &[], &[], &[], &[array_container]),
+            DecodeCheck::TypedContentHash,
+        );
+        expect_result_check(
+            hash_decoded_document(
+                &[],
+                &[],
+                0,
+                0,
+                &[],
+                &[],
+                &[ValueReference {
+                    tag: 7,
+                    offset: 1,
+                    length: 1,
+                }],
+                &[array_container],
+            ),
+            DecodeCheck::TypedContentHash,
+        );
+
+        let compressible_sections = [vec![b'a'; 4_096], Vec::new(), Vec::new(), Vec::new()];
+        let mut canonical_envelope = synthetic_envelope(0);
+        canonical_envelope.compressed_sections = 1;
+        expect_result_check(
+            validate_canonical_envelope(&[], &compressible_sections, &canonical_envelope, [0; 32]),
+            DecodeCheck::CompressionCanonicality,
+        );
+        let mut compressed_envelope = parse_envelope(&compressed)?;
+        let compressed_sections = decode_logical_sections(&compressed, &compressed_envelope)?;
+        compressed_envelope.compressed_sections += 1;
+        expect_result_check(
+            validate_canonical_envelope(
+                &compressed,
+                &compressed_sections,
+                &compressed_envelope,
+                compressed_envelope.footer_hash,
+            ),
+            DecodeCheck::CompressionCanonicality,
+        );
+        let mut build_failure = synthetic_envelope(0);
+        build_failure.total_length = 0;
+        build_failure.canonical_length = 0;
+        expect_result_check(
+            validate_canonical_envelope(&[], &empty_sections, &build_failure, [0; 32]),
+            DecodeCheck::CompressionCanonicality,
+        );
+        let mut rebuilt_mismatch = synthetic_envelope(0);
+        rebuilt_mismatch.total_length = 256;
+        rebuilt_mismatch.canonical_length = 256;
+        expect_result_check(
+            validate_canonical_envelope(&[], &empty_sections, &rebuilt_mismatch, [0; 32]),
+            DecodeCheck::CompressionCanonicality,
+        );
+        assert_eq!(payload_alignment_for_tag(9), None);
+        Ok(())
+    }
+
+    #[test]
     fn metadata_error_codes_and_internal_guards_are_stable() -> Result<(), EncodeError> {
         assert_eq!(COMPONENT_NAME, "helix-doc");
-        assert_eq!(MATURITY, "hdoc-encoder");
+        assert_eq!(MATURITY, "hdoc-codec");
         assert!(INTERNAL_DEPENDENCIES.is_empty());
         assert_eq!(CompressionMode::default(), CompressionMode::Canonical);
         assert_eq!(

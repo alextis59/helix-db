@@ -591,7 +591,8 @@ can replace this registry without data migration. After immutable fixtures or da
 | [`P03-005`](hdoc-v1-records.md) | Containing records, value-area order, offsets, external padding, object/array tables | Payload bytes, lengths, or alignments listed here |
 | [`P03-006`](hdoc-v1-integrity.md) | CRC replay and typed-hash domain/length/tree framing | Canonical logical payload identity |
 | [`P03-007`](hdoc-v1-compression.md) | Deterministic bounded compression blocks/codecs | Expanded canonical payload bytes |
-| `P03-008`–`P03-010` | Safe encoder, validating decoder, owned/borrowed values | Host-independent encoding and fail-closed rules |
+| `P03-008`–`P03-009` (complete) | Safe encoder and validating decoder | Host-independent encoding and fail-closed rules |
+| `P03-010` | Owned/borrowed values | Validated logical value exposure without reinterpretation |
 | `P03-015` | Required-feature negotiation and registered subtype extensions | Existing subtype/encoding assignments |
 | `P03-016`–`P03-019` | Complete golden HDocs, independent readers, malformed/property/fuzz suites | Payload vectors and rejection expectations |
 

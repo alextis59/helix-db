@@ -1,6 +1,6 @@
 # Rust Product Code Coverage Policy
 
-- Status: Active for the deterministic HDoc encoder
+- Status: Active for the deterministic HDoc codec
 - Last updated: 2026-07-11
 - Owner: Quality owner with storage and query-semantics review
 - Plan item: `P02-013`
@@ -135,7 +135,7 @@ metric that exists is enforced, while absent branch instrumentation remains visi
 Critical groups enforce the same threshold on each file that has an instrumented product metric.
 One fully covered file therefore cannot hide a second partially covered critical file.
 
-## Historical Phase 2 empty scope and active P03-008 scope
+## Historical Phase 2 empty scope and active HDoc codec scope
 
 At `P02-013` the eight Rust crates contain boundary constants and unit-test harnesses but no
 executable product function. LLVM reports 9 covered test functions, 36 test lines, and 38 test
@@ -150,10 +150,11 @@ database-functionality = false
 ```
 
 That exception was revalidated and expired when `P03-008` introduced the safe deterministic HDoc
-encoder. The active workspace metadata is now:
+encoder. `P03-009` expanded the same active semantic-critical scope with the whole-envelope
+validating decoder. The active workspace metadata is now:
 
 ```text
-status = "hdoc-encoder"
+status = "hdoc-codec"
 database-functionality = true
 ```
 
@@ -163,8 +164,8 @@ can explain its posture, but changing the current metadata back to the skeleton 
 workspace bootstrap and implementation contract. Maturity metadata cannot hide uncovered code:
 an active empty scope fails, while a nonempty scope always activates its thresholds.
 
-The current clean report proves measured HDoc product coverage. It records workspace maturity and
-database-functionality metadata alongside the executed test and source identities.
+The current clean report proves measured HDoc encoder/decoder coverage. It records workspace
+maturity and database-functionality metadata alongside the executed test and source identities.
 
 ## Report contract
 

@@ -635,7 +635,8 @@ Reading never silently renumbers, canonicalizes, repairs, or rewrites an old HDo
 | --- | --- | --- |
 | [`P03-006`](hdoc-v1-integrity.md) | CRC replay; BLAKE3 typed-content domain/framing and vectors | Table bytes, presentation/container/value ordering |
 | [`P03-007`](hdoc-v1-compression.md) | Registered deterministic compression and logical coordinates | Expanded section bytes and item meanings |
-| `P03-008`–`P03-011` | Safe writer/reader, owned/borrowed values, raw lookup | Accepted structure or fail-closed validation |
+| `P03-008`–`P03-009` (complete) | Safe writer and bounded validating reader | Accepted structure or fail-closed validation |
+| `P03-010`–`P03-011` | Owned/borrowed values and raw lookup | Complete validation before exposure |
 | `P03-013` | Feature-gated collection path dictionary/profile | Base document-local field IDs and self-containment |
 | `P03-015` | Feature/version reader-writer migration matrix | Existing IDs/flags/record meanings |
 | `P03-016`–`P03-019` | Complete golden/malformed, independent readers, property/fuzz suites | Structural vectors and rejection expectations |

@@ -30,11 +30,40 @@ coordinate model are fixed by the [compression registry](hdoc-v1-compression.md)
 documents complete the HDoc 1.0 byte grammar.
 
 Completion of the grammar alone was not an implementation or release-support claim. `P03-008` now
-implements the production writer; `P03-009` still owns the validating reader, and `P03-016` owns
-immutable supported golden files.
+implements the production writer and `P03-009` implements the bounded whole-envelope validating
+reader. `P03-010` still owns decoded values/views, and `P03-016` owns immutable supported golden
+files.
 Footer `hash_profile_id = 1` is the only assigned base integrity profile; zero remains permanently
 invalid. The exact envelopes in the integrity and compression registries are normative executable
 references until the immutable corpus is published.
+
+## Implemented P03-009 validating reader
+
+`helix_doc::decode(&[u8])` is the portable whole-envelope validation boundary. It performs these
+stages before returning success:
+
+1. recognize magic/version/features and prove total/canonical/footer bounds;
+2. verify CRC-32C over the exact stored bytes with the checksum slot zeroed;
+3. prove directory order, nonoverlap, alignment, zero padding, stored placement, and footer copies;
+4. derive canonical-logical coordinates, then decode each compressed section into a fresh,
+   zero-initialized, exact-size allocation after validating its header and complete block table;
+5. validate name, field, container, array, value, and payload grammars; reconstruct breadth-first
+   ownership/depth and bottom-up recursive field counts; and enforce `_id`/portable limits;
+6. recompress every eligible section and rebuild the entire envelope with the stored footer hash,
+   requiring byte-for-byte equality with the supplied stored form; and
+7. recompute the profile-1 typed-content hash over the independently validated logical tree and
+   compare it with the footer.
+
+Success returns `DecodedHDoc`, a borrowed wrapper exposing only the original validated bytes,
+content hash, canonical length, recursive field count, and compressed-section count. It does not
+expose partially validated tables or logical values. `P03-010` owns the later owned-value and
+borrowed-view APIs.
+
+Failures are redacted `DecodeError` values. Unsupported major/minor versions and required
+capabilities use stable `CAP_*` codes; malformed or noncanonical bytes use `DUR_CORRUPTION` plus a
+bounded `DecodeCheck` stage and byte offset. Errors never contain names, values, input fragments,
+or decompressed payloads. Unknown optional semantics are rejected until `P03-015` publishes an
+explicit preservation/negotiation matrix.
 
 ## Normative notation
 
@@ -538,9 +567,10 @@ change. Unassigned reserved bits/IDs are not free for local experimentation in c
 
 No valid HDoc fixture or persisted HDoc row existed at P03-002; its then-unassigned profile zero
 ensured that partial format could not accidentally become one. P03-006 assigned integrity profile
-1, P03-007 completed compression and the full byte grammar, and P03-008 added a production encoder
-without publishing or persisting supported data. Immutable support fixtures remain P03-016, so the
-format can still be superseded without stored-data migration before that fixture/data boundary.
+1, P03-007 completed compression and the full byte grammar, P03-008 added a production encoder, and
+P03-009 added a bounded validating reader without publishing or persisting supported data.
+Immutable support fixtures remain P03-016, so the format can still be superseded without
+stored-data migration before that fixture/data boundary.
 
 Once a nonzero hash profile and immutable HDoc 1.x vectors exist, changing this layout requires:
 

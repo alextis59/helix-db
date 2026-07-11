@@ -24,10 +24,11 @@ and compression cannot make a document larger, bypass the canonical 16 MiB limit
 content identity, or introduce dictionaries, network access, or user code during decoding.
 
 `P03-007` defined bytes and executable reference vectors without adding a production crate.
-`P03-008` has now installed fail-closed Rust dependency/advisory reporting and adopted the exact
-reviewed codec package and implemented the production writer. `P03-009` owns the production
-validating reader. `P03-016` owns immutable supported fixture files. Until those later tasks
-complete, the writer is implemented but the format is not a release-support claim.
+`P03-008` installed fail-closed Rust dependency/advisory reporting, adopted the exact reviewed
+codec package, and implemented the production writer. `P03-009` now implements the production
+bounded validating reader, including fresh exact-output decompression and exact canonical stream
+comparison. `P03-016` owns immutable supported fixture files. Until that later task completes, the
+codec is implemented but the format is not a release-support claim.
 
 The prose and machine registry are jointly normative. A disagreement is a specification defect
 that blocks `G03`; an implementation must not select whichever form is convenient.
@@ -391,7 +392,7 @@ Reading never silently recompresses, repairs, or rewrites an HDoc.
 | Task | Owns next | Cannot change from `P03-007` |
 | --- | --- | --- |
 | `P03-008` (complete) | Canonical writer, exact dependency adoption, advisory/license gates | Profile IDs, stream bytes, block/selection rules |
-| `P03-009` | Bounded validating reader and stable decompression diagnostics | Trust order, resource bounds, unknown-codec behavior |
+| `P03-009` (complete) | Bounded validating reader and stable decompression diagnostics | Trust order, resource bounds, unknown-codec behavior |
 | `P03-010`–`P03-012` | Owned/borrowed values, lookup, traversal | Whole-document validation and logical offsets |
 | `P03-015` | Extension-area negotiation and any registered extension compression rule | Four-base-section profile and existing IDs |
 | `P03-016`–`P03-019` | Immutable fixtures, independent reader, properties, fuzz/sanitizer replay | Registry vectors and rejection expectations |

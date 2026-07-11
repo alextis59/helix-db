@@ -9,7 +9,7 @@
     "default_branch": "main",
     "public_name_decision": "P16-016"
   },
-  "claim_boundary": "This contract documents foundation setup and validation; HelixDB now includes safe deterministic HDoc encoding, while a validating decoder, owned and borrowed document views, query, storage, durability, GPU execution, network service, compatibility, security, performance, and release functionality remain unimplemented.",
+  "claim_boundary": "This contract documents foundation setup and validation; HelixDB now includes safe deterministic HDoc encoding and whole-envelope validation, while owned and borrowed document values and views, query, storage, durability, GPU execution, network service, compatibility, security, performance, and release functionality remain unimplemented.",
   "tools": {
     "git": {
       "version_policy": "supported-system-release",
