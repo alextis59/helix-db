@@ -10,4 +10,4 @@ Unit tests remain beside their implementation where idiomatic. This root is rese
 - `integration/` owns cross-crate, cross-language, and multi-process behavior.
 - `toolchain/` owns build-profile/configuration verification that precedes feature suites.
 
-The versioned [`suites.json`](suites.json) manifest and [`run-suite.mjs`](run-suite.mjs) implement the [stable test command policy](../docs/quality/test-command-surface.md). Run `npm run test:commands` to verify the surface or `npm run test:all` to execute every active authority and reserved-state probe. Empty system-test directories remain explicit contracts and do not claim coverage.
+The versioned [`suites.json`](suites.json) manifest and [`run-suite.mjs`](run-suite.mjs) implement the [stable test command policy](../docs/quality/test-command-surface.md). Run `npm run test:commands` to verify the surface or `npm run test:all` to execute every active authority and reserved-state probe. The separate [product coverage gate](../docs/quality/code-coverage-policy.md) replays Rust library tests with compiler-matched instrumentation and does not turn empty system-test directories into coverage claims.

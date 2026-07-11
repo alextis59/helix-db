@@ -17,6 +17,7 @@ pub const INTERNAL_DEPENDENCIES: &[&str] = &[
     helix_storage::COMPONENT_NAME,
 ];
 
+// helix-coverage: exclude-start unit-tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -35,3 +36,4 @@ mod tests {
         );
     }
 }
+// helix-coverage: exclude-end unit-tests

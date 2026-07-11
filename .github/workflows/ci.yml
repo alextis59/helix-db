@@ -113,6 +113,9 @@ jobs:
           cargo check --frozen --workspace --all-targets --all-features
           cargo clippy --frozen --workspace --all-targets --all-features -- -D warnings
           cargo test --frozen --workspace --all-features --no-fail-fast
+      - name: Enforce Rust product coverage thresholds
+        if: matrix.id == 'linux-x64'
+        run: node tests/toolchain/check-rust-coverage.mjs run
       - name: Build warning-free documentation
         if: matrix.id == 'linux-x64'
         env:

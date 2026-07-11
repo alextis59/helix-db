@@ -1,9 +1,9 @@
 # Native, Wasm, Browser, Diagnostic, and Benchmark Build Profiles
 
 - Status: Accepted and executable toolchain profiles; no database/browser release claim
-- Last updated: 2026-07-10
+- Last updated: 2026-07-11
 - Owner: Runtime architecture owner
-- Plan item: `P02-005`
+- Plan items: `P02-005`; coverage reporting completed by `P02-013`
 - Governing requirements: `INV-003`, `INV-004`, `INV-007`, `PLAT-001`, `PLAT-002`, `PLAT-003`, `CORE-001`, `CORE-003`, `QUAL-001`
 - Governing gate: `G02`
 - Rust toolchain: [Rust toolchain policy](rust-toolchain-policy.md)
@@ -23,7 +23,7 @@ The [Cargo profile reference](https://doc.rust-lang.org/cargo/reference/profiles
 | Browser Wasm | Cargo `browser` | `wasm32-unknown-unknown`; portable `helix-core` closure | Size-first optimization, fat LTO, abort panic, stripped symbols; P02-010 validates/instantiates the core module | Not a JavaScript binding or database behavior claim |
 | Browser JavaScript | Vite production config | Internal standards-based smoke fixture | Relative base, `custom` app, ES2022, assets kept external, hidden maps, Oxc minification, public-env allow-prefix | Not a user-facing example or browser support claim |
 | AddressSanitizer | Cargo `sanitizer` | `x86_64-unknown-linux-gnuasan`; workspace libraries/all features | Optimization 1, full debug/assertions/overflow checks, one codegen unit, fully instrumented distributed standard library | Not portable to unlisted hosts; not Thread/MemorySanitizer |
-| Coverage | Cargo `coverage` plus exact stable rustflag | Host; workspace libraries/all features | No optimization, full debug/assertions/overflow checks, one codegen unit, `-C instrument-coverage`, unique raw profiles | Raw instrumentation only; no report, exclusion, or threshold claim |
+| Coverage | Cargo `coverage` plus exact stable rustflag and compiler-matched LLVM reporting | Linux x64; workspace libraries/all features | No optimization, full debug/assertions/overflow checks, one codegen unit, `-C instrument-coverage`, unique raw profiles, explicit product/test classification, semantic/recovery thresholds | Coverage is reachability evidence, not semantic or recovery correctness proof |
 | Benchmark | Cargo `bench` | Host; workspace/all targets/features | Same optimization/LTO/codegen/overflow posture as native release, with line tables | Build readiness only; no workload or performance result |
 
 Release and benchmark builds retain line information and native symbols so later evidence can be symbolized. Packaging may split/strip symbols only while retaining a matching debug artifact and digest. Integer overflow checking remains enabled in optimized profiles to avoid silently changing observable failure behavior between debug and optimized builds.
@@ -46,7 +46,9 @@ All Cargo invocations are frozen and offline. The runner accepts no passthrough 
 
 The sanitizer lane deliberately supports only x86_64 Linux. Rust's [ASan target documentation](https://doc.rust-lang.org/nightly/rustc/platform-support/x86_64-unknown-linux-gnuasan.html) says this target ships an instrumented standard library through rustup and avoids nightly `build-std`. The more general [unstable sanitizer documentation](https://doc.rust-lang.org/beta/unstable-book/compiler-flags/sanitizer.html) remains relevant to future targets and explains why partial instrumentation can miss defects; no unpinned `+nightly` fallback is permitted.
 
-The coverage runner rejects ambient `RUSTFLAGS`/`CARGO_ENCODED_RUSTFLAGS`, sets exactly `-C instrument-coverage`, gives every test process a `%p`/`%m` raw-profile path, and fails if no `.profraw` file appears. The [rustc coverage documentation](https://doc.rust-lang.org/beta/rustc/instrument-coverage.html) defines the stable compiler flag, raw profile behavior, and unique filename patterns. Merging/reporting, source exclusions, and minimum thresholds remain `P02-013`; raw profiles alone cannot close a coverage requirement.
+The raw coverage runner rejects ambient `RUSTFLAGS`/`CARGO_ENCODED_RUSTFLAGS`, sets exactly `-C instrument-coverage`, gives every test process a `%p`/`%m` raw-profile path, and fails if no `.profraw` file appears. The [rustc coverage documentation](https://doc.rust-lang.org/beta/rustc/instrument-coverage.html) defines the stable compiler flag, raw profile behavior, unique filename patterns, and compiler-matched LLVM report flow.
+
+`P02-013` adds the separate [product coverage policy](../quality/code-coverage-policy.md). Its bounded runner builds the same profile, executes every discovered library test object, merges profiles with the pinned toolchain's `llvm-profdata`, exports with its `llvm-cov`, excludes only explicitly delimited test code, and enforces workspace plus semantic/recovery-critical thresholds. Raw-profile success alone still cannot close a coverage requirement.
 
 ## Browser configuration boundary
 
@@ -72,7 +74,7 @@ corepack npm run toolchain:browser-profile
 
 ## Artifact and reproducibility rules
 
-- Cargo profile output stays under ignored `target/`; Vite output stays under ignored `dist/`.
+- Cargo profile output stays under ignored `target/`; Vite output stays under ignored `dist/`; the deterministic coverage summary stays under ignored `dist/coverage/`.
 - Coverage `.profraw`/`.profdata`, source maps, sanitizer logs, and benchmark output are generated artifacts and are not committed casually.
 - Evidence promotes only compact manifests/reports or immutable external hashes according to the [evidence guide](../../evidence/README.md).
 - Wasm and browser artifacts are never relabeled as components/bundles until the appropriate validator has run.

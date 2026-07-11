@@ -16,6 +16,7 @@ pub const INTERNAL_DEPENDENCIES: &[&str] = &[helix_core::COMPONENT_NAME];
 #[cfg(feature = "gpu")]
 pub const OPTIONAL_GPU_DEPENDENCY: &str = helix_gpu::COMPONENT_NAME;
 
+// helix-coverage: exclude-start unit-tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -32,3 +33,4 @@ mod tests {
         assert_eq!(OPTIONAL_GPU_DEPENDENCY, "helix-gpu");
     }
 }
+// helix-coverage: exclude-end unit-tests

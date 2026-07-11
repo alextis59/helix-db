@@ -1,7 +1,7 @@
 # Stable Test Command Surface
 
 - Status: Accepted bootstrap command contract; feature suites remain maturity-labeled
-- Last updated: 2026-07-10
+- Last updated: 2026-07-11
 - Owner: Quality and release owner
 - Plan item: `P02-007`
 - Governing gate: `G02`
@@ -34,6 +34,8 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 The common runner invokes fixed program/argument arrays without a shell. Cargo commands are frozen/offline; suite scripts never install a dependency, browser binary, container image, or toolchain. A command may read existing cached tools selected by the pinned Rust and npm policies, but mutable setup remains an explicit bootstrap or CI responsibility.
 
 The unit command selects Rust library targets so integration, examples, binaries, and doctests cannot drift into its count accidentally. JavaScript uses Vitest's explicit empty-suite switch only while the manifest records zero files. The conformance command is offline and deterministic: it validates committed MongoDB observations but does not start MongoDB. The separately retained Phase 1 live differential remains an evidence/gate workflow until a later differential command policy is accepted.
+
+The [`P02-013` product coverage command](code-coverage-policy.md) is a quality gate over the same Rust library tests, not a ninth feature-suite alias. It recompiles with exact instrumentation, excludes test-only source ranges from the denominator, and enforces product/critical thresholds. `test:unit` remains the stable behavior command; `coverage:check` remains the bounded reporting command.
 
 The stable browser command uses Playwright list mode. It does not install or execute Chromium, Firefox, or WebKit; explicit `browser:install`, `browser:smoke`, and CI commands own that network/platform boundary under the [P02-010 validation contract](../architecture/wasm-browser-smoke-validation.md). The benchmark command uses the accepted `bench` compilation profile; it does not time code, emit a report, compare machines, or create a performance claim.
 

@@ -12,10 +12,12 @@ This directory contains bounded verification entry points for foundation build p
 - `check-ci-matrix.mjs` validates gating/nightly lanes, immutable action pins, workflow security, emitted matrices, Playwright projects, and explicit exclusions.
 - `emit-ci-matrix.mjs` emits compact trusted `fromJSON` matrices for gating or nightly workflow contract jobs.
 - `check-ci-runtime.mjs` rejects a provisioned runner whose OS, architecture, Node version, or process identity differs from its matrix entry.
+- `check-rust-coverage.mjs` validates or executes the compiler-matched LLVM coverage pipeline, removes only reviewed test-code ranges, and enforces workspace/semantic/recovery thresholds.
+- `rust-coverage-policy.json` fixes the source inventory, exclusions, tool identities, report schema, threshold groups, execution bounds, and expiring boundary-skeleton exception.
 - `install-wasm-tools.mjs` downloads or reuses only the official hash-pinned Linux x64 component validator and verifies archive, inventory, executable, and version identities.
 - `check-wasm-artifacts.mjs` builds and validates the WASIp2 component and browser core-module forms and emits deterministic ignored reports.
 - `build-browser-smoke.mjs` checks the exact four-file Vite output and byte identity of its Wasm asset.
 - `run-browser-smoke.mjs` executes the built bundle in one selected engine or all three pinned engines.
 - `check-wgsl-fixtures.mjs` validates the strict trusted-source manifest without a browser or parses, validates, and creates compute pipelines for every fixture through pinned Chromium Dawn/SwiftShader.
 
-These checks prove toolchain configuration, artifact plumbing, and compile-only WGSL acceptance/rejection only. They do not dispatch a shader or prove GPU correctness/support. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; user-facing browser examples and product-host behavior remain `P02-016`/`P11-*` work.
+These checks prove toolchain configuration, artifact plumbing, compile-only WGSL acceptance/rejection, and an armed product-coverage gate only. The current coverage denominator is honestly empty after test-only exclusions because the Rust crates remain boundary skeletons; it is not a 100% product-coverage claim. The checks do not dispatch a shader or prove GPU correctness/support. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; user-facing browser examples and product-host behavior remain `P02-016`/`P11-*` work.

@@ -1,9 +1,9 @@
 # Rust Toolchain, MSRV, Components, and Wasm Targets
 
 - Status: Accepted toolchain baseline
-- Last updated: 2026-07-10
+- Last updated: 2026-07-11
 - Owner: Runtime architecture owner
-- Plan item: `P02-002`
+- Plan items: `P02-002`; compiler-matched coverage tools added by `P02-013`
 - Governing requirements: `PLAT-001`, `PLAT-002`, `PLAT-003`, `INV-004`, `INV-007`, `CORE-001`
 - Governing gate: `G02`; WASIp3 production promotion remains required before `G04`
 - Workspace boundary: [Rust workspace and initial crate boundaries](workspace-boundaries.md)
@@ -35,10 +35,11 @@ The toolchain file uses rustup's `minimal` profile, which supplies `rustc`, the 
 | `clippy` | Version-matched Rust lint engine | `cargo clippy --workspace --all-targets --all-features` |
 | `rust-docs` | Offline standard-library/tool documentation | `rustup doc --path` |
 | `rust-src` | Version-matched standard-library source for tooling and future controlled `build-std` experiments | `rustup component list --installed` |
+| `llvm-tools` | Compiler-matched `llvm-profdata` and `llvm-cov` for the bounded Linux x64 product coverage gate | `corepack npm run coverage:check` |
 
 Rustdoc is shipped with `rustc`; repository documentation builds use `cargo doc` with `RUSTDOCFLAGS="-D warnings"`. The [rustup component documentation](https://rust-lang.github.io/rustup/concepts/components.html) defines these component roles, while the [profile documentation](https://rust-lang.github.io/rustup/concepts/profiles.html) confirms the minimal profile's small compiler/Cargo baseline.
 
-`rust-analyzer`, Miri, LLVM coverage reporting tools, generic nightly sanitizer runtimes, dependency-policy tools, and external documentation generators are not P02-002 requirements. `P02-005` adds the stable Linux ASan standard-library target described below; later tasks select reporting and additional diagnostic tools only when their CI/test/coverage purpose and versioning policy are defined.
+`rust-analyzer`, Miri, generic nightly sanitizer runtimes, dependency-policy tools, and external documentation generators are not P02-002 requirements. `P02-005` adds the stable Linux ASan standard-library target described below. `P02-013` selects only the `llvm-tools` binaries shipped for this exact toolchain and binds their versions/hashes in the [coverage report](../quality/code-coverage-policy.md); it does not add a floating Cargo plugin or ambient LLVM.
 
 ## Formatter baseline
 
@@ -113,6 +114,8 @@ cargo metadata --frozen --format-version 1 --no-deps
 cargo fmt --all -- --check
 cargo clippy --frozen --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS="-D warnings" cargo doc --frozen --workspace --no-deps --all-features
+corepack npm run coverage:policy
+corepack npm run coverage:check
 cargo check --frozen --target wasm32-unknown-unknown -p helix-core
 cargo check --frozen --target wasm32-wasip2 -p helix-core
 corepack npm run wasm:install-validator

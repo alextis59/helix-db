@@ -56,7 +56,11 @@ same(
   'matrix fields',
 );
 assert(matrix.schema === 'helix.ci-matrix/2', 'CI matrix schema mismatch');
-same(matrix.plan_items, ['P02-009', 'P02-010', 'P02-011', 'P02-012'], 'CI matrix task history');
+same(
+  matrix.plan_items,
+  ['P02-009', 'P02-010', 'P02-011', 'P02-012', 'P02-013'],
+  'CI matrix task history',
+);
 same(
   matrix.actions,
   {
@@ -203,6 +207,8 @@ same(
   {
     'ci:browser-smoke': packageJson.scripts['ci:browser-smoke'],
     'ci:check': packageJson.scripts['ci:check'],
+    'coverage:check': packageJson.scripts['coverage:check'],
+    'coverage:policy': packageJson.scripts['coverage:policy'],
     'dependencies:check': packageJson.scripts['dependencies:check'],
     'dependencies:licenses': packageJson.scripts['dependencies:licenses'],
     'dependencies:report': packageJson.scripts['dependencies:report'],
@@ -214,6 +220,8 @@ same(
   {
     'ci:browser-smoke': 'node tests/toolchain/run-browser-smoke.mjs',
     'ci:check': 'node tests/toolchain/check-ci-matrix.mjs',
+    'coverage:check': 'node tests/toolchain/check-rust-coverage.mjs run',
+    'coverage:policy': 'node tests/toolchain/check-rust-coverage.mjs policy',
     'dependencies:check': 'node tests/toolchain/check-dependency-reports.mjs offline',
     'dependencies:licenses': 'node tests/toolchain/check-dependency-reports.mjs licenses',
     'dependencies:report': 'node tests/toolchain/check-dependency-reports.mjs live',
@@ -223,6 +231,20 @@ same(
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
   'CI npm scripts',
+);
+assert(
+  runNode(['tests/toolchain/check-rust-coverage.mjs', 'policy']).includes(
+    'PASS Rust coverage policy: 3 threshold groups',
+  ),
+  'Rust coverage policy did not pass',
+);
+expectFailure(
+  ['tests/toolchain/check-rust-coverage.mjs'],
+  'usage: node tests/toolchain/check-rust-coverage.mjs <policy|run>',
+);
+expectFailure(
+  ['tests/toolchain/check-rust-coverage.mjs', 'unknown'],
+  'usage: node tests/toolchain/check-rust-coverage.mjs <policy|run>',
 );
 assert(
   runNode(['tests/toolchain/check-dependency-reports.mjs', 'offline']).includes(
@@ -341,6 +363,7 @@ for (const marker of [
   `cargo clippy --frozen --target ${githubExpression('matrix.target')} --package helix-core -- -D warnings`,
   `node tests/toolchain/check-wasm-artifacts.mjs ${githubExpression('matrix.artifact')}`,
   'corepack npm run dependencies:check',
+  'node tests/toolchain/check-rust-coverage.mjs run',
   "if: matrix.node == '22.23.1'",
   'corepack npm run dependencies:report',
   `playwright install --with-deps ${githubExpression('matrix.engine')}`,
@@ -370,6 +393,7 @@ for (const marker of [
   'wasm-tools',
   'SwiftShader',
   'registry signatures',
+  'source-based coverage',
   'https://docs.github.com/en/actions/reference/runners/github-hosted-runners',
   'https://playwright.dev/docs/ci',
   'does not prove',
@@ -391,5 +415,8 @@ process.stdout.write(
 );
 process.stdout.write(
   'PASS dependency reports: lock/license/duplicate inventory plus Node 22 live observation\n',
+);
+process.stdout.write(
+  'PASS Rust coverage: compiler-matched LLVM report plus semantic/recovery thresholds\n',
 );
 process.stdout.write('PASS matrix rejection: unknown emitter/runtime lanes fail\n');

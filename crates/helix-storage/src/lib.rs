@@ -11,6 +11,7 @@ pub const MATURITY: &str = "boundary-skeleton";
 /// Internal dependency boundaries exercised by this skeleton.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[helix_doc::COMPONENT_NAME];
 
+// helix-coverage: exclude-start unit-tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -21,3 +22,4 @@ mod tests {
         assert_eq!(INTERNAL_DEPENDENCIES, &["helix-doc"]);
     }
 }
+// helix-coverage: exclude-end unit-tests

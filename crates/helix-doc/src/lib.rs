@@ -11,6 +11,7 @@ pub const MATURITY: &str = "boundary-skeleton";
 /// Internal `HelixDB` crates this boundary is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
 
+// helix-coverage: exclude-start unit-tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -22,3 +23,4 @@ mod tests {
         assert!(INTERNAL_DEPENDENCIES.is_empty());
     }
 }
+// helix-coverage: exclude-end unit-tests

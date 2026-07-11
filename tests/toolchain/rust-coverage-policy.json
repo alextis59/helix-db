@@ -1,0 +1,100 @@
+{
+  "schema": "helix.rust-coverage-policy/1",
+  "plan_item": "P02-013",
+  "execution": {
+    "ci_lane": "linux-x64",
+    "platform": "linux",
+    "architecture": "x64",
+    "cargo_arguments": [
+      "test",
+      "--frozen",
+      "--profile",
+      "coverage",
+      "--workspace",
+      "--all-features",
+      "--lib",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "rustflags": "-C instrument-coverage",
+    "minimum_test_binaries": 8,
+    "maximum_test_binaries": 128,
+    "minimum_tests": 9,
+    "maximum_tests": 100000,
+    "minimum_raw_profiles": 8,
+    "maximum_raw_profiles": 128
+  },
+  "toolchain": {
+    "rust_release": "1.96.1",
+    "llvm_release": "22.1.2",
+    "rustup_component": "llvm-tools"
+  },
+  "source": {
+    "include_regex": "^crates/[^/]+/src/.+\\.rs$",
+    "excluded_path_rules": [
+      {
+        "regex": "^crates/[^/]+/(?:tests|benches|examples)/.+\\.rs$",
+        "reason": "test-benchmark-example-code"
+      }
+    ],
+    "inline_exclusion": {
+      "start_marker": "// helix-coverage: exclude-start unit-tests",
+      "end_marker": "// helix-coverage: exclude-end unit-tests",
+      "reason": "inline-unit-test-code",
+      "required_attribute": "#[cfg(test)]",
+      "required_module": "mod tests {"
+    }
+  },
+  "empty_product_scope": {
+    "allowed_status": "boundary-skeleton",
+    "requires_database_functionality": false,
+    "revalidate_by": "P03-008",
+    "reason": "Phase 2 has crate-boundary constants and test harnesses but no executable database product logic; the first instrumented product region activates every applicable threshold"
+  },
+  "groups": [
+    {
+      "id": "workspace-product",
+      "description": "All workspace product Rust sources after explicit test-code exclusions",
+      "include_regex": "^crates/[^/]+/src/",
+      "minimum_source_files": 8,
+      "enforce_per_file": false,
+      "thresholds_basis_points": {
+        "branches": 8500,
+        "functions": 9000,
+        "lines": 9000,
+        "regions": 8500
+      }
+    },
+    {
+      "id": "semantic-critical",
+      "description": "Deterministic document, query, and portable-core semantics",
+      "include_regex": "^crates/(?:helix-core|helix-doc|helix-query)/src/",
+      "minimum_source_files": 3,
+      "enforce_per_file": true,
+      "thresholds_basis_points": {
+        "branches": 9500,
+        "functions": 10000,
+        "lines": 10000,
+        "regions": 9500
+      }
+    },
+    {
+      "id": "recovery-critical",
+      "description": "Deterministic storage/recovery and portable-core orchestration",
+      "include_regex": "^crates/(?:helix-core|helix-storage)/src/",
+      "minimum_source_files": 2,
+      "enforce_per_file": true,
+      "thresholds_basis_points": {
+        "branches": 9500,
+        "functions": 10000,
+        "lines": 10000,
+        "regions": 9500
+      }
+    }
+  ],
+  "report": {
+    "schema": "helix.rust-coverage-report/1",
+    "output": "dist/coverage/rust-coverage.json",
+    "maximum_bytes": 2097152
+  }
+}

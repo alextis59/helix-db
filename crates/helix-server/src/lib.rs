@@ -11,6 +11,7 @@ pub const MATURITY: &str = "boundary-skeleton";
 /// The server is a leaf over the native host boundary.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[helix_host_native::COMPONENT_NAME];
 
+// helix-coverage: exclude-start unit-tests
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -21,3 +22,4 @@ mod tests {
         assert_eq!(INTERNAL_DEPENDENCIES, &["helix-host-native"]);
     }
 }
+// helix-coverage: exclude-end unit-tests

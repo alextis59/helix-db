@@ -73,6 +73,8 @@ component-validator = ".github/ci/wasm-tools.json"
 browser-smoke-root = "tests/browser/smoke-app"
 sanitizer-target = "x86_64-unknown-linux-gnuasan"
 coverage-rustflags = "-C instrument-coverage"
+coverage-report-contract = "P02-013"
+coverage-policy = "tests/toolchain/rust-coverage-policy.json"
 browser-js-target = "es2022"
 
 [profile.dev]

@@ -35,6 +35,8 @@
     "browser:smoke": "node tests/toolchain/run-browser-smoke.mjs all",
     "ci:browser-smoke": "node tests/toolchain/run-browser-smoke.mjs",
     "ci:check": "node tests/toolchain/check-ci-matrix.mjs",
+    "coverage:check": "node tests/toolchain/check-rust-coverage.mjs run",
+    "coverage:policy": "node tests/toolchain/check-rust-coverage.mjs policy",
     "dependencies:check": "node tests/toolchain/check-dependency-reports.mjs offline",
     "dependencies:licenses": "node tests/toolchain/check-dependency-reports.mjs licenses",
     "dependencies:report": "node tests/toolchain/check-dependency-reports.mjs live",
