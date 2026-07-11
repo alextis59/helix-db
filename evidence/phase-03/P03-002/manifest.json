@@ -1,0 +1,164 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-002",
+  "requirements": ["CORE-001", "DATA-001", "INV-001", "INV-007", "SEC-002"],
+  "accepted_adrs": ["0012"],
+  "base_commit": "057fdd4559a4fb369e493671a575049a9a013c2e",
+  "source_commits": ["6b89d300d2cf5f0618219c4894b8db100fbb4949"],
+  "commit": "6b89d300d2cf5f0618219c4894b8db100fbb4949",
+  "source_tree": "fc7df09e0235332488f75ab0748c00f676cb9a6c",
+  "recorded_at": "2026-07-11T08:20:25.428Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": ["22.23.1", "24.18.0"]
+    },
+    "network_required": false,
+    "hosted_workflow_execution": false
+  },
+  "commands": [
+    {
+      "command": "machine envelope partition/registry/structural-skeleton validation",
+      "exit_code": 0
+    },
+    {
+      "command": "node compatibility/v1/generate-matrix.mjs --check && node compatibility/v1/check-matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run fixtures:check",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:javascript",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run test:all",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 22.23.1 and 24.18.0 evidence verifier replay with 35 isolated mutation canaries",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "source_artifacts": 10,
+    "format_document_lines": 578,
+    "format_document_headings": 31,
+    "layout_registry_lines": 498,
+    "layout_registry_bytes": 11083,
+    "header_bytes": 64,
+    "header_fields": 16,
+    "directory_entry_bytes": 32,
+    "directory_fields": 11,
+    "footer_bytes": 64,
+    "footer_fields": 10,
+    "document_flags": 5,
+    "required_feature_bits": 3,
+    "optional_feature_bits": 1,
+    "section_flags": 4,
+    "section_kinds": 5,
+    "canonical_rules": 12,
+    "base_header_bytes": 192,
+    "structural_skeleton_bytes": 256,
+    "structural_skeleton_crc32c": "4eb20944",
+    "structural_skeleton_sha256": "8507b3b355ff4786e4eafac55cfdfd913e2f9f4077171eb51512f6f5ebcaf39f",
+    "mutation_canaries": 35,
+    "markdown_files": 165,
+    "local_links": 1137,
+    "node_lanes": 2,
+    "native_tests": 9,
+    "semantic_fixtures": 17,
+    "semantic_steps": 313,
+    "oracle_assertions": 382,
+    "compatibility_rows": 263,
+    "mongodb_cases": 16,
+    "declared_browser_tests": 3,
+    "aggregate_suites": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "source_artifacts": [
+    {
+      "status": "M",
+      "path": "Specifications.md",
+      "media_type": "text/markdown",
+      "bytes": 76708,
+      "sha256": "8cdb2e6b7bf8fa42d2c124a383ac7f0de209d9fc9f336b2a1ed522a2d6915361"
+    },
+    {
+      "status": "M",
+      "path": "Study.md",
+      "media_type": "text/markdown",
+      "bytes": 62340,
+      "sha256": "04d150dc368dd72edacdcad59f9b6dc65f175f9b03d3abc531772620015cd644"
+    },
+    {
+      "status": "M",
+      "path": "compatibility/v1/matrix-v1.json",
+      "media_type": "application/json",
+      "bytes": 217132,
+      "sha256": "648a1356431176c354a62bbbdca0dc82d963a85c60a29f484e72de41fb0c1f14"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md",
+      "media_type": "text/markdown",
+      "bytes": 9712,
+      "sha256": "528433a197607a0af484d162d2dc510d5719a0a356cdb39e7ac641eb31bf8be4"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/0012-use-bounded-little-endian-hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 31818,
+      "sha256": "170871ff0ca2215044d1f0fcb2f68205f5d319a830f91dbdc06cc1f8461ddc38"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "media_type": "text/markdown",
+      "bytes": 103065,
+      "sha256": "fb073169346e41e68671f4953580ede7c3f5b508245974129b4f6e20027e407d"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1963,
+      "sha256": "2e263a94576caafea47e6375617d53549faf1551db520bc1734d4c6e148d7f9b"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-envelope.json",
+      "media_type": "application/json",
+      "bytes": 11083,
+      "sha256": "9aea3bfb92569f10ec48896423711e3fff4ca6be0aae30153ecf7b7081a2c4ae"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 30447,
+      "sha256": "7e2014a43020e857abaf63fce6a1e22192c546bc1223ca3360dfd4f0dae2539d"
+    },
+    {
+      "status": "M",
+      "path": "fixtures/generation/report-v1.json",
+      "media_type": "application/json",
+      "bytes": 2547,
+      "sha256": "382067a7de913d13bc886ed68cc7d9a41d7b1bad68fe5a64184b10ac431aca9d"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-03/P03-002/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 34871,
+    "sha256": "9b91ee1629430a54d623481a87f815c211dd66cfb5a1cefcfda90005f4eef5bd"
+  },
+  "verdict": "pass"
+}
