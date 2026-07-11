@@ -1,0 +1,453 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-008",
+  "verdict": "pass",
+  "requirements": [
+    "CORE-001",
+    "DATA-001",
+    "DATA-002",
+    "INV-001",
+    "INV-007",
+    "SEC-002"
+  ],
+  "accepted_adrs": [
+    "0012"
+  ],
+  "base_commit": "e2c4ca4a8a3ebe185dd27c67eff40fb65b88b4b7",
+  "source_commits": [
+    "6d4ea39f603c93467874371f995fefa71b5a585a",
+    "807e3556a02fe8d5073f65fb60d8c6c86c30e71b"
+  ],
+  "commit": "807e3556a02fe8d5073f65fb60d8c6c86c30e71b",
+  "source_tree": "877494864e6a6e265afaa7643c316414395aba9d",
+  "recorded_at": "2026-07-11T13:15:16Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": [
+        "22.23.1",
+        "24.18.0"
+      ],
+      "rustc": "1.96.1",
+      "cargo": "1.96.1",
+      "cargo_audit": "0.22.2",
+      "rustsec_database": "e20296422feea6aab5cd36bf993c68d22e4aa24f",
+      "blake3": "1.8.5",
+      "crc": "3.4.0",
+      "lz4_flex": "0.13.1"
+    },
+    "network_required_for_replay": false,
+    "live_observation_network_used": true,
+    "hosted_workflow_execution": false
+  },
+  "commands": [
+    {
+      "command": "cargo fmt --all -- --check && cargo check/clippy/test/doc --frozen --workspace --all-features",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo clippy --frozen --target wasm32-unknown-unknown/wasm32-wasip2 --package helix-doc --all-features -- -D warnings",
+      "exit_code": 0
+    },
+    {
+      "command": "node tests/toolchain/run-build-profile.mjs wasm && node tests/toolchain/run-build-profile.mjs browser",
+      "exit_code": 0
+    },
+    {
+      "command": "node tests/toolchain/run-build-profile.mjs sanitizer",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run coverage:check",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:javascript && corepack npm run policy:dependencies",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run rust:audit:test && corepack npm run rust:dependencies:test",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run dependencies:check && corepack npm run dependencies:report",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run fixtures:check && node compatibility/v1/check-matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run ci:check && corepack npm run bootstrap:check && corepack npm run test:commands",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm test",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 22.23.1 and 24.18.0 immutable P03-008 evidence replay",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "source_artifacts": 50,
+    "source_commits": 2,
+    "retained_reports": 3,
+    "helix_doc_tests": 10,
+    "workspace_tests": 18,
+    "value_type_tags": 16,
+    "payload_vectors": 41,
+    "payload_rejections": 17,
+    "typed_node_vectors": 23,
+    "structural_examples": 4,
+    "compression_block_vectors": 7,
+    "compression_section_vectors": 5,
+    "complete_hdoc_vectors": 4,
+    "compression_negative_classes": 18,
+    "exact_document_boundary_bytes": 16777216,
+    "coverage_functions_basis_points": 10000,
+    "coverage_lines_basis_points": 10000,
+    "coverage_regions_basis_points": 9511,
+    "rust_workspace_packages": 8,
+    "rust_external_packages": 13,
+    "rust_audited_packages": 21,
+    "rust_scanner_packages": 374,
+    "npm_vulnerabilities": 0,
+    "rust_vulnerabilities": 0,
+    "rust_warnings": 0,
+    "npm_verified_signatures": 52,
+    "npm_slsa_attestations": 27,
+    "mutation_canaries": 12,
+    "node_lanes": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "source_artifacts": [
+    {
+      "status": "A",
+      "path": ".github/ci/cargo-audit-0.22.2.lock",
+      "bytes": 93912,
+      "sha256": "a042bb900a58eea76c7d07847ce6a1f62aefdf9a41c0cdce6723c22c2afb414c"
+    },
+    {
+      "status": "M",
+      "path": ".github/ci/matrix.json",
+      "bytes": 5324,
+      "sha256": "758200eccd61073d4bb44c979c3341cc49b39d50364fd9914b5ae9dae36e57a7"
+    },
+    {
+      "status": "A",
+      "path": ".github/ci/rust-license-inventory.json",
+      "bytes": 5812,
+      "sha256": "201775bd572c08a5f1988b130e8a11145c872c16c18dd4ba5dd4d36158c61497"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/ci-nightly.yml",
+      "bytes": 2375,
+      "sha256": "1ce688737fd4545b32fbda21de14de0cb55f0b8558303d04d340c3482a10fe5d"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/ci.yml",
+      "bytes": 10736,
+      "sha256": "81b6fa8bd3abba32a10f4f188c9b13d3ce8e22344a86e292e641350f288ea9cd"
+    },
+    {
+      "status": "M",
+      "path": "Cargo.lock",
+      "bytes": 3646,
+      "sha256": "731783458dbef335e830d369b4220bd598ea1f1d6595209b8d1898801c8c8381"
+    },
+    {
+      "status": "M",
+      "path": "Cargo.toml",
+      "bytes": 4252,
+      "sha256": "c2b42d8b1764ce0ab243efdcc987ab54a1f075589f764c6259607ff332b6ca6e"
+    },
+    {
+      "status": "M",
+      "path": "README.md",
+      "bytes": 4874,
+      "sha256": "6982104a208b33b770639d9bc79ccd85b34606c36fb14598a307596e45ccff5b"
+    },
+    {
+      "status": "M",
+      "path": "Specifications.md",
+      "bytes": 81703,
+      "sha256": "62340a3531fb0f74038e1a481b0a4634b6e0337457680cd5c66e499c4681dcd1"
+    },
+    {
+      "status": "M",
+      "path": "Study.md",
+      "bytes": 68115,
+      "sha256": "4613c4015e135320d40f3ff21bee98b7cac4697ee0564684943cb0c261ed104a"
+    },
+    {
+      "status": "M",
+      "path": "THIRD_PARTY_NOTICES.md",
+      "bytes": 8631,
+      "sha256": "3d7b80d997c4bffff7dd951cac558fa592fb2623870c307d13ffddd611933bc3"
+    },
+    {
+      "status": "M",
+      "path": "compatibility/v1/matrix-v1.json",
+      "bytes": 217132,
+      "sha256": "6928a09a830bbe3a77a9a43475e62cabd5f6e3e78c261b86ac03c78c2a108bdc"
+    },
+    {
+      "status": "M",
+      "path": "crates/helix-doc/Cargo.toml",
+      "bytes": 469,
+      "sha256": "8e23b6feff83dbb7af862d13b7414fe65beee8a0d97da41e16bdbf9f748d699f"
+    },
+    {
+      "status": "M",
+      "path": "crates/helix-doc/src/lib.rs",
+      "bytes": 104982,
+      "sha256": "64de521e3612265836d92a3a7c8bf2e39a3865381ae3bca3f1bc656a939a9224"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/0012-use-bounded-little-endian-hdoc-v1.md",
+      "bytes": 33228,
+      "sha256": "b10ec4d698270a3ab6d31b7a59fa672f90e00cb0537db795ce492d6a9300797e"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/code-quality-and-dependency-policy.md",
+      "bytes": 9646,
+      "sha256": "d0c9a8db0bf0b403cab1c74301da501feddf130a5be015f3e0601824fc4229d2"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/continuous-integration.md",
+      "bytes": 13735,
+      "sha256": "1de15334bb4e76de188ecfe62e66bfa4d8afaef5501e38369e3607054e9494b1"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/dependency-security-reporting.md",
+      "bytes": 12056,
+      "sha256": "b211382a7a3da08f5cb1d6bc3ef028d5891f1bff702b0d864244706e8f0f846e"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/workspace-boundaries.md",
+      "bytes": 6524,
+      "sha256": "6921a092bf0c5da6524098039413c0c2a6c32df19de71905987376eaab650ab3"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "bytes": 103065,
+      "sha256": "38bee3fa895118ccebb1c32308e7fc3adf932fe35bfba0b9de27ba59590f5a8e"
+    },
+    {
+      "status": "M",
+      "path": "docs/development/bootstrap.json",
+      "bytes": 9196,
+      "sha256": "2c47fc6805a399fb0108ad40d426a70625d7383591c19d76dfb4b0ea3627b224"
+    },
+    {
+      "status": "M",
+      "path": "docs/development/bootstrap.md",
+      "bytes": 25755,
+      "sha256": "b891b3c121c8af0bd110d9b6a9b12579f34b1811c4cf5b81c5c332d9dd024299"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-compression.md",
+      "bytes": 23991,
+      "sha256": "7f21b1dfbdd99520fcc67535cf31ac8c56a5b9dea360b49facad26820bc20a67"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-integrity.md",
+      "bytes": 23535,
+      "sha256": "c10678ca3ff6cc97cd3666908446ca4f02ea627102e69095c53393bd0b0ad859"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1.md",
+      "bytes": 32848,
+      "sha256": "90e8ee99d99704eceb01469d52c941c15a8025e12f9144fc4634ac9fc27449ba"
+    },
+    {
+      "status": "M",
+      "path": "docs/governance/decision-owners.md",
+      "bytes": 6100,
+      "sha256": "ac7b3f16df806ffc4404a95039ea0e9e777c0dd309ac371be54c1c3d9d72a007"
+    },
+    {
+      "status": "M",
+      "path": "docs/governance/licensing.md",
+      "bytes": 9261,
+      "sha256": "ba242209944720cb18a7b453f227d5756ad66562aa290fea4184f994641352cc"
+    },
+    {
+      "status": "M",
+      "path": "docs/quality/code-coverage-policy.md",
+      "bytes": 12469,
+      "sha256": "1fd10ac61b3549775821ae6839cbb7b70082e85056ad94f5829851edb91c5b4c"
+    },
+    {
+      "status": "M",
+      "path": "docs/quality/test-command-surface.md",
+      "bytes": 7273,
+      "sha256": "f4db6f775ca9b7449cec4db1f18dda19eb1f39e26fda4a10bc82f807eec096cd"
+    },
+    {
+      "status": "M",
+      "path": "fixtures/generation/report-v1.json",
+      "bytes": 2547,
+      "sha256": "1a23fee1211a3bd4720b1045bd215e14f016cd500b1beb0ea2a2b7a2cda8703e"
+    },
+    {
+      "status": "M",
+      "path": "package.json",
+      "bytes": 4955,
+      "sha256": "8d1c7d72b3d104196189c9c9c3bd3f032bf884534fa6e7dfd3a54790219c8732"
+    },
+    {
+      "status": "M",
+      "path": "tests/suites.json",
+      "bytes": 4011,
+      "sha256": "25295800b390f813bf533dbdacc7b15aa299109b059f928764d0f96ffe4c130d"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/README.md",
+      "bytes": 4950,
+      "sha256": "9c23a8a3929d1c9e0d8e3050d3870168f890b0e347f5fda68738fdb0acec5551"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/artifact-retention-contract.mjs",
+      "bytes": 44010,
+      "sha256": "f3e7de11b0e49a39cb321c8aa9cc536cd0d2a9ac51fd090613ae7a9ef79ff0a5"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/bootstrap-contract.mjs",
+      "bytes": 16664,
+      "sha256": "25715d484d46de7ab0a0e6857c842be6ecfb3b25d0e90eb361b0a7127c17f233"
+    },
+    {
+      "status": "A",
+      "path": "tests/toolchain/cargo-audit-contract.mjs",
+      "bytes": 7560,
+      "sha256": "9c6684734c381ae771984874aa3c141c1abdbd0cd774dc21788d095384534491"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-bootstrap.mjs",
+      "bytes": 4184,
+      "sha256": "d1e640c915121aecfcbfba8ec5e37ab9432e0ea1d490aa43a5032c2e819ccd81"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-ci-matrix.mjs",
+      "bytes": 27120,
+      "sha256": "c963ca4dcf86bc663a5c773d45a3e1a194c4b3c20fc1ac3d31ee2d39d40029fe"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-dependency-policy.mjs",
+      "bytes": 9387,
+      "sha256": "53c02022e4415dd4df1e192e1f27b2deaf9a9ebae6d8bd02c0d3b93444e65c8a"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-dependency-reports.mjs",
+      "bytes": 35870,
+      "sha256": "3fe18be0ea0b6639322c5a7a3cbaca612839c9bf94c0f037d175f5ecb5c13479"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-rust-coverage.mjs",
+      "bytes": 26259,
+      "sha256": "6a0b96c6367de321ad3fdecfe88bbcfab78fdf1b0864bf7f24fec79d229952af"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/collect-retained-artifacts.mjs",
+      "bytes": 11168,
+      "sha256": "99d2d425b3d1dafe5480c9db3c6660daf70d66ed10a3f4b6d8a2888504605674"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/dependency-policy.json",
+      "bytes": 6280,
+      "sha256": "1fb14c0518fccba74cf7ef2c1a25f1e329bfaf1d4d55c7bf3379a58f45f6138b"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/dependency-report-policy.json",
+      "bytes": 6561,
+      "sha256": "7d3045f78951b8bc3fa70a720c485fe55f0bfd4a9ee62ad54cda475a4545ec13"
+    },
+    {
+      "status": "A",
+      "path": "tests/toolchain/install-cargo-audit.mjs",
+      "bytes": 4689,
+      "sha256": "43ca01040579292ec60a3299d8996317ab87c79964ced1bd24e2b3357cd2ce3c"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/rust-coverage-policy.json",
+      "bytes": 3331,
+      "sha256": "62c8da27aabf60ad0a2e73203a1b64adbb2ed2f5192af9cd3881ea5b60e33984"
+    },
+    {
+      "status": "A",
+      "path": "tests/toolchain/rust-dependency-contract.mjs",
+      "bytes": 6983,
+      "sha256": "40463d9fb3230bddbc5b215095a6ebbcda562c5c78d9eb4ddc129244f108a4d4"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/test-artifact-retention-contract.mjs",
+      "bytes": 19243,
+      "sha256": "032b5cf32ef2c65e8e0aee9e9c32b6067f751fefdcb7e207477a7fadcb3e4bad"
+    },
+    {
+      "status": "A",
+      "path": "tests/toolchain/test-cargo-audit-contract.mjs",
+      "bytes": 2265,
+      "sha256": "489a421d62d1e0a8e720107f0a575d14859690ad3ac21da6e031628f0bdda2f7"
+    },
+    {
+      "status": "A",
+      "path": "tests/toolchain/test-rust-dependency-contract.mjs",
+      "bytes": 4773,
+      "sha256": "3a3d8115bb1fec5d296dc3ac4e62b727d6b4a33a670ab7f9cbcf9d2922e60c68"
+    }
+  ],
+  "retained_reports": [
+    {
+      "path": "dependency-inventory-report.json",
+      "bytes": 14873,
+      "sha256": "3c2fa59cc03c9bf0217eb2c34a277dd0e4bce48e663b736fcfc7242b8166893e"
+    },
+    {
+      "path": "dependency-observation-report.json",
+      "bytes": 16875,
+      "sha256": "8fee3313b07ee3ac5d24ca3e4a7d8aec625047711837d5183206db6907dfec9a"
+    },
+    {
+      "path": "rust-coverage-report.json",
+      "bytes": 15596,
+      "sha256": "ee85138a6bfaf1cdbb350fa23cc3c9a96624128221490d5f270fc8d98c4bb2d5"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-03/P03-008/verify.mjs",
+    "bytes": 16386,
+    "sha256": "7ee506c92573999f7b950488e9e3cf3577a4741387d6776622bee55bfd943524"
+  }
+}

@@ -216,7 +216,7 @@ Dependencies: `G01`, `G02`.
 - [x] **P03-005** Define field-table entries, name storage, nested object/array tables, value offsets, and length encodings.
 - [x] **P03-006** Define canonical document hashing and checksum coverage, including corruption versus semantic-hash behavior.
 - [x] **P03-007** Define optional compression blocks, supported algorithms, block boundaries, and unknown-codec rejection.
-- [ ] **P03-008** Implement a safe HDoc encoder with limit enforcement and deterministic output.
+- [x] **P03-008** Implement a safe HDoc encoder with limit enforcement and deterministic output.
 - [ ] **P03-009** Implement a validating HDoc decoder that rejects unknown required features, invalid offsets, overlap, truncation, and checksum failure.
 - [ ] **P03-010** Implement owned document values and borrowed read-only views without changing semantics.
 - [ ] **P03-011** Implement fast field and nested-path lookup over raw HDoc views.

@@ -1,0 +1,551 @@
+{
+  "schema": "helix.dependency-inventory-report/1",
+  "plan_item": "P02-012",
+  "inputs": {
+    "cargo_lock_sha256": "731783458dbef335e830d369b4220bd598ea1f1d6595209b8d1898801c8c8381",
+    "dependency_policy_sha256": "1fb14c0518fccba74cf7ef2c1a25f1e329bfaf1d4d55c7bf3379a58f45f6138b",
+    "npm_license_inventory_sha256": "9de026cad0a19f74b360b713688bd674026a059cefd2267260d32091874852eb",
+    "package_lock_sha256": "3dec0e13acf9c2303fd8d513bff7f8429a7969f63313b0315cdfeb478966812b",
+    "report_policy_sha256": "7d3045f78951b8bc3fa70a720c485fe55f0bfd4a9ee62ad54cda475a4545ec13",
+    "rust_license_inventory_sha256": "201775bd572c08a5f1988b130e8a11145c872c16c18dd4ba5dd4d36158c61497",
+    "wasm_tools_authority_sha256": "a1bd6b0faa017dbf76b1cc47b9468b116f833a709aaaa9c0e9257c2a07777bdf"
+  },
+  "environment": {
+    "architecture": "x64",
+    "installed_tree": "present",
+    "platform": "linux"
+  },
+  "npm": {
+    "duplicates": [
+      {
+        "name": "fsevents",
+        "paths": [
+          {
+            "path": "node_modules/fsevents",
+            "version": "2.3.2"
+          },
+          {
+            "path": "node_modules/vite/node_modules/fsevents",
+            "version": "2.3.3"
+          }
+        ],
+        "versions": [
+          "2.3.2",
+          "2.3.3"
+        ]
+      }
+    ],
+    "installed_packages": [
+      {
+        "name": "@biomejs/biome",
+        "path": "node_modules/@biomejs/biome",
+        "version": "2.5.3"
+      },
+      {
+        "name": "@biomejs/cli-linux-x64",
+        "path": "node_modules/@biomejs/cli-linux-x64",
+        "version": "2.5.3"
+      },
+      {
+        "name": "@jridgewell/sourcemap-codec",
+        "path": "node_modules/@jridgewell/sourcemap-codec",
+        "version": "1.5.5"
+      },
+      {
+        "name": "@oxc-project/types",
+        "path": "node_modules/@oxc-project/types",
+        "version": "0.139.0"
+      },
+      {
+        "name": "@playwright/test",
+        "path": "node_modules/@playwright/test",
+        "version": "1.61.1"
+      },
+      {
+        "name": "@rolldown/binding-linux-x64-gnu",
+        "path": "node_modules/@rolldown/binding-linux-x64-gnu",
+        "version": "1.1.5"
+      },
+      {
+        "name": "@rolldown/pluginutils",
+        "path": "node_modules/@rolldown/pluginutils",
+        "version": "1.0.1"
+      },
+      {
+        "name": "@standard-schema/spec",
+        "path": "node_modules/@standard-schema/spec",
+        "version": "1.1.0"
+      },
+      {
+        "name": "@types/chai",
+        "path": "node_modules/@types/chai",
+        "version": "5.2.3"
+      },
+      {
+        "name": "@types/deep-eql",
+        "path": "node_modules/@types/deep-eql",
+        "version": "4.0.2"
+      },
+      {
+        "name": "@types/estree",
+        "path": "node_modules/@types/estree",
+        "version": "1.0.9"
+      },
+      {
+        "name": "@types/node",
+        "path": "node_modules/@types/node",
+        "version": "22.20.1"
+      },
+      {
+        "name": "@vitest/expect",
+        "path": "node_modules/@vitest/expect",
+        "version": "4.1.10"
+      },
+      {
+        "name": "@vitest/mocker",
+        "path": "node_modules/@vitest/mocker",
+        "version": "4.1.10"
+      },
+      {
+        "name": "@vitest/pretty-format",
+        "path": "node_modules/@vitest/pretty-format",
+        "version": "4.1.10"
+      },
+      {
+        "name": "@vitest/runner",
+        "path": "node_modules/@vitest/runner",
+        "version": "4.1.10"
+      },
+      {
+        "name": "@vitest/snapshot",
+        "path": "node_modules/@vitest/snapshot",
+        "version": "4.1.10"
+      },
+      {
+        "name": "@vitest/spy",
+        "path": "node_modules/@vitest/spy",
+        "version": "4.1.10"
+      },
+      {
+        "name": "@vitest/utils",
+        "path": "node_modules/@vitest/utils",
+        "version": "4.1.10"
+      },
+      {
+        "name": "assertion-error",
+        "path": "node_modules/assertion-error",
+        "version": "2.0.1"
+      },
+      {
+        "name": "chai",
+        "path": "node_modules/chai",
+        "version": "6.2.2"
+      },
+      {
+        "name": "convert-source-map",
+        "path": "node_modules/convert-source-map",
+        "version": "2.0.0"
+      },
+      {
+        "name": "detect-libc",
+        "path": "node_modules/detect-libc",
+        "version": "2.1.2"
+      },
+      {
+        "name": "es-module-lexer",
+        "path": "node_modules/es-module-lexer",
+        "version": "2.3.0"
+      },
+      {
+        "name": "estree-walker",
+        "path": "node_modules/estree-walker",
+        "version": "3.0.3"
+      },
+      {
+        "name": "expect-type",
+        "path": "node_modules/expect-type",
+        "version": "1.4.0"
+      },
+      {
+        "name": "fdir",
+        "path": "node_modules/fdir",
+        "version": "6.5.0"
+      },
+      {
+        "name": "lightningcss",
+        "path": "node_modules/lightningcss",
+        "version": "1.32.0"
+      },
+      {
+        "name": "lightningcss-linux-x64-gnu",
+        "path": "node_modules/lightningcss-linux-x64-gnu",
+        "version": "1.32.0"
+      },
+      {
+        "name": "magic-string",
+        "path": "node_modules/magic-string",
+        "version": "0.30.21"
+      },
+      {
+        "name": "nanoid",
+        "path": "node_modules/nanoid",
+        "version": "3.3.15"
+      },
+      {
+        "name": "obug",
+        "path": "node_modules/obug",
+        "version": "2.1.3"
+      },
+      {
+        "name": "pathe",
+        "path": "node_modules/pathe",
+        "version": "2.0.3"
+      },
+      {
+        "name": "picocolors",
+        "path": "node_modules/picocolors",
+        "version": "1.1.1"
+      },
+      {
+        "name": "picomatch",
+        "path": "node_modules/picomatch",
+        "version": "4.0.5"
+      },
+      {
+        "name": "playwright",
+        "path": "node_modules/playwright",
+        "version": "1.61.1"
+      },
+      {
+        "name": "playwright-core",
+        "path": "node_modules/playwright-core",
+        "version": "1.61.1"
+      },
+      {
+        "name": "postcss",
+        "path": "node_modules/postcss",
+        "version": "8.5.16"
+      },
+      {
+        "name": "rolldown",
+        "path": "node_modules/rolldown",
+        "version": "1.1.5"
+      },
+      {
+        "name": "siginfo",
+        "path": "node_modules/siginfo",
+        "version": "2.0.0"
+      },
+      {
+        "name": "source-map-js",
+        "path": "node_modules/source-map-js",
+        "version": "1.2.1"
+      },
+      {
+        "name": "stackback",
+        "path": "node_modules/stackback",
+        "version": "0.0.2"
+      },
+      {
+        "name": "std-env",
+        "path": "node_modules/std-env",
+        "version": "4.2.0"
+      },
+      {
+        "name": "tinybench",
+        "path": "node_modules/tinybench",
+        "version": "2.9.0"
+      },
+      {
+        "name": "tinyexec",
+        "path": "node_modules/tinyexec",
+        "version": "1.2.4"
+      },
+      {
+        "name": "tinyglobby",
+        "path": "node_modules/tinyglobby",
+        "version": "0.2.17"
+      },
+      {
+        "name": "tinyrainbow",
+        "path": "node_modules/tinyrainbow",
+        "version": "3.1.0"
+      },
+      {
+        "name": "typescript",
+        "path": "node_modules/typescript",
+        "version": "6.0.3"
+      },
+      {
+        "name": "undici-types",
+        "path": "node_modules/undici-types",
+        "version": "6.21.0"
+      },
+      {
+        "name": "vite",
+        "path": "node_modules/vite",
+        "version": "8.1.4"
+      },
+      {
+        "name": "vitest",
+        "path": "node_modules/vitest",
+        "version": "4.1.10"
+      },
+      {
+        "name": "why-is-node-running",
+        "path": "node_modules/why-is-node-running",
+        "version": "2.3.0"
+      }
+    ],
+    "license_file_packages": 65,
+    "license_files": 73,
+    "license_forms": {
+      "0BSD": 1,
+      "Apache-2.0": 6,
+      "BSD-3-Clause": 1,
+      "ISC": 2,
+      "MIT": 60,
+      "MIT OR Apache-2.0": 9,
+      "MPL-2.0": 12
+    },
+    "locked_development_packages": 91,
+    "missing_license_text_packages": 26,
+    "registry_sources": 91,
+    "sha512_integrities": 91,
+    "suppressed_lifecycle_scripts": [
+      {
+        "optional": true,
+        "path": "node_modules/fsevents",
+        "version": "2.3.2"
+      },
+      {
+        "optional": true,
+        "path": "node_modules/vite/node_modules/fsevents",
+        "version": "2.3.3"
+      }
+    ]
+  },
+  "rust": {
+    "advisory_status": "live-observation-required",
+    "external_packages": [
+      {
+        "build_script": false,
+        "checksum": "76a2e8124351fda1ef8aaaa3bbd7ebbcb486bbcd4225aca0aa0d84bb2db8fecb",
+        "features": [],
+        "license": "BSD-2-Clause",
+        "name": "arrayref",
+        "version": "0.3.9"
+      },
+      {
+        "build_script": false,
+        "checksum": "d3fb67a6e08acf24fdeccbac2cb6ac4305825bd1f117462e0e6f2f193345ad56",
+        "features": [],
+        "license": "MIT OR Apache-2.0",
+        "name": "arrayvec",
+        "version": "0.7.8"
+      },
+      {
+        "build_script": true,
+        "checksum": "0aa83c34e62843d924f905e0f5c866eb1dd6545fc4d719e803d9ba6030371fce",
+        "features": [
+          "pure"
+        ],
+        "license": "CC0-1.0 OR Apache-2.0 OR Apache-2.0 WITH LLVM-exception",
+        "name": "blake3",
+        "version": "1.8.5"
+      },
+      {
+        "build_script": false,
+        "checksum": "e17dd265a7d0f31ef544e1b20e03add05d3b45b491b633b10d67145d2acc1a38",
+        "features": [],
+        "license": "MIT OR Apache-2.0",
+        "name": "cc",
+        "version": "1.2.67"
+      },
+      {
+        "build_script": false,
+        "checksum": "9330f8b2ff13f34540b44e946ef35111825727b38d33286ef986142615121801",
+        "features": [],
+        "license": "MIT OR Apache-2.0",
+        "name": "cfg-if",
+        "version": "1.0.4"
+      },
+      {
+        "build_script": false,
+        "checksum": "3d52eff69cd5e647efe296129160853a42795992097e8af39800e1060caeea9b",
+        "features": [],
+        "license": "CC0-1.0 OR MIT-0 OR Apache-2.0",
+        "name": "constant_time_eq",
+        "version": "0.4.2"
+      },
+      {
+        "build_script": false,
+        "checksum": "8b2a41393f66f16b0823bb79094d54ac5fbd34ab292ddafb9a0456ac9f87d201",
+        "features": [],
+        "license": "MIT OR Apache-2.0",
+        "name": "cpufeatures",
+        "version": "0.3.0"
+      },
+      {
+        "build_script": false,
+        "checksum": "5eb8a2a1cd12ab0d987a5d5e825195d372001a4094a0376319d5a0ad71c1ba0d",
+        "features": [],
+        "license": "MIT OR Apache-2.0",
+        "name": "crc",
+        "version": "3.4.0"
+      },
+      {
+        "build_script": false,
+        "checksum": "217698eaf96b4a3f0bc4f3662aaa55bdf913cd54d7204591faa790070c6d0853",
+        "features": [],
+        "license": "MIT OR Apache-2.0",
+        "name": "crc-catalog",
+        "version": "2.5.0"
+      },
+      {
+        "build_script": false,
+        "checksum": "5baebc0774151f905a1a2cc41989300b1e6fbb29aff0ceffa1064fdd3088d582",
+        "features": [],
+        "license": "MIT OR Apache-2.0",
+        "name": "find-msvc-tools",
+        "version": "0.1.9"
+      },
+      {
+        "build_script": true,
+        "checksum": "68ab91017fe16c622486840e4c83c9a37afeff978bd239b5293d61ece587de66",
+        "features": [],
+        "license": "MIT OR Apache-2.0",
+        "name": "libc",
+        "version": "0.2.186"
+      },
+      {
+        "build_script": false,
+        "checksum": "7ef0d4ed8669f8f8826eb00dc878084aa8f253506c4fd5e8f58f5bce72ddb97e",
+        "features": [
+          "safe-decode",
+          "safe-encode"
+        ],
+        "license": "MIT",
+        "name": "lz4_flex",
+        "version": "0.13.1"
+      },
+      {
+        "build_script": false,
+        "checksum": "f8fadd59c855ef2080decdef8ff161eb6661b86933c9d82e5ba29dc602a55aba",
+        "features": [
+          "default",
+          "std"
+        ],
+        "license": "MIT OR Apache-2.0",
+        "name": "shlex",
+        "version": "2.0.1"
+      }
+    ],
+    "license_files": 26,
+    "workspace_packages": [
+      {
+        "license": "MIT",
+        "name": "helix-columnar",
+        "version": "0.0.0"
+      },
+      {
+        "license": "MIT",
+        "name": "helix-core",
+        "version": "0.0.0"
+      },
+      {
+        "license": "MIT",
+        "name": "helix-doc",
+        "version": "0.0.0"
+      },
+      {
+        "license": "MIT",
+        "name": "helix-gpu",
+        "version": "0.0.0"
+      },
+      {
+        "license": "MIT",
+        "name": "helix-host-native",
+        "version": "0.0.0"
+      },
+      {
+        "license": "MIT",
+        "name": "helix-query",
+        "version": "0.0.0"
+      },
+      {
+        "license": "MIT",
+        "name": "helix-server",
+        "version": "0.0.0"
+      },
+      {
+        "license": "MIT",
+        "name": "helix-storage",
+        "version": "0.0.0"
+      }
+    ]
+  },
+  "external_tools": {
+    "playwright_browsers": {
+      "installed_manifest": true,
+      "revisions": [
+        {
+          "browser_version": "149.0.7827.55",
+          "name": "chromium",
+          "revision": "1228"
+        },
+        {
+          "browser_version": "149.0.7827.55",
+          "name": "chromium-headless-shell",
+          "revision": "1228"
+        },
+        {
+          "browser_version": "151.0",
+          "name": "firefox",
+          "revision": "1532"
+        },
+        {
+          "browser_version": "26.5",
+          "name": "webkit",
+          "revision": "2311"
+        },
+        {
+          "browser_version": null,
+          "name": "ffmpeg",
+          "revision": "1011"
+        }
+      ],
+      "coverage": "exact-package-coupled revisions; retained launcher entrypoint identity and structured execution report; no complete browser-distribution SBOM",
+      "revalidate_by": "P16-010"
+    },
+    "wasm_tools": {
+      "archive_bytes": 6007583,
+      "archive_sha256": "4e2898f7ca3bd0536218ed9b7b36ff7b86954c57ae0e6272fde69728cbe01088",
+      "coverage": "pinned-release-and-license-files; no binary-transitive advisory feed",
+      "license": "Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT",
+      "license_files": [
+        {
+          "path": "LICENSE-APACHE",
+          "spdx": "Apache-2.0",
+          "bytes": 10847,
+          "sha256": "a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2"
+        },
+        {
+          "path": "LICENSE-Apache-2.0_WITH_LLVM-exception",
+          "spdx": "Apache-2.0 WITH LLVM-exception",
+          "bytes": 12243,
+          "sha256": "268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5"
+        },
+        {
+          "path": "LICENSE-MIT",
+          "spdx": "MIT",
+          "bytes": 1023,
+          "sha256": "23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3"
+        }
+      ],
+      "release": "bytecodealliance/wasm-tools@v1.253.0",
+      "revalidate_by": "P16-010"
+    }
+  },
+  "verdict": "pass"
+}
