@@ -19,7 +19,7 @@
     "rustflags": "-C instrument-coverage",
     "minimum_test_binaries": 8,
     "maximum_test_binaries": 128,
-    "minimum_tests": 23,
+    "minimum_tests": 25,
     "maximum_tests": 100000,
     "minimum_raw_profiles": 8,
     "maximum_raw_profiles": 128
@@ -52,10 +52,10 @@
     "reason": "Phase 2 has crate-boundary constants and test harnesses but no executable database product logic; the first instrumented product region activates every applicable threshold"
   },
   "active_product_scope": {
-    "allowed_status": "hdoc-codec",
+    "allowed_status": "hdoc-values",
     "requires_database_functionality": true,
     "activated_by": "P03-008",
-    "reason": "The safe deterministic HDoc encoder and validating decoder are executable semantic-critical product logic, so an empty denominator is forbidden and every applicable aggregate and per-file threshold must pass"
+    "reason": "The safe deterministic HDoc encoder, validating decoder, borrowed views, and owned logical values are executable semantic-critical product logic, so an empty denominator is forbidden and every applicable aggregate and per-file threshold must pass"
   },
   "groups": [
     {

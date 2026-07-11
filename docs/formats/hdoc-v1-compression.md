@@ -393,7 +393,8 @@ Reading never silently recompresses, repairs, or rewrites an HDoc.
 | --- | --- | --- |
 | `P03-008` (complete) | Canonical writer, exact dependency adoption, advisory/license gates | Profile IDs, stream bytes, block/selection rules |
 | `P03-009` (complete) | Bounded validating reader and stable decompression diagnostics | Trust order, resource bounds, unknown-codec behavior |
-| `P03-010`–`P03-012` | Owned/borrowed values, lookup, traversal | Whole-document validation and logical offsets |
+| `P03-010` (complete) | Borrowed views reusing bounded decoded sections and detached owned values | Whole-document validation and logical offsets |
+| `P03-011`–`P03-012` | Lookup, traversal, rendering, and import | Whole-document validation and logical offsets |
 | `P03-015` | Extension-area negotiation and any registered extension compression rule | Four-base-section profile and existing IDs |
 | `P03-016`–`P03-019` | Immutable fixtures, independent reader, properties, fuzz/sanitizer replay | Registry vectors and rejection expectations |
 | `P03-020`–`P03-021` | Formal format/compression/dictionary benchmarks | Correctness, canonicality, limits, or security rules |

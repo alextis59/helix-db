@@ -29,10 +29,11 @@ profile `1/1`, its independently bounded block stream, canonical selection, and 
 coordinate model are fixed by the [compression registry](hdoc-v1-compression.md). Together these
 documents complete the HDoc 1.0 byte grammar.
 
-Completion of the grammar alone was not an implementation or release-support claim. `P03-008` now
-implements the production writer and `P03-009` implements the bounded whole-envelope validating
-reader. `P03-010` still owns decoded values/views, and `P03-016` owns immutable supported golden
-files.
+Completion of the grammar alone was not an implementation or release-support claim. `P03-008`
+implements the production writer, `P03-009` implements the bounded whole-envelope validating
+reader, and `P03-010` implements lifetime-bound borrowed views plus detached owned logical values.
+`P03-011` still owns optimized exact-name/nested-path lookup, and `P03-016` owns immutable supported
+golden files.
 Footer `hash_profile_id = 1` is the only assigned base integrity profile; zero remains permanently
 invalid. The exact envelopes in the integrity and compression registries are normative executable
 references until the immutable corpus is published.
@@ -54,16 +55,47 @@ stages before returning success:
 7. recompute the profile-1 typed-content hash over the independently validated logical tree and
    compare it with the footer.
 
-Success returns `DecodedHDoc`, a borrowed wrapper exposing only the original validated bytes,
-content hash, canonical length, recursive field count, and compressed-section count. It does not
-expose partially validated tables or logical values. `P03-010` owns the later owned-value and
-borrowed-view APIs.
+Success returns `DecodedHDoc`, which retains the original validated bytes, content hash, canonical
+length, recursive field count, compressed-section count, validation-built record metadata, and the
+logical section backing needed by `P03-010`. The wrapper is constructed only after all seven stages;
+no partially validated table or value escapes.
 
 Failures are redacted `DecodeError` values. Unsupported major/minor versions and required
 capabilities use stable `CAP_*` codes; malformed or noncanonical bytes use `DUR_CORRUPTION` plus a
 bounded `DecodeCheck` stage and byte offset. Errors never contain names, values, input fragments,
 or decompressed payloads. Unknown optional semantics are rejected until `P03-015` publishes an
 explicit preservation/negotiation matrix.
+
+## Implemented P03-010 value and view layer
+
+`DecodedHDoc::view()` returns a `DocumentView` whose lifetime is bounded by the validated wrapper.
+The wrapper retains each base section as follows:
+
+- an uncompressed section is a borrowed slice of the exact input bytes;
+- a compressed section is the decoder's existing fresh, exact-size, bounded logical allocation; and
+- opening, copying, or traversing a view does not decompress again or allocate payload storage.
+
+The read-only API exposes `DocumentView`, `ObjectView`, `ArrayView`, `FieldView`, and `ValueView`.
+Every object descriptor receives a validation-built O(1) presentation-position permutation over
+its already canonical-name-sorted field span. Full reads therefore reproduce presentation order
+without changing mapping/hash identity. Array access is direct and dense; no hole or Missing value
+can appear. Exact string and binary data borrow their logical section, fixed-width scalars are copied
+as typed integers/byte arrays, decimal BID bytes become the already validated canonical logical
+tuple, and vector views iterate exact finite f32/f16 bit patterns without casting through host
+floating point.
+
+`DecodedHDoc::to_owned_document()` recursively detaches a complete `OwnedDocument` / `OwnedValue`
+tree. It copies names and variable payloads, preserves object presentation and dense array order,
+retains binary subtype zero, exact float/vector bits, decimal tuple, temporal counts, and identifier
+octets, and remains valid after all HDoc backing is dropped. The owned inventory has the same 16
+stored logical types as `ValueView`; Missing deliberately has no variant and present null has an
+explicit variant in both paths.
+
+These APIs do not yet promise exact-name or nested-path lookup. `ObjectView::field_at()` is a
+presentation-position accessor, while `ArrayView::get()` is a direct semantic index accessor.
+`P03-011` owns allocation-free name/path resolution and its measurements. `P03-012` owns canonical
+rendering/import. Public view formatting is not used as a data export contract, and `DecodedHDoc`'s
+debug representation reports only bounded metadata rather than names or payloads.
 
 ## Normative notation
 
@@ -567,8 +599,9 @@ change. Unassigned reserved bits/IDs are not free for local experimentation in c
 
 No valid HDoc fixture or persisted HDoc row existed at P03-002; its then-unassigned profile zero
 ensured that partial format could not accidentally become one. P03-006 assigned integrity profile
-1, P03-007 completed compression and the full byte grammar, P03-008 added a production encoder, and
-P03-009 added a bounded validating reader without publishing or persisting supported data.
+1, P03-007 completed compression and the full byte grammar, P03-008 added a production encoder,
+P03-009 added a bounded validating reader, and P03-010 added logical views/owned values without
+publishing or persisting supported data.
 Immutable support fixtures remain P03-016, so the format can still be superseded without
 stored-data migration before that fixture/data boundary.
 

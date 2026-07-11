@@ -135,7 +135,7 @@ metric that exists is enforced, while absent branch instrumentation remains visi
 Critical groups enforce the same threshold on each file that has an instrumented product metric.
 One fully covered file therefore cannot hide a second partially covered critical file.
 
-## Historical Phase 2 empty scope and active HDoc codec scope
+## Historical Phase 2 empty scope and active HDoc value scope
 
 At `P02-013` the eight Rust crates contain boundary constants and unit-test harnesses but no
 executable product function. LLVM reports 9 covered test functions, 36 test lines, and 38 test
@@ -151,10 +151,11 @@ database-functionality = false
 
 That exception was revalidated and expired when `P03-008` introduced the safe deterministic HDoc
 encoder. `P03-009` expanded the same active semantic-critical scope with the whole-envelope
-validating decoder. The active workspace metadata is now:
+validating decoder, and `P03-010` added borrowed views and detached owned logical values. The active
+workspace metadata is now:
 
 ```text
-status = "hdoc-codec"
+status = "hdoc-values"
 database-functionality = true
 ```
 
@@ -164,8 +165,9 @@ can explain its posture, but changing the current metadata back to the skeleton 
 workspace bootstrap and implementation contract. Maturity metadata cannot hide uncovered code:
 an active empty scope fails, while a nonempty scope always activates its thresholds.
 
-The current clean report proves measured HDoc encoder/decoder coverage. It records workspace
-maturity and database-functionality metadata alongside the executed test and source identities.
+The current clean report proves measured HDoc encoder/decoder/value-access coverage. It records
+workspace maturity and database-functionality metadata alongside the executed test and source
+identities.
 
 ## Report contract
 

@@ -1,14 +1,17 @@
-//! Safe, deterministic `HDoc` 1.0 encoding and validation.
+//! Safe, deterministic `HDoc` 1.0 encoding, validation, and logical value access.
 //!
 //! The encoder accepts a transient borrowed input tree, validates the complete tree and portable
 //! limits, and publishes bytes only after canonical tables, typed content identity, optional
 //! bounded compression, and stored-byte integrity have all succeeded. The decoder validates an
 //! exact stored envelope, bounded decompression, canonical structure/payloads, typed identity, and
-//! byte canonicality before returning metadata. Decoded owned/borrowed values remain a later API.
+//! byte canonicality before returning metadata and read-only logical views. Callers may detach an
+//! owned logical tree without losing exact type, payload, array, or object-presentation semantics.
 
+use std::borrow::Cow;
 use std::collections::BTreeSet;
 use std::error::Error;
 use std::fmt;
+use std::iter::FusedIterator;
 
 use blake3::Hasher;
 use crc::{CRC_32_ISCSI, Crc};
@@ -17,7 +20,7 @@ use crc::{CRC_32_ISCSI, Crc};
 pub const COMPONENT_NAME: &str = "helix-doc";
 
 /// Current implementation maturity.
-pub const MATURITY: &str = "hdoc-codec";
+pub const MATURITY: &str = "hdoc-values";
 
 /// Internal `HelixDB` crates this portable leaf is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
@@ -127,6 +130,97 @@ pub enum Decimal128 {
     NaN,
 }
 
+/// Stable logical type identity shared by encoded inputs, borrowed views, and owned values.
+#[derive(Clone, Copy, Debug, Eq, Hash, PartialEq)]
+pub enum ValueType {
+    /// Null.
+    Null,
+    /// Boolean.
+    Bool,
+    /// Signed 32-bit integer.
+    Int32,
+    /// Signed 64-bit integer.
+    Int64,
+    /// Exact IEEE-754 binary64 bits.
+    Float64,
+    /// Canonical decimal128 logical value.
+    Decimal128,
+    /// Exact UTF-8 string.
+    String,
+    /// Binary subtype plus exact bytes.
+    Binary,
+    /// Unique-name object mapping with separate presentation order.
+    Object,
+    /// Dense ordered array.
+    Array,
+    /// Signed Unix-microsecond timestamp.
+    Timestamp,
+    /// Signed Unix-relative civil date.
+    Date,
+    /// RFC-order UUID bytes.
+    Uuid,
+    /// Opaque `ObjectId` bytes.
+    ObjectId,
+    /// Exact finite binary32 vector bits.
+    VectorF32,
+    /// Exact finite binary16 vector bits.
+    VectorF16,
+}
+
+impl ValueType {
+    /// Returns the stable logical type name used by semantic contracts and diagnostics.
+    #[must_use]
+    pub const fn as_str(self) -> &'static str {
+        match self {
+            Self::Null => "null",
+            Self::Bool => "bool",
+            Self::Int32 => "int32",
+            Self::Int64 => "int64",
+            Self::Float64 => "float64",
+            Self::Decimal128 => "decimal128",
+            Self::String => "string",
+            Self::Binary => "binary",
+            Self::Object => "object",
+            Self::Array => "array",
+            Self::Timestamp => "timestamp",
+            Self::Date => "date",
+            Self::Uuid => "uuid",
+            Self::ObjectId => "objectId",
+            Self::VectorF32 => "vector<f32,N>",
+            Self::VectorF16 => "vector<f16,N>",
+        }
+    }
+
+    /// Returns the assigned `HDoc` 1.x type tag.
+    #[must_use]
+    pub const fn hdoc_tag(self) -> u8 {
+        match self {
+            Self::Null => 1,
+            Self::Bool => 2,
+            Self::Int32 => 3,
+            Self::Int64 => 4,
+            Self::Float64 => 5,
+            Self::Decimal128 => 6,
+            Self::String => 7,
+            Self::Binary => 8,
+            Self::Object => 9,
+            Self::Array => 10,
+            Self::Timestamp => 11,
+            Self::Date => 12,
+            Self::Uuid => 13,
+            Self::ObjectId => 14,
+            Self::VectorF32 => 15,
+            Self::VectorF16 => 16,
+        }
+    }
+
+    /// Reports whether this type is represented by a container descriptor.
+    #[must_use]
+    pub const fn is_container(self) -> bool {
+        matches!(self, Self::Object | Self::Array)
+    }
+}
+
 /// Exact logical input variants accepted by `HDoc` 1.0.
 #[derive(Clone, Copy, Debug)]
 pub enum EncodeValue<'a> {
@@ -162,6 +256,31 @@ pub enum EncodeValue<'a> {
     VectorF32(&'a [u32]),
     /// Exact finite IEEE-754 binary16 element bits.
     VectorF16(&'a [u16]),
+}
+
+impl EncodeValue<'_> {
+    /// Returns the stable logical type without inspecting or converting the payload.
+    #[must_use]
+    pub const fn value_type(self) -> ValueType {
+        match self {
+            Self::Null => ValueType::Null,
+            Self::Bool(_) => ValueType::Bool,
+            Self::Int32(_) => ValueType::Int32,
+            Self::Int64(_) => ValueType::Int64,
+            Self::Float64Bits(_) => ValueType::Float64,
+            Self::Decimal128(_) => ValueType::Decimal128,
+            Self::String(_) => ValueType::String,
+            Self::Binary(_) => ValueType::Binary,
+            Self::Object(_) => ValueType::Object,
+            Self::Array(_) => ValueType::Array,
+            Self::Timestamp(_) => ValueType::Timestamp,
+            Self::Date(_) => ValueType::Date,
+            Self::Uuid(_) => ValueType::Uuid,
+            Self::ObjectId(_) => ValueType::ObjectId,
+            Self::VectorF32(_) => ValueType::VectorF32,
+            Self::VectorF16(_) => ValueType::VectorF16,
+        }
+    }
 }
 
 /// Encoder compression behavior.
@@ -439,14 +558,755 @@ impl fmt::Display for DecodeError {
 
 impl Error for DecodeError {}
 
-/// A completely validated `HDoc` envelope without decoded value/view exposure.
+/// An owned root document detached from its encoded `HDoc` backing.
+#[derive(Clone, Debug)]
+pub struct OwnedDocument {
+    fields: Vec<OwnedField>,
+}
+
+impl OwnedDocument {
+    /// Returns root fields in their preserved presentation order.
+    #[must_use]
+    pub fn fields(&self) -> &[OwnedField] {
+        &self.fields
+    }
+
+    /// Consumes the document and returns root fields in presentation order.
+    #[must_use]
+    pub fn into_fields(self) -> Vec<OwnedField> {
+        self.fields
+    }
+}
+
+/// One owned object field with an exact UTF-8 name and typed value.
+#[derive(Clone, Debug)]
+pub struct OwnedField {
+    name: String,
+    value: OwnedValue,
+}
+
+impl OwnedField {
+    /// Returns the exact, non-normalized field name.
+    #[must_use]
+    pub fn name(&self) -> &str {
+        &self.name
+    }
+
+    /// Returns the exact owned logical value.
+    #[must_use]
+    pub const fn value(&self) -> &OwnedValue {
+        &self.value
+    }
+
+    /// Consumes the field without changing its name or value.
+    #[must_use]
+    pub fn into_parts(self) -> (String, OwnedValue) {
+        (self.name, self.value)
+    }
+}
+
+/// An owned nested object retaining its observable field-presentation order.
+#[derive(Clone, Debug)]
+pub struct OwnedObject {
+    fields: Vec<OwnedField>,
+}
+
+impl OwnedObject {
+    /// Returns fields in their preserved presentation order.
+    #[must_use]
+    pub fn fields(&self) -> &[OwnedField] {
+        &self.fields
+    }
+
+    /// Consumes the object and returns fields in presentation order.
+    #[must_use]
+    pub fn into_fields(self) -> Vec<OwnedField> {
+        self.fields
+    }
+}
+
+/// Exact detached logical value produced from a completely validated `HDoc`.
+#[derive(Clone, Debug)]
+pub enum OwnedValue {
+    /// Null.
+    Null,
+    /// Boolean.
+    Bool(bool),
+    /// Signed 32-bit integer.
+    Int32(i32),
+    /// Signed 64-bit integer.
+    Int64(i64),
+    /// Exact IEEE-754 binary64 bits, including signed zero and NaN payloads.
+    Float64Bits(u64),
+    /// Canonical decimal128 logical value.
+    Decimal128(Decimal128),
+    /// Exact UTF-8 string.
+    String(String),
+    /// Binary subtype and exact uninterpreted bytes.
+    Binary {
+        /// Registered binary subtype. `HDoc` 1.0 accepts subtype zero.
+        subtype: u8,
+        /// Exact binary value bytes after the subtype.
+        bytes: Vec<u8>,
+    },
+    /// Nested unique-name object mapping.
+    Object(OwnedObject),
+    /// Dense ordered array.
+    Array(Vec<OwnedValue>),
+    /// Signed Unix microseconds.
+    Timestamp(i64),
+    /// Signed Unix-relative civil days.
+    Date(i32),
+    /// RFC-order UUID octets.
+    Uuid([u8; 16]),
+    /// Exact opaque `ObjectId` octets.
+    ObjectId([u8; 12]),
+    /// Exact finite IEEE-754 binary32 element bits.
+    VectorF32(Vec<u32>),
+    /// Exact finite IEEE-754 binary16 element bits.
+    VectorF16(Vec<u16>),
+}
+
+impl OwnedValue {
+    /// Returns the stable logical type without converting the payload.
+    #[must_use]
+    pub const fn value_type(&self) -> ValueType {
+        match self {
+            Self::Null => ValueType::Null,
+            Self::Bool(_) => ValueType::Bool,
+            Self::Int32(_) => ValueType::Int32,
+            Self::Int64(_) => ValueType::Int64,
+            Self::Float64Bits(_) => ValueType::Float64,
+            Self::Decimal128(_) => ValueType::Decimal128,
+            Self::String(_) => ValueType::String,
+            Self::Binary { .. } => ValueType::Binary,
+            Self::Object(_) => ValueType::Object,
+            Self::Array(_) => ValueType::Array,
+            Self::Timestamp(_) => ValueType::Timestamp,
+            Self::Date(_) => ValueType::Date,
+            Self::Uuid(_) => ValueType::Uuid,
+            Self::ObjectId(_) => ValueType::ObjectId,
+            Self::VectorF32(_) => ValueType::VectorF32,
+            Self::VectorF16(_) => ValueType::VectorF16,
+        }
+    }
+}
+
+/// Borrowed binary subtype and exact bytes from validated logical backing.
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct BinaryView<'a> {
+    subtype: u8,
+    bytes: &'a [u8],
+}
+
+impl<'a> BinaryView<'a> {
+    /// Returns the registered subtype. `HDoc` 1.0 validation admits only zero.
+    #[must_use]
+    pub const fn subtype(self) -> u8 {
+        self.subtype
+    }
+
+    /// Returns exact uninterpreted data bytes after the subtype.
+    #[must_use]
+    pub const fn as_bytes(self) -> &'a [u8] {
+        self.bytes
+    }
+
+    /// Returns the number of data bytes after the subtype.
+    #[must_use]
+    pub const fn len(self) -> usize {
+        self.bytes.len()
+    }
+
+    /// Reports whether the binary data is empty.
+    #[must_use]
+    pub const fn is_empty(self) -> bool {
+        self.bytes.is_empty()
+    }
+}
+
+/// Allocation-free read-only view over exact binary32 vector element bits.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct VectorF32View<'a> {
+    element_bytes: &'a [u8],
+}
+
+impl<'a> VectorF32View<'a> {
+    /// Returns the validated vector dimension.
+    #[must_use]
+    pub const fn len(self) -> usize {
+        self.element_bytes.len() / 4
+    }
+
+    /// Reports whether the vector has no elements. Valid `HDoc` vectors are never empty.
+    #[must_use]
+    pub const fn is_empty(self) -> bool {
+        self.element_bytes.is_empty()
+    }
+
+    /// Returns exact bits at one zero-based vector position.
+    #[must_use]
+    pub fn get(self, index: usize) -> Option<u32> {
+        let start = index.checked_mul(4)?;
+        let end = start.checked_add(4)?;
+        let bytes = <[u8; 4]>::try_from(self.element_bytes.get(start..end)?).ok()?;
+        Some(u32::from_le_bytes(bytes))
+    }
+
+    /// Iterates exact element bits in vector order.
+    #[must_use]
+    pub const fn iter(self) -> VectorF32Iter<'a> {
+        VectorF32Iter {
+            view: self,
+            front: 0,
+            back: self.len(),
+        }
+    }
+}
+
+/// Exact-size iterator over a borrowed binary32 vector.
+#[derive(Clone)]
+pub struct VectorF32Iter<'a> {
+    view: VectorF32View<'a>,
+    front: usize,
+    back: usize,
+}
+
+impl Iterator for VectorF32Iter<'_> {
+    type Item = u32;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.front == self.back {
+            return None;
+        }
+        let index = self.front;
+        self.front += 1;
+        self.view.get(index)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.back - self.front;
+        (remaining, Some(remaining))
+    }
+}
+
+impl DoubleEndedIterator for VectorF32Iter<'_> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.front == self.back {
+            return None;
+        }
+        self.back -= 1;
+        self.view.get(self.back)
+    }
+}
+
+impl ExactSizeIterator for VectorF32Iter<'_> {}
+impl FusedIterator for VectorF32Iter<'_> {}
+
+/// Allocation-free read-only view over exact binary16 vector element bits.
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
+pub struct VectorF16View<'a> {
+    element_bytes: &'a [u8],
+}
+
+impl<'a> VectorF16View<'a> {
+    /// Returns the validated vector dimension.
+    #[must_use]
+    pub const fn len(self) -> usize {
+        self.element_bytes.len() / 2
+    }
+
+    /// Reports whether the vector has no elements. Valid `HDoc` vectors are never empty.
+    #[must_use]
+    pub const fn is_empty(self) -> bool {
+        self.element_bytes.is_empty()
+    }
+
+    /// Returns exact bits at one zero-based vector position.
+    #[must_use]
+    pub fn get(self, index: usize) -> Option<u16> {
+        let start = index.checked_mul(2)?;
+        let end = start.checked_add(2)?;
+        let bytes = <[u8; 2]>::try_from(self.element_bytes.get(start..end)?).ok()?;
+        Some(u16::from_le_bytes(bytes))
+    }
+
+    /// Iterates exact element bits in vector order.
+    #[must_use]
+    pub const fn iter(self) -> VectorF16Iter<'a> {
+        VectorF16Iter {
+            view: self,
+            front: 0,
+            back: self.len(),
+        }
+    }
+}
+
+/// Exact-size iterator over a borrowed binary16 vector.
+#[derive(Clone)]
+pub struct VectorF16Iter<'a> {
+    view: VectorF16View<'a>,
+    front: usize,
+    back: usize,
+}
+
+impl Iterator for VectorF16Iter<'_> {
+    type Item = u16;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.front == self.back {
+            return None;
+        }
+        let index = self.front;
+        self.front += 1;
+        self.view.get(index)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.back - self.front;
+        (remaining, Some(remaining))
+    }
+}
+
+impl DoubleEndedIterator for VectorF16Iter<'_> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.front == self.back {
+            return None;
+        }
+        self.back -= 1;
+        self.view.get(self.back)
+    }
+}
+
+impl ExactSizeIterator for VectorF16Iter<'_> {}
+impl FusedIterator for VectorF16Iter<'_> {}
+
+#[derive(Clone, Copy)]
+struct ViewData<'a> {
+    sections: [&'a [u8]; 4],
+    logical_offsets: [u32; 4],
+    names: &'a [NameRecord],
+    fields: &'a [FieldRecord],
+    arrays: &'a [ValueReference],
+    containers: &'a [ContainerRecord],
+    presentation_fields: &'a [usize],
+}
+
+/// Read-only root-document view over completely validated logical `HDoc` backing.
+#[derive(Clone, Copy)]
+pub struct DocumentView<'a> {
+    data: ViewData<'a>,
+}
+
+impl<'a> DocumentView<'a> {
+    /// Returns the root object view.
+    #[must_use]
+    pub const fn root(self) -> ObjectView<'a> {
+        ObjectView {
+            data: self.data,
+            container_id: 0,
+        }
+    }
+
+    /// Returns the number of immediate root fields.
+    #[must_use]
+    pub fn len(self) -> usize {
+        self.root().len()
+    }
+
+    /// Reports whether the root object has no fields. Accepted stored documents are never empty.
+    #[must_use]
+    pub fn is_empty(self) -> bool {
+        self.root().is_empty()
+    }
+
+    /// Returns one root field by presentation position.
+    #[must_use]
+    pub fn field_at(self, presentation_index: usize) -> Option<FieldView<'a>> {
+        self.root().field_at(presentation_index)
+    }
+
+    /// Iterates root fields in preserved presentation order.
+    #[must_use]
+    pub fn fields(self) -> ObjectFields<'a> {
+        self.root().fields()
+    }
+
+    /// Detaches a complete owned logical document from the `HDoc` backing.
+    #[must_use]
+    pub fn to_owned_document(self) -> OwnedDocument {
+        OwnedDocument {
+            fields: self.fields().map(FieldView::to_owned_field).collect(),
+        }
+    }
+}
+
+/// Read-only view over one validated object container.
+#[derive(Clone, Copy)]
+pub struct ObjectView<'a> {
+    data: ViewData<'a>,
+    container_id: usize,
+}
+
+impl<'a> ObjectView<'a> {
+    /// Returns the number of immediate object fields.
+    #[must_use]
+    pub fn len(self) -> usize {
+        self.data
+            .containers
+            .get(self.container_id)
+            .map_or(0, |container| container.item_count)
+    }
+
+    /// Reports whether the object has no fields.
+    #[must_use]
+    pub fn is_empty(self) -> bool {
+        self.len() == 0
+    }
+
+    /// Returns the recursive object-field count rooted at this container.
+    #[must_use]
+    pub fn recursive_field_count(self) -> u32 {
+        self.data
+            .containers
+            .get(self.container_id)
+            .map_or(0, |container| container.recursive_fields)
+    }
+
+    /// Returns one field by preserved presentation position.
+    ///
+    /// Name and nested-path lookup are deliberately owned by `P03-011`; this positional access is
+    /// an O(1) read over validation-built presentation metadata.
+    #[must_use]
+    pub fn field_at(self, presentation_index: usize) -> Option<FieldView<'a>> {
+        let container = self.data.containers.get(self.container_id)?;
+        if container.tag != ValueType::Object.hdoc_tag()
+            || presentation_index >= container.item_count
+        {
+            return None;
+        }
+        let order_index = container.item_start.checked_add(presentation_index)?;
+        let field_index = *self.data.presentation_fields.get(order_index)?;
+        let field = self.data.fields.get(field_index)?;
+        let name = self
+            .data
+            .names
+            .get(bounded_u64_to_usize(u64::from(field.field_id)))?;
+        let name = std::str::from_utf8(name_bytes(self.data.sections[1], name).ok()?).ok()?;
+        Some(FieldView {
+            name,
+            value: value_view(self.data, field.value)?,
+            presentation_ordinal: field.presentation_ordinal,
+        })
+    }
+
+    /// Iterates fields in preserved presentation order.
+    #[must_use]
+    pub fn fields(self) -> ObjectFields<'a> {
+        ObjectFields {
+            object: self,
+            front: 0,
+            back: self.len(),
+        }
+    }
+
+    /// Detaches an owned object with the same mapping and presentation sequence.
+    #[must_use]
+    pub fn to_owned_object(self) -> OwnedObject {
+        OwnedObject {
+            fields: self.fields().map(FieldView::to_owned_field).collect(),
+        }
+    }
+}
+
+/// One borrowed field yielded in its owning object's presentation order.
+#[derive(Clone, Copy)]
+pub struct FieldView<'a> {
+    name: &'a str,
+    value: ValueView<'a>,
+    presentation_ordinal: u32,
+}
+
+impl<'a> FieldView<'a> {
+    /// Returns the exact non-normalized UTF-8 field name.
+    #[must_use]
+    pub const fn name(self) -> &'a str {
+        self.name
+    }
+
+    /// Returns the exact read-only logical value.
+    #[must_use]
+    pub const fn value(self) -> ValueView<'a> {
+        self.value
+    }
+
+    /// Returns the validated zero-based presentation ordinal.
+    #[must_use]
+    pub const fn presentation_ordinal(self) -> u32 {
+        self.presentation_ordinal
+    }
+
+    /// Detaches this field and its complete recursive value.
+    #[must_use]
+    pub fn to_owned_field(self) -> OwnedField {
+        OwnedField {
+            name: self.name.to_owned(),
+            value: self.value.to_owned_value(),
+        }
+    }
+}
+
+/// Exact-size double-ended iterator over object fields in presentation order.
+#[derive(Clone)]
+pub struct ObjectFields<'a> {
+    object: ObjectView<'a>,
+    front: usize,
+    back: usize,
+}
+
+impl<'a> Iterator for ObjectFields<'a> {
+    type Item = FieldView<'a>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.front == self.back {
+            return None;
+        }
+        let index = self.front;
+        self.front += 1;
+        self.object.field_at(index)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.back - self.front;
+        (remaining, Some(remaining))
+    }
+}
+
+impl DoubleEndedIterator for ObjectFields<'_> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.front == self.back {
+            return None;
+        }
+        self.back -= 1;
+        self.object.field_at(self.back)
+    }
+}
+
+impl ExactSizeIterator for ObjectFields<'_> {}
+impl FusedIterator for ObjectFields<'_> {}
+
+/// Read-only view over one validated dense array container.
+#[derive(Clone, Copy)]
+pub struct ArrayView<'a> {
+    data: ViewData<'a>,
+    container_id: usize,
+}
+
+impl<'a> ArrayView<'a> {
+    /// Returns the number of immediate dense elements.
+    #[must_use]
+    pub fn len(self) -> usize {
+        self.data
+            .containers
+            .get(self.container_id)
+            .map_or(0, |container| container.item_count)
+    }
+
+    /// Reports whether the array has no elements.
+    #[must_use]
+    pub fn is_empty(self) -> bool {
+        self.len() == 0
+    }
+
+    /// Returns one direct zero-based array element.
+    #[must_use]
+    pub fn get(self, index: usize) -> Option<ValueView<'a>> {
+        let container = self.data.containers.get(self.container_id)?;
+        if container.tag != ValueType::Array.hdoc_tag() || index >= container.item_count {
+            return None;
+        }
+        let reference = *self.arrays().get(index)?;
+        value_view(self.data, reference)
+    }
+
+    /// Iterates dense elements in semantic index order.
+    #[must_use]
+    pub fn elements(self) -> ArrayElements<'a> {
+        ArrayElements {
+            array: self,
+            front: 0,
+            back: self.len(),
+        }
+    }
+
+    fn arrays(self) -> &'a [ValueReference] {
+        let Some(container) = self.data.containers.get(self.container_id) else {
+            return &[];
+        };
+        let end = container.item_start.saturating_add(container.item_count);
+        self.data
+            .arrays
+            .get(container.item_start..end)
+            .unwrap_or_default()
+    }
+}
+
+/// Exact-size double-ended iterator over a dense borrowed array.
+#[derive(Clone)]
+pub struct ArrayElements<'a> {
+    array: ArrayView<'a>,
+    front: usize,
+    back: usize,
+}
+
+impl<'a> Iterator for ArrayElements<'a> {
+    type Item = ValueView<'a>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        if self.front == self.back {
+            return None;
+        }
+        let index = self.front;
+        self.front += 1;
+        self.array.get(index)
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        let remaining = self.back - self.front;
+        (remaining, Some(remaining))
+    }
+}
+
+impl DoubleEndedIterator for ArrayElements<'_> {
+    fn next_back(&mut self) -> Option<Self::Item> {
+        if self.front == self.back {
+            return None;
+        }
+        self.back -= 1;
+        self.array.get(self.back)
+    }
+}
+
+impl ExactSizeIterator for ArrayElements<'_> {}
+impl FusedIterator for ArrayElements<'_> {}
+
+/// Exact borrowed logical value exposed only after complete `HDoc` validation.
+#[derive(Clone, Copy)]
+pub enum ValueView<'a> {
+    /// Null.
+    Null,
+    /// Boolean.
+    Bool(bool),
+    /// Signed 32-bit integer.
+    Int32(i32),
+    /// Signed 64-bit integer.
+    Int64(i64),
+    /// Exact IEEE-754 binary64 bits.
+    Float64Bits(u64),
+    /// Canonical decimal128 logical value.
+    Decimal128(Decimal128),
+    /// Exact validated UTF-8 string.
+    String(&'a str),
+    /// Binary subtype and exact data bytes.
+    Binary(BinaryView<'a>),
+    /// Nested object.
+    Object(ObjectView<'a>),
+    /// Dense array.
+    Array(ArrayView<'a>),
+    /// Signed Unix microseconds.
+    Timestamp(i64),
+    /// Signed Unix-relative civil days.
+    Date(i32),
+    /// RFC-order UUID octets.
+    Uuid([u8; 16]),
+    /// Exact opaque `ObjectId` octets.
+    ObjectId([u8; 12]),
+    /// Exact finite binary32 vector element bits.
+    VectorF32(VectorF32View<'a>),
+    /// Exact finite binary16 vector element bits.
+    VectorF16(VectorF16View<'a>),
+}
+
+impl ValueView<'_> {
+    /// Returns the stable logical type without converting the payload.
+    #[must_use]
+    pub const fn value_type(self) -> ValueType {
+        match self {
+            Self::Null => ValueType::Null,
+            Self::Bool(_) => ValueType::Bool,
+            Self::Int32(_) => ValueType::Int32,
+            Self::Int64(_) => ValueType::Int64,
+            Self::Float64Bits(_) => ValueType::Float64,
+            Self::Decimal128(_) => ValueType::Decimal128,
+            Self::String(_) => ValueType::String,
+            Self::Binary(_) => ValueType::Binary,
+            Self::Object(_) => ValueType::Object,
+            Self::Array(_) => ValueType::Array,
+            Self::Timestamp(_) => ValueType::Timestamp,
+            Self::Date(_) => ValueType::Date,
+            Self::Uuid(_) => ValueType::Uuid,
+            Self::ObjectId(_) => ValueType::ObjectId,
+            Self::VectorF32(_) => ValueType::VectorF32,
+            Self::VectorF16(_) => ValueType::VectorF16,
+        }
+    }
+
+    /// Detaches this value recursively while preserving exact type and presentation semantics.
+    #[must_use]
+    pub fn to_owned_value(self) -> OwnedValue {
+        match self {
+            Self::Null => OwnedValue::Null,
+            Self::Bool(value) => OwnedValue::Bool(value),
+            Self::Int32(value) => OwnedValue::Int32(value),
+            Self::Int64(value) => OwnedValue::Int64(value),
+            Self::Float64Bits(value) => OwnedValue::Float64Bits(value),
+            Self::Decimal128(value) => OwnedValue::Decimal128(value),
+            Self::String(value) => OwnedValue::String(value.to_owned()),
+            Self::Binary(value) => OwnedValue::Binary {
+                subtype: value.subtype(),
+                bytes: value.as_bytes().to_vec(),
+            },
+            Self::Object(value) => OwnedValue::Object(value.to_owned_object()),
+            Self::Array(value) => {
+                OwnedValue::Array(value.elements().map(Self::to_owned_value).collect())
+            }
+            Self::Timestamp(value) => OwnedValue::Timestamp(value),
+            Self::Date(value) => OwnedValue::Date(value),
+            Self::Uuid(value) => OwnedValue::Uuid(value),
+            Self::ObjectId(value) => OwnedValue::ObjectId(value),
+            Self::VectorF32(value) => OwnedValue::VectorF32(value.iter().collect()),
+            Self::VectorF16(value) => OwnedValue::VectorF16(value.iter().collect()),
+        }
+    }
+}
+
+/// A completely validated `HDoc` envelope retaining safe logical view backing.
+#[derive(Clone, Eq, PartialEq)]
 pub struct DecodedHDoc<'a> {
     bytes: &'a [u8],
+    logical_sections: [Cow<'a, [u8]>; 4],
+    logical_offsets: [u32; 4],
+    names: Vec<NameRecord>,
+    fields: Vec<FieldRecord>,
+    arrays: Vec<ValueReference>,
+    containers: Vec<ContainerRecord>,
+    presentation_fields: Vec<usize>,
     content_hash: [u8; 32],
     canonical_length: u32,
     field_count: u32,
     compressed_sections: u8,
+}
+
+impl fmt::Debug for DecodedHDoc<'_> {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        formatter
+            .debug_struct("DecodedHDoc")
+            .field("stored_length", &self.bytes.len())
+            .field("canonical_length", &self.canonical_length)
+            .field("field_count", &self.field_count)
+            .field("compressed_sections", &self.compressed_sections)
+            .finish_non_exhaustive()
+    }
 }
 
 impl<'a> DecodedHDoc<'a> {
@@ -478,6 +1338,28 @@ impl<'a> DecodedHDoc<'a> {
     #[must_use]
     pub const fn compressed_section_count(&self) -> u8 {
         self.compressed_sections
+    }
+
+    /// Returns a read-only root-document view borrowing this validated backing.
+    #[must_use]
+    pub fn view(&self) -> DocumentView<'_> {
+        DocumentView {
+            data: ViewData {
+                sections: self.logical_sections.each_ref().map(AsRef::as_ref),
+                logical_offsets: self.logical_offsets,
+                names: &self.names,
+                fields: &self.fields,
+                arrays: &self.arrays,
+                containers: &self.containers,
+                presentation_fields: &self.presentation_fields,
+            },
+        }
+    }
+
+    /// Detaches a complete owned logical tree from the encoded and decoded backing.
+    #[must_use]
+    pub fn to_owned_document(&self) -> OwnedDocument {
+        self.view().to_owned_document()
     }
 }
 
@@ -1395,28 +2277,11 @@ const fn payload_alignment(value: EncodeValue<'_>) -> u64 {
 }
 
 const fn is_container(value: EncodeValue<'_>) -> bool {
-    matches!(value, EncodeValue::Object(_) | EncodeValue::Array(_))
+    value.value_type().is_container()
 }
 
 const fn type_tag(value: EncodeValue<'_>) -> u8 {
-    match value {
-        EncodeValue::Null => 1,
-        EncodeValue::Bool(_) => 2,
-        EncodeValue::Int32(_) => 3,
-        EncodeValue::Int64(_) => 4,
-        EncodeValue::Float64Bits(_) => 5,
-        EncodeValue::Decimal128(_) => 6,
-        EncodeValue::String(_) => 7,
-        EncodeValue::Binary(_) => 8,
-        EncodeValue::Object(_) => 9,
-        EncodeValue::Array(_) => 10,
-        EncodeValue::Timestamp(_) => 11,
-        EncodeValue::Date(_) => 12,
-        EncodeValue::Uuid(_) => 13,
-        EncodeValue::ObjectId(_) => 14,
-        EncodeValue::VectorF32(_) => 15,
-        EncodeValue::VectorF16(_) => 16,
-    }
+    value.value_type().hdoc_tag()
 }
 
 fn decimal_bytes(decimal: Decimal128) -> Result<[u8; 16], EncodeError> {
@@ -1603,8 +2468,8 @@ fn compression_stream(input: &[u8]) -> Option<Vec<u8>> {
     Some(output)
 }
 
-fn measure_stored_length(
-    logical_sections: &[Vec<u8>; 4],
+fn measure_stored_length<S: AsRef<[u8]>>(
+    logical_sections: &[S; 4],
     candidates: &[Option<Vec<u8>>; 4],
 ) -> u64 {
     let mut cursor = BASE_HEADER_BYTES;
@@ -1612,14 +2477,14 @@ fn measure_stored_length(
         cursor = align8_bounded(cursor);
         let length = candidates[index]
             .as_ref()
-            .map_or(logical_sections[index].len(), Vec::len);
+            .map_or(logical_sections[index].as_ref().len(), Vec::len);
         cursor += bounded_usize_to_u64(length);
     }
     align8_bounded(cursor) + FOOTER_BYTES
 }
 
-fn build_envelope(
-    logical_sections: &[Vec<u8>; 4],
+fn build_envelope<S: AsRef<[u8]>>(
+    logical_sections: &[S; 4],
     candidates: &[Option<Vec<u8>>; 4],
     item_counts: [u32; 4],
     field_count: u32,
@@ -1656,7 +2521,8 @@ fn build_envelope(
         } else {
             None
         };
-        let stored = candidate.unwrap_or(&logical_sections[index]);
+        let logical = logical_sections[index].as_ref();
+        let stored = candidate.unwrap_or(logical);
         let directory = bounded_u64_to_usize(
             HEADER_BYTES + bounded_usize_to_u64(index) * DIRECTORY_ENTRY_BYTES,
         );
@@ -1675,7 +2541,7 @@ fn build_envelope(
         put_u32(
             &mut output,
             directory + 12,
-            bounded_usize_to_u32(logical_sections[index].len()),
+            bounded_usize_to_u32(logical.len()),
         );
         put_u32(&mut output, directory + 16, item_counts[index]);
         put_u16(&mut output, directory + 20, u16::from(candidate.is_some()));
@@ -1840,8 +2706,9 @@ struct ParsedEnvelope {
 
 /// Validates and decodes one complete `HDoc` 1.0 envelope atomically.
 ///
-/// The returned wrapper exposes only validated stored bytes and bounded metadata. Owned logical
-/// values and borrowed field/value views remain separate later API layers.
+/// The returned wrapper retains borrowed uncompressed section slices and owns only sections that
+/// required bounded decompression. No logical view is available until every validation and exact
+/// canonical-envelope check has succeeded.
 ///
 /// # Errors
 ///
@@ -1850,14 +2717,22 @@ struct ParsedEnvelope {
 pub fn decode(bytes: &[u8]) -> Result<DecodedHDoc<'_>, DecodeError> {
     let envelope = parse_envelope(bytes)?;
     let logical_sections = decode_logical_sections(bytes, &envelope)?;
-    let content_hash = validate_logical_sections(&logical_sections, &envelope)?;
-    validate_canonical_envelope(bytes, &logical_sections, &envelope, envelope.footer_hash)?;
-    if content_hash != envelope.footer_hash {
+    let section_refs = logical_sections.each_ref().map(AsRef::as_ref);
+    let validated = validate_logical_sections(&section_refs, &envelope)?;
+    validate_canonical_envelope(bytes, &section_refs, &envelope, envelope.footer_hash)?;
+    if validated.content_hash != envelope.footer_hash {
         return Err(corruption(DecodeCheck::TypedContentHash, 0));
     }
     Ok(DecodedHDoc {
         bytes,
-        content_hash,
+        logical_sections,
+        logical_offsets: envelope.logical_offsets,
+        names: validated.names,
+        fields: validated.fields,
+        arrays: validated.arrays,
+        containers: validated.containers,
+        presentation_fields: validated.presentation_fields,
+        content_hash: validated.content_hash,
         canonical_length: envelope.canonical_length,
         field_count: envelope.field_count,
         compressed_sections: envelope.compressed_sections,
@@ -2094,11 +2969,11 @@ fn validate_checksum(bytes: &[u8], expected: u32) -> Result<(), DecodeError> {
     Ok(())
 }
 
-fn decode_logical_sections(
-    bytes: &[u8],
+fn decode_logical_sections<'a>(
+    bytes: &'a [u8],
     envelope: &ParsedEnvelope,
-) -> Result<[Vec<u8>; 4], DecodeError> {
-    let mut sections = [Vec::new(), Vec::new(), Vec::new(), Vec::new()];
+) -> Result<[Cow<'a, [u8]>; 4], DecodeError> {
+    let mut sections = std::array::from_fn(|_| Cow::Borrowed(&[][..]));
     for (index, entry) in envelope.entries.iter().copied().enumerate() {
         let start = bounded_u64_to_usize(u64::from(entry.stored_offset));
         let end = start
@@ -2108,9 +2983,9 @@ fn decode_logical_sections(
             .get(start..end)
             .ok_or(corruption(DecodeCheck::Directory, start))?;
         if entry.flags & 1 == 0 {
-            sections[index] = stored.to_vec();
+            sections[index] = Cow::Borrowed(stored);
         } else {
-            sections[index] = decode_compressed_section(stored, entry)?;
+            sections[index] = Cow::Owned(decode_compressed_section(stored, entry)?);
         }
     }
     Ok(sections)
@@ -2239,21 +3114,21 @@ fn decode_compressed_section(stored: &[u8], entry: DirectoryEntry) -> Result<Vec
     Ok(output)
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct NameRecord {
     absolute_offset: u32,
     local_offset: usize,
     length: u16,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct ValueReference {
     tag: u8,
     offset: u32,
     length: u32,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct FieldRecord {
     field_id: u32,
     name_offset: u32,
@@ -2262,7 +3137,7 @@ struct FieldRecord {
     presentation_ordinal: u32,
 }
 
-#[derive(Clone, Copy)]
+#[derive(Clone, Copy, Debug, Eq, PartialEq)]
 struct ContainerRecord {
     tag: u8,
     depth: u16,
@@ -2273,10 +3148,20 @@ struct ContainerRecord {
     parent_slot: u32,
 }
 
-fn validate_logical_sections(
-    sections: &[Vec<u8>; 4],
+struct ValidatedLogicalSections {
+    names: Vec<NameRecord>,
+    fields: Vec<FieldRecord>,
+    arrays: Vec<ValueReference>,
+    containers: Vec<ContainerRecord>,
+    presentation_fields: Vec<usize>,
+    content_hash: [u8; 32],
+}
+
+fn validate_logical_sections<S: AsRef<[u8]>>(
+    sections: &[S; 4],
     envelope: &ParsedEnvelope,
-) -> Result<[u8; 32], DecodeError> {
+) -> Result<ValidatedLogicalSections, DecodeError> {
+    let sections = sections.each_ref().map(AsRef::as_ref);
     let expected_field_bytes = u64::from(envelope.field_count)
         .checked_mul(FIELD_ENTRY_BYTES)
         .ok_or(corruption(DecodeCheck::FieldTable, 0))?;
@@ -2289,22 +3174,22 @@ fn validate_logical_sections(
         return Err(corruption(DecodeCheck::NamePool, 0));
     }
     let names = parse_names(
-        &sections[1],
+        sections[1],
         envelope.logical_offsets[1],
         envelope.entries[1].item_count,
     )?;
-    let fields = parse_fields(&sections[0], envelope.field_count)?;
+    let fields = parse_fields(sections[0], envelope.field_count)?;
     let (containers, arrays) = parse_containers_and_arrays(
-        &sections[3],
+        sections[3],
         envelope.logical_offsets[0],
         envelope.logical_offsets[3],
         envelope.field_count,
         envelope.entries[3].item_count,
     )?;
-    let root_id_field =
-        validate_records_and_tree(sections, envelope, &names, &fields, &arrays, &containers)?;
+    let (root_id_field, presentation_fields) =
+        validate_records_and_tree(&sections, envelope, &names, &fields, &arrays, &containers)?;
     validate_value_area(
-        &sections[2],
+        sections[2],
         envelope.logical_offsets[2],
         envelope.entries[2].item_count,
         &fields,
@@ -2313,19 +3198,28 @@ fn validate_logical_sections(
     )?;
     validate_decoded_root_id(
         &fields[root_id_field],
-        &sections[2],
+        sections[2],
         envelope.logical_offsets[2],
     )?;
-    hash_decoded_document(
-        &sections[1],
-        &sections[2],
+    let content_hash_result = hash_decoded_document(
+        sections[1],
+        sections[2],
         envelope.logical_offsets[2],
         envelope.logical_offsets[3],
         &names,
         &fields,
         &arrays,
         &containers,
-    )
+    );
+    let content_hash = content_hash_result?;
+    Ok(ValidatedLogicalSections {
+        names,
+        fields,
+        arrays,
+        containers,
+        presentation_fields,
+        content_hash,
+    })
 }
 
 fn parse_names(
@@ -2553,15 +3447,17 @@ fn parse_containers_and_arrays(
     clippy::too_many_lines,
     reason = "record ownership, breadth-first reachability, and recursive counts form one audit"
 )]
-fn validate_records_and_tree(
-    sections: &[Vec<u8>; 4],
+fn validate_records_and_tree<S: AsRef<[u8]>>(
+    sections: &[S; 4],
     envelope: &ParsedEnvelope,
     names: &[NameRecord],
     fields: &[FieldRecord],
     arrays: &[ValueReference],
     containers: &[ContainerRecord],
-) -> Result<usize, DecodeError> {
+) -> Result<(usize, Vec<usize>), DecodeError> {
+    let sections = sections.each_ref().map(AsRef::as_ref);
     let mut name_uses = vec![0_u32; names.len()];
+    let mut presentation_fields = vec![0_usize; fields.len()];
     let mut root_id_field = None;
     for (container_id, container) in containers.iter().enumerate() {
         if container.tag != 9 {
@@ -2593,11 +3489,19 @@ fn validate_records_and_tree(
                 return Err(corruption(DecodeCheck::FieldTable, field_index * 24 + 20));
             }
             *ordinal_slot = true;
+            let presentation_index = container
+                .item_start
+                .checked_add(ordinal)
+                .ok_or(corruption(DecodeCheck::FieldTable, field_index * 24 + 20))?;
+            let presentation_slot = presentation_fields
+                .get_mut(presentation_index)
+                .ok_or(corruption(DecodeCheck::FieldTable, field_index * 24 + 20))?;
+            *presentation_slot = field_index;
             name_uses[name_index] = name_uses[name_index]
                 .checked_add(1)
                 .ok_or(corruption(DecodeCheck::NamePool, name.local_offset))?;
             if container_id == 0 {
-                let name_bytes = name_bytes(&sections[1], name)?;
+                let name_bytes = name_bytes(sections[1], name)?;
                 if matches!(name_bytes, b"_v" | b"_ts") {
                     return Err(corruption(DecodeCheck::RootId, field_index * 24));
                 }
@@ -2674,7 +3578,7 @@ fn validate_records_and_tree(
     if recursive.first().copied() != Some(envelope.field_count) {
         return Err(corruption(DecodeCheck::ContainerTables, 16));
     }
-    Ok(root_id_field)
+    Ok((root_id_field, presentation_fields))
 }
 
 fn container_reference(
@@ -2714,6 +3618,66 @@ fn decoded_child_index(
     Ok(bounded_u64_to_usize(
         u64::from(relative) / CONTAINER_DESCRIPTOR_BYTES,
     ))
+}
+
+fn value_view(data: ViewData<'_>, reference: ValueReference) -> Option<ValueView<'_>> {
+    if matches!(reference.tag, 9 | 10) {
+        let container_id = decoded_child_index(reference, data.logical_offsets[3]).ok()?;
+        let container = data.containers.get(container_id)?;
+        return match container.tag {
+            9 => Some(ValueView::Object(ObjectView { data, container_id })),
+            10 => Some(ValueView::Array(ArrayView { data, container_id })),
+            _ => None,
+        };
+    }
+    let start = reference.offset.checked_sub(data.logical_offsets[2])?;
+    let end = start.checked_add(reference.length)?;
+    let payload = data.sections[2]
+        .get(bounded_u64_to_usize(u64::from(start))..bounded_u64_to_usize(u64::from(end)))?;
+    match reference.tag {
+        1 if payload.is_empty() => Some(ValueView::Null),
+        2 => Some(ValueView::Bool(*payload.first()? != 0)),
+        3 => Some(ValueView::Int32(i32::from_le_bytes(
+            <[u8; 4]>::try_from(payload).ok()?,
+        ))),
+        4 => Some(ValueView::Int64(i64::from_le_bytes(
+            <[u8; 8]>::try_from(payload).ok()?,
+        ))),
+        5 => Some(ValueView::Float64Bits(u64::from_le_bytes(
+            <[u8; 8]>::try_from(payload).ok()?,
+        ))),
+        6 => Some(ValueView::Decimal128(decode_decimal_payload(payload)?)),
+        7 => Some(ValueView::String(std::str::from_utf8(payload).ok()?)),
+        8 => {
+            let (&subtype, bytes) = payload.split_first()?;
+            Some(ValueView::Binary(BinaryView { subtype, bytes }))
+        }
+        11 => Some(ValueView::Timestamp(i64::from_le_bytes(
+            <[u8; 8]>::try_from(payload).ok()?,
+        ))),
+        12 => Some(ValueView::Date(i32::from_le_bytes(
+            <[u8; 4]>::try_from(payload).ok()?,
+        ))),
+        13 => Some(ValueView::Uuid(<[u8; 16]>::try_from(payload).ok()?)),
+        14 => Some(ValueView::ObjectId(<[u8; 12]>::try_from(payload).ok()?)),
+        15 => {
+            let count = u32::from_le_bytes(<[u8; 4]>::try_from(payload.get(..4)?).ok()?);
+            let element_bytes = payload.get(4..)?;
+            if bounded_u64_to_usize(u64::from(count)).checked_mul(4)? != element_bytes.len() {
+                return None;
+            }
+            Some(ValueView::VectorF32(VectorF32View { element_bytes }))
+        }
+        16 => {
+            let count = u32::from_le_bytes(<[u8; 4]>::try_from(payload.get(..4)?).ok()?);
+            let element_bytes = payload.get(4..)?;
+            if bounded_u64_to_usize(u64::from(count)).checked_mul(2)? != element_bytes.len() {
+                return None;
+            }
+            Some(ValueView::VectorF16(VectorF16View { element_bytes }))
+        }
+        _ => None,
+    }
 }
 
 fn validate_value_area(
@@ -2801,9 +3765,11 @@ fn validate_payload(tag: u8, payload: &[u8], offset: usize) -> Result<(), Decode
 }
 
 fn validate_decimal_payload(payload: &[u8]) -> bool {
-    let Ok(bytes) = <[u8; 16]>::try_from(payload) else {
-        return false;
-    };
+    decode_decimal_payload(payload).is_some()
+}
+
+fn decode_decimal_payload(payload: &[u8]) -> Option<Decimal128> {
+    let bytes = <[u8; 16]>::try_from(payload).ok()?;
     let bits = u128::from_le_bytes(bytes);
     let logical = match bits {
         0x7800_0000_0000_0000_0000_0000_0000_0000 => Decimal128::PositiveInfinity,
@@ -2837,7 +3803,7 @@ fn validate_decimal_payload(payload: &[u8]) -> bool {
             }
         }
     };
-    decimal_bytes(logical).is_ok_and(|canonical| canonical == bytes)
+    (decimal_bytes(logical).ok()? == bytes).then_some(logical)
 }
 
 fn validate_vector_payload(payload: &[u8], width: usize, shift: u32, mask: u32) -> bool {
@@ -3017,17 +3983,18 @@ fn name_bytes<'a>(section: &'a [u8], name: &NameRecord) -> Result<&'a [u8], Deco
         .ok_or(corruption(DecodeCheck::NamePool, name.local_offset))
 }
 
-fn validate_canonical_envelope(
+fn validate_canonical_envelope<S: AsRef<[u8]>>(
     bytes: &[u8],
-    sections: &[Vec<u8>; 4],
+    sections: &[S; 4],
     envelope: &ParsedEnvelope,
     content_hash: [u8; 32],
 ) -> Result<(), DecodeError> {
+    let sections = sections.each_ref().map(AsRef::as_ref);
     let candidates = [
-        compression_stream(&sections[0]),
-        compression_stream(&sections[1]),
-        compression_stream(&sections[2]),
-        compression_stream(&sections[3]),
+        compression_stream(sections[0]),
+        compression_stream(sections[1]),
+        compression_stream(sections[2]),
+        compression_stream(sections[3]),
     ];
     let use_compression = envelope.compressed_sections != 0;
     if use_compression {
@@ -3049,13 +4016,13 @@ fn validate_canonical_envelope(
             }
         }
         if selected != envelope.compressed_sections
-            || measure_stored_length(sections, &candidates) >= u64::from(envelope.canonical_length)
+            || measure_stored_length(&sections, &candidates) >= u64::from(envelope.canonical_length)
         {
             return Err(corruption(DecodeCheck::CompressionCanonicality, 0));
         }
     }
     let Ok(rebuilt) = build_envelope(
-        sections,
+        &sections,
         &candidates,
         [
             envelope.entries[0].item_count,
@@ -3420,6 +4387,437 @@ mod tests {
             }
         }
         Err(corruption(DecodeCheck::FieldTable, 0))
+    }
+
+    #[test]
+    #[allow(
+        clippy::too_many_lines,
+        reason = "all logical variants and public borrowed/owned accessors form one round-trip table"
+    )]
+    fn borrowed_and_owned_values_preserve_every_logical_type() -> Result<(), EncodeError> {
+        let encoded = decoder_all_types_hdoc()?;
+        let decoded = decode(encoded.as_bytes()).map_err(|_| EncodeError::ArithmeticOverflow)?;
+        assert!(
+            decoded
+                .logical_sections
+                .iter()
+                .all(|section| matches!(section, Cow::Borrowed(_)))
+        );
+
+        let types = [
+            ValueType::Uuid,
+            ValueType::Null,
+            ValueType::Bool,
+            ValueType::Int32,
+            ValueType::Int64,
+            ValueType::Float64,
+            ValueType::Decimal128,
+            ValueType::String,
+            ValueType::Binary,
+            ValueType::Object,
+            ValueType::Array,
+            ValueType::Timestamp,
+            ValueType::Date,
+            ValueType::Uuid,
+            ValueType::ObjectId,
+            ValueType::VectorF32,
+            ValueType::VectorF16,
+        ];
+        let registry = [
+            (ValueType::Null, "null", 1),
+            (ValueType::Bool, "bool", 2),
+            (ValueType::Int32, "int32", 3),
+            (ValueType::Int64, "int64", 4),
+            (ValueType::Float64, "float64", 5),
+            (ValueType::Decimal128, "decimal128", 6),
+            (ValueType::String, "string", 7),
+            (ValueType::Binary, "binary", 8),
+            (ValueType::Object, "object", 9),
+            (ValueType::Array, "array", 10),
+            (ValueType::Timestamp, "timestamp", 11),
+            (ValueType::Date, "date", 12),
+            (ValueType::Uuid, "uuid", 13),
+            (ValueType::ObjectId, "objectId", 14),
+            (ValueType::VectorF32, "vector<f32,N>", 15),
+            (ValueType::VectorF16, "vector<f16,N>", 16),
+        ];
+        for (value_type, name, tag) in registry {
+            assert_eq!(value_type.as_str(), name);
+            assert_eq!(value_type.hdoc_tag(), tag);
+            assert_eq!(value_type.is_container(), matches!(tag, 9 | 10));
+        }
+
+        let view = decoded.view();
+        assert_eq!(view.len(), 17);
+        assert!(!view.is_empty());
+        assert_eq!(view.root().len(), 17);
+        assert!(!view.root().is_empty());
+        assert_eq!(view.root().recursive_field_count(), 17);
+        assert!(view.field_at(17).is_none());
+
+        let fields = view.fields().collect::<Vec<_>>();
+        assert_eq!(fields.len(), 17);
+        for (index, field) in fields.iter().copied().enumerate() {
+            assert_eq!(field.presentation_ordinal(), bounded_usize_to_u32(index));
+            assert_eq!(field.value().value_type(), types[index]);
+        }
+        assert_eq!(
+            fields.iter().map(|field| field.name()).collect::<Vec<_>>(),
+            [
+                "_id", "t01", "t02", "t03", "t04", "t05", "t06", "t07", "t08", "t09", "t10", "t11",
+                "t12", "t13", "t14", "t15", "t16",
+            ]
+        );
+
+        let mut field_ends = view.fields();
+        assert_eq!(field_ends.len(), 17);
+        assert_eq!(field_ends.next().map(FieldView::name), Some("_id"));
+        assert_eq!(field_ends.next_back().map(FieldView::name), Some("t16"));
+        assert_eq!(field_ends.size_hint(), (15, Some(15)));
+        for _ in &mut field_ends {}
+        assert!(field_ends.next().is_none());
+        assert!(field_ends.next_back().is_none());
+
+        assert!(matches!(fields[0].value(), ValueView::Uuid(value) if value == [0; 16]));
+        assert!(matches!(fields[1].value(), ValueView::Null));
+        assert!(matches!(fields[2].value(), ValueView::Bool(true)));
+        assert!(matches!(fields[3].value(), ValueView::Int32(i32::MIN)));
+        assert!(matches!(fields[4].value(), ValueView::Int64(i64::MAX)));
+        assert!(matches!(
+            fields[5].value(),
+            ValueView::Float64Bits(0x7ff0_0000_0000_0001)
+        ));
+        assert!(matches!(
+            fields[6].value(),
+            ValueView::Decimal128(Decimal128::Finite {
+                negative: true,
+                coefficient: 12_345,
+                exponent: -2
+            })
+        ));
+        let ValueView::String(string) = fields[7].value() else {
+            return Err(EncodeError::ArithmeticOverflow);
+        };
+        assert_eq!(string, "e\u{301}");
+        let stored_start = encoded.as_bytes().as_ptr() as usize;
+        let stored_end = stored_start + encoded.as_bytes().len();
+        assert!((stored_start..stored_end).contains(&(string.as_ptr() as usize)));
+
+        let ValueView::Binary(binary) = fields[8].value() else {
+            return Err(EncodeError::ArithmeticOverflow);
+        };
+        assert_eq!(binary.subtype(), 0);
+        assert_eq!(binary.as_bytes(), [0, 0xff]);
+        assert_eq!(binary.len(), 2);
+        assert!(!binary.is_empty());
+        let empty_binary = BinaryView {
+            subtype: 0,
+            bytes: &[],
+        };
+        assert!(empty_binary.is_empty());
+
+        let ValueView::Object(object) = fields[9].value() else {
+            return Err(EncodeError::ArithmeticOverflow);
+        };
+        assert_eq!(object.len(), 0);
+        assert!(object.is_empty());
+        assert_eq!(object.recursive_field_count(), 0);
+        assert!(object.field_at(0).is_none());
+        assert_eq!(object.fields().len(), 0);
+        assert!(object.to_owned_object().into_fields().is_empty());
+
+        let ValueView::Array(array) = fields[10].value() else {
+            return Err(EncodeError::ArithmeticOverflow);
+        };
+        assert_eq!(array.len(), 1);
+        assert!(!array.is_empty());
+        assert!(matches!(array.get(0), Some(ValueView::Null)));
+        assert!(array.get(1).is_none());
+        let mut elements = array.elements();
+        assert_eq!(elements.len(), 1);
+        assert!(matches!(elements.next_back(), Some(ValueView::Null)));
+        assert!(elements.next().is_none());
+        assert!(elements.next_back().is_none());
+
+        assert!(matches!(
+            fields[11].value(),
+            ValueView::Timestamp(TIMESTAMP_MIN)
+        ));
+        assert!(matches!(fields[12].value(), ValueView::Date(DATE_MAX)));
+        assert!(matches!(fields[13].value(), ValueView::Uuid(value) if value == [0xff; 16]));
+        assert!(matches!(
+            fields[14].value(),
+            ValueView::ObjectId(value) if value == [0xff; 12]
+        ));
+
+        let ValueView::VectorF32(vector_f32) = fields[15].value() else {
+            return Err(EncodeError::ArithmeticOverflow);
+        };
+        assert_eq!(vector_f32.len(), 3);
+        assert!(!vector_f32.is_empty());
+        assert_eq!(vector_f32.get(0), Some(0x3f80_0000));
+        assert_eq!(vector_f32.get(3), None);
+        assert_eq!(vector_f32.get(usize::MAX), None);
+        let mut f32_bits = vector_f32.iter();
+        assert_eq!(f32_bits.len(), 3);
+        assert_eq!(f32_bits.next(), Some(0x3f80_0000));
+        assert_eq!(f32_bits.next_back(), Some(1));
+        assert_eq!(f32_bits.size_hint(), (1, Some(1)));
+        assert_eq!(f32_bits.next(), Some(0x8000_0000));
+        assert_eq!(f32_bits.next(), None);
+        assert_eq!(f32_bits.next_back(), None);
+        assert!(VectorF32View { element_bytes: &[] }.is_empty());
+
+        let ValueView::VectorF16(vector_f16) = fields[16].value() else {
+            return Err(EncodeError::ArithmeticOverflow);
+        };
+        assert_eq!(vector_f16.len(), 3);
+        assert!(!vector_f16.is_empty());
+        assert_eq!(vector_f16.get(0), Some(0x3c00));
+        assert_eq!(vector_f16.get(3), None);
+        assert_eq!(vector_f16.get(usize::MAX), None);
+        let mut f16_bits = vector_f16.iter();
+        assert_eq!(f16_bits.len(), 3);
+        assert_eq!(f16_bits.next(), Some(0x3c00));
+        assert_eq!(f16_bits.next_back(), Some(1));
+        assert_eq!(f16_bits.size_hint(), (1, Some(1)));
+        assert_eq!(f16_bits.next(), Some(0x8000));
+        assert_eq!(f16_bits.next(), None);
+        assert_eq!(f16_bits.next_back(), None);
+        assert!(VectorF16View { element_bytes: &[] }.is_empty());
+
+        let owned = decoded.to_owned_document();
+        let owned_from_view = view.to_owned_document();
+        let owned_root = view.root().to_owned_object();
+        assert_eq!(owned.fields().len(), 17);
+        assert_eq!(owned_from_view.fields().len(), 17);
+        assert_eq!(owned_root.fields().len(), 17);
+        for (index, field) in owned.fields().iter().enumerate() {
+            assert_eq!(field.name(), fields[index].name());
+            assert_eq!(field.value().value_type(), types[index]);
+        }
+        let (detached_name, detached_value) = fields[7].to_owned_field().into_parts();
+        assert_eq!(detached_name, "t07");
+        assert!(matches!(detached_value, OwnedValue::String(value) if value == "e\u{301}"));
+        let owned_fields = owned.clone().into_fields();
+        assert_eq!(owned_fields.len(), 17);
+        assert!(matches!(owned_fields[1].value(), OwnedValue::Null));
+        assert!(matches!(owned_fields[2].value(), OwnedValue::Bool(true)));
+        assert!(matches!(
+            owned_fields[3].value(),
+            OwnedValue::Int32(i32::MIN)
+        ));
+        assert!(matches!(
+            owned_fields[4].value(),
+            OwnedValue::Int64(i64::MAX)
+        ));
+        assert!(matches!(
+            owned_fields[5].value(),
+            OwnedValue::Float64Bits(0x7ff0_0000_0000_0001)
+        ));
+        assert!(matches!(
+            owned_fields[6].value(),
+            OwnedValue::Decimal128(Decimal128::Finite {
+                negative: true,
+                coefficient: 12_345,
+                exponent: -2
+            })
+        ));
+        assert!(matches!(
+            owned_fields[8].value(),
+            OwnedValue::Binary { subtype: 0, bytes } if bytes == &[0, 0xff]
+        ));
+        assert!(matches!(
+            owned_fields[9].value(),
+            OwnedValue::Object(value) if value.fields().is_empty()
+        ));
+        assert!(matches!(
+            owned_fields[10].value(),
+            OwnedValue::Array(values) if matches!(values.as_slice(), [OwnedValue::Null])
+        ));
+        assert!(matches!(
+            owned_fields[11].value(),
+            OwnedValue::Timestamp(TIMESTAMP_MIN)
+        ));
+        assert!(matches!(
+            owned_fields[12].value(),
+            OwnedValue::Date(DATE_MAX)
+        ));
+        assert!(matches!(
+            owned_fields[13].value(),
+            OwnedValue::Uuid(value) if value == &[0xff; 16]
+        ));
+        assert!(matches!(
+            owned_fields[14].value(),
+            OwnedValue::ObjectId(value) if value == &[0xff; 12]
+        ));
+        assert!(matches!(
+            owned_fields[15].value(),
+            OwnedValue::VectorF32(values) if values == &[0x3f80_0000, 0x8000_0000, 1]
+        ));
+        assert!(matches!(
+            owned_fields[16].value(),
+            OwnedValue::VectorF16(values) if values == &[0x3c00, 0x8000, 1]
+        ));
+
+        let invalid_object = ObjectView {
+            data: view.data,
+            container_id: usize::MAX,
+        };
+        assert_eq!(invalid_object.len(), 0);
+        assert_eq!(invalid_object.recursive_field_count(), 0);
+        assert!(invalid_object.field_at(0).is_none());
+        let invalid_array = ArrayView {
+            data: view.data,
+            container_id: usize::MAX,
+        };
+        assert_eq!(invalid_array.len(), 0);
+        assert!(invalid_array.is_empty());
+        assert!(invalid_array.get(0).is_none());
+        assert!(invalid_array.arrays().is_empty());
+        assert!(
+            ArrayView {
+                data: view.data,
+                container_id: 0
+            }
+            .get(0)
+            .is_none()
+        );
+        assert!(
+            value_view(
+                view.data,
+                ValueReference {
+                    tag: 17,
+                    offset: view.data.logical_offsets[2],
+                    length: 0,
+                }
+            )
+            .is_none()
+        );
+        let mut invalid_containers = decoded.containers.clone();
+        invalid_containers[1].tag = 17;
+        let mut invalid_container_data = view.data;
+        invalid_container_data.containers = &invalid_containers;
+        assert!(
+            value_view(
+                invalid_container_data,
+                ValueReference {
+                    tag: 9,
+                    offset: view.data.logical_offsets[3]
+                        + bounded_u64_to_u32(CONTAINER_DESCRIPTOR_BYTES),
+                    length: bounded_u64_to_u32(CONTAINER_DESCRIPTOR_BYTES),
+                }
+            )
+            .is_none()
+        );
+
+        let bad_f32 = [2, 0, 0, 0, 0, 0, 0, 0];
+        let mut bad_f32_data = view.data;
+        bad_f32_data.sections[2] = &bad_f32;
+        bad_f32_data.logical_offsets[2] = 0;
+        assert!(
+            value_view(
+                bad_f32_data,
+                ValueReference {
+                    tag: 15,
+                    offset: 0,
+                    length: bounded_usize_to_u32(bad_f32.len()),
+                }
+            )
+            .is_none()
+        );
+        let bad_f16 = [2, 0, 0, 0, 0, 0];
+        let mut bad_f16_data = view.data;
+        bad_f16_data.sections[2] = &bad_f16;
+        bad_f16_data.logical_offsets[2] = 0;
+        assert!(
+            value_view(
+                bad_f16_data,
+                ValueReference {
+                    tag: 16,
+                    offset: 0,
+                    length: bounded_usize_to_u32(bad_f16.len()),
+                }
+            )
+            .is_none()
+        );
+        Ok(())
+    }
+
+    #[test]
+    fn views_preserve_presentation_and_own_only_decoded_sections() -> Result<(), EncodeError> {
+        let scalar = decoder_scalar_hdoc()?;
+        let scalar_decoded =
+            decode(scalar.as_bytes()).map_err(|_| EncodeError::ArithmeticOverflow)?;
+        assert_eq!(
+            scalar_decoded
+                .view()
+                .fields()
+                .map(FieldView::name)
+                .collect::<Vec<_>>(),
+            ["b", "_id", "a"]
+        );
+        assert_eq!(
+            scalar_decoded
+                .view()
+                .fields()
+                .map(FieldView::presentation_ordinal)
+                .collect::<Vec<_>>(),
+            [0, 1, 2]
+        );
+
+        let detached = {
+            let large = "view-storage-sentinel-".repeat(256);
+            let fields = [
+                EncodeField::new("_id", EncodeValue::Uuid([0; 16])),
+                EncodeField::new("pad", EncodeValue::String(&large)),
+            ];
+            let encoded = encode(EncodeDocument::new(&fields))?;
+            assert_eq!(encoded.compressed_section_count(), 1);
+            let decoded =
+                decode(encoded.as_bytes()).map_err(|_| EncodeError::ArithmeticOverflow)?;
+            assert_eq!(decoded.compressed_section_count(), 1);
+            assert_eq!(
+                decoded
+                    .logical_sections
+                    .iter()
+                    .filter(|section| matches!(section, Cow::Owned(_)))
+                    .count(),
+                1
+            );
+            let first = decoded
+                .view()
+                .field_at(1)
+                .ok_or(EncodeError::ArithmeticOverflow)?;
+            let second = decoded
+                .view()
+                .field_at(1)
+                .ok_or(EncodeError::ArithmeticOverflow)?;
+            let (ValueView::String(first), ValueView::String(second)) =
+                (first.value(), second.value())
+            else {
+                return Err(EncodeError::ArithmeticOverflow);
+            };
+            assert_eq!(first, large);
+            assert_eq!(first.as_ptr(), second.as_ptr());
+            let stored_start = encoded.as_bytes().as_ptr() as usize;
+            let stored_end = stored_start + encoded.as_bytes().len();
+            assert!(!(stored_start..stored_end).contains(&(first.as_ptr() as usize)));
+            let debug = format!("{decoded:?}");
+            assert!(debug.contains("compressed_sections: 1"));
+            assert!(!debug.contains("view-storage-sentinel"));
+            decoded.to_owned_document()
+        };
+        let detached_pad = detached
+            .fields()
+            .get(1)
+            .ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(
+            detached_pad.value(),
+            OwnedValue::String(value) if value == &"view-storage-sentinel-".repeat(256)
+        ));
+        assert_eq!(detached.into_fields().len(), 2);
+        Ok(())
     }
 
     #[test]
@@ -5299,7 +6697,7 @@ mod tests {
     #[test]
     fn metadata_error_codes_and_internal_guards_are_stable() -> Result<(), EncodeError> {
         assert_eq!(COMPONENT_NAME, "helix-doc");
-        assert_eq!(MATURITY, "hdoc-codec");
+        assert_eq!(MATURITY, "hdoc-values");
         assert!(INTERNAL_DEPENDENCIES.is_empty());
         assert_eq!(CompressionMode::default(), CompressionMode::Canonical);
         assert_eq!(

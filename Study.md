@@ -291,17 +291,25 @@ cost, but it prevents multiple durable byte identities and is bounded per block;
 evidence may reject the optional profile, not weaken its canonicality.
 
 The dependency review selected a version outside known `RUSTSEC-2026-0041` affected ranges and
-requires safe decode into fresh zeroed exact-size output with no dictionaries. `P03-008` has now
-adopted the exact dependency graph with fail-closed Rust advisory reporting, license/notices, and
-lock policy, and has implemented the portable canonical writer. `P03-009` now adds the bounded
-whole-envelope validating reader. It verifies length/version/feature/checksum trust order,
-stored/logical section placement, fresh-output decompression, canonical tables/tree/value
-occurrence, payload grammars, root `_id`, typed identity, and exact recompression/rebuild before
-returning metadata. Tests replay the complete envelopes, structural sections, typed hashes,
-scalar/decimal/vector payloads, LZ4 block streams, limit boundaries, deterministic presentation,
-all truncations, per-byte mutations, and targeted fail-closed internal guards on native and Wasm
-builds. `P03-010` still owns decoded values/views, and `P03-016` still owns immutable supported
-fixtures.
+requires safe decode into fresh zeroed exact-size output with no dictionaries. `P03-008` adopted the
+exact dependency graph with fail-closed Rust advisory reporting, license/notices, and lock policy,
+and implemented the portable canonical writer. `P03-009` added the bounded whole-envelope
+validating reader. It verifies length/version/feature/checksum trust order, stored/logical section
+placement, fresh-output decompression, canonical tables/tree/value occurrence, payload grammars,
+root `_id`, typed identity, and exact recompression/rebuild before returning metadata.
+
+`P03-010` now retains that validated logical backing and exposes it through lifetime-bound read-only
+document/object/array/field/value views. Uncompressed sections remain slices of the accepted input;
+compressed sections reuse the decoder's already bounded owned output, so opening or traversing a
+view performs no payload copy. A validation-built presentation permutation makes full object reads
+reproduce accepted order without confusing it with canonical mapping identity; arrays stay dense
+and directly indexed. Scalars preserve exact integer widths, float bits, canonical decimal tuples,
+temporal counts, identifier bytes, binary subtype/data, and vector family/dimension/element bits.
+Recursive detachment produces owned fields/values that survive the HDoc buffer without introducing
+a Missing value or normalizing any payload. The all-type, presentation, compression, and defensive
+view tests extend the existing complete-envelope, truncation, per-byte mutation, native, Wasm, and
+coverage replay. Optimized raw name/path lookup remains `P03-011`, and `P03-016` still owns
+immutable supported fixtures.
 
 ### 6.3 Field-path dictionaries
 

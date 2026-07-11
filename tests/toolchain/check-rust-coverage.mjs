@@ -145,7 +145,7 @@ const validatePolicy = () => {
   assert(
     policy.execution.minimum_test_binaries === 8 &&
       policy.execution.maximum_test_binaries === 128 &&
-      policy.execution.minimum_tests === 23 &&
+      policy.execution.minimum_tests === 25 &&
       policy.execution.maximum_tests === 100000 &&
       policy.execution.minimum_raw_profiles === 8 &&
       policy.execution.maximum_raw_profiles === 128,
@@ -190,7 +190,7 @@ const validatePolicy = () => {
     'empty product-scope exception',
   );
   assert(
-    policy.active_product_scope.allowed_status === 'hdoc-codec' &&
+    policy.active_product_scope.allowed_status === 'hdoc-values' &&
       policy.active_product_scope.requires_database_functionality === true &&
       policy.active_product_scope.activated_by === 'P03-008' &&
       policy.active_product_scope.reason.length >= 150,

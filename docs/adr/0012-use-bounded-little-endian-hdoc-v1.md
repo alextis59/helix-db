@@ -483,7 +483,9 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] Implement the bounded validating decoder under `P03-009`, including trust-ordered outer
   validation, fresh-output decompression, structural/payload/hash checks, and exact byte
   canonicality.
-- [ ] Implement independent owned/borrowed paths and rendering under `P03-010`–`P03-012`.
+- [x] Implement independent owned/borrowed logical value paths under `P03-010`, retaining exact
+  type/payload/presentation semantics and complete-validation-before-exposure.
+- [ ] Implement raw field/path lookup and canonical rendering/import under `P03-011`–`P03-012`.
 - [ ] Commit immutable positive, boundary, noncanonical, unknown-feature/version, checksum, hash,
   overlap, truncation, padding, compression-bomb, and limit golden vectors under `P03-016`.
 - [ ] Prove Rust and TypeScript readers produce identical logical values and hashes under
@@ -520,6 +522,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   limits, native/Wasm replay, and active semantic-critical coverage.
 - [x] `P03-009`: implement the bounded validating reader, stable redacted diagnostics, malformed
   and mutation replay, exact canonical rebuild, native/Wasm/ASan proof, and active coverage.
+- [x] `P03-010`: implement allocation-free borrowed views over retained validated backing, detached
+  owned logical values, all-type/presentation/compression replay, and active coverage.
 - [ ] `P03-015`: publish the HDoc reader/writer/feature migration matrix.
 - [ ] `P03-016`–`P03-021`: freeze independent fixtures, fuzz/corruption evidence, and experiment
   conclusions before `G03`.

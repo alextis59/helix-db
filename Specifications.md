@@ -545,13 +545,25 @@ slots, and 64-byte footer. `P03-003`–`P03-007` fix all base tags, payloads, re
 placement, containers, CRC coverage, typed-hash profile, compression bytes, logical coordinates,
 and canonical profile selection, completing the HDoc 1.0 byte grammar. `P03-008` implements the
 safe deterministic production writer with full portable-limit validation, canonical tables and
-typed identity, CRC-32C, and exact optional compression selection. `P03-009` now implements the
-bounded whole-envelope validating reader: it rejects unsupported versions/features/codecs,
-truncation, invalid placement/overlap/padding, malformed compressed streams, noncanonical
-payloads/tables/trees, root-ID violations, checksum/hash disagreement, and any stored-byte form
-that does not exactly rebuild under the selected profile. Owned and borrowed decoded values remain
-`P03-010`; the normative reference envelopes are not yet the immutable supported fixtures owned by
-`P03-016`.
+typed identity, CRC-32C, and exact optional compression selection. `P03-009` implements the bounded
+whole-envelope validating reader: it rejects unsupported versions/features/codecs, truncation,
+invalid placement/overlap/padding, malformed compressed streams, noncanonical payloads/tables/
+trees, root-ID violations, checksum/hash disagreement, and any stored-byte form that does not
+exactly rebuild under the selected profile.
+
+`P03-010` now implements the logical value-access layer without weakening that validation boundary.
+`DecodedHDoc` borrows each uncompressed section directly from the validated input and owns only the
+fresh bounded section buffers required by compression. `DocumentView`, `ObjectView`, `ArrayView`,
+`FieldView`, and `ValueView` borrow that retained backing and therefore cannot outlive the validated
+wrapper. Full object reads use the validated presentation permutation; dense arrays retain direct
+index order; strings and binary data remain borrowed slices; integer, float, decimal, temporal,
+identifier, and vector views preserve exact logical type and payload bits. `to_owned_document()`
+recursively detaches names, variable payloads, containers, and vector bits into `OwnedDocument` /
+`OwnedValue` while retaining the same presentation order and typed values. Missing has no view or
+owned variant, whereas a present null remains `ValueView::Null` / `OwnedValue::Null`. Neither path
+can expose partially validated data. Optimized exact-name and nested-path lookup remains
+`P03-011`; canonical rendering/import remains `P03-012`; the normative reference envelopes are not
+yet the immutable supported fixtures owned by `P03-016`.
 
 ### 7.4 Field path dictionary
 
@@ -2446,7 +2458,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer/validating reader implemented by `P03-008`–`P03-009`, owned views/fixtures continue at `P03-010` onward) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, borrowed views, and owned values implemented by `P03-008`–`P03-010`; lookup/fixtures continue at `P03-011` onward) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |
