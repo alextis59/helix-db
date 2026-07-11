@@ -1,0 +1,36 @@
+{
+  "schema": "helix.browser-example-bundle-report/1",
+  "plan_items": [
+    "P02-010",
+    "P02-016"
+  ],
+  "example": "examples/browser-toolchain",
+  "vite": "8.1.4",
+  "target": "es2022",
+  "artifacts": [
+    {
+      "path": "dist/browser/assets/helix_core-DCUk-il2.wasm",
+      "bytes": 86,
+      "sha256": "c3231bfcaaa248bda3c8a762c35f5f778e1e4f319b93eef3882e7a9c6a0fde93"
+    },
+    {
+      "path": "dist/browser/assets/index-DDwXdUbO.js",
+      "bytes": 2235,
+      "sha256": "0f663224780847759751381ba901fef036ab3ac7ac06a0137cf66e1d274cdcf9"
+    },
+    {
+      "path": "dist/browser/assets/index-DDwXdUbO.js.map",
+      "bytes": 3988,
+      "sha256": "4b696f7c24cf5df1e906b5a06a9bb42d4d4b21ce3f7c0bd065a226905eed05cd"
+    },
+    {
+      "path": "dist/browser/index.html",
+      "bytes": 978,
+      "sha256": "ec7d3685418713eabdc8e44af0253375f0148616487a0be4638d11f0c7abd718"
+    }
+  ],
+  "wasm_source_sha256": "c3231bfcaaa248bda3c8a762c35f5f778e1e4f319b93eef3882e7a9c6a0fde93",
+  "database_functionality": false,
+  "claim_boundary": "These examples prove native linking and browser Wasm bundling only; they expose no document, query, storage, durability, GPU, network, compatibility, security, or release functionality.",
+  "verdict": "pass"
+}

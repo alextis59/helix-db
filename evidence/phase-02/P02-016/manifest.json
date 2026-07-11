@@ -1,0 +1,505 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-016",
+  "requirements": [
+    "CORE-001",
+    "CORE-003",
+    "INV-003",
+    "INV-004",
+    "INV-007",
+    "PLAT-001",
+    "PLAT-002",
+    "PLAT-003",
+    "QUAL-001"
+  ],
+  "accepted_adrs": [],
+  "base_commit": "8bfb5c37caebdc911dde04f094d1e8fea8727d1e",
+  "source_commits": [
+    "bceba1253e612a7cfe8a26abbcf42c176c80824a",
+    "77bcc130615617d2f7d2269d275e3677ba1f8e27"
+  ],
+  "commit": "77bcc130615617d2f7d2269d275e3677ba1f8e27",
+  "source_tree": "b09fc8ed0b7d6bdf298116af95ccb0a3c97080e9",
+  "recorded_at": "2026-07-11T05:40:20.733Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "active_node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "playwright": "1.61.1",
+      "chromium": "149.0.7827.55",
+      "firefox": "151.0",
+      "webkit": "26.5",
+      "pyyaml": "6.0",
+      "yq": "4.33.3"
+    },
+    "javascript_lanes": ["22.23.1", "24.18.0"],
+    "native_local_lane": "linux-x64",
+    "declared_native_ci_lanes": [
+      "linux-x64",
+      "windows-x64",
+      "macos-arm64",
+      "linux-arm64",
+      "macos-x64"
+    ],
+    "hosted_workflow_execution": false
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "keep the browser input under tests/browser/smoke-app",
+      "exit_code": 0,
+      "result": "rejected because P02-016 requires a real example boundary; the input moved to examples/browser-toolchain while assertions remain under tests/browser"
+    },
+    {
+      "command": "make the native example a root workspace member",
+      "exit_code": 0,
+      "result": "rejected because aggregate workspace counts and product coverage would become misleading; the example is a standalone unpublished locked package with a path-only dependency closure"
+    },
+    {
+      "command": "add placeholder document or query operations to make the examples appear useful",
+      "exit_code": 0,
+      "result": "rejected because those semantics are unimplemented; native operations are exactly empty and browser nonimplementation fields are asserted in three real engines"
+    },
+    {
+      "command": "let the standalone package emit into examples/native-toolchain/target",
+      "exit_code": 0,
+      "result": "rejected after the first local run exposed a nested generated tree; the fixed command redirects all output to ignored target/examples/native-toolchain"
+    },
+    {
+      "command": "download browser binaries from the stable aggregate test command",
+      "exit_code": 0,
+      "result": "rejected because provisioning is an explicit network/platform boundary; test:browser builds and inventories while browser:smoke and CI run the already provisioned engines"
+    }
+  ],
+  "verification": {
+    "changed_paths": 49,
+    "source_artifacts": 46,
+    "deleted_artifacts": 3,
+    "retained_artifacts": 3,
+    "boundary_examples": 2,
+    "example_authority_files": 9,
+    "native_reports": 1,
+    "browser_bundle_files": 4,
+    "browser_engines": 3,
+    "declared_native_ci_lanes": 5,
+    "active_test_suites": 4,
+    "reserved_test_suites": 4,
+    "example_source_rejection_canaries": 28,
+    "retention_source_rejection_canaries": 38,
+    "evidence_rejection_canaries": 18,
+    "total_rejection_canaries": 84,
+    "node_lanes": 2,
+    "workflow_jobs": 9,
+    "workflow_steps": 55,
+    "workflow_action_uses": 22,
+    "native_tests": 9,
+    "candidate_rust_sources": 9,
+    "markdown_files": 154,
+    "local_links": 1030,
+    "specification_requirements": 44
+  },
+  "commands": [
+    {
+      "command": "Node 22.23.1 clean install plus JavaScript/dependency/example/type/CI/retention/aggregate replay, native and browser report reproduction, three real-engine runs, and per-engine retained-bundle validation",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 24.18.0 clean install plus JavaScript/dependency/example/type/CI and aggregate replay",
+      "exit_code": 0
+    },
+    {
+      "command": "root and standalone Cargo format/check/Clippy/test, warning-free rustdoc, both portable Clippy targets, ASan, compiler-matched coverage, WASIp2/core-module validation, and Chromium WGSL compilation",
+      "exit_code": 0
+    },
+    {
+      "command": "independent workflow YAML parse, 154-file/1030-link Markdown validation, exact source/deletion/lock/tree verification, and 18 evidence mutation canaries",
+      "exit_code": 0
+    },
+    {
+      "command": "deliberate browser claim escalation proving a nonzero test result still emits a sanitized structured failure report before restoration",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/P02-016/verify.mjs 77bcc130615617d2f7d2269d275e3677ba1f8e27",
+      "exit_code": 0
+    }
+  ],
+  "retained_artifacts": [
+    {
+      "path": "reports/native-toolchain-example.json",
+      "media_type": "application/json",
+      "bytes": 595,
+      "sha256": "876e8289c6afef2d2542036a57f7d2e32c3d268e902460f662454853977e07e3"
+    },
+    {
+      "path": "reports/browser-bundle-example.json",
+      "media_type": "application/json",
+      "bytes": 1252,
+      "sha256": "bbf4afbf3558bdb1a4b715a5e5085fd00013c23d05363e661ea9924fd66bb7ef"
+    },
+    {
+      "path": "reports/browser-execution-all.json",
+      "media_type": "application/json",
+      "bytes": 2163,
+      "sha256": "f9f335c65bd2270f6f408de7a0c28a480f112b83d7a84d0a6b156e8d8f9a9a6e"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "status": "M",
+      "path": ".github/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1998,
+      "sha256": "a6324598ddb5a2cd8fde0afed2b1f2f2533d86d63fafab9dc70ba8e29dae621e"
+    },
+    {
+      "status": "M",
+      "path": ".github/ci/matrix.json",
+      "media_type": "application/json",
+      "bytes": 5294,
+      "sha256": "d2a211331f16932ff99e7e0801a9ae04fb17f78b76d9d545a79a2799e3272c60"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/ci-nightly.yml",
+      "media_type": "application/yaml",
+      "bytes": 2243,
+      "sha256": "a970227c2a5b4445aae8ad5d9abcbb942ea5f71dfd22a6b2d60f5cdc73fd2bec"
+    },
+    {
+      "status": "M",
+      "path": ".github/workflows/ci.yml",
+      "media_type": "application/yaml",
+      "bytes": 9701,
+      "sha256": "dd6ada21d40c86cb3e9724321163f90d6c78bf60279956ee4b21e644f6d50b3c"
+    },
+    {
+      "status": "M",
+      "path": "Cargo.toml",
+      "media_type": "application/toml",
+      "bytes": 3857,
+      "sha256": "1ffc5ad8fedeccba23107013edd5020b05c731c1630427831916049f6b6d949f"
+    },
+    {
+      "status": "M",
+      "path": "README.md",
+      "media_type": "text/markdown",
+      "bytes": 4570,
+      "sha256": "a5046c5bd3cbec6ba4a33fcbaf432639209388fd78d063031f2e4b8d79998e89"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md",
+      "media_type": "text/markdown",
+      "bytes": 9155,
+      "sha256": "ad8491a19c0878b4fe7b3be8458233ad94123d8cd8133ab42b4d9153b045511a"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/build-profiles.md",
+      "media_type": "text/markdown",
+      "bytes": 9844,
+      "sha256": "c2da578b632ec2ea220b235ab704e01bf8ddeb172e7f15d570be6568ec6007a9"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/code-quality-and-dependency-policy.md",
+      "media_type": "text/markdown",
+      "bytes": 9368,
+      "sha256": "63f22fdecc5408dc402dbf876590b8e6744bb389765a4b2a4a7d3c471d657ff9"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/continuous-integration.md",
+      "media_type": "text/markdown",
+      "bytes": 12927,
+      "sha256": "93808423a228baa4971fc92bec7bc918c6aa24ce7563d4b4e84f901e25472db5"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/javascript-toolchain-policy.md",
+      "media_type": "text/markdown",
+      "bytes": 11886,
+      "sha256": "610dcb34ee3b9496328e826d718d709638d2f5aabd6c825c81f3b63e1a643c3c"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/repository-layout.md",
+      "media_type": "text/markdown",
+      "bytes": 5388,
+      "sha256": "36ea25f68c26ccc6ac09f3a65b932faf6c2286c54ba9a4ca51b704fe1bee0b3a"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/wasm-browser-smoke-validation.md",
+      "media_type": "text/markdown",
+      "bytes": 8872,
+      "sha256": "6f55e40fc04901dcc6b0f657661dbaff2081c270f2f86f6db109e7f7df9e49b7"
+    },
+    {
+      "status": "M",
+      "path": "docs/governance/requirements.md",
+      "media_type": "text/markdown",
+      "bytes": 22910,
+      "sha256": "779b3ea5762e4fb23431cc96eb94c3cbcbd8227c238f5ae422c0115e86519b97"
+    },
+    {
+      "status": "M",
+      "path": "docs/quality/artifact-retention.md",
+      "media_type": "text/markdown",
+      "bytes": 12099,
+      "sha256": "c2f0c2971f1507f35d19b700be6501367c1db9616c21039abddea5ed74354a24"
+    },
+    {
+      "status": "M",
+      "path": "docs/quality/test-command-surface.md",
+      "media_type": "text/markdown",
+      "bytes": 7272,
+      "sha256": "c988849f2df209b2d0c52d91ac0b36fb47231add9873edd146f3d43484146d33"
+    },
+    {
+      "status": "M",
+      "path": "examples/README.md",
+      "media_type": "text/markdown",
+      "bytes": 862,
+      "sha256": "970c122508e4b0ec02ffbb4c3f6af6e68f36c39f8125d3433557add99572e489"
+    },
+    {
+      "status": "A",
+      "path": "examples/browser-toolchain/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1242,
+      "sha256": "1b64445409bd02681ba9d021eea5926fb8bf5aece3fc27dc0a96046e994e1571"
+    },
+    {
+      "status": "A",
+      "path": "examples/browser-toolchain/index.html",
+      "media_type": "text/html",
+      "bytes": 949,
+      "sha256": "c10a7449177067747da2a273525eb3deacd21678cc642db390bd0b65d9ad582d"
+    },
+    {
+      "status": "A",
+      "path": "examples/browser-toolchain/main.ts",
+      "media_type": "text/typescript",
+      "bytes": 2355,
+      "sha256": "2dee0ebdbe5e43e5033aea6ca371aa40e98728bfb5e9882d6f20e2e53f28ed7c"
+    },
+    {
+      "status": "A",
+      "path": "examples/browser-toolchain/report.ts",
+      "media_type": "text/typescript",
+      "bytes": 963,
+      "sha256": "150e863669cd4040cb76c69e4882c75d8ae04821ae942bcd16b905d984313e44"
+    },
+    {
+      "status": "A",
+      "path": "examples/examples.json",
+      "media_type": "application/json",
+      "bytes": 1599,
+      "sha256": "27b932a45af5cc076bd933a650a212e707c89bcd9fbd29a36e2a513abe85bc3f"
+    },
+    {
+      "status": "A",
+      "path": "examples/native-toolchain/Cargo.lock",
+      "media_type": "text/plain",
+      "bytes": 770,
+      "sha256": "3f9937b5c0c845aa56bbf87a28e2b448c75b9bfac39507f3b65dcb265c1bc2ea"
+    },
+    {
+      "status": "A",
+      "path": "examples/native-toolchain/Cargo.toml",
+      "media_type": "application/toml",
+      "bytes": 646,
+      "sha256": "259bb9b9b8e69483a925f6ba0bfe1c80ab178954cfdbe85b978adef1e52da827"
+    },
+    {
+      "status": "A",
+      "path": "examples/native-toolchain/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1195,
+      "sha256": "89d7b685dcca7f399a55ebc621126eeec7b0e1c9251b535c7e0e33ee518751cb"
+    },
+    {
+      "status": "A",
+      "path": "examples/native-toolchain/src/main.rs",
+      "media_type": "text/rust",
+      "bytes": 1407,
+      "sha256": "41fd00c28f85b90c2c57d377951b4e7edd79aa73a28ad223c9912380c814dbff"
+    },
+    {
+      "status": "M",
+      "path": "package.json",
+      "media_type": "application/json",
+      "bytes": 4485,
+      "sha256": "5944c8d5705902ae0718eaa97bedc4d2e8002d7059c68ca89cce37e71ad50b86"
+    },
+    {
+      "status": "M",
+      "path": "tests/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1716,
+      "sha256": "88bb3dabcc4e75f4e93009bfb83307d321a7691c60f62861f1d92573a7cb90e3"
+    },
+    {
+      "status": "M",
+      "path": "tests/browser/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1103,
+      "sha256": "a16361696ebcc5469e68dd91619c02332d8342552930471c58a879e76461ff78"
+    },
+    {
+      "status": "M",
+      "path": "tests/browser/bundle-smoke.spec.ts",
+      "media_type": "text/typescript",
+      "bytes": 2601,
+      "sha256": "100fc8b926c2de464f7e7203b1a0d423e299998c48c951e42b6210f3c9ba5d0d"
+    },
+    {
+      "status": "M",
+      "path": "tests/run-suite.mjs",
+      "media_type": "text/javascript",
+      "bytes": 15217,
+      "sha256": "c4ff80f96a6b6f84459c475ad67d16acd267fa57c140d88f0ccb86c5eacf21f6"
+    },
+    {
+      "status": "M",
+      "path": "tests/suites.json",
+      "media_type": "application/json",
+      "bytes": 4010,
+      "sha256": "af5486e6e9ee1d9db532259c398cbac4986f5a9e87c40221bc8e9d9f1c7229eb"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/README.md",
+      "media_type": "text/markdown",
+      "bytes": 4577,
+      "sha256": "0f4d8211bc3b9236218dbca33286fbcfaee20baa4077afd311f7bbbb6680d6e2"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/artifact-retention-contract.mjs",
+      "media_type": "text/javascript",
+      "bytes": 41891,
+      "sha256": "3bd1802347d0eccb89ed1fb8a4e5838824dc63e321c0ecd7b4407819a4ff8401"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/artifact-retention-policy.json",
+      "media_type": "application/json",
+      "bytes": 5613,
+      "sha256": "d2a5a0c8eb9373987bc5e159beb227c5c48e34f0e340ccba08c13d6e953ea567"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/build-browser-smoke.mjs",
+      "media_type": "text/javascript",
+      "bytes": 4816,
+      "sha256": "e025548cf427c45c85edda00ac58dca9a4ac38130163f83161b019e6d20a6b7e"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-browser-profile.mjs",
+      "media_type": "text/javascript",
+      "bytes": 1471,
+      "sha256": "8cadcedcbd9c28cecc11a073afdba868bf1c00db8e954dfd92c33f0062014bc5"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-ci-matrix.mjs",
+      "media_type": "text/javascript",
+      "bytes": 25012,
+      "sha256": "0b83f0e4f97815a75a5e70a0f3e1079cae685b8f6d3b5a8a3e3bfbd43410f323"
+    },
+    {
+      "status": "A",
+      "path": "tests/toolchain/check-examples.mjs",
+      "media_type": "text/javascript",
+      "bytes": 2850,
+      "sha256": "afe5da3783c02a164ad73fc6b0f81576b95e8e88f6b835835284426221eaf6b6"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-test-command-surface.mjs",
+      "media_type": "text/javascript",
+      "bytes": 6513,
+      "sha256": "9cbd77bdd1a78c1aa393d8dfeb946c5a2bbe398c6505cf4e283f7ef7a5cf3e2e"
+    },
+    {
+      "status": "A",
+      "path": "tests/toolchain/examples-contract.mjs",
+      "media_type": "text/javascript",
+      "bytes": 12132,
+      "sha256": "685712fdf20e2f3ab989710d793744818177d474b070fc43bde241d774956350"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/run-browser-smoke.mjs",
+      "media_type": "text/javascript",
+      "bytes": 7881,
+      "sha256": "eea790a24c73a25e5ba8f967213e3e8b486b7d63532ebeb1f38cbe1133ef460c"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/test-artifact-retention-contract.mjs",
+      "media_type": "text/javascript",
+      "bytes": 16233,
+      "sha256": "051f1dffc95a54c1891e33db8ae8546f835752d7b8f3cefb69a7b418fce2d6fd"
+    },
+    {
+      "status": "A",
+      "path": "tests/toolchain/test-examples-contract.mjs",
+      "media_type": "text/javascript",
+      "bytes": 6947,
+      "sha256": "83208fb91f314421bcef25d6b4b384723509eb857559347bcac5455b65d6b40b"
+    },
+    {
+      "status": "M",
+      "path": "tsconfig.browser-smoke.json",
+      "media_type": "application/json",
+      "bytes": 183,
+      "sha256": "13c9c366f5e6e64c3d7015edbe157afcfa48073b2168db14c9fd2b0be968c108"
+    },
+    {
+      "status": "M",
+      "path": "vite.config.ts",
+      "media_type": "text/typescript",
+      "bytes": 728,
+      "sha256": "7a1068341b077710c694295332acacf3cd4749c851fec4fb3ced24e215f800f7"
+    }
+  ],
+  "deleted_artifacts": [
+    {
+      "status": "D",
+      "path": "tests/browser/smoke-app/index.html",
+      "media_type": "text/html",
+      "bytes": 404,
+      "sha256": "ebbf2ce9d61a4cee3a048f5620f9e7ca8f2a28c527ad8e9ab8c65498cf91d378"
+    },
+    {
+      "status": "D",
+      "path": "tests/browser/smoke-app/main.ts",
+      "media_type": "text/typescript",
+      "bytes": 1653,
+      "sha256": "9febb75a9946a9a9ba8eca1e6611fb496e92d2529a8f24dd86f65e8cfa1b28bd"
+    },
+    {
+      "status": "D",
+      "path": "tests/browser/smoke-app/report.ts",
+      "media_type": "text/typescript",
+      "bytes": 487,
+      "sha256": "d92de603fd4943c2e01037d35664f04d799d3028f5671c3e4f76f0400e4dcc35"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-016/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 34469,
+    "sha256": "2423259b1404f6f4708d81334a3b5d4551bfd9716e080dc1e4d33f32f544c0a4"
+  },
+  "verdict": "pass"
+}

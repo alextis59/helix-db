@@ -1,0 +1,19 @@
+{
+  "schema": "helix.native-toolchain-example/1",
+  "plan_item": "P02-016",
+  "example": "native-toolchain",
+  "component": {
+    "name": "helix-host-native",
+    "maturity": "boundary-skeleton",
+    "required_dependencies": [
+      "helix-core"
+    ]
+  },
+  "target": {
+    "architecture": "x86_64",
+    "operating_system": "linux"
+  },
+  "database_functionality": false,
+  "operations": [],
+  "claim_boundary": "This example proves native Rust linking only; database document, query, storage, durability, GPU, network, compatibility, security, and release functionality is not implemented."
+}
