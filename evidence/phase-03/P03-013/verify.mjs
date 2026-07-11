@@ -31,6 +31,43 @@ assert(manifest.verdict === 'pass', 'evidence verdict mismatch');
 assert(gitText(['rev-parse', `${argument}^{commit}`]).trim() === argument, 'source commit');
 assert(gitText(['rev-parse', `${argument}^`]).trim() === manifest.base_commit, 'source parent');
 assert(gitText(['rev-parse', `${argument}^{tree}`]).trim() === manifest.source_tree, 'source tree');
+assert(
+  JSON.stringify(manifest.source_commits) ===
+    JSON.stringify([manifest.commit, manifest.hosted_fix.commit]),
+  'source commits',
+);
+assert(
+  gitText(['rev-parse', `${manifest.hosted_fix.commit}^{commit}`]).trim() ===
+    manifest.hosted_fix.commit,
+  'hosted fix commit',
+);
+assert(
+  gitText(['rev-parse', `${manifest.hosted_fix.commit}^`]).trim() === manifest.hosted_fix.parent,
+  'hosted fix parent',
+);
+assert(
+  gitText(['rev-parse', `${manifest.hosted_fix.commit}^{tree}`]).trim() ===
+    manifest.hosted_fix.tree,
+  'hosted fix tree',
+);
+assert(
+  gitText(['diff-tree', '--no-commit-id', '--name-status', '-r', manifest.hosted_fix.commit]).trim() ===
+    'M\ttests/toolchain/bootstrap-contract.mjs',
+  'hosted fix inventory',
+);
+assert(
+  sha256(gitBytes(['diff', '--binary', manifest.hosted_fix.parent, manifest.hosted_fix.commit])) ===
+    manifest.hosted_fix.diff_sha256,
+  'hosted fix diff hash',
+);
+const fixedBootstrap = gitBytes([
+  'show',
+  `${manifest.hosted_fix.commit}:tests/toolchain/bootstrap-contract.mjs`,
+]).toString('utf8');
+assert(
+  fixedBootstrap.includes('canonical collection field-path dictionary snapshots with non-reuse lineage validation'),
+  'hosted fix claim marker',
+);
 
 const expectedChanges = [
   'M\t.github/ci/matrix.json',
@@ -258,5 +295,5 @@ rejectObjectMutation(coverage, (value) => (value.product_files.find(({ path: fil
 assert(mutations === manifest.verification.mutation_canaries, 'mutation count');
 
 process.stdout.write(
-  `PASS P03-013 evidence: ${expectedChanges.length} source artifacts, 28 helix-doc tests, 36 workspace tests, canonical dictionary snapshots/non-reuse, 100% lines/functions, ${mutations} mutation canaries\n`,
+  `PASS P03-013 evidence: ${expectedChanges.length + 1} source artifacts in 2 commits, 28 helix-doc tests, 36 workspace tests, canonical dictionary snapshots/non-reuse, 100% lines/functions, ${mutations} mutation canaries\n`,
 );
