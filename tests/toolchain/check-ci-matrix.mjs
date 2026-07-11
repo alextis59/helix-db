@@ -58,7 +58,17 @@ same(
 assert(matrix.schema === 'helix.ci-matrix/3', 'CI matrix schema mismatch');
 same(
   matrix.plan_items,
-  ['P02-009', 'P02-010', 'P02-011', 'P02-012', 'P02-013', 'P02-014', 'P02-015', 'P02-016'],
+  [
+    'P02-009',
+    'P02-010',
+    'P02-011',
+    'P02-012',
+    'P02-013',
+    'P02-014',
+    'P02-015',
+    'P02-016',
+    'P02-017',
+  ],
   'CI matrix task history',
 );
 same(
@@ -244,6 +254,9 @@ same(
     'benchmark:check': packageJson.scripts['benchmark:check'],
     'benchmark:schemas': packageJson.scripts['benchmark:schemas'],
     'benchmark:test': packageJson.scripts['benchmark:test'],
+    'bootstrap:check': packageJson.scripts['bootstrap:check'],
+    'bootstrap:preflight': packageJson.scripts['bootstrap:preflight'],
+    'bootstrap:test': packageJson.scripts['bootstrap:test'],
     'ci:browser-smoke': packageJson.scripts['ci:browser-smoke'],
     'ci:check': packageJson.scripts['ci:check'],
     'coverage:check': packageJson.scripts['coverage:check'],
@@ -274,6 +287,9 @@ same(
     'benchmark:check': 'node benchmarks/check-benchmark-artifacts.mjs report',
     'benchmark:schemas': 'node benchmarks/check-benchmark-artifacts.mjs schemas',
     'benchmark:test': 'node tests/toolchain/test-benchmark-contract.mjs',
+    'bootstrap:check': 'node tests/toolchain/check-bootstrap.mjs contract',
+    'bootstrap:preflight': 'node tests/toolchain/check-bootstrap.mjs preflight',
+    'bootstrap:test': 'node tests/toolchain/test-bootstrap-contract.mjs',
     'ci:browser-smoke': 'node tests/toolchain/run-browser-smoke.mjs',
     'ci:check': 'node tests/toolchain/check-ci-matrix.mjs',
     'coverage:check': 'node tests/toolchain/check-rust-coverage.mjs run',
@@ -292,6 +308,26 @@ same(
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
   'CI npm scripts',
+);
+assert(
+  runNode(['tests/toolchain/check-bootstrap.mjs', 'contract']).includes(
+    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 17 troubleshooting codes, database functionality false',
+  ),
+  'clean bootstrap contract did not pass',
+);
+assert(
+  runNode(['tests/toolchain/test-bootstrap-contract.mjs']).includes(
+    'PASS clean bootstrap rejection canaries: 35 contract/source mutations, 11 Node boundaries, and 7 host mappings verified',
+  ),
+  'clean bootstrap rejection canaries did not pass',
+);
+expectFailure(
+  ['tests/toolchain/check-bootstrap.mjs'],
+  'usage: node tests/toolchain/check-bootstrap.mjs <contract|preflight>',
+);
+expectFailure(
+  ['tests/toolchain/check-bootstrap.mjs', 'unknown'],
+  'usage: node tests/toolchain/check-bootstrap.mjs <contract|preflight>',
 );
 assert(
   runNode(['tests/toolchain/check-examples.mjs', 'policy']).includes(
@@ -512,6 +548,8 @@ for (const marker of [
   `matrix: ${githubExpression('fromJSON(needs.contract.outputs.portable)')}`,
   `matrix: ${githubExpression('fromJSON(needs.contract.outputs.sanitizer)')}`,
   `matrix: ${githubExpression('fromJSON(needs.contract.outputs.browser)')}`,
+  'corepack npm run bootstrap:check',
+  'corepack npm run bootstrap:test',
   `cargo clippy --frozen --target ${githubExpression('matrix.target')} --package helix-core -- -D warnings`,
   `node tests/toolchain/check-wasm-artifacts.mjs ${githubExpression('matrix.artifact')}`,
   'corepack npm run dependencies:check',
@@ -601,6 +639,9 @@ process.stdout.write('PASS platforms: Linux/Windows/macOS and x64/arm64 with 2 p
 process.stdout.write('PASS JavaScript/browser: 2 Node lines and 3 real boundary-example engines\n');
 process.stdout.write(
   'PASS examples: native boundary report on 5 native lanes; browser boundary example on 3 engines\n',
+);
+process.stdout.write(
+  'PASS bootstrap: 4 documented profiles, 17 stable troubleshooting codes, and clean-host preflight\n',
 );
 process.stdout.write(
   'PASS workflow policy: 22 full-SHA action uses, read-only permissions, fixed runners\n',

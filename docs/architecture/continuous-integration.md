@@ -3,9 +3,10 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-016`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-017`
 - Governing gate: `G02`
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
+- Bootstrap authority: [`helix.clean-bootstrap/1`](../development/bootstrap.json)
 - Component validator authority: [`helix.wasm-tools/2`](../../.github/ci/wasm-tools.json)
 - Gating workflow: [`ci.yml`](../../.github/workflows/ci.yml)
 - Nightly workflow: [`ci-nightly.yml`](../../.github/workflows/ci-nightly.yml)
@@ -87,7 +88,13 @@ An action update requires confirming the tag-to-SHA mapping from the official ac
 
 ## Local verification
 
+The [clean-machine bootstrap guide](../development/bootstrap.md) is the human command authority and
+separates cross-platform foundation work from Linux x64 browser/diagnostic proof. The CI contract
+job validates its machine authority and rejection canaries before emitting the matrices below.
+
 ```bash
+corepack npm run bootstrap:check
+corepack npm run bootstrap:test
 corepack npm run ci:check
 corepack npm run examples:check
 node tests/toolchain/emit-ci-matrix.mjs gating

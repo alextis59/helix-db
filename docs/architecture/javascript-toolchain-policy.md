@@ -3,7 +3,7 @@
 - Status: Accepted toolchain baseline
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner
-- Plan items: `P02-003`, reporting extended by `P02-012`, browser boundary example added by `P02-016`
+- Plan items: `P02-003`, reporting extended by `P02-012`, browser boundary example added by `P02-016`, clean-host procedure bound by `P02-017`
 - Governing requirements: `PLAT-001`, `PLAT-002`, `CORE-003`, `INV-007`
 - Governing gate: `G02`
 - Development identity: [ADR 0001](../adr/0001-public-product-identity.md)
@@ -94,6 +94,10 @@ The shared [`vite.config.ts`](../../vite.config.ts) establishes a framework-free
 The fixed [`examples/browser-toolchain`](../../examples/browser-toolchain/README.md) root is an executable boundary example. Vite emits it to `dist/browser`, a deterministic checker validates the exact four-file output and source identities, and Playwright serves only that output on fixed loopback. Its visible page and structured report state that database functionality is absent. ES2022 is a deterministic emitted-language target, not a branded-browser/version support claim.
 
 ## Required selection checks
+
+The executable [clean-machine bootstrap guide](../development/bootstrap.md) owns prerequisite,
+install, shell, profile, output, and troubleshooting order. This policy remains authoritative for
+the Node/npm/tool selections consumed by that procedure.
 
 ```bash
 corepack npm --version

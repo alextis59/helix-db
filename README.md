@@ -28,6 +28,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Benchmark result contract](docs/quality/benchmark-results.md) — strict workload/raw/summary schemas and a retained, non-gating integrity-only baseline.
 - [Artifact retention and durable promotion](docs/quality/artifact-retention.md) — strict replay/browser bundles, failure preservation, expiry, sensitivity, and permanent evidence promotion.
 - [Toolchain boundary examples](examples/README.md) — executable native-link and browser-Wasm paths with machine-enforced non-database claims.
+- [Clean-machine bootstrap](docs/development/bootstrap.md) — exact prerequisites, install and development profiles, platform limits, and stable troubleshooting codes.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

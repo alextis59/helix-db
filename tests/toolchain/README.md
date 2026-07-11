@@ -3,6 +3,7 @@
 This directory contains bounded verification entry points for foundation build profiles, policies, CI, Wasm artifacts, and browser plumbing.
 
 - `run-build-profile.mjs` runs exactly one named Rust build/instrumentation profile with fixed Cargo arguments.
+- `bootstrap-contract.mjs`, `check-bootstrap.mjs`, and `test-bootstrap-contract.mjs` bind the [clean-machine bootstrap guide](../../docs/development/bootstrap.md) to exact tools, profiles, host limits, CI, troubleshooting codes, and rejection canaries; `preflight` additionally requires a clean worktree and real local prerequisite identities.
 - `check-browser-profile.mjs` resolves the pinned Vite production configuration without creating a bundle.
 - `examples-contract.mjs`, `check-examples.mjs`, and `test-examples-contract.mjs` bind the two executable example sources/commands/reports and reject inflated database claims.
 - `check-dependency-policy.mjs` reconciles Cargo metadata and the complete npm lock with the machine policy.

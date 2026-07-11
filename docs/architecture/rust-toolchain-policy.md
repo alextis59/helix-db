@@ -3,7 +3,7 @@
 - Status: Accepted toolchain baseline
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner
-- Plan items: `P02-002`; compiler-matched coverage tools added by `P02-013`
+- Plan items: `P02-002`; compiler-matched coverage tools added by `P02-013`; clean-host procedure bound by `P02-017`
 - Governing requirements: `PLAT-001`, `PLAT-002`, `PLAT-003`, `INV-004`, `INV-007`, `CORE-001`
 - Governing gate: `G02`; WASIp3 production promotion remains required before `G04`
 - Workspace boundary: [Rust workspace and initial crate boundaries](workspace-boundaries.md)
@@ -100,6 +100,10 @@ This target is diagnostic, not a supported deployment platform. It avoids an unp
 The exact profile and invocation are defined in [Build Profiles](build-profiles.md). Updating or removing this target follows the same exact-toolchain and clean-replay rules as the Wasm targets.
 
 ## Required checks
+
+The cross-platform prerequisite, shell, profile, and failure procedures are centralized in the
+[clean-machine bootstrap guide](../development/bootstrap.md). The commands below remain the Rust
+policy source and are incorporated into that guide without widening their host claims.
 
 ```bash
 rustc --version

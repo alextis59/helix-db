@@ -39,6 +39,10 @@ jobs:
         with:
           node-version: 22.23.1
           package-manager-cache: false
+      - name: Validate clean bootstrap contract
+        run: |
+          corepack npm run bootstrap:check
+          corepack npm run bootstrap:test
       - name: Validate CI contract
         run: node tests/toolchain/check-ci-matrix.mjs
       - name: Emit gating matrices

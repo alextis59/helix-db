@@ -33,6 +33,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Benchmark result and retention contract](quality/benchmark-results.md) | Versioned workload/raw/summary schemas, complete stage reporting, and the non-gating retained baseline |
 | [CI artifact retention and durable promotion](quality/artifact-retention.md) | Versioned replay/browser bundles, reserved future classes, failure uploads, expiry, sensitivity, and durable evidence promotion |
 | [Toolchain boundary examples](../examples/README.md) | Executable native and browser foundation paths with explicit non-database maturity contracts |
+| [Clean-machine bootstrap](development/bootstrap.md) | Exact prerequisite, install, validation, browser, Linux diagnostic, output, and troubleshooting contract |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 
@@ -45,6 +46,7 @@ docs/
   README.md
   adr/                    architecture decision records
   architecture/           component, data-flow, deployment, and dependency design
+  development/            clean bootstrap, local development, and troubleshooting procedures
   formats/                HDoc, WAL, MANIFEST, SST, VLOG, CSEG, IDX, backup, protocol formats
   api/                    native API, SDK, embedded, server, and error contracts
   operations/             configuration, admin, telemetry, backup, restore, upgrade, runbooks

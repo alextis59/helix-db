@@ -75,7 +75,7 @@ Run the narrowest useful test first, then every affected broader suite:
 7. Browser or distributed tests when affected.
 8. Package/install/restore proof when a user-facing artifact changes.
 
-Exact commands will be established by `P02-*` and documented in the repository bootstrap guide. Until then, record every manual verification command in the commit handoff.
+Use the exact profile and focused commands in the [clean-machine bootstrap guide](docs/development/bootstrap.md). Do not widen a command with unreviewed flags or treat a host-specific omission as a pass. Record every executed command and produced report in the task evidence; gate evidence also requires a clean-checkout replay.
 
 ## Review requirements
 

@@ -1,0 +1,192 @@
+{
+  "schema": "helix.clean-bootstrap/1",
+  "plan_item": "P02-017",
+  "status": "active-foundation",
+  "repository": {
+    "development_name": "HelixDB",
+    "directory_name": "helix-db",
+    "clone_url": "https://github.com/alextis59/helix-db.git",
+    "default_branch": "main",
+    "public_name_decision": "P16-016"
+  },
+  "claim_boundary": "This contract documents foundation setup and validation only; HelixDB remains a boundary skeleton with no document, query, storage, durability, GPU execution, network service, compatibility, security, performance, or release functionality.",
+  "tools": {
+    "git": {
+      "version_policy": "supported-system-release",
+      "official_install": "https://git-scm.com/book/en/v2/Getting-Started-Installing-Git"
+    },
+    "node": {
+      "supported_range": ">=22.12.0 <23 || >=24.11.0 <25",
+      "recommended": "22.23.1",
+      "ci_replay": ["22.23.1", "24.18.0"],
+      "official_install": "https://nodejs.org/en/download"
+    },
+    "npm": {
+      "version": "11.18.0",
+      "launcher": "corepack npm",
+      "install_command": "corepack npm ci --ignore-scripts"
+    },
+    "rust": {
+      "version": "1.96.1",
+      "profile": "minimal",
+      "components": ["clippy", "llvm-tools", "rust-docs", "rust-src", "rustfmt"],
+      "targets": ["wasm32-unknown-unknown", "wasm32-wasip2", "x86_64-unknown-linux-gnuasan"],
+      "official_install": "https://rust-lang.github.io/rustup/installation/",
+      "windows_prerequisites": "https://rust-lang.github.io/rustup/installation/windows-msvc.html"
+    },
+    "playwright": {
+      "version": "1.61.1",
+      "engines": ["chromium", "firefox", "webkit"],
+      "install_command": "corepack npm run browser:install",
+      "linux_dependencies_command": "corepack npm exec -- playwright install-deps chromium firefox webkit",
+      "official_install": "https://playwright.dev/docs/browsers"
+    }
+  },
+  "profiles": [
+    {
+      "id": "contract",
+      "platforms": ["linux-x64", "linux-arm64", "windows-x64", "macos-arm64", "macos-x64"],
+      "network": "conditional-for-first-corepack-resolution",
+      "privilege": "user",
+      "commands": ["corepack npm run bootstrap:check", "corepack npm run bootstrap:test"],
+      "outputs": []
+    },
+    {
+      "id": "foundation",
+      "platforms": ["linux-x64", "linux-arm64", "windows-x64", "macos-arm64", "macos-x64"],
+      "network": "required-for-first-tool-and-package-install",
+      "privilege": "user-after-system-prerequisites",
+      "commands": [
+        "corepack npm ci --ignore-scripts",
+        "corepack npm run bootstrap:preflight",
+        "corepack npm run policy:javascript",
+        "corepack npm run policy:dependencies",
+        "corepack npm run dependencies:check",
+        "corepack npm run toolchain:types",
+        "corepack npm run fixtures:check",
+        "corepack npm test",
+        "corepack npm run examples:native"
+      ],
+      "outputs": ["target/", "dist/validation/native-toolchain-example.json"]
+    },
+    {
+      "id": "browser",
+      "platforms": ["linux-x64"],
+      "network": "required-for-browser-install",
+      "privilege": "linux-system-dependencies-only",
+      "commands": ["corepack npm run browser:install", "corepack npm run browser:smoke"],
+      "outputs": [
+        "dist/browser/",
+        "dist/validation/browser-bundle-smoke.json",
+        "dist/validation/browser-execution-{engine}.json"
+      ]
+    },
+    {
+      "id": "linux-x64-gates",
+      "platforms": ["linux-x64"],
+      "network": "conditional-for-validator-and-browser-cache-misses",
+      "privilege": "user-after-browser-system-dependencies",
+      "commands": [
+        "corepack npm run wasm:validate",
+        "corepack npm run coverage:check",
+        "node tests/toolchain/run-build-profile.mjs sanitizer",
+        "corepack npm run wgsl:validate"
+      ],
+      "outputs": [
+        "target/wasm/",
+        "target/coverage/",
+        "target/sanitizer/",
+        "dist/validation/wasm-*.json",
+        "dist/validation/rust-coverage.json",
+        "dist/validation/wgsl-chromium.json"
+      ]
+    }
+  ],
+  "troubleshooting": [
+    {
+      "code": "BOOT-NODE-RANGE",
+      "condition": "Node is outside the supported major-line ranges",
+      "action": "Select Node 22.23.1 or another version accepted by the declared engine range."
+    },
+    {
+      "code": "BOOT-NPM-PIN",
+      "condition": "Corepack is absent or npm is not 11.18.0",
+      "action": "Install an official supported Node distribution and invoke the package manager through corepack npm."
+    },
+    {
+      "code": "BOOT-NPM-LOCK",
+      "condition": "npm ci reports package.json and package-lock.json drift",
+      "action": "Do not edit the lock by hand; restore unintended drift or regenerate it in a focused dependency change."
+    },
+    {
+      "code": "BOOT-NPM-SCRIPTS",
+      "condition": "A package lifecycle script is denied or requested",
+      "action": "Keep --ignore-scripts and the strict lifecycle policy; review any required script as a dependency-policy change."
+    },
+    {
+      "code": "BOOT-RUSTUP",
+      "condition": "The pinned Rust toolchain does not activate",
+      "action": "Install rustup, enter the repository root, and let rust-toolchain.toml select Rust 1.96.1."
+    },
+    {
+      "code": "BOOT-RUST-TARGET",
+      "condition": "A required Rust component or target is missing",
+      "action": "Run rustup component list --installed and rustup target list --installed from the repository root before repairing the pinned toolchain."
+    },
+    {
+      "code": "BOOT-LINKER",
+      "condition": "A native link step cannot find a platform compiler or linker",
+      "action": "Install the platform build tools and use a shell where cc, Xcode clang, or MSVC cl.exe is discoverable."
+    },
+    {
+      "code": "BOOT-WASM-HOST",
+      "condition": "The pinned component validator rejects the local operating system or architecture",
+      "action": "Run component validation on Linux x64 or rely on the declared Linux x64 CI lane; do not bypass validation."
+    },
+    {
+      "code": "BOOT-WASM-CACHE",
+      "condition": "The validator cache is incomplete or fails an integrity check",
+      "action": "Preserve the error, remove only target/toolchain/wasm-tools and its ignored download cache, then rerun the pinned installer."
+    },
+    {
+      "code": "BOOT-BROWSER-BINARY",
+      "condition": "Playwright cannot find a pinned browser executable",
+      "action": "Run corepack npm run browser:install as the same user that will run the smoke test."
+    },
+    {
+      "code": "BOOT-BROWSER-DEPS",
+      "condition": "A Linux browser fails because shared libraries or system packages are absent",
+      "action": "Run the documented Playwright install-deps command with the system privilege appropriate to the machine."
+    },
+    {
+      "code": "BOOT-BROWSER-PORT",
+      "condition": "The browser preview cannot bind 127.0.0.1:4173",
+      "action": "Stop the conflicting local listener; the fixed address and strict port are part of the test contract."
+    },
+    {
+      "code": "BOOT-BROWSER-NETWORK",
+      "condition": "Browser download fails behind a proxy or private certificate authority",
+      "action": "Configure HTTPS_PROXY and NODE_EXTRA_CA_CERTS for the install; do not disable TLS verification."
+    },
+    {
+      "code": "BOOT-LINUX-GATE",
+      "condition": "Coverage or AddressSanitizer is requested on another host profile",
+      "action": "Run the diagnostic on Linux x64 or use its CI lane; absence on another host is not a pass."
+    },
+    {
+      "code": "BOOT-WGSL",
+      "condition": "WGSL validation cannot launch pinned Chromium with SwiftShader",
+      "action": "Provision the pinned Chromium browser and Linux dependencies, then keep the compile-only result distinct from GPU support."
+    },
+    {
+      "code": "BOOT-REPORT-STALE",
+      "condition": "A retained report no longer matches its source authority",
+      "action": "Regenerate the producing check and then recollect the retained bundle; never edit a report into agreement."
+    },
+    {
+      "code": "BOOT-WORKTREE",
+      "condition": "Bootstrap preflight finds tracked or untracked changes",
+      "action": "Inspect and preserve the changes, then run the clean-checkout proof in a separate worktree or clone; never reset unknown work."
+    }
+  ]
+}

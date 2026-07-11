@@ -8,3 +8,5 @@
 - [`workflows/benchmark-baseline.yml`](workflows/benchmark-baseline.yml) runs one scheduled/manual non-gating benchmark harness calibration and preserves its integrity-checked raw result and summary for 30 days with full-SHA-pinned `upload-artifact`.
 
 The [CI policy](../docs/architecture/continuous-integration.md) defines claim, security, update, and promotion boundaries. The [artifact-retention policy](../docs/quality/artifact-retention.md) defines bundle contents, failure behavior, expiry, sensitivity, and durable promotion. Workflow edits must keep full action SHAs, read-only permissions, fixed runner labels, bounded timeouts, and the matrix checker passing.
+
+The [clean-machine bootstrap guide](../docs/development/bootstrap.md) is the developer-facing command authority. The gating workflow validates its machine contract and rejection canaries before emitting any matrix.
