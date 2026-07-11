@@ -6,6 +6,8 @@ This directory contains bounded verification entry points for foundation build p
 - `check-browser-profile.mjs` resolves the pinned Vite production configuration without creating a bundle.
 - `check-dependency-policy.mjs` reconciles Cargo metadata and the complete npm lock with the machine policy.
 - `dependency-policy.json` is the exact source/license/lifecycle/duplicate/unsafe exception authority.
+- `check-dependency-reports.mjs` creates the deterministic lock/license/duplicate inventory, refreshes all integrity-verified npm tarball license identities, and obtains the dated npm advisory/signature/SLSA observation.
+- `dependency-report-policy.json` fixes report schemas, vulnerability/signature thresholds, download limits, reviewed missing-license-text families, external-tool coverage, and freshness.
 - `check-test-command-surface.mjs` validates all stable test aliases, suite states, activation owners, runner descriptions, documentation, and rejection behavior.
 - `check-ci-matrix.mjs` validates gating/nightly lanes, immutable action pins, workflow security, emitted matrices, Playwright projects, and explicit exclusions.
 - `emit-ci-matrix.mjs` emits compact trusted `fromJSON` matrices for gating or nightly workflow contract jobs.

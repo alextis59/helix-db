@@ -1,12 +1,12 @@
 # Wasm Component and Browser Bundle Smoke Validation
 
 - Status: Accepted foundation artifact-validation contract; no database or release support claim
-- Last updated: 2026-07-10
+- Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan item: `P02-010`
+- Plan items: `P02-010`, validator licensing extended by `P02-012`
 - Governing requirements: `PLAT-001`, `PLAT-002`, `PLAT-003`, `INV-003`, `INV-004`, `INV-007`, `CORE-001`, `CORE-003`, `QUAL-001`
 - Governing gate: `G02`
-- Component-validator authority: [`helix.wasm-tools/1`](../../.github/ci/wasm-tools.json)
+- Component-validator authority: [`helix.wasm-tools/2`](../../.github/ci/wasm-tools.json)
 - CI matrix authority: [`helix.ci-matrix/2`](../../.github/ci/matrix.json)
 
 ## Purpose and maturity boundary
@@ -43,9 +43,10 @@ The machine authority records:
 - GitHub-published archive byte count and SHA-256;
 - exact archive inventory;
 - extracted executable byte count and independently checked SHA-256; and
-- exact `--version` output, including the upstream source revision/date.
+- exact `--version` output, including the upstream source revision/date; and
+- exact byte counts and SHA-256 identities for the Apache-2.0, Apache-2.0-with-LLVM-exception, and MIT license files.
 
-`npm run wasm:install-validator` downloads only when the ignored target-scoped installation is absent. It verifies the archive before extraction, rejects unexpected members, extracts without owner/permission restoration, verifies the executable before and after its atomic move, and re-verifies every cached invocation. A corrupt cached archive or executable fails; it is never silently replaced and counted as a pass.
+`npm run wasm:install-validator` downloads only when the ignored target-scoped installation is absent. It verifies the archive before extraction, rejects unexpected members, extracts without owner/permission restoration, verifies the executable and all license texts before and after its atomic move, and re-verifies every cached invocation. A corrupt cached archive, executable, or license file fails; it is never silently replaced and counted as a pass.
 
 Only the Linux x64 component-validation lane downloads this binary. The browser core-module lane uses the host's built-in WebAssembly engine and the real browsers. Adding a validator host requires an official release asset with equivalent immutable identities plus evidence on that host.
 

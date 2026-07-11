@@ -20,6 +20,7 @@
       "shaders/**/*.json",
       "tests/**/*.mjs",
       "tests/**/*.ts",
+      "tests/toolchain/*.json",
       "!package-lock.json",
       "!!evidence",
       "!!target",

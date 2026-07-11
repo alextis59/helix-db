@@ -45,7 +45,8 @@ export const validateWasmToolsAuthority = () => {
     [
       'hosts',
       'license',
-      'plan_item',
+      'license_files',
+      'plan_items',
       'published_at',
       'release_api',
       'repository',
@@ -55,14 +56,38 @@ export const validateWasmToolsAuthority = () => {
     ],
     'wasm-tools authority fields',
   );
-  assert(authority.schema === 'helix.wasm-tools/1', 'wasm-tools authority schema mismatch');
-  assert(authority.plan_item === 'P02-010', 'wasm-tools authority task mismatch');
+  assert(authority.schema === 'helix.wasm-tools/2', 'wasm-tools authority schema mismatch');
+  same(authority.plan_items, ['P02-010', 'P02-012'], 'validator task history');
   assert(authority.repository === 'bytecodealliance/wasm-tools', 'validator repository mismatch');
   assert(authority.version === '1.253.0' && authority.tag === 'v1.253.0', 'validator pin drift');
   assert(authority.published_at === '2026-07-07T16:29:04Z', 'validator publication time drift');
   assert(
     authority.license === 'Apache-2.0 WITH LLVM-exception OR Apache-2.0 OR MIT',
     'validator license inventory drift',
+  );
+  same(
+    authority.license_files,
+    [
+      {
+        path: 'LICENSE-APACHE',
+        spdx: 'Apache-2.0',
+        bytes: 10847,
+        sha256: 'a60eea817514531668d7e00765731449fe14d059d3249e0bc93b36de45f759f2',
+      },
+      {
+        path: 'LICENSE-Apache-2.0_WITH_LLVM-exception',
+        spdx: 'Apache-2.0 WITH LLVM-exception',
+        bytes: 12243,
+        sha256: '268872b9816f90fd8e85db5a28d33f8150ebb8dd016653fb39ef1f94f2686bc5',
+      },
+      {
+        path: 'LICENSE-MIT',
+        spdx: 'MIT',
+        bytes: 1023,
+        sha256: '23f18e03dc49df91622fe2a76176497404e46ced8a715d9d2b67a7446571cca3',
+      },
+    ],
+    'validator license-file identities',
   );
   assert(
     authority.release_api ===
@@ -110,6 +135,21 @@ const verifyExecutable = (executablePath, host) => {
   assert(version === host.version_output, `wasm-tools version mismatch: ${version}`);
 };
 
+const verifyLicenseFiles = (installRoot, executablePath, authority) => {
+  const archiveRoot = path.dirname(executablePath);
+  for (const license of authority.license_files) {
+    const licensePath = path.join(archiveRoot, license.path);
+    assert(
+      path.resolve(licensePath).startsWith(`${path.resolve(installRoot)}${path.sep}`),
+      `${license.path}: path escapes validator installation`,
+    );
+    assert(lstatSync(licensePath).isFile(), `${license.path}: not a regular file`);
+    const bytes = readFileSync(licensePath);
+    assert(bytes.length === license.bytes, `${license.path}: byte count mismatch`);
+    assert(sha256(bytes) === license.sha256, `${license.path}: SHA-256 mismatch`);
+  }
+};
+
 export const ensureWasmTools = async () => {
   const { authority, host } = validateWasmToolsAuthority();
   assert(
@@ -122,6 +162,7 @@ export const ensureWasmTools = async () => {
   const executablePath = path.join(installRoot, host.executable);
   if (existsSync(executablePath)) {
     verifyExecutable(executablePath, host);
+    verifyLicenseFiles(installRoot, executablePath, authority);
     return executablePath;
   }
 
@@ -161,6 +202,7 @@ export const ensureWasmTools = async () => {
     assert(lstatSync(extractedExecutable).isFile(), 'wasm-tools archive executable is not a file');
     chmodSync(extractedExecutable, 0o755);
     verifyExecutable(extractedExecutable, host);
+    verifyLicenseFiles(temporaryRoot, extractedExecutable, authority);
     rmSync(installRoot, { recursive: true, force: true });
     mkdirSync(installRoot, { recursive: true });
     renameSync(extractedRoot, path.join(installRoot, path.dirname(host.executable)));
@@ -168,6 +210,7 @@ export const ensureWasmTools = async () => {
     rmSync(temporaryRoot, { recursive: true, force: true });
   }
   verifyExecutable(executablePath, host);
+  verifyLicenseFiles(installRoot, executablePath, authority);
   return executablePath;
 };
 

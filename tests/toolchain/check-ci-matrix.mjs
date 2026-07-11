@@ -56,7 +56,7 @@ same(
   'matrix fields',
 );
 assert(matrix.schema === 'helix.ci-matrix/2', 'CI matrix schema mismatch');
-same(matrix.plan_items, ['P02-009', 'P02-010', 'P02-011'], 'CI matrix task history');
+same(matrix.plan_items, ['P02-009', 'P02-010', 'P02-011', 'P02-012'], 'CI matrix task history');
 same(
   matrix.actions,
   {
@@ -203,6 +203,9 @@ same(
   {
     'ci:browser-smoke': packageJson.scripts['ci:browser-smoke'],
     'ci:check': packageJson.scripts['ci:check'],
+    'dependencies:check': packageJson.scripts['dependencies:check'],
+    'dependencies:licenses': packageJson.scripts['dependencies:licenses'],
+    'dependencies:report': packageJson.scripts['dependencies:report'],
     'wasm:install-validator': packageJson.scripts['wasm:install-validator'],
     'wasm:validate': packageJson.scripts['wasm:validate'],
     'wgsl:check': packageJson.scripts['wgsl:check'],
@@ -211,12 +214,29 @@ same(
   {
     'ci:browser-smoke': 'node tests/toolchain/run-browser-smoke.mjs',
     'ci:check': 'node tests/toolchain/check-ci-matrix.mjs',
+    'dependencies:check': 'node tests/toolchain/check-dependency-reports.mjs offline',
+    'dependencies:licenses': 'node tests/toolchain/check-dependency-reports.mjs licenses',
+    'dependencies:report': 'node tests/toolchain/check-dependency-reports.mjs live',
     'wasm:install-validator': 'node tests/toolchain/install-wasm-tools.mjs',
     'wasm:validate': 'node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
   'CI npm scripts',
+);
+assert(
+  runNode(['tests/toolchain/check-dependency-reports.mjs', 'offline']).includes(
+    'PASS dependency inventory: 91 npm development packages, 0 external Rust packages, 73 license/notice files, 1 duplicate family',
+  ),
+  'dependency inventory report did not pass',
+);
+expectFailure(
+  ['tests/toolchain/check-dependency-reports.mjs'],
+  'usage: node tests/toolchain/check-dependency-reports.mjs <offline|live|licenses>',
+);
+expectFailure(
+  ['tests/toolchain/check-dependency-reports.mjs', 'unknown'],
+  'usage: node tests/toolchain/check-dependency-reports.mjs <offline|live|licenses>',
 );
 assert(
   runNode(['tests/toolchain/check-wgsl-fixtures.mjs', 'manifest']).includes(
@@ -320,6 +340,9 @@ for (const marker of [
   `matrix: ${githubExpression('fromJSON(needs.contract.outputs.browser)')}`,
   `cargo clippy --frozen --target ${githubExpression('matrix.target')} --package helix-core -- -D warnings`,
   `node tests/toolchain/check-wasm-artifacts.mjs ${githubExpression('matrix.artifact')}`,
+  'corepack npm run dependencies:check',
+  "if: matrix.node == '22.23.1'",
+  'corepack npm run dependencies:report',
   `playwright install --with-deps ${githubExpression('matrix.engine')}`,
   'corepack npm run wgsl:check',
   "if: matrix.engine == 'chromium'",
@@ -346,6 +369,7 @@ for (const marker of [
   'toolchain-smoke',
   'wasm-tools',
   'SwiftShader',
+  'registry signatures',
   'https://docs.github.com/en/actions/reference/runners/github-hosted-runners',
   'https://playwright.dev/docs/ci',
   'does not prove',
@@ -364,5 +388,8 @@ process.stdout.write(
 );
 process.stdout.write(
   'PASS WGSL fixtures: 2 accepted pipelines and 2 rejection canaries in Chromium\n',
+);
+process.stdout.write(
+  'PASS dependency reports: lock/license/duplicate inventory plus Node 22 live observation\n',
 );
 process.stdout.write('PASS matrix rejection: unknown emitter/runtime lanes fail\n');

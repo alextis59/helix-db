@@ -1,9 +1,9 @@
 # JavaScript and TypeScript Toolchain Policy
 
 - Status: Accepted toolchain baseline
-- Last updated: 2026-07-10
+- Last updated: 2026-07-11
 - Owner: Runtime architecture owner
-- Plan item: `P02-003`
+- Plan items: `P02-003`, reporting extended by `P02-012`
 - Governing requirements: `PLAT-001`, `PLAT-002`, `CORE-003`, `INV-007`
 - Governing gate: `G02`
 - Development identity: [ADR 0001](../adr/0001-public-product-identity.md)
@@ -42,8 +42,8 @@ Lock rules:
 - Use `npm install --save-exact` only in a focused dependency-update change, then inspect package/lock diffs and rerun clean installs.
 - Do not commit `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`, Bun locks, or nested package locks.
 - Keep lifecycle-script policy explicit per dependency. A clean install cannot silently download Playwright browsers; browser binaries are installed by a named later command and cached/retained as CI artifacts.
-- The lock contains two optional `fsevents` install-script entries (one direct in the shared graph and one below Vite). Selection evidence suppresses both scripts and uses non-watch commands; `P02-006` inventories and explicitly denies them, and `P02-012` must revalidate them before any workflow enables lifecycle scripts.
-- Registry audit is disabled during ordinary deterministic install to avoid network/time-dependent results. `P02-012` owns an explicit, retained vulnerability/provenance report; disabling implicit audit does not waive that gate.
+- The lock contains two optional `fsevents` install-script entries (one direct in the shared graph and one below Vite). Selection evidence suppresses both scripts and uses non-watch commands; `P02-006` inventories/denies them and `P02-012` revalidates their exact duplicate paths, licenses, signatures when selected, and non-shipment boundary through `P16-010`.
+- Registry audit is disabled during ordinary deterministic install to avoid network/time-dependent results. `P02-012` adds an explicit dated vulnerability and signature/provenance observation after the clean install; disabling implicit audit does not waive that CI gate.
 
 The workspace glob is `packages/*`. `P02-004` creates the package directories and `P02-016` adds the first non-functional browser example.
 
@@ -105,11 +105,13 @@ corepack npm exec -- playwright --version
 corepack npm run toolchain:types
 corepack npm run toolchain:test-runner
 corepack npm run toolchain:browser-harness
+corepack npm run dependencies:check
+corepack npm run dependencies:report
 corepack npm run browser:build
 corepack npm run browser:smoke
 ```
 
-The evidence replays these commands on Node 22.23.1 and Node 24.18.0, checks a byte-identical lockfile before/after `npm ci`, rejects alternate lockfiles, verifies exact resolved direct/transitive versions and integrity fields, and confirms that no Playwright browser cache is created inside the repository.
+The evidence replays deterministic commands on Node 22.23.1 and Node 24.18.0, checks a byte-identical lockfile before/after `npm ci`, rejects alternate lockfiles, verifies exact resolved direct/transitive versions and integrity fields, and confirms that no Playwright browser cache is created inside the repository. The Node 22 lane additionally obtains one fresh live advisory/signature/provenance observation; it is not duplicated merely to make both Node jobs query the registry.
 
 ## Upgrade procedure
 

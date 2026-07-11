@@ -1,15 +1,16 @@
 # Code Quality, Unsafe Review, and Dependency Policy
 
-- Status: Accepted and executable bootstrap policy
-- Last updated: 2026-07-10
+- Status: Accepted and executable bootstrap policy with dependency security reporting
+- Last updated: 2026-07-11
 - Owner: Runtime architecture owner with security and release review
-- Plan item: `P02-006`
+- Plan items: `P02-006`, extended by `P02-012`
 - Governing requirements: `INV-003`, `INV-004`, `INV-006`, `INV-007`, `CORE-001`, `CORE-003`, `SEC-001`, `SEC-002`, `QUAL-001`
 - Governing gate: `G02`
 - Machine dependency policy: [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json)
+- Dependency report policy: [`helix.dependency-report-policy/1`](../../tests/toolchain/dependency-report-policy.json)
 - License inventory: [Third-party notices](../../THIRD_PARTY_NOTICES.md)
 
-This policy makes formatting, compiler warnings, lints, unsafe-code review, dependency sources, lock integrity, license screening, lifecycle scripts, and duplicate versions executable before feature code accumulates. Passing these checks does not replace security analysis, vulnerability/provenance reporting, or release artifact review.
+This policy makes formatting, compiler warnings, lints, unsafe-code review, dependency sources, lock integrity, license screening, lifecycle scripts, duplicate versions, explicit advisory checks, registry signatures, and provenance reporting executable before feature code accumulates. Passing these checks does not replace security analysis or release artifact review.
 
 ## Rust policy
 
@@ -86,15 +87,15 @@ For npm it requires:
 
 The [npm lock documentation](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/) defines the committed exact-tree role. The [npm CI documentation](https://docs.npmjs.com/cli/v11/commands/npm-ci/) defines frozen installs and script controls. `.npmrc` enables strict script review, while `package.json` denies `fsevents`; a newly introduced script fails policy until reviewed.
 
-For Rust it currently requires exactly the eight unpublished MIT workspace paths, no registry/git/external package, no build script, and no unsafe token. External dependencies are introduced only with exact lock changes, license/source review, Wasm/host impact, maintenance/security rationale, and the checks selected by `P02-012`.
+For Rust it currently requires exactly the eight unpublished MIT workspace paths, no registry/git/external package, no build script, and no unsafe token. The dependency report labels Rust advisory scanning `not-applicable-no-external-packages`; the first external crate remains denied until its focused change also configures a pinned advisory scanner. External dependencies additionally require exact lock changes, license/source review, Wasm/host impact, and a maintenance/security rationale.
 
-Downloaded development executables are not smuggled into npm/Cargo dependency graphs. The first such tool, the P02-010 component validator, has a separate machine authority that pins its official release URL, host, archive inventory, byte counts, archive/executable SHA-256 values, license forms, and exact version output. It is installed only under ignored `target/toolchain`, reverified on every use, and disclosed in third-party notices. `P02-012` must incorporate this authority into retained provenance/vulnerability/license reporting.
+Downloaded development executables are not smuggled into npm/Cargo dependency graphs. The first such tool, the P02-010 component validator, has a separate machine authority that pins its official release URL, host, archive inventory, byte counts, archive/executable SHA-256 values, license forms/files, and exact version output. It is installed only under ignored `target/toolchain`, reverified with all three license files on every use, disclosed in third-party notices, and incorporated into the P02-012 report with the explicit limitation that no compiled-binary transitive advisory feed exists.
 
 ## License boundary
 
-The machine check validates SPDX metadata and the [notice inventory](../../THIRD_PARTY_NOTICES.md). The twelve MPL-2.0 entries are build-only Vite tooling and are not permitted in runtime/package contents without explicit revalidation. Metadata screening does not prove that upstream license texts/provenance are complete.
+The machine check validates SPDX metadata and the [notice inventory](../../THIRD_PARTY_NOTICES.md). The twelve MPL-2.0 entries are build-only Vite tooling and are not permitted in runtime/package contents without explicit revalidation. The complete npm tarball refresh verifies 73 root license/notice files and records 26 reviewed missing-text omissions instead of treating metadata as text.
 
-`P02-012` owns retained advisory, provenance, full license-text, and duplicate reports. `P02-016` and release tasks inspect real bundles/packages and must reconcile what is shipped. A clean policy check cannot be cited as an SBOM, vulnerability-free claim, legal opinion, or production release approval.
+The [dependency security reporting contract](dependency-security-reporting.md) defines the deterministic inventory, full tarball license refresh, dated npm advisory result, registry signatures, SLSA attestations, duplicates, and non-npm tool limitations. `P02-016` and release tasks inspect real bundles/packages and must reconcile what is shipped. A clean policy check cannot be cited as an SBOM, continuing vulnerability-free claim, legal opinion, or production release approval.
 
 ## Suppressions and changes
 

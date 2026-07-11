@@ -1,0 +1,128 @@
+{
+  "schema": "helix.dependency-report-policy/1",
+  "plan_item": "P02-012",
+  "authorities": {
+    "dependency_policy": "tests/toolchain/dependency-policy.json",
+    "npm_license_inventory": ".github/ci/npm-license-inventory.json",
+    "wasm_tools": ".github/ci/wasm-tools.json"
+  },
+  "reports": {
+    "inventory_schema": "helix.dependency-inventory-report/1",
+    "observation_schema": "helix.dependency-observation-report/1",
+    "license_refresh_schema": "helix.npm-license-refresh/1",
+    "output_directory": "dist/dependency"
+  },
+  "npm": {
+    "cli_version": "11.18.0",
+    "registry_prefix": "https://registry.npmjs.org/",
+    "expected_locked_packages": 91,
+    "audit": {
+      "command": ["audit", "--json", "--package-lock-only", "--ignore-scripts"],
+      "maximum_vulnerabilities": {
+        "info": 0,
+        "low": 0,
+        "moderate": 0,
+        "high": 0,
+        "critical": 0,
+        "total": 0
+      },
+      "exceptions": []
+    },
+    "signatures": {
+      "command": ["audit", "signatures", "--json", "--include-attestations"],
+      "require_all_installed_registry_signatures": true,
+      "required_attested_direct_packages": ["@biomejs/biome", "@playwright/test", "vite", "vitest"],
+      "exceptions": []
+    },
+    "license_tarballs": {
+      "maximum_individual_bytes": 33554432,
+      "maximum_total_bytes": 402653184,
+      "download_concurrency": 8,
+      "missing_text_exceptions": [
+        {
+          "selector": "prefix",
+          "package": "@biomejs/cli-",
+          "version": "2.5.3",
+          "expected_packages": 8,
+          "reason": "Development-only Biome platform binaries declare MIT OR Apache-2.0 but omit root license text; their parent provenance is locked and release artifacts must not contain them",
+          "revalidate_by": "P16-010"
+        },
+        {
+          "selector": "exact",
+          "package": "@napi-rs/wasm-runtime",
+          "version": "1.1.6",
+          "expected_packages": 1,
+          "reason": "Optional development-tool transitively declares MIT without a root license file; it is lock-only on the reviewed host and prohibited from shipped artifacts pending release reconciliation",
+          "revalidate_by": "P16-010"
+        },
+        {
+          "selector": "prefix",
+          "package": "@rolldown/binding-",
+          "version": "1.1.5",
+          "expected_packages": 15,
+          "reason": "Development-only Rolldown platform bindings declare MIT but omit root license files; the parent tool carries the license and no binding may enter a shipped artifact without content-level review",
+          "revalidate_by": "P16-010"
+        },
+        {
+          "selector": "exact",
+          "package": "@tybys/wasm-util",
+          "version": "0.10.3",
+          "expected_packages": 1,
+          "reason": "Optional development-tool transitively declares MIT without root license text; it remains non-runtime and requires release content reconciliation if selected",
+          "revalidate_by": "P16-010"
+        },
+        {
+          "selector": "exact",
+          "package": "stackback",
+          "version": "0.0.2",
+          "expected_packages": 1,
+          "reason": "Development-only test dependency declares MIT but its npm tarball omits root license text; it is not eligible for shipment without a resolved notice source",
+          "revalidate_by": "P16-010"
+        }
+      ]
+    }
+  },
+  "rust": {
+    "workspace_packages": 8,
+    "external_package_policy": "deny-until-advisory-scanner-is-configured",
+    "advisory_status_when_external_count_is_zero": "not-applicable-no-external-packages"
+  },
+  "external_tools": {
+    "wasm_tools": {
+      "coverage": "pinned-release-and-license-files; no binary-transitive advisory feed",
+      "revalidate_by": "P16-010"
+    },
+    "playwright_browsers": {
+      "coverage": "exact-package-coupled revisions; upstream installer verification; no standalone repository digest",
+      "expected_default_browsers": [
+        {
+          "name": "chromium",
+          "revision": "1228",
+          "browser_version": "149.0.7827.55"
+        },
+        {
+          "name": "chromium-headless-shell",
+          "revision": "1228",
+          "browser_version": "149.0.7827.55"
+        },
+        {
+          "name": "firefox",
+          "revision": "1532",
+          "browser_version": "151.0"
+        },
+        {
+          "name": "webkit",
+          "revision": "2311",
+          "browser_version": "26.5"
+        },
+        {
+          "name": "ffmpeg",
+          "revision": "1011",
+          "browser_version": null
+        }
+      ],
+      "revalidate_by": "P02-015"
+    }
+  },
+  "live_report_max_age_hours": 24
+}

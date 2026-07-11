@@ -131,8 +131,8 @@ for (const exception of policy.npm.build_only_license_exceptions) {
     `${exception.package_prefix}: exception scope is not bounded`,
   );
   assert(
-    /^P\d{2}-\d{3}$/.test(exception.revalidate_by),
-    `${exception.package_prefix}: exception lacks a task deadline`,
+    exception.revalidate_by === 'P16-010',
+    `${exception.package_prefix}: exception revalidation deadline drift`,
   );
   assert(
     exceptionCounts.get(exception.package_prefix) === exception.expected_packages,
@@ -164,8 +164,8 @@ same(
 for (const duplicate of policy.npm.allowed_duplicate_versions) {
   assert(duplicate.reason.length >= 20, `${duplicate.name}: duplicate exception reason too short`);
   assert(
-    /^P\d{2}-\d{3}$/.test(duplicate.revalidate_by),
-    `${duplicate.name}: duplicate exception lacks a task deadline`,
+    duplicate.revalidate_by === 'P16-010',
+    `${duplicate.name}: duplicate revalidation deadline drift`,
   );
 }
 
@@ -227,6 +227,8 @@ for (const marker of [
   '| MPL-2.0 | 12 |',
   'No external Rust crate is locked',
   'No npm dependency is a production/runtime dependency',
+  '73 root license/notice files across 65 packages',
+  'Twenty-six development-only tarballs omit root license text',
 ])
   assert(notices.includes(marker), `third-party notice marker absent: ${marker}`);
 

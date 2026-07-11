@@ -1,7 +1,7 @@
 # Licensing and Third-Party Material Policy
 
 - Status: Approved
-- Effective date: 2026-07-10
+- Effective date: 2026-07-11
 - Project license: [MIT](../../LICENSE)
 - Notice index: [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)
 
@@ -96,12 +96,12 @@ Release validation compares packaged notices with the locked dependency graph an
 
 ## Review and automation
 
-`P02-006` adds deterministic locked-license/source/lifecycle/duplicate screening and the current development-tool notice inventory. `P02-012` adds retained vulnerability, provenance, license-text, and duplicate-version reporting; package/release tasks reconcile the actual shipped contents and SBOM. Every new dependency or external asset still records a focused review in its change.
+`P02-006` adds deterministic locked-license/source/lifecycle/duplicate screening and the current development-tool notice inventory. `P02-012` adds a complete integrity-verified npm tarball license authority, reviewed missing-text exceptions, deterministic duplicate/source reports, and dated vulnerability/registry-signature/SLSA-provenance observations. Package/release tasks still reconcile actual shipped contents and the production SBOM. Every new dependency or external asset records a focused review in its change.
 
 The release owner owns the aggregate notice/SBOM result. Domain owners remain responsible for declaring external material introduced in their areas.
 
 ## Current third-party inventory
 
-The exact current npm development-tool inventory and license counts are maintained in [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md) and enforced by [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json). All locked npm entries are development-only; the twelve MPL-2.0 `lightningcss` entries are a bounded build-tool exception and cannot enter shipped artifacts without revalidation. Cargo currently contains only the eight unpublished MIT workspace packages and no external crate. No vendored code, third-party shader, generated SDK, benchmark dataset, or browser binary is committed.
+The exact current npm development-tool inventory and license counts are maintained in [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md), enforced by [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json), and expanded by the [dependency reporting contract](../architecture/dependency-security-reporting.md). All locked npm entries are development-only; the twelve MPL-2.0 `lightningcss` entries are a bounded build-tool exception and cannot enter shipped artifacts without revalidation. Cargo currently contains only the eight unpublished MIT workspace packages and no external crate. No vendored code, third-party shader, generated SDK, benchmark dataset, or browser binary is committed.
 
 The transcript contains source citations as documentation links; those links do not incorporate the cited content into distributed software.

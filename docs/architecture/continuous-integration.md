@@ -3,10 +3,10 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` and `P02-011`
+- Plan items: `P02-009`, revised by `P02-010`, `P02-011`, and `P02-012`
 - Governing gate: `G02`
 - Machine authority: [`helix.ci-matrix/2`](../../.github/ci/matrix.json)
-- Component validator authority: [`helix.wasm-tools/1`](../../.github/ci/wasm-tools.json)
+- Component validator authority: [`helix.wasm-tools/2`](../../.github/ci/wasm-tools.json)
 - Gating workflow: [`ci.yml`](../../.github/workflows/ci.yml)
 - Nightly workflow: [`ci-nightly.yml`](../../.github/workflows/ci-nightly.yml)
 
@@ -20,7 +20,7 @@ Runner labels are explicit rather than mutable `*-latest` aliases. The selected 
 
 | Group | Required lanes | Commands and boundary |
 | --- | --- | --- |
-| Node | 22.23.1 and 24.18.0 on `ubuntu-24.04` x64 | Clean script-suppressed install; formatting/dependency/types; deterministic fixtures; aggregate tests |
+| Node | 22.23.1 and 24.18.0 on `ubuntu-24.04` x64 | Clean script-suppressed install; formatting/dependency/types; deterministic dependency/license/duplicate inventory and fixtures; aggregate tests; Node 22 additionally records the live advisory/signature/provenance observation |
 | Native Rust | `ubuntu-24.04` x64, `windows-2025` x64, `macos-15` arm64 | Exact Rust toolchain; format, check, Clippy, all-feature tests; docs additionally on Linux x64 |
 | Portable Rust | `wasm32-unknown-unknown`, `wasm32-wasip2` on Linux x64 | Strict Clippy plus real core-module/component builds; Node validates the browser module and pinned `wasm-tools` validates/classifies the WASIp2 component |
 | Sanitizer | `x86_64-unknown-linux-gnuasan` on Linux x64 | Stable fully instrumented standard-library build profile; no non-Linux sanitizer claim |
@@ -49,9 +49,10 @@ Both run the same strict native format/check/Clippy/test command set. A nightly 
 - Setup Node's automatic package cache is disabled. Clean installs use the repository lock and deny lifecycle scripts.
 - Workflows use fixed runner labels, fixed Node versions, the exact `rust-toolchain.toml`, frozen Cargo operations, bounded timeouts, and fail-fast disabled so every matrix failure is visible.
 - No third-party community action, service, container, mutable cache, or secret is used. P02-010 adds two explicit downloads: the matrix-selected Playwright browser revision from its documented CDN and the official Bytecode Alliance `wasm-tools` Linux x64 release archive. Neither occurs through an npm lifecycle script. P02-011 reuses Chromium's bundled Dawn/SwiftShader implementation and adds no download or dependency.
-- The validator archive/executable are version-, size-, inventory-, and SHA-256-pinned by `helix.wasm-tools/1`. Playwright browser identity remains coupled to the exact locked Playwright package.
+- The validator archive/executable and three license texts are version-, size-, inventory-, and SHA-256-pinned by `helix.wasm-tools/2`. Playwright browser identity remains coupled to the exact locked Playwright package.
 - SwiftShader is enabled only for small, committed, hash-bound repository fixtures. The validator accepts no external WGSL, URL, stdin, or environment-provided source; Chromium's documented lower-security software-renderer path is never exposed as a product interface.
-- Artifact retention is intentionally absent until `P02-015`; compact local reports are produced under ignored `dist/validation`, and failure screenshots/traces remain local outputs.
+- Every Node lane verifies the integrity-bound 91-package license/source/duplicate inventory. Node 22.23.1 alone performs the explicit npm advisory query and verifies all installed registry signatures plus available SLSA provenance attestations; missing/invalid signatures, any advisory, or network/malformed-response failure is gating.
+- Artifact retention is intentionally absent until `P02-015`; compact local reports are produced under ignored `dist/validation` or `dist/dependency`, and failure screenshots/traces remain local outputs.
 
 An action update requires confirming the tag-to-SHA mapping from the official action repository, reviewing release and runtime changes, updating both workflows and the machine authority together, and replaying all local CI-contract canaries. A full SHA prevents tag movement from changing accepted code but does not eliminate the need to review the action source and transitive runtime.
 
@@ -63,6 +64,8 @@ node tests/toolchain/emit-ci-matrix.mjs gating
 node tests/toolchain/emit-ci-matrix.mjs nightly
 corepack npm run wasm:install-validator
 corepack npm run wasm:validate
+corepack npm run dependencies:check
+corepack npm run dependencies:report
 corepack npm run wgsl:check
 corepack npm run browser:install
 corepack npm run wgsl:validate
@@ -72,7 +75,7 @@ corepack npm run ci:browser-smoke -- webkit
 corepack npm run toolchain:types
 ```
 
-Local checks validate exact matrix/workflow/action/validator configuration, lane identities, emitted JSON, security markers, both Wasm forms, WGSL manifest hashes and compiler outcomes, bundle output, and real browser execution on Linux x64. GitHub itself remains the authority for hosted workflow parsing and Windows/macOS/arm64 provisioning. Therefore local evidence does not prove a hosted matrix passed; the first hosted green matrix and independent review remain required inputs to `G02`.
+Local checks validate exact matrix/workflow/action/validator configuration, lane identities, emitted JSON, registry signatures and provenance observations, lock/tarball license and duplicate reports, both Wasm forms, WGSL manifest hashes/compiler outcomes, bundle output, and real browser execution on Linux x64. GitHub itself remains the authority for hosted workflow parsing and Windows/macOS/arm64 provisioning. Therefore local evidence does not prove a hosted matrix passed; the first hosted green matrix and independent review remain required inputs to `G02`.
 
 ## Change policy
 

@@ -1,6 +1,6 @@
 {
   "schema": "helix.ci-matrix/2",
-  "plan_items": ["P02-009", "P02-010", "P02-011"],
+  "plan_items": ["P02-009", "P02-010", "P02-011", "P02-012"],
   "actions": {
     "checkout": {
       "repository": "actions/checkout",

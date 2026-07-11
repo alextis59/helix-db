@@ -28,6 +28,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Continuous integration matrix](architecture/continuous-integration.md) | Gating/nightly OS, architecture, target, Node, browser, action-pin, and trust boundaries |
 | [Wasm/component/browser smoke validation](architecture/wasm-browser-smoke-validation.md) | Pinned component validator, browser core module, Vite artifact, and real-engine execution boundaries |
 | [WGSL fixture validation](architecture/wgsl-fixture-validation.md) | Hash-bound trusted shaders, Dawn/SwiftShader parsing, validation, compilation, and security boundaries |
+| [Dependency security reporting](architecture/dependency-security-reporting.md) | Deterministic lock/license/duplicate inventory plus dated vulnerability, signature, and provenance observations |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 

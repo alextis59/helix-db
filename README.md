@@ -23,6 +23,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Continuous integration matrix](docs/architecture/continuous-integration.md) — fixed gating/nightly platforms, targets, Node lines, browser smoke lanes, and action pins.
 - [Wasm/component/browser smoke validation](docs/architecture/wasm-browser-smoke-validation.md) — pinned component validation, byte-identical Vite bundling, and real three-engine execution.
 - [WGSL fixture validation](docs/architecture/wgsl-fixture-validation.md) — hash-bound internal shader parsing, rejection canaries, and compile-only Dawn/SwiftShader checks.
+- [Dependency security reporting](docs/architecture/dependency-security-reporting.md) — integrity-bound license/duplicate inventory and explicit vulnerability/signature/provenance observations.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 
