@@ -1,0 +1,800 @@
+{
+  "schema": "helix.rust-coverage-report/1",
+  "plan_item": "P02-013",
+  "inputs": {
+    "cargo_lock_sha256": "731783458dbef335e830d369b4220bd598ea1f1d6595209b8d1898801c8c8381",
+    "cargo_manifest_sha256": "6595943a56ea4f06e65c8bebd26df55ae2cc60c96c69e5e4b3f3f0e00624c98d",
+    "coverage_policy_sha256": "0927b474329b88f071dbb2127af39e330722d5fe2c018949ebb49b9dc9a313f9",
+    "coverage_runner_sha256": "ab5a4eea5e23fa66f6644efa4f90719d71d4f0758cda4d5433e1ab0d750bf098",
+    "rust_toolchain_sha256": "3aeb3323922706566dcd057bc0225469d7f26dee2fbcf68a9d426396bdef5195"
+  },
+  "toolchain": {
+    "host": "x86_64-unknown-linux-gnu",
+    "llvm_export_version": "3.1.0",
+    "llvm_release": "22.1.2",
+    "rust_release": "1.96.1",
+    "rustup_component": "llvm-tools",
+    "tools": [
+      {
+        "bytes": 639704,
+        "name": "llvm-cov",
+        "sha256": "c7fdde9c0db66a68a4f55a4d757030c16c085c951593304ad8985fda92b955d0",
+        "version": "LLVM (http://llvm.org/): | LLVM version 22.1.2-rust-1.96.1-stable | Optimized build."
+      },
+      {
+        "bytes": 666984,
+        "name": "llvm-profdata",
+        "sha256": "ac5964e5d8f2cd08c6c95a0413c6e3233dbbbc2100f1289c2d032d32acca413b",
+        "version": "LLVM (http://llvm.org/): | LLVM version 22.1.2-rust-1.96.1-stable | Optimized build."
+      }
+    ]
+  },
+  "execution": {
+    "architecture": "x64",
+    "cargo_arguments": [
+      "test",
+      "--frozen",
+      "--profile",
+      "coverage",
+      "--workspace",
+      "--all-features",
+      "--lib",
+      "--no-run",
+      "--message-format=json"
+    ],
+    "ci_lane": "linux-x64",
+    "platform": "linux",
+    "raw_profiles": 9,
+    "test_binaries": [
+      {
+        "binary": "helix_columnar-89138b2fb7883b1c",
+        "target": "helix_columnar"
+      },
+      {
+        "binary": "helix_core-ba0f113e2be58462",
+        "target": "helix_core"
+      },
+      {
+        "binary": "helix_doc-b35faa57be623c80",
+        "target": "helix_doc"
+      },
+      {
+        "binary": "helix_gpu-84baccc043a50e52",
+        "target": "helix_gpu"
+      },
+      {
+        "binary": "helix_host_native-5a64c2fabed1745d",
+        "target": "helix_host_native"
+      },
+      {
+        "binary": "helix_query-70027f5ccede2af2",
+        "target": "helix_query"
+      },
+      {
+        "binary": "helix_server-33aaa1ef8db7798e",
+        "target": "helix_server"
+      },
+      {
+        "binary": "helix_storage-3994596faa8ad263",
+        "target": "helix_storage"
+      }
+    ],
+    "tests_executed": 44,
+    "workspace_database_functionality": true,
+    "workspace_status": "hdoc-feature-negotiation"
+  },
+  "exclusions": {
+    "empty_product_scope": null,
+    "inline_ranges": [
+      {
+        "path": "crates/helix-columnar/src/lib.rs",
+        "end_line": 25,
+        "reason": "inline-unit-test-code",
+        "start_line": 16
+      },
+      {
+        "path": "crates/helix-core/src/lib.rs",
+        "end_line": 38,
+        "reason": "inline-unit-test-code",
+        "start_line": 21
+      },
+      {
+        "path": "crates/helix-doc/src/hdoc_negotiation.rs",
+        "end_line": 457,
+        "reason": "inline-unit-test-code",
+        "start_line": 311
+      },
+      {
+        "path": "crates/helix-doc/src/lib.rs",
+        "end_line": 7872,
+        "reason": "inline-unit-test-code",
+        "start_line": 4729
+      },
+      {
+        "path": "crates/helix-doc/src/path_dictionary.rs",
+        "end_line": 968,
+        "reason": "inline-unit-test-code",
+        "start_line": 650
+      },
+      {
+        "path": "crates/helix-doc/src/path_dictionary_state.rs",
+        "end_line": 675,
+        "reason": "inline-unit-test-code",
+        "start_line": 494
+      },
+      {
+        "path": "crates/helix-doc/src/tagged_json.rs",
+        "end_line": 2275,
+        "reason": "inline-unit-test-code",
+        "start_line": 1788
+      },
+      {
+        "path": "crates/helix-gpu/src/lib.rs",
+        "end_line": 31,
+        "reason": "inline-unit-test-code",
+        "start_line": 19
+      },
+      {
+        "path": "crates/helix-host-native/src/lib.rs",
+        "end_line": 35,
+        "reason": "inline-unit-test-code",
+        "start_line": 20
+      },
+      {
+        "path": "crates/helix-query/src/lib.rs",
+        "end_line": 24,
+        "reason": "inline-unit-test-code",
+        "start_line": 15
+      },
+      {
+        "path": "crates/helix-server/src/lib.rs",
+        "end_line": 24,
+        "reason": "inline-unit-test-code",
+        "start_line": 15
+      },
+      {
+        "path": "crates/helix-storage/src/lib.rs",
+        "end_line": 24,
+        "reason": "inline-unit-test-code",
+        "start_line": 15
+      }
+    ],
+    "path_rules": [
+      {
+        "regex": "^crates/[^/]+/(?:tests|benches|examples)/.+\\.rs$",
+        "reason": "test-benchmark-example-code"
+      }
+    ]
+  },
+  "llvm_totals_including_tests": {
+    "branches": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "functions": {
+      "count": 1043,
+      "covered": 800,
+      "percent": 76.70182166826463
+    },
+    "instantiations": {
+      "count": 1847,
+      "covered": 995,
+      "percent": 53.871142393069846
+    },
+    "lines": {
+      "count": 13547,
+      "covered": 10802,
+      "percent": 79.73721119066953
+    },
+    "mcdc": {
+      "count": 0,
+      "covered": 0,
+      "notcovered": 0,
+      "percent": 0
+    },
+    "regions": {
+      "count": 23282,
+      "covered": 18349,
+      "notcovered": 4933,
+      "percent": 78.81195773558971
+    }
+  },
+  "product_files": [
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 25,
+          "reason": "inline-unit-test-code",
+          "start_line": 16
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "lines": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "regions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        }
+      },
+      "path": "crates/helix-columnar/src/lib.rs",
+      "sha256": "06b119745b8c44d0518d01dbe925381e85f8ad4ad79423e2ba1d5f52aa80d2b9"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 38,
+          "reason": "inline-unit-test-code",
+          "start_line": 21
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "lines": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "regions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        }
+      },
+      "path": "crates/helix-core/src/lib.rs",
+      "sha256": "462ba7b15ebd203d5f6e497faf0ba94e9baaf924cf4979217abe188c7580cbbc"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 457,
+          "reason": "inline-unit-test-code",
+          "start_line": 311
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 25,
+          "covered": 25,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "lines": {
+          "count": 106,
+          "covered": 106,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "regions": {
+          "count": 136,
+          "covered": 136,
+          "missed": 0,
+          "percent_basis_points": 10000
+        }
+      },
+      "path": "crates/helix-doc/src/hdoc_negotiation.rs",
+      "sha256": "2618ee60c1a377b18143acb4d8f4c0e1df6638127ebbdc955ca294a5665eefa4"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 7872,
+          "reason": "inline-unit-test-code",
+          "start_line": 4729
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 241,
+          "covered": 241,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "lines": {
+          "count": 2716,
+          "covered": 2716,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "regions": {
+          "count": 5547,
+          "covered": 5293,
+          "missed": 254,
+          "percent_basis_points": 9542
+        }
+      },
+      "path": "crates/helix-doc/src/lib.rs",
+      "sha256": "5b6132f2f9e88baebad473b8664160cbaa9886230095a38a69b40ef5b2031e9f"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 968,
+          "reason": "inline-unit-test-code",
+          "start_line": 650
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 42,
+          "covered": 42,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "lines": {
+          "count": 361,
+          "covered": 361,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "regions": {
+          "count": 715,
+          "covered": 703,
+          "missed": 12,
+          "percent_basis_points": 9832
+        }
+      },
+      "path": "crates/helix-doc/src/path_dictionary.rs",
+      "sha256": "be09498f6c72e0c545f89f3ab1a3316548c9586b10ff2aeb3ace16b99f75d4f8"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 675,
+          "reason": "inline-unit-test-code",
+          "start_line": 494
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 35,
+          "covered": 35,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "lines": {
+          "count": 204,
+          "covered": 204,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "regions": {
+          "count": 355,
+          "covered": 342,
+          "missed": 13,
+          "percent_basis_points": 9633
+        }
+      },
+      "path": "crates/helix-doc/src/path_dictionary_state.rs",
+      "sha256": "ed6969c62ebbbe9786f2c44ef27c4b591c0d31b7572122188d29c3520d6d1e3c"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 2275,
+          "reason": "inline-unit-test-code",
+          "start_line": 1788
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 117,
+          "covered": 117,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "lines": {
+          "count": 1178,
+          "covered": 1178,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "regions": {
+          "count": 2493,
+          "covered": 2380,
+          "missed": 113,
+          "percent_basis_points": 9546
+        }
+      },
+      "path": "crates/helix-doc/src/tagged_json.rs",
+      "sha256": "3d8a72181be170e3a4637b78581042217a1bb11542e54fc1254445cd6d34bb20"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 31,
+          "reason": "inline-unit-test-code",
+          "start_line": 19
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "lines": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "regions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        }
+      },
+      "path": "crates/helix-gpu/src/lib.rs",
+      "sha256": "1f3276dc51deff6a5c85f610620ff5d9e67dc4c035a17b6161a7d60fb11b3291"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 35,
+          "reason": "inline-unit-test-code",
+          "start_line": 20
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "lines": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "regions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        }
+      },
+      "path": "crates/helix-host-native/src/lib.rs",
+      "sha256": "ffbdaa22ebd619e4de4a63cac47a296563c88ec7e91b1c9991dec29d9573074a"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 24,
+          "reason": "inline-unit-test-code",
+          "start_line": 15
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "lines": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "regions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        }
+      },
+      "path": "crates/helix-query/src/lib.rs",
+      "sha256": "09d3edeb382dfd0cdbb0b36609273e64327b8d699da4c6c16bd48f1036cd17cc"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 24,
+          "reason": "inline-unit-test-code",
+          "start_line": 15
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "lines": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "regions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        }
+      },
+      "path": "crates/helix-server/src/lib.rs",
+      "sha256": "f128aba1ef8870934411e29d68a17564aaba2057f1e547609216a9bfee8f95a3"
+    },
+    {
+      "exclusion_ranges": [
+        {
+          "end_line": 24,
+          "reason": "inline-unit-test-code",
+          "start_line": 15
+        }
+      ],
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "lines": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "regions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        }
+      },
+      "path": "crates/helix-storage/src/lib.rs",
+      "sha256": "6228af6d62eb7e40cd98af172c7082bc1a941eb42b38ed2e80cbf21990bf6f77"
+    }
+  ],
+  "groups": [
+    {
+      "description": "All workspace product Rust sources after explicit test-code exclusions",
+      "empty_product_scope": false,
+      "enforce_per_file": false,
+      "failures": [],
+      "id": "workspace-product",
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 460,
+          "covered": 460,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "lines": {
+          "count": 4565,
+          "covered": 4565,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "regions": {
+          "count": 9246,
+          "covered": 8854,
+          "missed": 392,
+          "percent_basis_points": 9576
+        }
+      },
+      "source_files": [
+        "crates/helix-columnar/src/lib.rs",
+        "crates/helix-core/src/lib.rs",
+        "crates/helix-doc/src/hdoc_negotiation.rs",
+        "crates/helix-doc/src/lib.rs",
+        "crates/helix-doc/src/path_dictionary.rs",
+        "crates/helix-doc/src/path_dictionary_state.rs",
+        "crates/helix-doc/src/tagged_json.rs",
+        "crates/helix-gpu/src/lib.rs",
+        "crates/helix-host-native/src/lib.rs",
+        "crates/helix-query/src/lib.rs",
+        "crates/helix-server/src/lib.rs",
+        "crates/helix-storage/src/lib.rs"
+      ],
+      "thresholds_basis_points": {
+        "branches": 8500,
+        "functions": 9000,
+        "lines": 9000,
+        "regions": 8500
+      },
+      "verdict": "pass"
+    },
+    {
+      "description": "Deterministic document, query, and portable-core semantics",
+      "empty_product_scope": false,
+      "enforce_per_file": true,
+      "failures": [],
+      "id": "semantic-critical",
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 460,
+          "covered": 460,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "lines": {
+          "count": 4565,
+          "covered": 4565,
+          "missed": 0,
+          "percent_basis_points": 10000
+        },
+        "regions": {
+          "count": 9246,
+          "covered": 8854,
+          "missed": 392,
+          "percent_basis_points": 9576
+        }
+      },
+      "source_files": [
+        "crates/helix-core/src/lib.rs",
+        "crates/helix-doc/src/hdoc_negotiation.rs",
+        "crates/helix-doc/src/lib.rs",
+        "crates/helix-doc/src/path_dictionary.rs",
+        "crates/helix-doc/src/path_dictionary_state.rs",
+        "crates/helix-doc/src/tagged_json.rs",
+        "crates/helix-query/src/lib.rs"
+      ],
+      "thresholds_basis_points": {
+        "branches": 9500,
+        "functions": 10000,
+        "lines": 10000,
+        "regions": 9500
+      },
+      "verdict": "pass"
+    },
+    {
+      "description": "Deterministic storage/recovery and portable-core orchestration",
+      "empty_product_scope": true,
+      "enforce_per_file": true,
+      "failures": [],
+      "id": "recovery-critical",
+      "metrics": {
+        "branches": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "functions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "lines": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        },
+        "regions": {
+          "count": 0,
+          "covered": 0,
+          "missed": 0,
+          "percent_basis_points": null
+        }
+      },
+      "source_files": [
+        "crates/helix-core/src/lib.rs",
+        "crates/helix-storage/src/lib.rs"
+      ],
+      "thresholds_basis_points": {
+        "branches": 9500,
+        "functions": 10000,
+        "lines": 10000,
+        "regions": 9500
+      },
+      "verdict": "pass"
+    }
+  ],
+  "verdict": "pass"
+}

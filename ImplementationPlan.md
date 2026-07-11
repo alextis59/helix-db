@@ -223,7 +223,7 @@ Dependencies: `G01`, `G02`.
 - [x] **P03-012** Implement canonical JSON-like rendering and import conversion for debugging and SDK boundaries.
 - [x] **P03-013** Implement the collection field-path dictionary format, monotonic IDs, versions, and non-reuse rule.
 - [x] **P03-014** Implement path registration, resolution, dictionary snapshots, and version pinning.
-- [ ] **P03-015** Define and implement HDoc feature negotiation and migration hooks without committing an unsupported compatibility window.
+- [x] **P03-015** Define and implement HDoc feature negotiation and migration hooks without committing an unsupported compatibility window.
 - [ ] **P03-016** Commit golden vectors covering every type, nesting pattern, boundary, invalid encoding, and format version.
 - [ ] **P03-017** Add cross-language golden-vector readers for Rust and TypeScript.
 - [ ] **P03-018** Add round-trip, canonicalization, malformed-input, property, and mutation tests.
