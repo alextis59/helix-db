@@ -1,0 +1,203 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-005",
+  "verdict": "pass",
+  "requirements": ["CORE-001", "DATA-001", "DATA-002", "INV-001", "INV-007"],
+  "accepted_adrs": ["0012"],
+  "base_commit": "cd8e4bd102968061b5ee0349a93854fa888943ac",
+  "source_commits": ["6d919c39af9ae126de3f152f3a7178bf44489c05"],
+  "commit": "6d919c39af9ae126de3f152f3a7178bf44489c05",
+  "source_tree": "31edf6657c3fbe8a085eba697657ff51b7b1c4be",
+  "recorded_at": "2026-07-11T09:51:34.832Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": ["22.23.1", "24.18.0"]
+    },
+    "network_required": false,
+    "hosted_workflow_execution": false
+  },
+  "commands": [
+    {
+      "command": "independent fixed-record parser and exact structural-vector replay",
+      "exit_code": 0
+    },
+    {
+      "command": "node compatibility/v1/generate-matrix.mjs --check && node compatibility/v1/check-matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run fixtures:check",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:javascript",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run test:all",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 22.23.1 and 24.18.0 evidence verifier replay with 60 isolated mutation canaries",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "source_artifacts": 16,
+    "record_document_lines": 657,
+    "record_document_headings": 28,
+    "registry_lines": 511,
+    "registry_bytes": 17936,
+    "sections": 4,
+    "record_layouts": 4,
+    "container_kinds": 2,
+    "canonicalization_steps": 8,
+    "validation_rules": 23,
+    "deferrals": 5,
+    "structural_examples": 4,
+    "structural_section_bytes": 636,
+    "field_entries": 10,
+    "distinct_name_records": 9,
+    "noncontainer_value_occurrences": 9,
+    "container_descriptors": 7,
+    "array_entries": 2,
+    "internal_alignment_padding_bytes": 7,
+    "mutation_canaries": 60,
+    "markdown_files": 171,
+    "local_links": 1269,
+    "node_lanes": 2,
+    "native_tests": 9,
+    "semantic_fixtures": 17,
+    "semantic_steps": 313,
+    "oracle_assertions": 382,
+    "compatibility_rows": 263,
+    "mongodb_cases": 16,
+    "declared_browser_tests": 3,
+    "aggregate_suites": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "source_artifacts": [
+    {
+      "status": "M",
+      "path": "Specifications.md",
+      "media_type": "text/markdown",
+      "bytes": 79339,
+      "sha256": "a5ffe4008390308d4a3bb8fae73bad037533d2c7b521a50440a88d767cc234f6"
+    },
+    {
+      "status": "M",
+      "path": "Study.md",
+      "media_type": "text/markdown",
+      "bytes": 63896,
+      "sha256": "2f2f10881137f5239933177e0efa127552d8d89a4b2afd175edf124d3ed24d8c"
+    },
+    {
+      "status": "M",
+      "path": "compatibility/v1/matrix-v1.json",
+      "media_type": "application/json",
+      "bytes": 217132,
+      "sha256": "2c5054a0a2266783fdcd847d076959f07d45d40fc236d66c18a3a2acd7a15316"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md",
+      "media_type": "text/markdown",
+      "bytes": 10210,
+      "sha256": "0c79cc702cb04c0f384cec328a6bf6d25488fa3c5e56c58ca6f672d442b7bd80"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/0012-use-bounded-little-endian-hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 32215,
+      "sha256": "25c7353fc7d5981d5bbc291dfff6bb21ecea427366218a3a2b073e9ab6dfff25"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "media_type": "text/markdown",
+      "bytes": 103065,
+      "sha256": "adba23b2ab52750179ad162aaee3ead13f56ecbd60bd55a785d56d5f98ebddd6"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/README.md",
+      "media_type": "text/markdown",
+      "bytes": 2477,
+      "sha256": "db51a2db367a004de5771d95c8b602fa24d4b45c9840760d95fb8e3b8c7e1a74"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-envelope.json",
+      "media_type": "application/json",
+      "bytes": 11210,
+      "sha256": "be2e6eba757a57dfe840b85227eb08074c2a6b28d1f155082e17b76565e1397c"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-payloads.json",
+      "media_type": "application/json",
+      "bytes": 23713,
+      "sha256": "22ffa3377c35236177b202cceb95397892c3c696baf9519cc4cb44bdb493a902"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-payloads.md",
+      "media_type": "text/markdown",
+      "bytes": 29560,
+      "sha256": "982cae65d8189a46fe8817dfc76a14f7892210138a3ee72204b842d991c1afd8"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-records.json",
+      "media_type": "application/json",
+      "bytes": 17936,
+      "sha256": "11cefc8fc44df409589c1831fa5c5a6be2a3e93a36e3de82daa99f51905f0dca"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-records.md",
+      "media_type": "text/markdown",
+      "bytes": 31486,
+      "sha256": "4011f0e01457f7b169947c7cba3a1da0670024ea1488c2429cf8353d2a01d103"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-type-tags.json",
+      "media_type": "application/json",
+      "bytes": 7664,
+      "sha256": "87a36c2b5d15f827e538e69079878fba0bcf802635abafe9c0cb238137e4c777"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-type-tags.md",
+      "media_type": "text/markdown",
+      "bytes": 19744,
+      "sha256": "035c0c1638f6d7bd84af22589cf1edbd9b2c0d6892fe4fbc350b9955e79d54f9"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 30946,
+      "sha256": "fcd4baa9b66914f2faf60a0bc8397296331e9770a7539260beb07edcf032a305"
+    },
+    {
+      "status": "M",
+      "path": "fixtures/generation/report-v1.json",
+      "media_type": "application/json",
+      "bytes": 2547,
+      "sha256": "a70ece4769440ae75a6d89e42aab922d3482100298f99be2aa825366f22f2318"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-03/P03-005/verify.mjs",
+    "bytes": 58288,
+    "sha256": "8f77b66b28fbd5e91e1d67d1480ea8529be0f862d3f2ea61fef2dcbe0e39d5e0"
+  }
+}
