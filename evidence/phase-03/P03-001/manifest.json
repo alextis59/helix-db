@@ -1,0 +1,135 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-001",
+  "requirements": ["CORE-001", "DATA-001", "DATA-002", "INV-001", "INV-007", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0012"],
+  "base_commit": "58cae3443a832bde20bcfd5051f3ea0de65446c0",
+  "source_commits": ["ae7bf86ec117d2d1d550a9cb6d1087b7f402402f"],
+  "commit": "ae7bf86ec117d2d1d550a9cb6d1087b7f402402f",
+  "source_tree": "606fa3e41dae59758865cb33c8b3244a3fb27f14",
+  "recorded_at": "2026-07-11T07:48:09.358Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": ["22.23.1", "24.18.0"]
+    },
+    "network_required": false,
+    "hosted_workflow_execution": false
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "corepack npm run test:all before regenerating the hash-bound compatibility matrix",
+      "exit_code": 1,
+      "result": "correctly rejected stale compatibility/v1/matrix-v1.json after Specifications.md changed"
+    },
+    {
+      "command": "node compatibility/v1/generate-matrix.mjs --write",
+      "exit_code": 0,
+      "result": "regenerated only the specification input identity in the matrix and rendered compatibility document"
+    }
+  ],
+  "commands": [
+    {
+      "command": "focused 24-marker ADR/backlink/specification contract plus independent CRC32C and u32/16 MiB checks",
+      "exit_code": 0
+    },
+    {
+      "command": "node compatibility/v1/generate-matrix.mjs --check && node compatibility/v1/check-matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:javascript",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run test:all",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 22.23.1 and 24.18.0 evidence verifier replay with 16 isolated mutation canaries",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "source_artifacts": 7,
+    "adr_lines": 530,
+    "adr_headings": 29,
+    "focused_markers": 24,
+    "primary_source_links": 6,
+    "markdown_files": 162,
+    "local_links": 1104,
+    "mutation_canaries": 16,
+    "node_lanes": 2,
+    "native_tests": 9,
+    "semantic_fixtures": 17,
+    "semantic_steps": 313,
+    "oracle_assertions": 382,
+    "compatibility_rows": 263,
+    "mongodb_cases": 16,
+    "declared_browser_tests": 3,
+    "aggregate_suites": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "source_artifacts": [
+    {
+      "status": "M",
+      "path": "Specifications.md",
+      "media_type": "text/markdown",
+      "bytes": 75817,
+      "sha256": "cc0489c6ffc111afcfe29c723b15a725de5eea116d937fe76c8a8b63d2706a30"
+    },
+    {
+      "status": "M",
+      "path": "Study.md",
+      "media_type": "text/markdown",
+      "bytes": 62005,
+      "sha256": "c31cbc0f249a3d4092d6a42e316979602c7b16581e01c1a5be377b13d753776b"
+    },
+    {
+      "status": "M",
+      "path": "compatibility/v1/matrix-v1.json",
+      "media_type": "application/json",
+      "bytes": 217132,
+      "sha256": "4409a66a5dda5f83cc372025dd0e27930829dc937652f41b2e16f32946429811"
+    },
+    {
+      "status": "A",
+      "path": "docs/adr/0012-use-bounded-little-endian-hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 31766,
+      "sha256": "80fc895d22700f8f0ca718640f710f6dca0f4b558d51a90acb1b1da218d9e0e2"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/README.md",
+      "media_type": "text/markdown",
+      "bytes": 4461,
+      "sha256": "5bcb1c9824c1ced64f2131601440ef9d1891bac74658f0dc534d0286ce9dfca0"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "media_type": "text/markdown",
+      "bytes": 103065,
+      "sha256": "02c5be0de9da44286c5cfea1833d4a0a13059cc82b9c97b4d06bc5b619b4bb97"
+    },
+    {
+      "status": "M",
+      "path": "docs/governance/decision-owners.md",
+      "media_type": "text/markdown",
+      "bytes": 6059,
+      "sha256": "6d0672d57359dc68f10c61ac7ebae1ea3b98c7defcf161e6396da41f8bda67bb"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-03/P03-001/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 20842,
+    "sha256": "e496f469cec169ba1014ae9cc4a8c651e0eb36fb51be4b7b23c98387321d4561"
+  },
+  "verdict": "pass"
+}

@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 59
-- Open checklist items: 463
+- Completed checklist items: 60
+- Open checklist items: 462
 - Total checklist items: 522
 - Current phase: Phase 3 — HDoc format, codec, and path dictionary
 - Next release gate: `G03`
@@ -44,7 +44,7 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 | 0 | Governance and project baseline | Foundation | Completed |
 | 1 | Semantic contract and compatibility corpus | Foundation | Completed |
 | 2 | Workspace, toolchain, and CI | Foundation | Completed |
-| 3 | HDoc format and codec | Research prototype | Not started |
+| 3 | HDoc format and codec | Research prototype | In progress |
 | 4 | Wasm core and host capability ABI | Research prototype | Not started |
 | 5 | Single-node storage foundation | v1 | Not started |
 | 6 | MVCC, transactions, and sessions | v1 | Not started |
@@ -209,7 +209,7 @@ Objective: implement the canonical typed row representation and its evolution ru
 
 Dependencies: `G01`, `G02`.
 
-- [ ] **P03-001** Write the HDoc format ADR covering endianness, alignment, offsets, maximum sizes, canonicalization, checksum, hash, and extension strategy.
+- [x] **P03-001** Write the HDoc format ADR covering endianness, alignment, offsets, maximum sizes, canonicalization, checksum, hash, and extension strategy.
 - [ ] **P03-002** Define the HDoc header, flags, format version, total length, field count, checksum, body sections, and footer.
 - [ ] **P03-003** Assign stable type tags for every required value type and reserve extension ranges.
 - [ ] **P03-004** Define canonical encodings for integers, floats, decimals, timestamps, dates, UUIDs, ObjectIds, binary values, and vectors.
