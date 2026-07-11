@@ -18,6 +18,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Repository layout](docs/architecture/repository-layout.md) — tracked source, conformance, benchmark, test, example, and evidence boundaries.
 - [Build profiles](docs/architecture/build-profiles.md) — native, Wasm, browser, sanitizer, coverage, and benchmark build contracts.
 - [Code quality and dependency policy](docs/architecture/code-quality-and-dependency-policy.md) — formatting, lints, warnings, unsafe review, sources, licenses, and lifecycle scripts.
+- [Stable test command surface](docs/quality/test-command-surface.md) — maturity-labeled unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed entry points.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

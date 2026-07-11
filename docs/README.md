@@ -23,6 +23,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Repository layout](architecture/repository-layout.md) | Tracked source, conformance, benchmark, test, example, and release-evidence boundaries |
 | [Build profiles](architecture/build-profiles.md) | Native, Wasm, browser, sanitizer, coverage, and benchmark build contracts |
 | [Code quality and dependency policy](architecture/code-quality-and-dependency-policy.md) | Formatting, lints, warnings, unsafe review, dependency sources, licenses, and lifecycle scripts |
+| [Stable test command surface](quality/test-command-surface.md) | Versioned unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed entry points |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 

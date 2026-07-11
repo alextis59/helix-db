@@ -6,5 +6,6 @@ This directory contains bounded verification entry points for the build profiles
 - `check-browser-profile.mjs` resolves the pinned Vite production configuration without creating a bundle.
 - `check-dependency-policy.mjs` reconciles Cargo metadata and the complete npm lock with the machine policy.
 - `dependency-policy.json` is the exact source/license/lifecycle/duplicate/unsafe exception authority.
+- `check-test-command-surface.mjs` validates all stable test aliases, suite states, activation owners, runner descriptions, documentation, and rejection behavior.
 
-These checks prove toolchain configuration only. Stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are added under `P02-007`; real bundles and browser execution remain `P02-010`/`P02-016` work.
+These checks prove toolchain configuration only. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; real bundles and browser execution remain `P02-010`/`P02-016` work.

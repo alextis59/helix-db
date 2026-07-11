@@ -8,3 +8,5 @@ This root will contain reproducible workload definitions and compact report inde
 - `reports/` owns compact retained summaries and immutable raw-result references.
 
 Every publishable result must follow the [benchmark evidence rules](../evidence/README.md#benchmark-specific-rules).
+
+`npm run test:benchmark` currently compiles the eight-crate workspace through the fixed benchmark profile and requires exactly zero workload files. It is a toolchain probe, not a performance run or claim; workload/result execution activates under `P02-014`.

@@ -8,3 +8,5 @@ This root owns cross-backend suite definitions, runner configuration, and bindin
 - `compatibility/` will validate explicitly claimed upstream/adapter subsets.
 
 Canonical Phase 1 semantic inputs remain under [`fixtures/semantic/`](../fixtures/semantic/README.md). Conformance code references that corpus and must not fork it into a second mutable copy.
+
+`npm run test:conformance` is active now: it replays the semantic examples/corpus/oracle, compatibility matrix, and offline MongoDB differential artifacts. It does not claim an implemented database binding or run the live upstream service.

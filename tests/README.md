@@ -6,6 +6,8 @@ Unit tests remain beside their implementation where idiomatic. This root is rese
 - `differential/` owns backend/reference result comparisons.
 - `browser/` owns real-browser lifecycle and capability tests.
 - `distributed/` owns simulation, multi-process, and consistency histories.
+- `fuzz/` owns coverage-guided targets, bounded smoke invocations, and reproducers.
+- `integration/` owns cross-crate, cross-language, and multi-process behavior.
 - `toolchain/` owns build-profile/configuration verification that precedes feature suites.
 
-These are directory contracts only; no system-test coverage is claimed yet.
+The versioned [`suites.json`](suites.json) manifest and [`run-suite.mjs`](run-suite.mjs) implement the [stable test command policy](../docs/quality/test-command-surface.md). Run `npm run test:commands` to verify the surface or `npm run test:all` to execute every active authority and reserved-state probe. Empty system-test directories remain explicit contracts and do not claim coverage.

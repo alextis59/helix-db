@@ -1,0 +1,135 @@
+{
+  "schema": "helix.test-command-surface/1",
+  "plan_item": "P02-007",
+  "runner": "tests/run-suite.mjs",
+  "ordered_suites": [
+    "unit",
+    "integration",
+    "conformance",
+    "fuzz",
+    "browser",
+    "crash",
+    "benchmark",
+    "distributed"
+  ],
+  "suites": [
+    {
+      "id": "unit",
+      "npm_script": "test:unit",
+      "state": "active",
+      "root": "crates",
+      "description": "In-crate Rust tests plus the explicit JavaScript unit-test inventory.",
+      "activation_tasks": [],
+      "allowed_files": [],
+      "steps": ["rust-unit", "javascript-unit-inventory"],
+      "expectations": {
+        "rust_tests": 9,
+        "javascript_test_files": 0
+      }
+    },
+    {
+      "id": "integration",
+      "npm_script": "test:integration",
+      "state": "reserved",
+      "root": "tests/integration",
+      "description": "Cross-crate, cross-language, and multi-process integration tests.",
+      "activation_tasks": ["P03-017"],
+      "allowed_files": ["README.md"],
+      "steps": ["rust-integration-inventory"],
+      "expectations": {
+        "executable_targets": 0
+      }
+    },
+    {
+      "id": "conformance",
+      "npm_script": "test:conformance",
+      "state": "active",
+      "root": "conformance",
+      "description": "Frozen semantic corpus, independent oracle, compatibility matrix, and offline differential artifacts.",
+      "activation_tasks": [],
+      "allowed_files": [],
+      "steps": ["semantic-conformance"],
+      "expectations": {
+        "accepted_examples": 4,
+        "rejected_examples": 3,
+        "semantic_fixtures": 17,
+        "semantic_steps": 313,
+        "oracle_assertions": 382,
+        "compatibility_rows": 263,
+        "mongodb_cases": 16
+      }
+    },
+    {
+      "id": "fuzz",
+      "npm_script": "test:fuzz",
+      "state": "reserved",
+      "root": "tests/fuzz",
+      "description": "Coverage-guided fuzz targets and bounded local smoke invocations.",
+      "activation_tasks": ["P03-019"],
+      "allowed_files": ["README.md"],
+      "steps": [],
+      "expectations": {
+        "fuzz_targets": 0
+      }
+    },
+    {
+      "id": "browser",
+      "npm_script": "test:browser",
+      "state": "reserved",
+      "root": "tests/browser",
+      "description": "Real-browser bundle, lifecycle, capability, storage, and fallback tests.",
+      "activation_tasks": ["P02-010", "P02-016"],
+      "allowed_files": ["README.md"],
+      "steps": ["browser-harness-inventory"],
+      "expectations": {
+        "browser_tests": 0
+      }
+    },
+    {
+      "id": "crash",
+      "npm_script": "test:crash",
+      "state": "reserved",
+      "root": "tests/crash",
+      "description": "Deterministic fault-point, termination, recovery, and corruption histories.",
+      "activation_tasks": ["P05-021"],
+      "allowed_files": ["README.md"],
+      "steps": [],
+      "expectations": {
+        "crash_histories": 0
+      }
+    },
+    {
+      "id": "benchmark",
+      "npm_script": "test:benchmark",
+      "state": "reserved",
+      "root": "benchmarks",
+      "description": "Reproducible workload definitions and retained, claim-bounded measurements.",
+      "activation_tasks": ["P02-014"],
+      "allowed_files": [
+        "README.md",
+        "cpu-columnar/README.md",
+        "datasets/README.md",
+        "reports/README.md",
+        "webgpu/README.md"
+      ],
+      "steps": ["benchmark-profile"],
+      "expectations": {
+        "workspace_packages": 8,
+        "benchmark_workloads": 0
+      }
+    },
+    {
+      "id": "distributed",
+      "npm_script": "test:distributed",
+      "state": "reserved",
+      "root": "tests/distributed",
+      "description": "Deterministic simulations, clusters, fault injection, and consistency histories.",
+      "activation_tasks": ["P17-016"],
+      "allowed_files": ["README.md"],
+      "steps": [],
+      "expectations": {
+        "distributed_histories": 0
+      }
+    }
+  ]
+}
