@@ -218,8 +218,11 @@ selects the HDoc v1 physical baseline: little-endian checked `u32` addressing un
 16 MiB limit, deterministic alignment/padding, separate CRC-32C stored-byte integrity and
 BLAKE3-256 canonical typed content identity, bounded optional compression, and fail-closed
 version/extension rules. Exact header, tag, payload, table, hash-framing, and compression-profile
-bytes remain the dependency-ordered `P03-002`–`P03-007` work rather than being guessed by the
-first codec implementation.
+bytes are dependency-ordered rather than guessed by the first codec implementation. The
+[HDoc 1.0 envelope format](docs/formats/hdoc-v1.md) now fixes the `P03-002` 64-byte header,
+32-byte section directory, canonical body placement, structural/feature flags, and 64-byte footer.
+It deliberately leaves hash profile zero invalid until `P03-006`, so the remaining
+`P03-003`–`P03-007` contracts must land before any complete HDoc byte fixture or writer claim.
 
 ### 6.3 Field-path dictionaries
 

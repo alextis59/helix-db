@@ -437,20 +437,23 @@ HelixDB should define its own binary JSON format, tentatively called **HDoc**.
 Each HDoc document contains:
 
 ```text
-Header
-  magic
-  format_version
-  flags
-  total_length
-  checksum
-  field_count
+Fixed header (64 bytes)
+  magic, major_version, minor_version
+  header_bytes, directory_entry_bytes
+  document_flags
+  total_length, canonical_length, field_count
+  crc32c
+  section_count, directory_offset, footer_offset
+  required_features, optional_features
+Section directory (section_count × 32 bytes)
 Body
-  field table
-  value area
-  nested object/array tables
-  optional compression block
-Footer
-  document-level hash
+  field_table, name_pool, value_area, container_tables
+  optional registered sections and bounded compression
+Footer (64 bytes)
+  footer magic/version
+  hash algorithm/profile/length
+  repeated lengths and field count
+  document-level typed content hash
 ```
 
 Field table entry:
@@ -481,6 +484,13 @@ integrity, BLAKE3-256 canonical typed content identity, bounded optional compres
 fail-closed version/extension handling. The subordinate `P03-002`–`P03-007` format documents must
 assign exact fields, tags, payloads, tables, hash framing, and compression profiles before the
 first writer or immutable fixture.
+
+The exact HDoc 1.0 outer byte layout is defined by the [HDoc 1.0 Envelope, Section Directory, and
+Footer Format](docs/formats/hdoc-v1.md) and its
+[machine-readable companion](docs/formats/hdoc-v1-envelope.json). It fixes the 64-byte header,
+32-byte directory entries, body section registry/order, structural/feature flags, length/count/CRC
+slots, and 64-byte footer while deliberately keeping the complete byte format invalid until
+`P03-003`–`P03-007` assign the subordinate registries and the first nonzero hash profile.
 
 ### 7.4 Field path dictionary
 

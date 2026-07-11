@@ -467,7 +467,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 
 - [x] Record implementable endianness, alignment, offset, maximum-size, canonicalization,
   checksum, content-hash, compression, extension, rejection, and rollback decisions in this ADR.
-- [ ] Freeze exact header/footer and feature/version fields under `P03-002`.
+- [x] Freeze exact header/footer and feature/version fields under `P03-002`.
 - [ ] Freeze type tags and payload encodings under `P03-003` and `P03-004`.
 - [ ] Freeze table/offset/section/padding rules under `P03-005`.
 - [ ] Reproduce RFC CRC-32C and official BLAKE3 vectors; freeze domain/framing and corruption
@@ -498,7 +498,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 
 ## Follow-up work
 
-- [ ] `P03-002`: assign exact magic, header/footer, directory, version, flag, algorithm, and feature
+- [x] `P03-002`: assign exact magic, header/footer, directory, version, flag, algorithm, and feature
   fields.
 - [ ] `P03-003`: publish stable type-tag and reserved-extension registries.
 - [ ] `P03-004`: publish exact canonical scalar/container payload bytes.
@@ -522,6 +522,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [Temporal semantics](../architecture/temporal-semantics.md)
 - [Persistent format and public protocol versioning policy](../governance/versioning.md)
 - [Versioned error semantics](../architecture/error-semantics.md)
+- [HDoc 1.0 envelope format](../formats/hdoc-v1.md)
 - [RFC 3385: Internet Checksum Considered Harmful?](https://www.rfc-editor.org/rfc/rfc3385)
 - [RFC 3720: iSCSI CRC-32C parameters and examples](https://www.rfc-editor.org/rfc/rfc3720)
 - [BLAKE3 official implementation and test vectors](https://github.com/BLAKE3-team/BLAKE3)

@@ -1,0 +1,498 @@
+{
+  "schema": "helix.hdoc-envelope-layout/1",
+  "format": {
+    "name": "HDoc",
+    "major_version": 1,
+    "minor_version": 0,
+    "byte_order": "little-endian",
+    "offset_base": "document-start",
+    "offset_width_bits": 32,
+    "section_alignment_bytes": 8,
+    "maximum_canonical_bytes": 16777216,
+    "minimum_envelope_bytes_without_section_payloads": 256,
+    "complete_byte_format": false,
+    "completion_gate": "P03-007"
+  },
+  "magic": {
+    "header_hex": "48444f430d0a1a0a",
+    "header_ascii_escaped": "HDOC\\r\\n\\x1a\\n",
+    "footer_hex": "48444f43454e440a",
+    "footer_ascii_escaped": "HDOCEND\\n"
+  },
+  "header": {
+    "bytes": 64,
+    "directory_offset": 64,
+    "checksum_field_offset": 32,
+    "checksum_field_bytes": 4,
+    "fields": [
+      {
+        "name": "magic",
+        "offset": 0,
+        "bytes": 8,
+        "encoding": "octets",
+        "constant_hex": "48444f430d0a1a0a"
+      },
+      {
+        "name": "major_version",
+        "offset": 8,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 1
+      },
+      {
+        "name": "minor_version",
+        "offset": 10,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 0
+      },
+      {
+        "name": "header_bytes",
+        "offset": 12,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "derived": "64 + section_count * 32"
+      },
+      {
+        "name": "directory_entry_bytes",
+        "offset": 14,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 32
+      },
+      {
+        "name": "document_flags",
+        "offset": 16,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "total_length",
+        "offset": 20,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "canonical_length",
+        "offset": 24,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "field_count",
+        "offset": 28,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "crc32c",
+        "offset": 32,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "section_count",
+        "offset": 36,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "minimum": 4,
+        "maximum": 32
+      },
+      {
+        "name": "reserved_0",
+        "offset": 38,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 0
+      },
+      {
+        "name": "directory_offset",
+        "offset": 40,
+        "bytes": 4,
+        "encoding": "u32-le",
+        "constant": 64
+      },
+      {
+        "name": "footer_offset",
+        "offset": 44,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "required_features",
+        "offset": 48,
+        "bytes": 8,
+        "encoding": "u64-le"
+      },
+      {
+        "name": "optional_features",
+        "offset": 56,
+        "bytes": 8,
+        "encoding": "u64-le"
+      }
+    ]
+  },
+  "document_flags": [
+    {
+      "bit": 0,
+      "mask_hex": "0x00000001",
+      "name": "has_compressed_sections",
+      "owner": "P03-007"
+    },
+    {
+      "bit": 1,
+      "mask_hex": "0x00000002",
+      "name": "has_extension_area",
+      "owner": "P03-015"
+    },
+    {
+      "bit": 2,
+      "mask_hex": "0x00000004",
+      "name": "uses_path_dictionary_references",
+      "owner": "P03-013"
+    },
+    {
+      "bit": 3,
+      "mask_hex": "0x00000008",
+      "name": "has_semantic_extensions",
+      "owner": "P03-015"
+    },
+    {
+      "bit": 4,
+      "mask_hex": "0x00000010",
+      "name": "has_nonsemantic_extensions",
+      "owner": "P03-015"
+    }
+  ],
+  "required_feature_bits": [
+    {
+      "bit": 0,
+      "mask_hex": "0x0000000000000001",
+      "name": "section_compression",
+      "owner": "P03-007"
+    },
+    {
+      "bit": 1,
+      "mask_hex": "0x0000000000000002",
+      "name": "path_dictionary_references",
+      "owner": "P03-013"
+    },
+    {
+      "bit": 2,
+      "mask_hex": "0x0000000000000004",
+      "name": "semantic_extensions",
+      "owner": "P03-015"
+    }
+  ],
+  "optional_feature_bits": [
+    {
+      "bit": 0,
+      "mask_hex": "0x0000000000000001",
+      "name": "nonsemantic_extensions",
+      "owner": "P03-015"
+    }
+  ],
+  "directory": {
+    "entry_bytes": 32,
+    "minimum_entries": 4,
+    "maximum_entries": 32,
+    "fields": [
+      {
+        "name": "section_kind",
+        "offset": 0,
+        "bytes": 2,
+        "encoding": "u16-le"
+      },
+      {
+        "name": "section_flags",
+        "offset": 2,
+        "bytes": 2,
+        "encoding": "u16-le"
+      },
+      {
+        "name": "section_offset",
+        "offset": 4,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "stored_length",
+        "offset": 8,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "logical_length",
+        "offset": 12,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "item_count",
+        "offset": 16,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "codec_id",
+        "offset": 20,
+        "bytes": 2,
+        "encoding": "u16-le"
+      },
+      {
+        "name": "codec_profile_id",
+        "offset": 22,
+        "bytes": 2,
+        "encoding": "u16-le"
+      },
+      {
+        "name": "section_version",
+        "offset": 24,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "base_value": 1
+      },
+      {
+        "name": "reserved_0",
+        "offset": 26,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 0
+      },
+      {
+        "name": "reserved_1",
+        "offset": 28,
+        "bytes": 4,
+        "encoding": "u32-le",
+        "constant": 0
+      }
+    ]
+  },
+  "section_flags": [
+    {
+      "bit": 0,
+      "mask_hex": "0x0001",
+      "name": "compressed"
+    },
+    {
+      "bit": 1,
+      "mask_hex": "0x0002",
+      "name": "critical"
+    },
+    {
+      "bit": 2,
+      "mask_hex": "0x0004",
+      "name": "semantic"
+    },
+    {
+      "bit": 3,
+      "mask_hex": "0x0008",
+      "name": "opaque_preserve"
+    }
+  ],
+  "section_kinds": [
+    {
+      "id": 1,
+      "id_hex": "0x0001",
+      "name": "field_table",
+      "required": true,
+      "canonical_order": 0,
+      "section_version": 1,
+      "base_flags_hex": "0x0006",
+      "owner": "P03-005"
+    },
+    {
+      "id": 2,
+      "id_hex": "0x0002",
+      "name": "name_pool",
+      "required": true,
+      "canonical_order": 1,
+      "section_version": 1,
+      "base_flags_hex": "0x0006",
+      "owner": "P03-005"
+    },
+    {
+      "id": 3,
+      "id_hex": "0x0003",
+      "name": "value_area",
+      "required": true,
+      "canonical_order": 2,
+      "section_version": 1,
+      "base_flags_hex": "0x0006",
+      "owner": "P03-004"
+    },
+    {
+      "id": 4,
+      "id_hex": "0x0004",
+      "name": "container_tables",
+      "required": true,
+      "canonical_order": 3,
+      "section_version": 1,
+      "base_flags_hex": "0x0006",
+      "owner": "P03-005"
+    },
+    {
+      "id": 32767,
+      "id_hex": "0x7fff",
+      "name": "extension_area",
+      "required": false,
+      "canonical_order": 4,
+      "section_version": 1,
+      "base_flags_hex": "0x0000",
+      "owner": "P03-015"
+    }
+  ],
+  "codec_registry": [
+    {
+      "id": 0,
+      "profile_id": 0,
+      "name": "none",
+      "valid_when": "compressed flag is clear and stored_length equals logical_length"
+    }
+  ],
+  "footer": {
+    "bytes": 64,
+    "version": 1,
+    "hash_algorithm_id": 1,
+    "hash_algorithm": "blake3-256",
+    "hash_profile_id": 0,
+    "hash_profile_status": "unassigned-until-P03-006",
+    "hash_bytes": 32,
+    "fields": [
+      {
+        "name": "magic",
+        "offset": 0,
+        "bytes": 8,
+        "encoding": "octets",
+        "constant_hex": "48444f43454e440a"
+      },
+      {
+        "name": "footer_bytes",
+        "offset": 8,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 64
+      },
+      {
+        "name": "footer_version",
+        "offset": 10,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 1
+      },
+      {
+        "name": "hash_algorithm_id",
+        "offset": 12,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 1
+      },
+      {
+        "name": "hash_profile_id",
+        "offset": 14,
+        "bytes": 2,
+        "encoding": "u16-le",
+        "constant": 0,
+        "valid_document": false,
+        "assignment_owner": "P03-006"
+      },
+      {
+        "name": "hash_length",
+        "offset": 16,
+        "bytes": 4,
+        "encoding": "u32-le",
+        "constant": 32
+      },
+      {
+        "name": "total_length_copy",
+        "offset": 20,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "canonical_length_copy",
+        "offset": 24,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "field_count_copy",
+        "offset": 28,
+        "bytes": 4,
+        "encoding": "u32-le"
+      },
+      {
+        "name": "content_hash",
+        "offset": 32,
+        "bytes": 32,
+        "encoding": "octets"
+      }
+    ]
+  },
+  "base_profile": {
+    "document_flags_hex": "0x00000000",
+    "required_features_hex": "0x0000000000000000",
+    "optional_features_hex": "0x0000000000000000",
+    "section_count": 4,
+    "header_bytes": 192,
+    "section_kinds": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "compression": false,
+    "extensions": false,
+    "path_dictionary_references": false
+  },
+  "canonical_rules": [
+    {
+      "id": "header-size",
+      "expression": "header_bytes = 64 + section_count * 32"
+    },
+    {
+      "id": "directory-position",
+      "expression": "directory_offset = 64"
+    },
+    {
+      "id": "section-placement",
+      "expression": "section_offset[i] = align8(previous_section_end), first previous end = header_bytes"
+    },
+    {
+      "id": "footer-position",
+      "expression": "footer_offset = align8(last_section_end)"
+    },
+    {
+      "id": "stored-length",
+      "expression": "total_length = footer_offset + 64 = exact supplied HDoc slice length"
+    },
+    {
+      "id": "length-bounds",
+      "expression": "256 <= total_length <= canonical_length <= 16777216"
+    },
+    {
+      "id": "uncompressed-length",
+      "expression": "without compressed sections, total_length = canonical_length"
+    },
+    {
+      "id": "footer-copies",
+      "expression": "footer length/count copies equal header total_length, canonical_length, and field_count"
+    },
+    {
+      "id": "checksum-coverage",
+      "expression": "CRC32C covers bytes [0,total_length), treating bytes [32,36) as zero"
+    },
+    {
+      "id": "field-count",
+      "expression": "field_count is the total recursive object-field entry count and equals field_table item_count"
+    },
+    {
+      "id": "padding",
+      "expression": "all canonical gaps are the minimum align8 padding and contain only zero bytes"
+    },
+    {
+      "id": "directory-order",
+      "expression": "directory entries are unique and ordered by section kind in canonical section order"
+    }
+  ]
+}
