@@ -58,7 +58,7 @@ same(
 assert(matrix.schema === 'helix.ci-matrix/3', 'CI matrix schema mismatch');
 same(
   matrix.plan_items,
-  ['P02-009', 'P02-010', 'P02-011', 'P02-012', 'P02-013', 'P02-014', 'P02-015'],
+  ['P02-009', 'P02-010', 'P02-011', 'P02-012', 'P02-013', 'P02-014', 'P02-015', 'P02-016'],
   'CI matrix task history',
 );
 same(
@@ -174,9 +174,9 @@ same(
 assert(
   matrix.gating.browser.every(
     ({ execution, expansion_task: expansionTask }) =>
-      execution === 'toolchain-smoke' && expansionTask === 'P02-016',
+      execution === 'boundary-example' && expansionTask === 'P11-014',
   ),
-  'browser smoke/expansion boundary mismatch',
+  'browser example/expansion boundary mismatch',
 );
 same(
   matrix.observational.benchmark,
@@ -251,6 +251,11 @@ same(
     'dependencies:check': packageJson.scripts['dependencies:check'],
     'dependencies:licenses': packageJson.scripts['dependencies:licenses'],
     'dependencies:report': packageJson.scripts['dependencies:report'],
+    'examples:browser': packageJson.scripts['examples:browser'],
+    'examples:check': packageJson.scripts['examples:check'],
+    'examples:native': packageJson.scripts['examples:native'],
+    'examples:policy': packageJson.scripts['examples:policy'],
+    'examples:test': packageJson.scripts['examples:test'],
     'wasm:install-validator': packageJson.scripts['wasm:install-validator'],
     'wasm:validate': packageJson.scripts['wasm:validate'],
     'wgsl:check': packageJson.scripts['wgsl:check'],
@@ -276,12 +281,37 @@ same(
     'dependencies:check': 'node tests/toolchain/check-dependency-reports.mjs offline',
     'dependencies:licenses': 'node tests/toolchain/check-dependency-reports.mjs licenses',
     'dependencies:report': 'node tests/toolchain/check-dependency-reports.mjs live',
+    'examples:browser': 'node tests/toolchain/check-examples.mjs browser',
+    'examples:check': 'node tests/toolchain/check-examples.mjs all',
+    'examples:native': 'node tests/toolchain/check-examples.mjs native',
+    'examples:policy': 'node tests/toolchain/check-examples.mjs policy',
+    'examples:test': 'node tests/toolchain/test-examples-contract.mjs',
     'wasm:install-validator': 'node tests/toolchain/install-wasm-tools.mjs',
     'wasm:validate': 'node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
   'CI npm scripts',
+);
+assert(
+  runNode(['tests/toolchain/check-examples.mjs', 'policy']).includes(
+    'PASS toolchain example policy: 2 active boundary examples, 9 hashable authority files, database functionality false',
+  ),
+  'toolchain example policy did not pass',
+);
+assert(
+  runNode(['tests/toolchain/test-examples-contract.mjs']).includes(
+    'PASS toolchain example rejection canaries: 28 policy/native/browser/bundle mutations rejected with exact reasons',
+  ),
+  'toolchain example rejection canaries did not pass',
+);
+expectFailure(
+  ['tests/toolchain/check-examples.mjs'],
+  'usage: node tests/toolchain/check-examples.mjs',
+);
+expectFailure(
+  ['tests/toolchain/check-examples.mjs', 'unknown'],
+  'usage: node tests/toolchain/check-examples.mjs',
 );
 assert(
   runNode(['tests/toolchain/check-rust-coverage.mjs', 'policy']).includes(
@@ -493,6 +523,7 @@ for (const marker of [
   "if: matrix.engine == 'chromium'",
   'corepack npm run wgsl:validate',
   `corepack npm run ci:browser-smoke -- ${githubExpression('matrix.engine')}`,
+  'corepack npm run examples:native',
   "if: always() && matrix.node == '22.23.1'",
   'corepack npm run artifacts:test-replay',
   `name: test-replays-semantic-node-${githubExpression('matrix.node')}-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,
@@ -513,6 +544,7 @@ for (const marker of [
   'cron: "23 3 * * *"',
   'node tests/toolchain/emit-ci-matrix.mjs nightly',
   `matrix: ${githubExpression('fromJSON(needs.contract.outputs.native)')}`,
+  'corepack npm run examples:native',
 ]) {
   assert(nightly.includes(marker), `nightly workflow marker absent: ${marker}`);
 }
@@ -547,7 +579,7 @@ for (const marker of [
   'ubuntu-24.04-arm',
   'macos-15-intel',
   'windows-2025',
-  'toolchain-smoke',
+  'boundary-example',
   'wasm-tools',
   'SwiftShader',
   'registry signatures',
@@ -566,7 +598,10 @@ process.stdout.write(
   'PASS CI matrix: 11 gating lanes, 2 nightly native lanes, 1 observational benchmark lane\n',
 );
 process.stdout.write('PASS platforms: Linux/Windows/macOS and x64/arm64 with 2 portable targets\n');
-process.stdout.write('PASS JavaScript/browser: 2 Node lines and 3 real bundle-smoke engines\n');
+process.stdout.write('PASS JavaScript/browser: 2 Node lines and 3 real boundary-example engines\n');
+process.stdout.write(
+  'PASS examples: native boundary report on 5 native lanes; browser boundary example on 3 engines\n',
+);
 process.stdout.write(
   'PASS workflow policy: 22 full-SHA action uses, read-only permissions, fixed runners\n',
 );

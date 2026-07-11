@@ -1,14 +1,14 @@
 # Repository Layout and Artifact Boundaries
 
-- Status: Accepted layout baseline; most implementation areas are empty
+- Status: Accepted layout baseline; most implementation areas remain empty
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner
-- Plan item: `P02-004`
+- Plan items: `P02-004`; examples activated by `P02-016`
 - Governing gate: `G02`
 - Design source: [Study section 24](../../Study.md#24-suggested-initial-repository-architecture)
 - Ownership source: [Ownership and review boundaries](../governance/ownership.md)
 
-This document establishes stable, reviewable locations for source code, conformance assets, benchmarks, tests, examples, documentation, and release evidence. A tracked directory proves only that its boundary exists. Except for the Phase 1 semantic corpus and the eight Rust boundary crates, these locations do not claim implemented database behavior.
+This document establishes stable, reviewable locations for source code, conformance assets, benchmarks, tests, examples, documentation, and release evidence. A tracked directory proves only that its boundary exists. The Phase 1 semantic corpus, eight Rust boundary crates, and two toolchain examples are executable authorities within their stated limits; none claims implemented database behavior.
 
 ## Tracked roots
 
@@ -21,7 +21,7 @@ This document establishes stable, reviewable locations for source code, conforma
 | [`benchmarks/`](../../benchmarks/README.md) | Reproducible datasets, workloads, schemas, runners, and report indexes | `datasets/`, `workloads/`, `schema/`, `cpu-columnar/`, `webgpu/`, `reports/` | One integrity-only harness calibration; no database performance claim |
 | [`tests/`](../../tests/README.md) | Toolchain and cross-crate/system tests | `toolchain/`, `integration/`, `fuzz/`, `crash/`, `differential/`, `browser/`, `distributed/` | Toolchain/unit/conformance commands plus explicit reserved system-test contracts |
 | [`docs/`](../README.md) | Project documentation | Architecture, governance, quality, compatibility, ADRs, and future document classes | Active documentation system |
-| [`examples/`](../../examples/README.md) | Minimal runnable usage and toolchain examples | Children are added with real examples | Empty contract; no functional examples |
+| [`examples/`](../../examples/README.md) | Minimal runnable usage and toolchain examples | `native-toolchain/`, `browser-toolchain/`, `examples.json` | Executable native/browser boundary examples; database functionality explicitly false |
 | [`evidence/releases/`](../../evidence/releases/README.md) | Immutable release proof indexes | One child per release candidate or published version | Empty contract; no release artifacts |
 
 The existing [`fixtures/`](../../fixtures/README.md), [`reference/`](../../reference/semantic-oracle/README.md), [`differential/`](../../differential/mongodb/README.md), [`compatibility/`](../../compatibility/v1/README.md), and task-scoped [`evidence/`](../../evidence/README.md) roots remain authoritative for the Phase 1 assets already committed. They are not moved merely to make the proposed tree visually uniform.
@@ -35,7 +35,7 @@ The existing [`fixtures/`](../../fixtures/README.md), [`reference/`](../../refer
 5. **Shaders are internal.** Only repository-owned, bounded, versioned kernels may be added. Client-submitted WGSL is prohibited by `INV-006`.
 6. **Benchmarks do not create claims.** The [foundation result contract](../quality/benchmark-results.md) is explicitly ineligible for a database claim. A later benchmark result supports a claim only through the environment, dataset, raw-result, and review requirements in the [evidence guide](../../evidence/README.md#benchmark-specific-rules).
 7. **Tests are organized by failure boundary.** Unit tests stay beside their implementation where idiomatic; the top-level `tests/` tree is for cross-component, process, browser, and cluster behavior.
-8. **Examples disclose maturity.** An example may prove a toolchain or API slice but must not imply durability, compatibility, security, or production readiness beyond its linked evidence.
+8. **Examples disclose maturity.** [`examples.json`](../../examples/examples.json) binds commands, sources, outputs, and the shared non-claim. An example may prove a toolchain or API slice but must not imply durability, compatibility, security, or production readiness beyond its linked evidence.
 
 ## Change rule
 

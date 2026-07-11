@@ -1,6 +1,15 @@
 {
   "schema": "helix.ci-matrix/3",
-  "plan_items": ["P02-009", "P02-010", "P02-011", "P02-012", "P02-013", "P02-014", "P02-015"],
+  "plan_items": [
+    "P02-009",
+    "P02-010",
+    "P02-011",
+    "P02-012",
+    "P02-013",
+    "P02-014",
+    "P02-015",
+    "P02-016"
+  ],
   "actions": {
     "checkout": {
       "repository": "actions/checkout",
@@ -114,8 +123,8 @@
         "process_arch": "x64",
         "node": "22.23.1",
         "engine": "chromium",
-        "execution": "toolchain-smoke",
-        "expansion_task": "P02-016"
+        "execution": "boundary-example",
+        "expansion_task": "P11-014"
       },
       {
         "id": "browser-firefox-smoke",
@@ -126,8 +135,8 @@
         "process_arch": "x64",
         "node": "22.23.1",
         "engine": "firefox",
-        "execution": "toolchain-smoke",
-        "expansion_task": "P02-016"
+        "execution": "boundary-example",
+        "expansion_task": "P11-014"
       },
       {
         "id": "browser-webkit-smoke",
@@ -138,8 +147,8 @@
         "process_arch": "x64",
         "node": "22.23.1",
         "engine": "webkit",
-        "execution": "toolchain-smoke",
-        "expansion_task": "P02-016"
+        "execution": "boundary-example",
+        "expansion_task": "P11-014"
       }
     ]
   },

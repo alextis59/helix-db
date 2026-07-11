@@ -3,7 +3,7 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-015`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-016`
 - Governing gate: `G02`
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
 - Component validator authority: [`helix.wasm-tools/2`](../../.github/ci/wasm-tools.json)
@@ -23,14 +23,14 @@ Runner labels are explicit rather than mutable `*-latest` aliases. The selected 
 | Group | Required lanes | Commands and boundary |
 | --- | --- | --- |
 | Node | 22.23.1 and 24.18.0 on `ubuntu-24.04` x64 | Clean script-suppressed install; formatting/dependency/types; deterministic dependency/license/duplicate inventory and fixtures; aggregate tests; Node 22 additionally records the live advisory/signature/provenance observation |
-| Native Rust | `ubuntu-24.04` x64, `windows-2025` x64, `macos-15` arm64 | Exact Rust toolchain; format, check, Clippy, all-feature tests; docs and compiler-matched source-based coverage thresholds additionally on Linux x64 |
+| Native Rust | `ubuntu-24.04` x64, `windows-2025` x64, `macos-15` arm64 | Exact Rust toolchain; format, check, Clippy, all-feature tests, and locked/offline native boundary-example execution; docs and compiler-matched source-based coverage thresholds additionally on Linux x64 |
 | Portable Rust | `wasm32-unknown-unknown`, `wasm32-wasip2` on Linux x64 | Strict Clippy plus real core-module/component builds; Node validates the browser module and pinned `wasm-tools` validates/classifies the WASIp2 component |
 | Sanitizer | `x86_64-unknown-linux-gnuasan` on Linux x64 | Stable fully instrumented standard-library build profile; no non-Linux sanitizer claim |
-| Browser/toolchain smoke | Chromium, Firefox, WebKit on Linux x64 | Install only the Playwright-coupled engine/dependencies; all three build and execute the byte-identical core Wasm bundle; Chromium additionally validates and compiles hash-bound internal WGSL through Dawn/SwiftShader |
+| Browser boundary example | Chromium, Firefox, WebKit on Linux x64 | Install only the Playwright-coupled engine/dependencies; all three build and execute the byte-identical core Wasm example with explicit non-database output; Chromium additionally validates and compiles hash-bound internal WGSL through Dawn/SwiftShader |
 
 The 11 emitted gating lanes come from the committed JSON authority, not copied YAML arrays. A contract job validates the authority and writes compact matrices to `GITHUB_OUTPUT`; downstream jobs consume them through `fromJSON`. Each job verifies `RUNNER_OS`, `RUNNER_ARCH`, Node version, `process.platform`, and `process.arch` before doing useful work, preventing an image-label transition from being mistaken for the reviewed architecture.
 
-The three browser entries are `toolchain-smoke` lanes. Following the [Playwright CI guidance](https://playwright.dev/docs/ci), each installs only its selected browser plus operating-system dependencies after the locked lifecycle-suppressed npm install. The [P02-010 validation contract](wasm-browser-smoke-validation.md) then builds and checks a real Vite/Wasm bundle before executing one test in that engine. These lanes prove the foundation toolchain path only; Playwright Chromium/WebKit are not branded Chrome/Edge/Safari claims, and product-host behavior remains `P02-016`/`P11-*` work.
+The three browser entries are `boundary-example` lanes. Following the [Playwright CI guidance](https://playwright.dev/docs/ci), each installs only its selected browser plus operating-system dependencies after the locked lifecycle-suppressed npm install. The [P02-010/P02-016 validation contract](wasm-browser-smoke-validation.md) then builds and checks the real Vite/Wasm example before executing one test in that engine. These lanes prove the foundation toolchain path only; Playwright Chromium/WebKit are not branded Chrome/Edge/Safari claims, and product-host behavior remains `P11-*` work.
 
 The Chromium lane additionally runs the [P02-011 WGSL fixture contract](wgsl-fixture-validation.md). It requires two reviewed shaders to create compute pipelines and two deliberate failures to produce diagnostics and pipeline rejection through pinned Chromium's Dawn/SwiftShader stack. It does not dispatch GPU work and is not a native adapter, cross-browser WebGPU, shader correctness, performance, or production SwiftShader claim.
 
@@ -41,7 +41,7 @@ The scheduled/manual nightly workflow adds:
 - `ubuntu-24.04-arm` for Linux arm64; and
 - `macos-15-intel` for macOS x64.
 
-Both run the same strict native format/check/Clippy/test command set. A nightly failure is actionable and blocks a support claim, but it does not currently block every pull request. Promotion to gating requires stable capacity, acceptable duration, and a reviewed matrix change. Demotion requires an incident/owner/recovery date; `continue-on-error` is prohibited.
+Both run the same strict native format/check/Clippy/test command set and the locked/offline native boundary example. A nightly failure is actionable and blocks a support claim, but it does not currently block every pull request. Promotion to gating requires stable capacity, acceptable duration, and a reviewed matrix change. Demotion requires an incident/owner/recovery date; `continue-on-error` is prohibited.
 
 ## Observational benchmark lane
 
@@ -89,6 +89,7 @@ An action update requires confirming the tag-to-SHA mapping from the official ac
 
 ```bash
 corepack npm run ci:check
+corepack npm run examples:check
 node tests/toolchain/emit-ci-matrix.mjs gating
 node tests/toolchain/emit-ci-matrix.mjs nightly
 corepack npm run wasm:install-validator

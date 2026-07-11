@@ -20,7 +20,7 @@ assert.equal(config.base, './');
 assert.equal(config.cacheDir, path.join(repository, 'target/vite'));
 assert.equal(config.clearScreen, false);
 assert.equal(config.envPrefix, 'HELIX_PUBLIC_');
-assert.equal(config.root, path.join(repository, 'tests/browser/smoke-app'));
+assert.equal(config.root, path.join(repository, 'examples/browser-toolchain'));
 assert.equal(config.build.assetsInlineLimit, 0);
 assert.equal(config.build.copyPublicDir, false);
 assert.equal(config.build.emptyOutDir, true);
@@ -35,5 +35,5 @@ assert.equal(config.preview.port, 4173);
 assert.equal(config.preview.strictPort, true);
 
 console.log(
-  'PASS browser profile: fixed smoke root/preview, relative ES2022 bundle, external assets, hidden maps, Oxc minification',
+  'PASS browser profile: fixed example root/preview, relative ES2022 bundle, external assets, hidden maps, Oxc minification',
 );

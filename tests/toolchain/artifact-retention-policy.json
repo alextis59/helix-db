@@ -119,6 +119,11 @@
           "output": "dist/retention/browser-reports/{engine}",
           "artifact_name_prefix": "browser-reports",
           "required_sources": [
+            "examples/examples.json",
+            "examples/browser-toolchain/README.md",
+            "examples/browser-toolchain/index.html",
+            "examples/browser-toolchain/main.ts",
+            "examples/browser-toolchain/report.ts",
             "playwright.config.ts",
             "tests/browser/bundle-smoke.spec.ts",
             "tests/toolchain/dependency-report-policy.json"

@@ -1,0 +1,30 @@
+[package]
+name = "helix-native-toolchain-example"
+version = "0.0.0"
+edition = "2024"
+rust-version = "1.96.1"
+description = "Non-database native linking example for the HelixDB boundary skeleton"
+license = "MIT"
+publish = false
+
+[workspace]
+
+[dependencies]
+helix-host-native = { path = "../../crates/helix-host-native", default-features = false }
+
+[lints.rust]
+warnings = "deny"
+unsafe_code = "forbid"
+
+[lints.clippy]
+all = "deny"
+pedantic = "deny"
+allow_attributes_without_reason = "deny"
+dbg_macro = "deny"
+expect_used = "deny"
+panic = "deny"
+print_stderr = "deny"
+print_stdout = "deny"
+todo = "deny"
+unimplemented = "deny"
+unwrap_used = "deny"

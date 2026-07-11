@@ -3,7 +3,7 @@
 - Status: Accepted foundation retention contract; hosted uploads are transient diagnostics
 - Last updated: 2026-07-11
 - Owner: Quality owner with security and release review
-- Plan item: `P02-015`
+- Plan items: `P02-015`; browser source binding extended by `P02-016`
 - Governing requirements: `INV-007`, `QUAL-001`
 - Governing gate: `G02`
 - Machine authority:
@@ -27,9 +27,9 @@ reproduction command, retention location, access boundary, and review result. Th
 alone can never satisfy that rule.
 
 The current bundles cover foundation semantic replay, dependency diagnostics, Rust coverage, Wasm
-bundle validation, real-engine browser smoke, and Chromium WGSL compilation. They do not prove a
-database, persistent format, crash recovery, browser product, supported platform, packaged release,
-SBOM, signature, provenance statement, or release installation exists.
+bundle validation, real-engine boundary-example execution, and Chromium WGSL compilation. They do
+not prove a database, persistent format, crash recovery, browser product, supported platform,
+packaged release, SBOM, signature, provenance statement, or release installation exists.
 
 ## Retention profiles
 
@@ -42,7 +42,7 @@ silently upload placeholder evidence for unimplemented functionality.
 | `golden-formats` | Reserved; no persistent HelixDB format or golden vector exists | 90 days after activation | Permanent by format version | `P03-016` |
 | `test-replays` | Active; semantic conformance/dependency diagnostics and Rust coverage | 30 days | Permanent when used by a gate or release | Active |
 | `crash-matrices` | Reserved; no storage fault point, crash history, or recovery matrix exists | 90 days after activation | Permanent by persistent-format and release line | `P05-021` |
-| `browser-reports` | Active; internal Chromium, Firefox, and WebKit toolchain smoke | 30 days | Supported platform lifetime when used by a release | Active |
+| `browser-reports` | Active; Chromium, Firefox, and WebKit boundary-example diagnostics | 30 days | Supported platform lifetime when used by a release | Active |
 | `packaged-releases` | Reserved; no release package, container, SBOM, signature, or provenance artifact exists | 90 days after activation | Permanent in release and provenance stores | `P16-010` |
 
 GitHub's service maximum in this policy is 90 days. That ceiling does not shorten a durable rule:
@@ -92,9 +92,9 @@ rejects any vulnerability, missing/invalid registry signature, or required-prove
 | --- | --- | --- | --- |
 | `test-replays/semantic` | Offline semantic conformance | Sanitized raw log; in GitHub Node 22, current deterministic inventory plus raw advisory, raw signature/provenance, and compact linked observation reports | Node 22 Linux x64 |
 | `test-replays/coverage` | Compiler-matched Rust product coverage | Strict `helix.rust-coverage-report/1` | Native Linux x64 |
-| `browser-reports/chromium` | Wasm/Vite smoke in Chromium and trusted WGSL compilation | Wasm report, bundle report, structured browser execution, WGSL report, and failure attachments | Chromium Linux x64 |
-| `browser-reports/firefox` | Wasm/Vite smoke in Firefox | Wasm report, bundle report, structured browser execution, and failure attachments | Firefox Linux x64 |
-| `browser-reports/webkit` | Wasm/Vite smoke in WebKit | Wasm report, bundle report, structured browser execution, and failure attachments | WebKit Linux x64 |
+| `browser-reports/chromium` | Wasm/Vite boundary example in Chromium and trusted WGSL compilation | Example policy/source identities, Wasm report, bundle report, structured browser execution, WGSL report, and failure attachments | Chromium Linux x64 |
+| `browser-reports/firefox` | Wasm/Vite boundary example in Firefox | Example policy/source identities, Wasm report, bundle report, structured browser execution, and failure attachments | Firefox Linux x64 |
+| `browser-reports/webkit` | Wasm/Vite boundary example in WebKit | Example policy/source identities, Wasm report, bundle report, structured browser execution, and failure attachments | WebKit Linux x64 |
 
 Collection and upload steps use `if: always()`. A failed upstream command therefore remains red,
 the collector writes the available payloads and a failure manifest, and the upload step still runs.

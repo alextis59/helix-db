@@ -3,13 +3,13 @@
 - Status: Accepted toolchain baseline
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner
-- Plan items: `P02-003`, reporting extended by `P02-012`
+- Plan items: `P02-003`, reporting extended by `P02-012`, browser boundary example added by `P02-016`
 - Governing requirements: `PLAT-001`, `PLAT-002`, `CORE-003`, `INV-007`
 - Governing gate: `G02`
 - Development identity: [ADR 0001](../adr/0001-public-product-identity.md)
 - Rust counterpart: [Rust toolchain policy](rust-toolchain-policy.md)
 
-This policy selects the private JavaScript/TypeScript workspace manager, lockfile behavior, supported Node.js lines, compiler, bundler, unit/conformance runner, and real-browser harness. It does not create a browser host, SDK, bundle, test suite, or database feature.
+This policy selects the private JavaScript/TypeScript workspace manager, lockfile behavior, supported Node.js lines, compiler, bundler, unit/conformance runner, and real-browser harness. The selection itself creates no database feature or product SDK; `P02-016` uses it only for an explicitly non-functional boundary example.
 
 ## Node.js support window
 
@@ -45,7 +45,7 @@ Lock rules:
 - The lock contains two optional `fsevents` install-script entries (one direct in the shared graph and one below Vite). Selection evidence suppresses both scripts and uses non-watch commands; `P02-006` inventories/denies them and `P02-012` revalidates their exact duplicate paths, licenses, signatures when selected, and non-shipment boundary through `P16-010`.
 - Registry audit is disabled during ordinary deterministic install to avoid network/time-dependent results. `P02-012` adds an explicit dated vulnerability and signature/provenance observation after the clean install; disabling implicit audit does not waive that CI gate.
 
-The workspace glob is `packages/*`. `P02-004` creates the package directories and `P02-016` adds the first non-functional browser example.
+The workspace glob is `packages/*`. `P02-004` creates the package directories; `P02-016` adds the first non-functional browser example outside that publishable workspace boundary.
 
 ## Selected JavaScript/TypeScript tools
 
@@ -53,9 +53,9 @@ The workspace glob is `packages/*`. `P02-004` creates the package directories an
 | --- | ---: | --- | --- |
 | TypeScript | 6.0.3 | Project/reference type checking and configuration contract | No emitted production bundle; strict no-emit base config |
 | `@types/node` | 22.20.1 | Lowest-supported Node API type surface for tool configuration | Code cannot assume Node 24-only globals without a guarded profile |
-| Vite | 8.1.4 | Browser dev server and production bundler | No framework plugin selected; P02-010 internal smoke only, no product bundle claim until later gates |
-| Vitest | 4.1.10 | Unit, property, and JS-side conformance test runner | Empty-run smoke only in P02-003; stable commands/suites land later |
-| Playwright Test | 1.61.1 | Browser lifecycle and end-to-end harness | P02-010 runs a toolchain smoke; P02-016/P11 expand to example and product-host behavior |
+| Vite | 8.1.4 | Browser dev server and production bundler | No framework plugin selected; P02-016 boundary example only, no product bundle claim until later gates |
+| Vitest | 4.1.10 | Unit, property, and JS-side conformance test runner | P02-007 stable unit inventory; currently no JavaScript unit files |
+| Playwright Test | 1.61.1 | Browser lifecycle and end-to-end harness | P02-016 runs the boundary example in three engines; P11 expands to product-host behavior |
 
 [Vite's official guide](https://vite.dev/guide/) describes its dev server/bundler roles and current Node floor. [Vitest](https://vitest.dev/guide/why.html) shares Vite's transform/config pipeline, avoiding a second incompatible TypeScript transform. [Playwright's browser documentation](https://playwright.dev/docs/browsers) defines its version-coupled browser installation and Chromium, Firefox, and WebKit support.
 
@@ -77,21 +77,21 @@ The project therefore pins TypeScript 6.0.3 for the initial workspace so `P02-00
 - case-consistent paths and full library checking; and
 - no ambient `@types` packages unless a child project opts in explicitly.
 
-The root `tsconfig.json` is the build-graph anchor and currently references the browser-smoke type boundary. Package-specific configs added later extend the base, list explicit sources/types, and become project references. Vite transforms browser TypeScript, while `tsc --build` remains the type authority; transpilation success is never a substitute for type checking.
+The root `tsconfig.json` is the build-graph anchor and currently references the browser-example/test type boundary. Package-specific configs added later extend the base, list explicit sources/types, and become project references. Vite transforms browser TypeScript, while `tsc --build` remains the type authority; transpilation success is never a substitute for type checking.
 
-`vitest.config.ts` fixes JavaScript unit discovery at the repository root and excludes the Playwright browser tree, generated/evidence output, and dependencies. This prevents the dedicated Vite smoke-app root from silently redirecting unit discovery or causing Playwright specs to execute under Vitest.
+`vitest.config.ts` fixes JavaScript unit discovery at the repository root and excludes the Playwright browser tree, generated/evidence output, and dependencies. This prevents the dedicated Vite example root from silently redirecting unit discovery or causing Playwright specs to execute under Vitest.
 
 ## Browser harness matrix
 
 Playwright is selected for Chromium, Firefox, and WebKit. `P02-003` installs only the harness package and lists its empty suite; it does not download hundreds of megabytes of mutable browser binaries during npm install.
 
-The [CI matrix](continuous-integration.md) gives Chromium, Firefox, and WebKit separate gating smoke jobs on Linux x64 and records broader native architectures as gating or nightly. The [P02-010 contract](wasm-browser-smoke-validation.md) installs only the Playwright-coupled selected engine, validates a real Vite/Wasm bundle, and executes it with one worker. Branded Chrome/Edge and Safari are separate profiles; bundled Chromium/WebKit must not be mislabeled as those branded products.
+The [CI matrix](continuous-integration.md) gives Chromium, Firefox, and WebKit separate gating boundary-example jobs on Linux x64 and records broader native architectures as gating or nightly. The [P02-010/P02-016 contract](wasm-browser-smoke-validation.md) installs only the Playwright-coupled selected engine, validates the real Vite/Wasm example, and executes it with one worker. Branded Chrome/Edge and Safari are separate profiles; bundled Chromium/WebKit must not be mislabeled as those branded products.
 
 ## Browser build profile added by P02-005
 
 The shared [`vite.config.ts`](../../vite.config.ts) establishes a framework-free production build boundary with a relative base, custom application type, explicit `HELIX_PUBLIC_` environment prefix, ES2022 transform target, external assets, hidden source maps, Oxc minification, and `dist/browser` output. The [build-profile policy](build-profiles.md) records why each option is selected.
 
-The fixed `tests/browser/smoke-app` root is an internal toolchain input. Vite emits it to `dist/browser`, a deterministic checker validates the four-file output, and Playwright serves only that output on fixed loopback. It is not a user-facing example or database bundle; `P02-016` owns that next boundary. ES2022 is a deterministic emitted-language target, not a branded-browser/version support claim.
+The fixed [`examples/browser-toolchain`](../../examples/browser-toolchain/README.md) root is an executable boundary example. Vite emits it to `dist/browser`, a deterministic checker validates the exact four-file output and source identities, and Playwright serves only that output on fixed loopback. Its visible page and structured report state that database functionality is absent. ES2022 is a deterministic emitted-language target, not a branded-browser/version support claim.
 
 ## Required selection checks
 
@@ -107,6 +107,7 @@ corepack npm run toolchain:test-runner
 corepack npm run toolchain:browser-harness
 corepack npm run dependencies:check
 corepack npm run dependencies:report
+corepack npm run examples:check
 corepack npm run browser:build
 corepack npm run browser:smoke
 ```

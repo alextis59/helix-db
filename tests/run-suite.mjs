@@ -22,6 +22,7 @@ const allowedSteps = new Set([
   'rust-integration-inventory',
   'javascript-unit-inventory',
   'semantic-conformance',
+  'browser-example-build',
   'browser-harness-inventory',
   'benchmark-profile',
   'benchmark-baseline',
@@ -285,6 +286,16 @@ const executeBrowserInventory = (suite) => {
   );
 };
 
+const executeBrowserExampleBuild = (suite) => {
+  const output = run(process.execPath, ['tests/toolchain/check-examples.mjs', 'browser']);
+  requireText(
+    output,
+    `PASS browser toolchain example: ${suite.expectations.example_source_files} source files, ${suite.expectations.bundle_files} bundled files`,
+    'browser boundary example',
+  );
+  requireText(output, 'database functionality false', 'browser example claim boundary');
+};
+
 const executeBenchmarkProfile = (suite) => {
   const metadata = cargoMetadata();
   assert(
@@ -342,6 +353,7 @@ const stepExecutors = {
   'rust-integration-inventory': executeRustIntegrationInventory,
   'javascript-unit-inventory': executeJavaScriptUnitInventory,
   'semantic-conformance': executeSemanticConformance,
+  'browser-example-build': executeBrowserExampleBuild,
   'browser-harness-inventory': executeBrowserInventory,
   'benchmark-profile': executeBenchmarkProfile,
   'benchmark-baseline': executeBenchmarkBaseline,

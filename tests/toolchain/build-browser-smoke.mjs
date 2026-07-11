@@ -6,6 +6,12 @@ import { lstatSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from '
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import {
+  loadExamplePolicy,
+  sharedClaimBoundary,
+  validateBrowserBundleReport,
+} from './examples-contract.mjs';
+
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 if (process.argv.length !== 2) {
   throw new Error('usage: node tests/toolchain/build-browser-smoke.mjs');
@@ -14,6 +20,7 @@ const assert = (condition, message) => {
   if (!condition) throw new Error(message);
 };
 const sha256 = (bytes) => createHash('sha256').update(bytes).digest('hex');
+const examplePolicy = loadExamplePolicy();
 const run = (program, args) => {
   const result = spawnSync(program, args, {
     cwd: repository,
@@ -66,6 +73,14 @@ const sourceWasm = readFileSync(
   path.join(repository, 'target/wasm32-unknown-unknown/browser/helix_core.wasm'),
 );
 assert(indexBytes.toString('utf8').includes('./assets/'), 'bundle index lacks relative assets');
+for (const marker of [
+  'HelixDB browser toolchain boundary example',
+  'Boundary skeleton — no database functionality',
+  'Database functionality',
+  'not implemented',
+]) {
+  assert(indexBytes.toString('utf8').includes(marker), `bundle index omits boundary: ${marker}`);
+}
 assert(
   !scriptBytes.toString('utf8').includes('sourceMappingURL'),
   'hidden source map was disclosed from emitted JavaScript',
@@ -78,20 +93,24 @@ const artifacts = files.map((file) => {
   return { path: `dist/browser/${file}`, bytes: bytes.length, sha256: sha256(bytes) };
 });
 const report = {
-  schema: 'helix.browser-bundle-smoke-report/1',
-  plan_item: 'P02-010',
+  schema: 'helix.browser-example-bundle-report/1',
+  plan_items: ['P02-010', 'P02-016'],
+  example: examplePolicy.browser.root,
   vite: '8.1.4',
   target: 'es2022',
   artifacts,
   wasm_source_sha256: sha256(sourceWasm),
+  database_functionality: false,
+  claim_boundary: sharedClaimBoundary,
   verdict: 'pass',
 };
+validateBrowserBundleReport(report);
 const reportDirectory = path.join(repository, 'dist/validation');
 mkdirSync(reportDirectory, { recursive: true });
 const reportPath = path.join(reportDirectory, 'browser-bundle-smoke.json');
 writeFileSync(reportPath, `${JSON.stringify(report, null, 2)}\n`);
 process.stdout.write(
-  `PASS browser bundle: ${files.length} files, ${wasmBytes.length} Wasm bytes, hidden source map\n`,
+  `PASS browser example bundle: ${files.length} files, ${wasmBytes.length} Wasm bytes, hidden source map, database functionality false\n`,
 );
 process.stdout.write(
   `REPORT ${path.relative(repository, reportPath)} ${sha256(readFileSync(reportPath))}\n`,

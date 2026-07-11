@@ -95,7 +95,7 @@ Downloaded development executables are not smuggled into npm/Cargo dependency gr
 
 The machine check validates SPDX metadata and the [notice inventory](../../THIRD_PARTY_NOTICES.md). The twelve MPL-2.0 entries are build-only Vite tooling and are not permitted in runtime/package contents without explicit revalidation. The complete npm tarball refresh verifies 73 root license/notice files and records 26 reviewed missing-text omissions instead of treating metadata as text.
 
-The [dependency security reporting contract](dependency-security-reporting.md) defines the deterministic inventory, full tarball license refresh, dated npm advisory result, registry signatures, SLSA attestations, duplicates, and non-npm tool limitations. `P02-016` and release tasks inspect real bundles/packages and must reconcile what is shipped. A clean policy check cannot be cited as an SBOM, continuing vulnerability-free claim, legal opinion, or production release approval.
+The [dependency security reporting contract](dependency-security-reporting.md) defines the deterministic inventory, full tarball license refresh, dated npm advisory result, registry signatures, SLSA attestations, duplicates, and non-npm tool limitations. `P02-016` binds the real browser example sources and bundle output to its retained diagnostics; release tasks must additionally inspect and reconcile every shipped package. A clean policy check cannot be cited as an SBOM, continuing vulnerability-free claim, legal opinion, or production release approval.
 
 ## Suppressions and changes
 

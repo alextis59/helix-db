@@ -4,6 +4,7 @@ This directory contains bounded verification entry points for foundation build p
 
 - `run-build-profile.mjs` runs exactly one named Rust build/instrumentation profile with fixed Cargo arguments.
 - `check-browser-profile.mjs` resolves the pinned Vite production configuration without creating a bundle.
+- `examples-contract.mjs`, `check-examples.mjs`, and `test-examples-contract.mjs` bind the two executable example sources/commands/reports and reject inflated database claims.
 - `check-dependency-policy.mjs` reconciles Cargo metadata and the complete npm lock with the machine policy.
 - `dependency-policy.json` is the exact source/license/lifecycle/duplicate/unsafe exception authority.
 - `check-dependency-reports.mjs` creates the deterministic lock/license/duplicate inventory, refreshes all integrity-verified npm tarball license identities, and obtains the dated npm advisory/signature/SLSA observation.
@@ -16,7 +17,7 @@ This directory contains bounded verification entry points for foundation build p
 - `rust-coverage-policy.json` fixes the source inventory, exclusions, tool identities, report schema, threshold groups, execution bounds, and expiring boundary-skeleton exception.
 - `install-wasm-tools.mjs` downloads or reuses only the official hash-pinned Linux x64 component validator and verifies archive, inventory, executable, and version identities.
 - `check-wasm-artifacts.mjs` builds and validates the WASIp2 component and browser core-module forms and emits deterministic ignored reports.
-- `build-browser-smoke.mjs` checks the exact four-file Vite output and byte identity of its Wasm asset.
+- `build-browser-smoke.mjs` checks the exact four-file example output, visible non-database boundary, and byte identity of its Wasm asset.
 - `run-browser-smoke.mjs` executes the built bundle in one selected engine or all three pinned engines and writes a sanitized, strict execution report with launcher-entrypoint identity.
 - `check-wgsl-fixtures.mjs` validates the strict trusted-source manifest without a browser or parses, validates, and creates compute pipelines for every fixture through pinned Chromium Dawn/SwiftShader.
 - `artifact-retention-policy.json` fixes the five retention profiles, active/reserved state, size/sensitivity limits, CI expiry, durable promotion, and immutable upload service controls.
@@ -24,4 +25,4 @@ This directory contains bounded verification entry points for foundation build p
 - `collect-retained-artifacts.mjs` creates one fixed semantic, coverage, or browser diagnostic bundle and records incomplete/failing results without making them pass.
 - `check-retained-artifacts.mjs` checks the policy or one complete generated bundle; `test-artifact-retention-contract.mjs` rejects service, profile, producer, reservation, engine, manifest, payload, browser-report, and dependency-report drift.
 
-These checks prove toolchain configuration, artifact plumbing, compile-only WGSL acceptance/rejection, and an armed product-coverage gate only. CI replay/browser bundles expire after 30 days and must be promoted under the [artifact-retention policy](../../docs/quality/artifact-retention.md) before supporting a gate or release. The current coverage denominator is honestly empty after test-only exclusions because the Rust crates remain boundary skeletons; it is not a 100% product-coverage claim. The checks do not dispatch a shader or prove GPU correctness/support. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; user-facing browser examples and product-host behavior remain `P02-016`/`P11-*` work.
+These checks prove toolchain configuration, artifact plumbing, compile-only WGSL acceptance/rejection, executable non-database boundary examples, and an armed product-coverage gate only. CI replay/browser bundles expire after 30 days and must be promoted under the [artifact-retention policy](../../docs/quality/artifact-retention.md) before supporting a gate or release. The current coverage denominator is honestly empty after test-only exclusions because the Rust crates remain boundary skeletons; it is not a 100% product-coverage claim. The checks do not dispatch a shader or prove GPU correctness/support. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; product-host behavior remains `P11-*` work.

@@ -1,0 +1,41 @@
+{
+  "schema": "helix.toolchain-examples/1",
+  "plan_item": "P02-016",
+  "claim_boundary": "These examples prove native linking and browser Wasm bundling only; they expose no document, query, storage, durability, GPU, network, compatibility, security, or release functionality.",
+  "native": {
+    "id": "native-toolchain",
+    "state": "active-boundary-example",
+    "manifest": "examples/native-toolchain/Cargo.toml",
+    "lockfile": "examples/native-toolchain/Cargo.lock",
+    "source": "examples/native-toolchain/src/main.rs",
+    "documentation": "examples/native-toolchain/README.md",
+    "command": [
+      "cargo",
+      "run",
+      "--locked",
+      "--offline",
+      "--quiet",
+      "--target-dir",
+      "target/examples/native-toolchain",
+      "--manifest-path",
+      "examples/native-toolchain/Cargo.toml"
+    ],
+    "report": "dist/validation/native-toolchain-example.json"
+  },
+  "browser": {
+    "id": "browser-toolchain",
+    "state": "active-boundary-example",
+    "root": "examples/browser-toolchain",
+    "documentation": "examples/browser-toolchain/README.md",
+    "sources": [
+      "examples/browser-toolchain/README.md",
+      "examples/browser-toolchain/index.html",
+      "examples/browser-toolchain/main.ts",
+      "examples/browser-toolchain/report.ts"
+    ],
+    "build_command": ["node", "tests/toolchain/build-browser-smoke.mjs"],
+    "smoke_command": ["node", "tests/toolchain/run-browser-smoke.mjs", "all"],
+    "bundle_report": "dist/validation/browser-bundle-smoke.json",
+    "execution_report_pattern": "dist/validation/browser-execution-{engine}.json"
+  }
+}

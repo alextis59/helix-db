@@ -1,0 +1,26 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>HelixDB browser toolchain boundary example</title>
+  </head>
+  <body>
+    <main>
+      <h1>HelixDB browser toolchain boundary example</h1>
+      <p id="maturity">Boundary skeleton — no database functionality</p>
+      <p>
+        This page proves that the Rust core skeleton survives Wasm compilation, Vite bundling,
+        browser validation, and instantiation. It cannot store or query documents.
+      </p>
+      <dl>
+        <dt>Status</dt>
+        <dd><output id="status" aria-live="polite">loading</output></dd>
+        <dt>Database functionality</dt>
+        <dd id="database-functionality">not implemented</dd>
+      </dl>
+      <pre id="report" aria-label="Toolchain report">report pending</pre>
+    </main>
+    <script type="module" src="./main.ts"></script>
+  </body>
+</html>

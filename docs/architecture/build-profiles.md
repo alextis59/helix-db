@@ -3,7 +3,7 @@
 - Status: Accepted and executable toolchain profiles; no database/browser release claim
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner
-- Plan items: `P02-005`; coverage reporting completed by `P02-013`; benchmark reporting completed by `P02-014`
+- Plan items: `P02-005`; coverage reporting completed by `P02-013`; benchmark reporting completed by `P02-014`; boundary examples completed by `P02-016`
 - Governing requirements: `INV-003`, `INV-004`, `INV-007`, `PLAT-001`, `PLAT-002`, `PLAT-003`, `CORE-001`, `CORE-003`, `QUAL-001`
 - Governing gate: `G02`
 - Rust toolchain: [Rust toolchain policy](rust-toolchain-policy.md)
@@ -21,7 +21,7 @@ The [Cargo profile reference](https://doc.rust-lang.org/cargo/reference/profiles
 | Native release | Cargo `release` | Host; workspace, all targets/features | Optimization 3, thin LTO, one codegen unit, line tables, overflow checks, unwind, no incremental build | Not a packaged/production binary |
 | Component Wasm | Cargo `wasm` | `wasm32-wasip2`; portable `helix-core` closure | Size optimization, fat LTO, abort panic, stripped symbols; P02-010 validates the Component Model binary | Not WASIp3/server-edge support or a production ABI claim |
 | Browser Wasm | Cargo `browser` | `wasm32-unknown-unknown`; portable `helix-core` closure | Size-first optimization, fat LTO, abort panic, stripped symbols; P02-010 validates/instantiates the core module | Not a JavaScript binding or database behavior claim |
-| Browser JavaScript | Vite production config | Internal standards-based smoke fixture | Relative base, `custom` app, ES2022, assets kept external, hidden maps, Oxc minification, public-env allow-prefix | Not a user-facing example or browser support claim |
+| Browser JavaScript | Vite production config | Standards-based boundary example | Relative base, `custom` app, ES2022, assets kept external, hidden maps, Oxc minification, public-env allow-prefix | Toolchain example only; not database behavior or browser support |
 | AddressSanitizer | Cargo `sanitizer` | `x86_64-unknown-linux-gnuasan`; workspace libraries/all features | Optimization 1, full debug/assertions/overflow checks, one codegen unit, fully instrumented distributed standard library | Not portable to unlisted hosts; not Thread/MemorySanitizer |
 | Coverage | Cargo `coverage` plus exact stable rustflag and compiler-matched LLVM reporting | Linux x64; workspace libraries/all features | No optimization, full debug/assertions/overflow checks, one codegen unit, `-C instrument-coverage`, unique raw profiles, explicit product/test classification, semantic/recovery thresholds | Coverage is reachability evidence, not semantic or recovery correctness proof |
 | Benchmark | Cargo `bench` plus versioned result harness | Host; workspace/all targets/features, then Node host-memory calibration | Same optimization/LTO/codegen/overflow posture as native release, with line tables; strict workload/raw/summary schemas and integrity-only result | Calibration proves reporting plumbing, not database or release performance |
@@ -72,11 +72,11 @@ corepack npm run toolchain:types
 corepack npm run toolchain:browser-profile
 ```
 
-`P02-010` adds the first honest internal input solely to validate the Rust/Wasm/Vite/Playwright toolchain. It is not listed under `examples/` and exposes no database API. The [smoke-validation contract](wasm-browser-smoke-validation.md) checks the exact Wasm and bundle outputs and launches all three engines. `P02-016` still owns the first user-facing minimal example.
+`P02-010` first established an internal Rust/Wasm/Vite/Playwright input. `P02-016` promotes that path into the machine-governed [`browser-toolchain`](../../examples/browser-toolchain/README.md) example and adds a standalone [`native-toolchain`](../../examples/native-toolchain/README.md) package. The [smoke-validation contract](wasm-browser-smoke-validation.md) checks the exact browser Wasm and bundle outputs and launches all three engines. Both examples expose an explicit false database-functionality claim; neither is a product SDK, database API, or supported deployment.
 
 ## Artifact and reproducibility rules
 
-- Cargo profile output stays under ignored `target/`; Vite output stays under ignored `dist/`; the deterministic coverage summary stays under ignored `dist/coverage/`; benchmark raw/summary output stays under ignored `dist/benchmarks/baseline/`.
+- Cargo profile output stays under ignored `target/`; the standalone native example uses `target/examples/native-toolchain`; Vite output stays under ignored `dist/browser`; example reports stay under ignored `dist/validation`; the deterministic coverage summary stays under ignored `dist/coverage/`; benchmark raw/summary output stays under ignored `dist/benchmarks/baseline/`.
 - Coverage `.profraw`/`.profdata`, source maps, sanitizer logs, and benchmark output are generated artifacts and are not committed casually.
 - Evidence promotes only compact manifests/reports or immutable external hashes according to the [evidence guide](../../evidence/README.md).
 - Wasm and browser artifacts are never relabeled as components/bundles until the appropriate validator has run.

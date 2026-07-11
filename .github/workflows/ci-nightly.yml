@@ -69,3 +69,4 @@ jobs:
           cargo check --frozen --workspace --all-targets --all-features
           cargo clippy --frozen --workspace --all-targets --all-features -- -D warnings
           cargo test --frozen --workspace --all-features --no-fail-fast
+          corepack npm run examples:native

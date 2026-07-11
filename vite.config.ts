@@ -10,7 +10,7 @@ export default defineConfig({
   cacheDir: path.join(repository, 'target/vite'),
   clearScreen: false,
   envPrefix: 'HELIX_PUBLIC_',
-  root: path.join(repository, 'tests/browser/smoke-app'),
+  root: path.join(repository, 'examples/browser-toolchain'),
   build: {
     assetsInlineLimit: 0,
     copyPublicDir: false,

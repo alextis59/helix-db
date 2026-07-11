@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["node", "vite/client"]
   },
-  "include": ["tests/browser/**/*.ts"]
+  "include": ["examples/browser-toolchain/**/*.ts", "tests/browser/**/*.ts"]
 }

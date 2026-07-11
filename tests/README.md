@@ -10,4 +10,8 @@ Unit tests remain beside their implementation where idiomatic. This root is rese
 - `integration/` owns cross-crate, cross-language, and multi-process behavior.
 - `toolchain/` owns build-profile/configuration verification that precedes feature suites.
 
+Executable end-user-shaped toolchain inputs live under [`examples/`](../examples/README.md), while
+this tree owns their assertions and real-engine execution. That separation keeps example source
+minimal without relabeling it as database behavior.
+
 The versioned [`suites.json`](suites.json) manifest and [`run-suite.mjs`](run-suite.mjs) implement the [stable test command policy](../docs/quality/test-command-surface.md). Run `npm run test:commands` to verify the surface or `npm run test:all` to execute every active authority and reserved-state probe. The separate [product coverage gate](../docs/quality/code-coverage-policy.md) replays Rust library tests with compiler-matched instrumentation and does not turn empty system-test directories into coverage claims. CI retains the semantic replay and coverage report as strict 30-day diagnostic bundles; anything used by a gate or release must be promoted under the [artifact-retention contract](../docs/quality/artifact-retention.md).

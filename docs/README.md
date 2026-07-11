@@ -32,6 +32,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Rust product code coverage policy](quality/code-coverage-policy.md) | Compiler-matched LLVM reporting, explicit product/test classification, and workspace/critical thresholds |
 | [Benchmark result and retention contract](quality/benchmark-results.md) | Versioned workload/raw/summary schemas, complete stage reporting, and the non-gating retained baseline |
 | [CI artifact retention and durable promotion](quality/artifact-retention.md) | Versioned replay/browser bundles, reserved future classes, failure uploads, expiry, sensitivity, and durable evidence promotion |
+| [Toolchain boundary examples](../examples/README.md) | Executable native and browser foundation paths with explicit non-database maturity contracts |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 
@@ -123,4 +124,4 @@ Release docs state supported platforms/versions, artifacts/digests, known issues
 
 Documentation changes follow [CONTRIBUTING.md](../CONTRIBUTING.md) and the domain owners in [governance/ownership.md](governance/ownership.md). A behavior change updates its documentation, tests, traceability, and implementation-plan state in the same coherent step.
 
-Broken-link, generated-doc drift, example, and metadata checks will be added to CI under Phase 2. Until then, each documentation commit performs an explicit local link and whitespace check.
+Broken-link, generated-doc drift, and metadata checks will be added to CI under Phase 2. The first native and browser examples are already machine-validated by `examples:check`; until the remaining documentation checks land, each documentation commit also performs an explicit local link and whitespace check.
