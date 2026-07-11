@@ -1,0 +1,179 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-004",
+  "requirements": ["CORE-001", "DATA-001", "DATA-002", "INV-001", "INV-007"],
+  "accepted_adrs": ["0012"],
+  "base_commit": "faf91fe76e7d40417181fdd020136385a6c2b673",
+  "source_commits": ["ef663fff9b396b649408479830e20afc7ce8a75a"],
+  "commit": "ef663fff9b396b649408479830e20afc7ce8a75a",
+  "source_tree": "689a8ee87535136e2ef7291a8301b9ca6a6e1722",
+  "recorded_at": "2026-07-11T09:13:07.889Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": ["22.23.1", "24.18.0"]
+    },
+    "network_required": false,
+    "hosted_workflow_execution": false
+  },
+  "external_research": {
+    "mongodb_specifications_commit": "d75d82b18b6f267dc00e75103105d48980181ef1",
+    "mongo_c_driver_commit": "d9691e85a8b5f70eca91a1a94d249a5accdc785a",
+    "official_decimal_payloads_compared": 7
+  },
+  "commands": [
+    {
+      "command": "machine payload/decimal/subtype/vector validation and exact rejection replay",
+      "exit_code": 0
+    },
+    {
+      "command": "pinned official MongoDB BID corpus cross-check for seven payloads",
+      "exit_code": 0
+    },
+    {
+      "command": "node compatibility/v1/generate-matrix.mjs --check && node compatibility/v1/check-matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run fixtures:check",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:javascript",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run test:all",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 22.23.1 and 24.18.0 evidence verifier replay with 67 isolated mutation canaries",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "source_artifacts": 12,
+    "payload_document_lines": 637,
+    "payload_document_headings": 35,
+    "registry_lines": 813,
+    "registry_bytes": 23643,
+    "payload_types": 14,
+    "registry_rules": 14,
+    "positive_vectors": 41,
+    "rejection_vectors": 17,
+    "external_references": 7,
+    "external_decimal_payloads": 7,
+    "classified_binary_subtypes": 256,
+    "vector_profiles": 2,
+    "mutation_canaries": 67,
+    "markdown_files": 169,
+    "local_links": 1219,
+    "node_lanes": 2,
+    "native_tests": 9,
+    "semantic_fixtures": 17,
+    "semantic_steps": 313,
+    "oracle_assertions": 382,
+    "compatibility_rows": 263,
+    "mongodb_cases": 16,
+    "declared_browser_tests": 3,
+    "aggregate_suites": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "source_artifacts": [
+    {
+      "status": "M",
+      "path": "Specifications.md",
+      "media_type": "text/markdown",
+      "bytes": 77925,
+      "sha256": "74bda2d840e7c7a56f6496f77b8adcceb673ac022c5045db8a53e823a1a7179d"
+    },
+    {
+      "status": "M",
+      "path": "Study.md",
+      "media_type": "text/markdown",
+      "bytes": 63345,
+      "sha256": "d62ddaa9884e2a74a155ea98e1166b66299f7b85698280c34ad699dc9995a880"
+    },
+    {
+      "status": "M",
+      "path": "compatibility/v1/matrix-v1.json",
+      "media_type": "application/json",
+      "bytes": 217132,
+      "sha256": "3784cefd0b9b89b53ab9f12ee3478aba891ffdc43149fdd2079f5c9b92f7bc3c"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md",
+      "media_type": "text/markdown",
+      "bytes": 10037,
+      "sha256": "d7028f91980947da95070c41236f0766a5af3781c66e1671935fdd16bc759d8e"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/0012-use-bounded-little-endian-hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 32126,
+      "sha256": "d8be25f0aff1500e28cdd81f4efc4b1124ee4635a8becb0fde0ba4e9a2db6916"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "media_type": "text/markdown",
+      "bytes": 103065,
+      "sha256": "1dfab48ca8c7ff69a220ad4bc189207fb4e74bf231e5b9250b1ed56c3654f507"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/README.md",
+      "media_type": "text/markdown",
+      "bytes": 2321,
+      "sha256": "3e9ee26265f08b0b0aac6551c0dfbbb2371e24917c74035e09e92ecd4397360f"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-payloads.json",
+      "media_type": "application/json",
+      "bytes": 23643,
+      "sha256": "43c431fd74e43437ccd608b400c26857b70d8ee5f64bea4643cdd8f13c8afaf6"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-payloads.md",
+      "media_type": "text/markdown",
+      "bytes": 29393,
+      "sha256": "968451ccbf58d4bcfacbf4acd54ee4ecff85e275472d78d70d67509273559607"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-type-tags.md",
+      "media_type": "text/markdown",
+      "bytes": 19561,
+      "sha256": "84ec2f61030ee7352366cbfba68c74ad5c42c03edbd2e9d462228fbe2bd6260f"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 30724,
+      "sha256": "bfd30bf9d9277e59215d9728ca843acd86778fbdcbbc7a0d5cc652f2df5a3f68"
+    },
+    {
+      "status": "M",
+      "path": "fixtures/generation/report-v1.json",
+      "media_type": "application/json",
+      "bytes": 2547,
+      "sha256": "1e307d83c056f86040a258b35309d0a84f10c4225b706e220f3599af13d74ac9"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-03/P03-004/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 55676,
+    "sha256": "22eac72fa6e42b3ca482cb5af86bb56fd108a0b6b81cbece095266a7702f59f2"
+  },
+  "verdict": "pass"
+}

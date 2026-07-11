@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 62
-- Open checklist items: 460
+- Completed checklist items: 63
+- Open checklist items: 459
 - Total checklist items: 522
 - Current phase: Phase 3 — HDoc format, codec, and path dictionary
 - Next release gate: `G03`
@@ -212,7 +212,7 @@ Dependencies: `G01`, `G02`.
 - [x] **P03-001** Write the HDoc format ADR covering endianness, alignment, offsets, maximum sizes, canonicalization, checksum, hash, and extension strategy.
 - [x] **P03-002** Define the HDoc header, flags, format version, total length, field count, checksum, body sections, and footer.
 - [x] **P03-003** Assign stable type tags for every required value type and reserve extension ranges.
-- [ ] **P03-004** Define canonical encodings for integers, floats, decimals, timestamps, dates, UUIDs, ObjectIds, binary values, and vectors.
+- [x] **P03-004** Define canonical encodings for integers, floats, decimals, timestamps, dates, UUIDs, ObjectIds, binary values, and vectors.
 - [ ] **P03-005** Define field-table entries, name storage, nested object/array tables, value offsets, and length encodings.
 - [ ] **P03-006** Define canonical document hashing and checksum coverage, including corruption versus semantic-hash behavior.
 - [ ] **P03-007** Define optional compression blocks, supported algorithms, block boundaries, and unknown-codec rejection.
