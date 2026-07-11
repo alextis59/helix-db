@@ -1,0 +1,130 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-011",
+  "requirements": ["INV-006", "INV-007", "PLAT-001", "QUAL-001"],
+  "accepted_adrs": [],
+  "commit": "9f05865334433bc19764b4803c8967ef910c308b",
+  "recorded_at": "2026-07-11T02:17:17Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "active_node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "playwright": "1.61.1",
+      "chromium": "149.0.7827.55"
+    },
+    "javascript_lanes": ["22.23.1", "24.18.0"],
+    "webgpu_adapter": {
+      "vendor": "google",
+      "architecture": "swiftshader",
+      "device": "0xc0de",
+      "description": "SwiftShader Device (Subzero)"
+    },
+    "hosted_workflow_execution": false
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "evaluate Naga 30.0.0 as a standalone WGSL parser",
+      "exit_code": 0,
+      "result": "the official parser was viable but would introduce the first external Cargo dependency and online resolution into every all-target workspace check; the already locked Chromium Dawn implementation was selected instead"
+    },
+    {
+      "command": "inspect JSON-serialized GPUAdapterInfo",
+      "exit_code": 0,
+      "result": "enumerating the adapter-info object returned no fields; reading its standardized vendor, architecture, device, and description properties directly proved the selected SwiftShader identity"
+    },
+    {
+      "command": "compile the initial duplicate-binding rejection fixture",
+      "exit_code": 0,
+      "result": "Dawn accepted duplicate unused bindings because neither affected the entry point; the fixture now reads both bindings so the conflict is live and deterministically rejected"
+    },
+    {
+      "command": "P02-011 invalid-adapter-name evidence canary",
+      "exit_code": 1,
+      "result": "Chromium ignored the unknown adapter selector and retained the reviewed SwiftShader fallback; the canary now disables WebGPU and requires the adapter-unavailable failure instead"
+    }
+  ],
+  "verification": {
+    "changed_paths": 21,
+    "fixture_sources": 4,
+    "accepted_fixtures": 2,
+    "rejected_fixtures": 2,
+    "pipelines_created": 2,
+    "node_lanes": 2,
+    "workflow_jobs": 8,
+    "workflow_steps": 40,
+    "browser_regression_engines": 3,
+    "clean_replay_browser_engines": 1,
+    "locked_npm_development_packages": 91,
+    "external_rust_packages": 0,
+    "native_tests": 9,
+    "mutation_canaries": 12,
+    "markdown_files": 141,
+    "local_links": 901,
+    "biome_files": 56
+  },
+  "produced_artifacts": [
+    {
+      "path": "dist/validation/wgsl-fixtures.json",
+      "media_type": "application/json",
+      "bytes": 3316,
+      "sha256": "5f1179f4106a45cfcbd0954342c73f4decde7543cc22a31cc86100c6782a7955"
+    }
+  ],
+  "commands": [
+    {
+      "command": "Node 22.23.1 clean install, WGSL manifest, CI/policy/type/fixture/aggregate test replay, real WGSL compilation, and Chromium Wasm regression",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 24.18.0 clean install plus WGSL manifest and CI-contract replay",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo fmt/check/Clippy/test plus both portable-target Clippy builds, Wasm validation, and rustdoc warnings denial",
+      "exit_code": 0
+    },
+    {
+      "command": "Chromium, Firefox, and WebKit browser bundle smoke plus focused Dawn/SwiftShader validation",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/P02-011/verify.mjs 9f05865334433bc19764b4803c8967ef910c308b",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    { "path": ".github/README.md", "media_type": "text/markdown", "bytes": 996, "sha256": "30a72fb31737ce0c39177089adb5feb01d4e5979f381e24fc935796917082ba0" },
+    { "path": ".github/ci/matrix.json", "media_type": "application/json", "bytes": 4602, "sha256": "a2cc11be96c939ae3922c6286d79bc810bdf5f2b9cf929e5074b97bf527b1078" },
+    { "path": ".github/workflows/ci.yml", "media_type": "application/yaml", "bytes": 7090, "sha256": "8556d45f0a977fc60aebda84f319ecf585a1479e3b68d34d827871a5c23f8ab2" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 3612, "sha256": "635d4dd9a4f6c44ab5de816f43b580c60acc8550f98c1439dd973ff8e7f16ad7" },
+    { "path": "biome.json", "media_type": "application/json", "bytes": 1351, "sha256": "6cd82cec7b57f542071d36ce18fc8e4b8d5dd38417ec5f7da6eefbbde4a9fdf5" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 8114, "sha256": "b81622775196219a461461a46d249d296b8a2edb5bdf7129b79c86fa853c6de4" },
+    { "path": "docs/architecture/continuous-integration.md", "media_type": "text/markdown", "bytes": 8008, "sha256": "f1ecc71330eff3c040132d8642f50fc665b01dcfa007a890e00a81900e240d52" },
+    { "path": "docs/architecture/repository-layout.md", "media_type": "text/markdown", "bytes": 4929, "sha256": "3cdc3897a6458b74a4c1110f65467a15ec2dc9c761a1f9f3955bc8997295a009" },
+    { "path": "docs/architecture/wgsl-fixture-validation.md", "media_type": "text/markdown", "bytes": 8611, "sha256": "b3803ea8940be7582593703b954059b689fed49a059eec5c9788c2255932e8d7" },
+    { "path": "package.json", "media_type": "application/json", "bytes": 2925, "sha256": "f31741c9ad450a5ef570de491dd66d98c9518e94c14ee05baff950e5e425b745" },
+    { "path": "shaders/README.md", "media_type": "text/markdown", "bytes": 773, "sha256": "3e1feaa95af47429b72b4d35d80170efc4007357e0059dc4ac06d56f63f416d6" },
+    { "path": "shaders/fixtures/README.md", "media_type": "text/markdown", "bytes": 918, "sha256": "744796b53aff11c4d10e742eae7b36e59f3700f8d53031ae70086703854a1d6c" },
+    { "path": "shaders/fixtures/invalid/duplicate-resource-binding.wgsl", "media_type": "text/wgsl", "bytes": 305, "sha256": "a45fbdda64979fbed45abff03a590cf0afea9e9ddf2eb6395817dd63b5c1528e" },
+    { "path": "shaders/fixtures/invalid/malformed-function.wgsl", "media_type": "text/wgsl", "bytes": 40, "sha256": "5538e78a7318f0c88d81c25fd09c6e65fcdc63dcd433d090b2087669f3127644" },
+    { "path": "shaders/fixtures/manifest.json", "media_type": "application/json", "bytes": 1981, "sha256": "6ab55aaed558e2ac041238c76517db333de2209b7753e033afd28df59e567fa5" },
+    { "path": "shaders/fixtures/valid/noop-compute.wgsl", "media_type": "text/wgsl", "bytes": 104, "sha256": "adc0c0186ec26eda6839d1377a685adfcc7f17639bc8ae284ff884d2fffaa215" },
+    { "path": "shaders/fixtures/valid/storage-binding-layout.wgsl", "media_type": "text/wgsl", "bytes": 506, "sha256": "0c6900ac304b5310bc8712008030ec3b6c2a3d324c7790e710c3b0a63d554406" },
+    { "path": "tests/browser/README.md", "media_type": "text/markdown", "bytes": 1033, "sha256": "5a48ac3a364344e772bae398af4d6d843208c3ec83cae6d9dab3935880701ada" },
+    { "path": "tests/toolchain/README.md", "media_type": "text/markdown", "bytes": 2299, "sha256": "24c6667c3b0a8bec6d6214b6bf2e3bb7c65d099ca47c7f877a5ca9310b7f1ae4" },
+    { "path": "tests/toolchain/check-ci-matrix.mjs", "media_type": "text/javascript", "bytes": 13558, "sha256": "262f7fd77aababefceaf5022eb56fff103b079df780be59f4c00a2e668c6701d" },
+    { "path": "tests/toolchain/check-wgsl-fixtures.mjs", "media_type": "text/javascript", "bytes": 16327, "sha256": "670cc25304d284a844b6426f794115ac49a3df383023059f68b3088e639ce6e7" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-011/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 24490,
+    "sha256": "fc2b94ad5127c39b0fb84058ca338f39212e8131a65c9bf6ecde251eb32dc190"
+  },
+  "verdict": "pass"
+}

@@ -192,7 +192,7 @@ Dependencies: `G00`; may proceed in parallel with Phase 1.
 - [x] **P02-008** Establish deterministic fixture generation with committed seeds and artifact schemas.
 - [x] **P02-009** Add CI for supported operating systems, architectures, Rust targets, Node versions, and browser engines.
 - [x] **P02-010** Add Wasm component validation and browser bundle smoke tests to CI.
-- [ ] **P02-011** Add WGSL parsing or validation and shader-fixture compilation to CI before GPU runtime work.
+- [x] **P02-011** Add WGSL parsing or validation and shader-fixture compilation to CI before GPU runtime work.
 - [ ] **P02-012** Configure dependency vulnerability, provenance, license, and duplicate-version reporting.
 - [ ] **P02-013** Add code coverage reporting with explicit exclusions and minimum thresholds for semantic and recovery-critical modules.
 - [ ] **P02-014** Add benchmark result schemas and a non-gating baseline job that preserves raw results.
