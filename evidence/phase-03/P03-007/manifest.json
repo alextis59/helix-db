@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-007",
+  "verdict": "pass",
+  "requirements": [
+    "CORE-001",
+    "DATA-001",
+    "DATA-002",
+    "INV-001",
+    "INV-007"
+  ],
+  "accepted_adrs": ["0012"],
+  "base_commit": "cff50c64b7a400fdf50a329277b6b412b4bf0480",
+  "source_commits": ["89ec351aa0754aafe69ce8a2f8ad6a4ffe88f8b0"],
+  "commit": "89ec351aa0754aafe69ce8a2f8ad6a4ffe88f8b0",
+  "source_tree": "cdde8d9a841a941247af7f70d71021bd0e482079",
+  "recorded_at": "2026-07-11T11:27:35.957Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": ["22.23.1", "24.18.0"],
+      "rustc": "1.96.1",
+      "cargo": "1.96.1",
+      "cc": "11.4.0",
+      "lz4_flex": "0.13.1",
+      "lz4_flex_source_commit": "8507d2e68ba2477fd087b7fa55d6806ca63f8138",
+      "lz4_reference_source_commit": "ebb370ca83af193212df4dcbadcc5d87bc0de2f0",
+      "rustsec_advisory_commit": "f8f8d392a4e6adf54c1ba1e7449bbeba00703cdc"
+    },
+    "network_required": false,
+    "hosted_workflow_execution": false
+  },
+  "commands": [
+    {
+      "command": "exact lz4_flex 0.13.1 native64/wasm32 block and section generation plus independent JavaScript LZ4 decode",
+      "exit_code": 0
+    },
+    {
+      "command": "official LZ4 v1.10.0 C alternate-encoding decode and canonical rejection",
+      "exit_code": 0
+    },
+    {
+      "command": "eight external source/archive/advisory byte-count and SHA-256 checks",
+      "exit_code": 0
+    },
+    {
+      "command": "node compatibility/v1/generate-matrix.mjs --check && node compatibility/v1/check-matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run fixtures:check",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:javascript",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:dependencies && corepack npm run dependencies:check",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run test:all",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 22.23.1 and 24.18.0 immutable evidence replay with 32 malformed/canonicality mutations",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "source_artifacts": 23,
+    "compression_document_lines": 412,
+    "compression_document_headings": 19,
+    "registry_lines": 424,
+    "registry_bytes": 28724,
+    "external_reference_snapshots": 8,
+    "block_vectors": 7,
+    "section_vectors": 5,
+    "source_time_codec_implementations": 3,
+    "native_wasm_exact_vectors": 7,
+    "complete_hdoc_documents": 2,
+    "complete_hdoc_bytes": 4920,
+    "negative_cases": 18,
+    "mutation_canaries": 32,
+    "markdown_files": 175,
+    "local_links": 1402,
+    "node_lanes": 2,
+    "native_tests": 9,
+    "semantic_fixtures": 17,
+    "semantic_steps": 313,
+    "oracle_assertions": 382,
+    "compatibility_rows": 263,
+    "mongodb_cases": 16,
+    "declared_browser_tests": 3,
+    "aggregate_suites": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "source_artifacts": [
+    {
+      "status": "M",
+      "path": "Specifications.md",
+      "media_type": "text/markdown",
+      "bytes": 81490,
+      "sha256": "99d50da36966fcbde5fe6d409b0d9bcede1e939460c3a9d469175f25dd69939b"
+    },
+    {
+      "status": "M",
+      "path": "Study.md",
+      "media_type": "text/markdown",
+      "bytes": 67905,
+      "sha256": "bee4b25ef9d1bd59db3d47bec019763b5c9b4a4077b97b4fbd146942dbf2a506"
+    },
+    {
+      "status": "M",
+      "path": "compatibility/v1/matrix-v1.json",
+      "media_type": "application/json",
+      "bytes": 217132,
+      "sha256": "2f43629035dfdf0748cff82ec0d9adffc3817c0ad144fe0b6445012bd7a8664e"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md",
+      "media_type": "text/markdown",
+      "bytes": 10551,
+      "sha256": "262dc39453f586deafdfe850c9fe87a3bdb35c052c30b2a82b98914776032110"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/0012-use-bounded-little-endian-hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 32893,
+      "sha256": "200a077ef6e33594539e7ec31eaeb0a3534d2e47904dfa4af2029bbaf26d0958"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/dependency-security-reporting.md",
+      "media_type": "text/markdown",
+      "bytes": 11534,
+      "sha256": "aaccb670897e3c5908413ce67f562a933f6305db82e6efd5addb26b16a8f89cb"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "media_type": "text/markdown",
+      "bytes": 103065,
+      "sha256": "a41fe4494843c1b26a4c44f86d22dbf33452596995820a6fb632613c6cd38ab9"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/README.md",
+      "media_type": "text/markdown",
+      "bytes": 2935,
+      "sha256": "8a43d6c0bc1816b0ab26e3fbc536a9ce544df5789e340322f579b9f6ec09f5c4"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-compression.json",
+      "media_type": "application/json",
+      "bytes": 28724,
+      "sha256": "aa173b5a04eadbfa9df086fd9064f74c37493d5fe1ae40a9307017691ca92ab4"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-compression.md",
+      "media_type": "text/markdown",
+      "bytes": 23983,
+      "sha256": "3ca4fd55da9add406349e376e3adfeb2db06cb448f47f22e7fa3fd66169a121d"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-envelope.json",
+      "media_type": "application/json",
+      "bytes": 12722,
+      "sha256": "99b39f483865af68bd37cd08c33928c8ee869006919e78048f22689b935e5529"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-integrity.json",
+      "media_type": "application/json",
+      "bytes": 20221,
+      "sha256": "a1cd16a81b298f6187865574c71ccce1e993ea9bfd05416b3d93be04c198b209"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-integrity.md",
+      "media_type": "text/markdown",
+      "bytes": 23475,
+      "sha256": "001bb5679f7e64f502d190f48e3cebe9ec9bdb4c52b43968dbbb5187609d718a"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-payloads.json",
+      "media_type": "application/json",
+      "bytes": 24032,
+      "sha256": "320ae2cb8bec89b23add40315be2dbdf21737b3d09ef1410149125b3aa5e5ca2"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-payloads.md",
+      "media_type": "text/markdown",
+      "bytes": 29968,
+      "sha256": "e80519afb264aeebb27a19fd6895330075899f7fcced659a7283b2a5a4de648e"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-records.json",
+      "media_type": "application/json",
+      "bytes": 18498,
+      "sha256": "8f65c9c374235b667e1b5e12d3be261902c95ffafaf4bb5659bbf80209b8a5fe"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-records.md",
+      "media_type": "text/markdown",
+      "bytes": 33303,
+      "sha256": "1c309dfafe343ef7c080fec7f4c57e97c7354342a5fa4c11ffe24e6cdccad46e"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-type-tags.json",
+      "media_type": "application/json",
+      "bytes": 7906,
+      "sha256": "705e07c0cc3890c52eadc9e5506fbc9ba38a0b1667a3d1df4b50fecf911f0d75"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-type-tags.md",
+      "media_type": "text/markdown",
+      "bytes": 20268,
+      "sha256": "5b7b9fde08a501d01c43f17472bb2e2f74c280ad816c7834dcbc7c91bf6eb319"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 32723,
+      "sha256": "496f76cad6ac452da6ae5c0df361b2ef5483cfae553ffc4e09b10f5393ca903b"
+    },
+    {
+      "status": "M",
+      "path": "docs/governance/decision-owners.md",
+      "media_type": "text/markdown",
+      "bytes": 6060,
+      "sha256": "56df9990ff9f41b9076ccd1b55cb2ab1611c589d438eb5fc96ffb8ef231ab8d1"
+    },
+    {
+      "status": "M",
+      "path": "docs/governance/licensing.md",
+      "media_type": "text/markdown",
+      "bytes": 8666,
+      "sha256": "4d47d78db657b0f8eb32c6aed38dd6c778952437d8f06d64bce37767a86cdee0"
+    },
+    {
+      "status": "M",
+      "path": "fixtures/generation/report-v1.json",
+      "media_type": "application/json",
+      "bytes": 2547,
+      "sha256": "3f4bb28e15817fa87069f58d6463ef1ef3ec832f780a10a60d167d98a1b12c11"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-03/P03-007/verify.mjs",
+    "bytes": 62256,
+    "sha256": "0538288807d2e66cd83f3326a86696af4ee8bb0407bc8b3dd711d3a2df681ee4"
+  }
+}
