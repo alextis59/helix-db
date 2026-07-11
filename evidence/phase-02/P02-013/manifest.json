@@ -1,0 +1,138 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-013",
+  "requirements": ["INV-007", "QUAL-001"],
+  "accepted_adrs": [],
+  "commit": "1909ecc756d7ae6130213f4e4ac573cfe84659a8",
+  "recorded_at": "2026-07-11T03:30:44Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "llvm": "22.1.2-rust-1.96.1-stable",
+      "active_node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "playwright": "1.61.1",
+      "chromium": "149.0.7827.55"
+    },
+    "javascript_lanes": ["22.23.1", "24.18.0"],
+    "coverage_lane": "linux-x64",
+    "hosted_workflow_execution": false
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "read the unfiltered LLVM workspace summary",
+      "exit_code": 0,
+      "result": "the initial total was 100 percent because every executable region belonged to inline unit tests; explicit validated test-only ranges now produce an honest null product denominator instead of a false product-coverage claim"
+    },
+    {
+      "command": "require exactly nine executed tests",
+      "exit_code": 0,
+      "result": "an exact test count would reject every legitimate new test; the machine policy now requires a reviewed minimum and bounded maximum while the evidence baseline still records nine"
+    },
+    {
+      "command": "run the report from the repository and a different temporary checkout path",
+      "exit_code": 0,
+      "result": "normalized source paths and stable Cargo object identities reproduced the exact report digest across both roots and both supported Node lines"
+    },
+    {
+      "command": "bind the report only to policy and Cargo inputs",
+      "exit_code": 0,
+      "result": "a reporter implementation change could otherwise retain the same apparent authority; the final report also binds the exact runner source digest"
+    }
+  ],
+  "verification": {
+    "changed_paths": 28,
+    "retained_report_files": 1,
+    "coverage_report_bytes": 15650,
+    "product_source_files": 8,
+    "inline_test_exclusions": 8,
+    "test_binaries": 8,
+    "tests_executed": 9,
+    "raw_profiles": 8,
+    "llvm_test_functions": 9,
+    "llvm_test_lines": 36,
+    "llvm_test_regions": 38,
+    "product_functions": 0,
+    "product_lines": 0,
+    "product_regions": 0,
+    "threshold_groups": 3,
+    "semantic_line_threshold_basis_points": 10000,
+    "recovery_line_threshold_basis_points": 10000,
+    "rejection_canaries": 18,
+    "covered_activation_canaries": 1,
+    "node_lanes": 2,
+    "workflow_jobs": 8,
+    "workflow_steps": 42,
+    "native_tests": 9,
+    "markdown_files": 145,
+    "local_links": 944,
+    "biome_files": 62
+  },
+  "commands": [
+    {
+      "command": "Node 22.23.1 clean install, JavaScript/dependency/coverage/CI/type/fixture/aggregate replay, exact coverage report comparison, and failure/activation canaries",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 24.18.0 clean install plus policy/report replay and byte-identical coverage report comparison",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo fmt/check/Clippy/test, warning-free docs, both portable Clippy targets, ASan, both Wasm forms, WGSL compilation, and Chromium/Firefox/WebKit smoke",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/P02-013/verify.mjs 1909ecc756d7ae6130213f4e4ac573cfe84659a8",
+      "exit_code": 0
+    }
+  ],
+  "retained_artifacts": [
+    {
+      "path": "reports/rust-coverage.json",
+      "media_type": "application/json",
+      "bytes": 15650,
+      "sha256": "2ff8c9fae4a3d8e5cb3f0063a0a76c1805afcc9f222caf01e578746bb87183f2"
+    }
+  ],
+  "artifacts": [
+    { "path": ".github/README.md", "media_type": "text/markdown", "bytes": 1326, "sha256": "74df6be13b08b83088f863932f21605a8f9292f1be714ec60f26ff321dad2f44" },
+    { "path": ".github/ci/matrix.json", "media_type": "application/json", "bytes": 4624, "sha256": "8447b73bfc0a4cc9f7e3cb5065529c49b8df4f093992bcc9678b8b7ed8d62d20" },
+    { "path": ".github/workflows/ci.yml", "media_type": "application/yaml", "bytes": 7451, "sha256": "a68dd1e02e903124ca2b44e403ef2dc85b6e0d74b51f57c33e80d47b4d820dcd" },
+    { "path": "Cargo.toml", "media_type": "application/toml", "bytes": 3748, "sha256": "cc497d6a797786f724cffbf33358b10f2ebd6cb73a8a302916dbff65b9cd7869" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 3969, "sha256": "cf10f19c4c48bdd69ed856f3f58adeb73d522d0e572b2c6172c19cf3e55ffd77" },
+    { "path": "THIRD_PARTY_NOTICES.md", "media_type": "text/markdown", "bytes": 5548, "sha256": "96609187a3362e167ce8003f214eb43dcb539f6506a24d85176bbc408bfed4e1" },
+    { "path": "crates/helix-columnar/src/lib.rs", "media_type": "text/rust", "bytes": 903, "sha256": "06b119745b8c44d0518d01dbe925381e85f8ad4ad79423e2ba1d5f52aa80d2b9" },
+    { "path": "crates/helix-core/src/lib.rs", "media_type": "text/rust", "bytes": 1171, "sha256": "462ba7b15ebd203d5f6e497faf0ba94e9baaf924cf4979217abe188c7580cbbc" },
+    { "path": "crates/helix-doc/src/lib.rs", "media_type": "text/rust", "bytes": 852, "sha256": "8ed5ca61a91bb655408da3807a29ae73109d6f53d59bc6f8578d3f8b35ff14f6" },
+    { "path": "crates/helix-gpu/src/lib.rs", "media_type": "text/rust", "bytes": 1027, "sha256": "1f3276dc51deff6a5c85f610620ff5d9e67dc4c035a17b6161a7d60fb11b3291" },
+    { "path": "crates/helix-host-native/src/lib.rs", "media_type": "text/rust", "bytes": 1231, "sha256": "ffbdaa22ebd619e4de4a63cac47a296563c88ec7e91b1c9991dec29d9573074a" },
+    { "path": "crates/helix-query/src/lib.rs", "media_type": "text/rust", "bytes": 842, "sha256": "09d3edeb382dfd0cdbb0b36609273e64327b8d699da4c6c16bd48f1036cd17cc" },
+    { "path": "crates/helix-server/src/lib.rs", "media_type": "text/rust", "bytes": 859, "sha256": "f128aba1ef8870934411e29d68a17564aaba2057f1e547609216a9bfee8f95a3" },
+    { "path": "crates/helix-storage/src/lib.rs", "media_type": "text/rust", "bytes": 845, "sha256": "6228af6d62eb7e40cd98af172c7082bc1a941eb42b38ed2e80cbf21990bf6f77" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 8491, "sha256": "866e202b0dabaecae9017541e551deda7a0f9b69261847ddcac25709248b7448" },
+    { "path": "docs/architecture/build-profiles.md", "media_type": "text/markdown", "bytes": 8753, "sha256": "607c2d0d648a0f8e599f46d5d64464c012e2c908be910a3dc54d4a5fe8fea627" },
+    { "path": "docs/architecture/continuous-integration.md", "media_type": "text/markdown", "bytes": 9252, "sha256": "0e40f9ec8e33586694c50faba81d461011bce1e301fb19fb25699922649ce7e6" },
+    { "path": "docs/architecture/rust-toolchain-policy.md", "media_type": "text/markdown", "bytes": 10867, "sha256": "eb6a0daa3642f6a07cd96fe1ef49409e3a279cc95a36e31f806661304386740a" },
+    { "path": "docs/governance/licensing.md", "media_type": "text/markdown", "bytes": 7442, "sha256": "7129f444e293973da40b5c773e34ca17d4a0e967a3d021ed7d297245177d5319" },
+    { "path": "docs/quality/code-coverage-policy.md", "media_type": "text/markdown", "bytes": 11808, "sha256": "a94f2075880c25ddf50626c2129b7bbe7cc598edf48e2f54809d99ddb03ab3ef" },
+    { "path": "docs/quality/test-command-surface.md", "media_type": "text/markdown", "bytes": 6665, "sha256": "f63fed1f996a1eb9ae8552b913ed53d17027b4d7b117897da7fe77f4d0ca0820" },
+    { "path": "package.json", "media_type": "application/json", "bytes": 3340, "sha256": "da11f0b8db825fd5a5da4a53f7d4346735d3a1957e620a6a5e63a75e64db6682" },
+    { "path": "rust-toolchain.toml", "media_type": "application/toml", "bytes": 211, "sha256": "3aeb3323922706566dcd057bc0225469d7f26dee2fbcf68a9d426396bdef5195" },
+    { "path": "tests/README.md", "media_type": "text/markdown", "bytes": 1248, "sha256": "246ef1e2937fadaa5d87f6438ef366c81297f492e059a391768a093982115c4f" },
+    { "path": "tests/toolchain/README.md", "media_type": "text/markdown", "bytes": 3284, "sha256": "283a861f83d89debb46b87710e8f82b5d03fbdf65f84c030d962cea715dddc89" },
+    { "path": "tests/toolchain/check-ci-matrix.mjs", "media_type": "text/javascript", "bytes": 15864, "sha256": "211911326a8d186f815cfab79a85ee10d6780e1b4221fa259c22bf66b76e28b8" },
+    { "path": "tests/toolchain/check-rust-coverage.mjs", "media_type": "text/javascript", "bytes": 25014, "sha256": "133bb96ec072135e2c3547a458fe049812ee314e16e8537465a7fb54147a5ab6" },
+    { "path": "tests/toolchain/rust-coverage-policy.json", "media_type": "application/json", "bytes": 2983, "sha256": "887b840685b7c1b76aec818a2e08d800d9d8fbe595abef6e8b325922955b4234" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-013/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 30718,
+    "sha256": "9e1da6e64100db9224a48929f4a7ccb0bb23522ff1f16af46b8cb3a92d2563af"
+  },
+  "verdict": "pass"
+}
