@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-012",
+  "verdict": "pass",
+  "requirements": ["CORE-001", "DATA-001", "DATA-002", "INV-001", "INV-007", "SEC-002"],
+  "accepted_adrs": ["0011", "0012"],
+  "base_commit": "181fca7f1a72d57b44f10c48553967d7fcbc4096",
+  "source_commits": ["c8039038a71925f4ae77d5c6116f26c9ecb4fdbf"],
+  "commit": "c8039038a71925f4ae77d5c6116f26c9ecb4fdbf",
+  "source_tree": "26f03ae92f44a46d570816f2958fa229ca3568ed",
+  "diff_sha256": "56846dff44f5ce9c222fdf3a5011c309bb0780b323aed0ac214c9264dac5b6eb",
+  "recorded_at": "2026-07-11T21:39:05Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": ["22.23.1", "24.18.0"],
+      "rustc": "1.96.1",
+      "cargo": "1.96.1",
+      "llvm": "22.1.2"
+    },
+    "network_required_for_replay": false,
+    "hosted_workflow_execution": false
+  },
+  "verification": {
+    "source_artifacts": 34,
+    "source_commits": 1,
+    "retained_reports": 1,
+    "helix_doc_tests": 24,
+    "workspace_tests": 32,
+    "coverage_functions": 117,
+    "coverage_lines": 1178,
+    "coverage_regions_covered": 2380,
+    "coverage_regions": 2493,
+    "mutation_canaries": 17,
+    "node_lanes": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "coverage_report": {
+    "path": "rust-coverage-report.json",
+    "bytes": 16792,
+    "sha256": "b92b2bebf6f61f25d0a85bc12f8ad3a65ae23b9ebbb4cf2ce625feefe788f6ac"
+  },
+  "verifier": {
+    "path": "verify.mjs",
+    "bytes": 12514,
+    "sha256": "8ccfb09b6dc727ed85b4c1862285bec54cdea40c7d152be115f3849020c25ce7"
+  }
+}

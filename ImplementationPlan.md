@@ -220,7 +220,7 @@ Dependencies: `G01`, `G02`.
 - [x] **P03-009** Implement a validating HDoc decoder that rejects unknown required features, invalid offsets, overlap, truncation, and checksum failure.
 - [x] **P03-010** Implement owned document values and borrowed read-only views without changing semantics.
 - [x] **P03-011** Implement fast field and nested-path lookup over raw HDoc views.
-- [ ] **P03-012** Implement canonical JSON-like rendering and import conversion for debugging and SDK boundaries.
+- [x] **P03-012** Implement canonical JSON-like rendering and import conversion for debugging and SDK boundaries.
 - [ ] **P03-013** Implement the collection field-path dictionary format, monotonic IDs, versions, and non-reuse rule.
 - [ ] **P03-014** Implement path registration, resolution, dictionary snapshots, and version pinning.
 - [ ] **P03-015** Define and implement HDoc feature negotiation and migration hooks without committing an unsupported compatibility window.
