@@ -1,0 +1,34 @@
+{
+  "schema": "helix.gate-remote-observation/1",
+  "gate": "G02",
+  "observed_at": "2026-07-11T06:40:05.463Z",
+  "repository": "alextis59/helix-db",
+  "origin_url": "git@github.com:alextis59/helix-db.git",
+  "reviewed_commit": "2c252e0b8663fae198c15bef833417c8dd4c6dfe",
+  "reviewed_tree": "50c7d885d62b358e3c668eb8f820d2ebbd786f30",
+  "origin_main": {
+    "sha": "1b95c8a5c93c76f1e79e08b8112ae5fcf831df83",
+    "ahead_by": 103,
+    "behind_by": 0,
+    "protected": false,
+    "required_checks": []
+  },
+  "workflow_runs": [],
+  "queries": [
+    {
+      "command": "git ls-remote origin refs/heads/main",
+      "exit_code": 0
+    },
+    {
+      "command": "gh run list --repo alextis59/helix-db --limit 20 --json databaseId,headSha,status,conclusion,workflowName,createdAt,updatedAt,url,event,headBranch",
+      "exit_code": 0
+    },
+    {
+      "command": "gh api repos/alextis59/helix-db/branches/main",
+      "exit_code": 0
+    }
+  ],
+  "push_authorized": false,
+  "hosted_green_for_reviewed_commit": false,
+  "verdict": "hosted-evidence-missing"
+}

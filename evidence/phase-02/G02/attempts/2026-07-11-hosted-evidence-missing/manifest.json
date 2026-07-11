@@ -1,0 +1,156 @@
+{
+  "schema_version": 1,
+  "gate_id": "G02",
+  "attempt_id": "2026-07-11-hosted-evidence-missing",
+  "reviewed_commit": "2c252e0b8663fae198c15bef833417c8dd4c6dfe",
+  "reviewed_tree": "50c7d885d62b358e3c668eb8f820d2ebbd786f30",
+  "recorded_at": "2026-07-11T06:40:05.463Z",
+  "requirements": [
+    "COMPAT-001",
+    "CORE-001",
+    "CORE-003",
+    "INV-001",
+    "INV-003",
+    "INV-004",
+    "INV-006",
+    "INV-007",
+    "INV-009",
+    "INV-010",
+    "PLAT-001",
+    "PLAT-002",
+    "PLAT-003",
+    "QUAL-001",
+    "QUAL-002",
+    "SEC-001",
+    "SEC-002"
+  ],
+  "accepted_adrs": [
+    "0001"
+  ],
+  "task_evidence": {
+    "directory": "evidence/phase-02",
+    "tasks": 17,
+    "distinct_source_commits": 17,
+    "source_artifact_records": 439,
+    "retained_artifact_records": 21,
+    "produced_artifact_records": 5,
+    "removed_artifact_records": 4,
+    "verifier_records": 17,
+    "verdict_required": "pass"
+  },
+  "primary_artifacts": [
+    {
+      "path": ".github/ci/matrix.json",
+      "bytes": 5309,
+      "sha256": "deb54c32d9aa0d66155289459d8c8c8e8e03f4f0b2e188ce00d027dbf8344663"
+    },
+    {
+      "path": "docs/development/bootstrap.json",
+      "bytes": 8336,
+      "sha256": "243d7efb81fa9484d10d409830d3adcd819e52e465e32c954605e36862f8a916"
+    },
+    {
+      "path": "evidence/phase-02/P02-012/reports/inventory-report.json",
+      "bytes": 11227,
+      "sha256": "48b8ab8c4564bdf77d3399542443ab5f94a2268c53d18cff3aedb170df0ed987"
+    },
+    {
+      "path": "evidence/phase-02/P02-012/reports/observation-report.json",
+      "bytes": 16167,
+      "sha256": "3dff1df9262c6b8df559850ad6d4f410de02b7d6b85a78ecd82c317ea20c9e07"
+    },
+    {
+      "path": "evidence/phase-02/P02-016/reports/native-toolchain-example.json",
+      "bytes": 595,
+      "sha256": "876e8289c6afef2d2542036a57f7d2e32c3d268e902460f662454853977e07e3"
+    },
+    {
+      "path": "evidence/phase-02/P02-016/reports/browser-bundle-example.json",
+      "bytes": 1252,
+      "sha256": "bbf4afbf3558bdb1a4b715a5e5085fd00013c23d05363e661ea9924fd66bb7ef"
+    },
+    {
+      "path": "evidence/phase-02/P02-016/reports/browser-execution-all.json",
+      "bytes": 2163,
+      "sha256": "f9f335c65bd2270f6f408de7a0c28a480f112b83d7a84d0a6b156e8d8f9a9a6e"
+    },
+    {
+      "path": "evidence/phase-02/P02-017/reports/clean-preflight.json",
+      "bytes": 1661,
+      "sha256": "2202781df2e44eda433c0cc6c2b366e04c1ba643887fa7e7b1105e2e16b89a46"
+    },
+    {
+      "path": "evidence/phase-02/P02-017/reports/documented-command-replay.json",
+      "bytes": 1998,
+      "sha256": "68591e0dd23e7b5fc741c0e3b3e9a375dd7b4d02a8c54fc35e3ab25f08565311"
+    }
+  ],
+  "retained_artifacts": [
+    {
+      "path": "remote-state.json",
+      "media_type": "application/json",
+      "bytes": 1052,
+      "sha256": "ad7738ff9ab8aed1ebc7b26e7618195b319e1906f8783614ff88574fc2952ad1"
+    }
+  ],
+  "verification": {
+    "implementation_plan_items": 522,
+    "phase_02_tasks": 17,
+    "distinct_source_commits": 17,
+    "source_artifact_records": 439,
+    "retained_artifact_records": 21,
+    "produced_artifact_records": 5,
+    "removed_artifact_records": 4,
+    "verifier_records": 17,
+    "accepted_adrs": 1,
+    "gate_requirements": 17,
+    "gating_lanes": 11,
+    "nightly_native_lanes": 2,
+    "observational_lanes": 1,
+    "bootstrap_profiles": 4,
+    "troubleshooting_codes": 17,
+    "node_lanes": 2,
+    "native_tests": 9,
+    "browser_engines": 3,
+    "workflow_files": 3,
+    "workflow_jobs": 9,
+    "workflow_steps": 56,
+    "markdown_files": 157,
+    "local_links": 1069,
+    "specification_requirements": 44,
+    "hosted_workflow_runs": 0,
+    "blocking_findings": 2,
+    "gate_checked": false
+  },
+  "commands": [
+    {
+      "command": "read-only git and GitHub remote/main/run/protection observation",
+      "exit_code": 0
+    },
+    {
+      "command": "17-manifest artifact/verifier/ancestry reconciliation plus CI/bootstrap/dependency/native/browser gate-input validation",
+      "exit_code": 0
+    },
+    {
+      "command": "full P02-017 exact-Node clean aggregate replay",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/G02/attempts/2026-07-11-hosted-evidence-missing/verify.mjs 2c252e0b8663fae198c15bef833417c8dd4c6dfe",
+      "exit_code": 0
+    }
+  ],
+  "review": "review.md",
+  "verifier": {
+    "path": "verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 18394,
+    "sha256": "47be06a0da24c66d99901844cfca1fc2c0a9ba91d16872aa5639f01686f7b2b9"
+  },
+  "blocking_findings": [
+    "G02-F01",
+    "G02-F03"
+  ],
+  "gate_checked": false,
+  "verdict": "blocked"
+}
