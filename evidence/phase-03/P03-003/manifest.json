@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-003",
+  "requirements": ["CORE-001", "DATA-001", "DATA-002", "INV-001", "INV-007"],
+  "accepted_adrs": ["0012"],
+  "base_commit": "7049f78de36f196f8ca65972a5902f584d6d63b7",
+  "source_commits": ["dc2122875b80d7d958c9b598fc4fd2dc8f7d0ce2"],
+  "commit": "dc2122875b80d7d958c9b598fc4fd2dc8f7d0ce2",
+  "source_tree": "76c77cc72fa905bce1852c00413b2b7ba8291775",
+  "recorded_at": "2026-07-11T08:41:11.627Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": ["22.23.1", "24.18.0"]
+    },
+    "network_required": false,
+    "hosted_workflow_execution": false
+  },
+  "commands": [
+    {
+      "command": "machine type-tag/range/fixture-reconciliation validation",
+      "exit_code": 0
+    },
+    {
+      "command": "node compatibility/v1/generate-matrix.mjs --check && node compatibility/v1/check-matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run fixtures:check",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:javascript",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run test:all",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 22.23.1 and 24.18.0 evidence verifier replay with 44 isolated mutation canaries",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "source_artifacts": 11,
+    "type_document_lines": 371,
+    "type_document_headings": 29,
+    "registry_lines": 293,
+    "registry_bytes": 7543,
+    "assigned_tags": 16,
+    "reserved_ranges": 6,
+    "classified_tag_bytes": 256,
+    "registry_rules": 10,
+    "fixture_tags": 16,
+    "mutation_canaries": 44,
+    "markdown_files": 167,
+    "local_links": 1173,
+    "node_lanes": 2,
+    "native_tests": 9,
+    "semantic_fixtures": 17,
+    "semantic_steps": 313,
+    "oracle_assertions": 382,
+    "compatibility_rows": 263,
+    "mongodb_cases": 16,
+    "declared_browser_tests": 3,
+    "aggregate_suites": 8,
+    "failed": 0,
+    "skipped": 0
+  },
+  "source_artifacts": [
+    {
+      "status": "M",
+      "path": "Specifications.md",
+      "media_type": "text/markdown",
+      "bytes": 77245,
+      "sha256": "ef1a31b9c29b0ad410787ab17c079851c18515d6771a5db18341c8d4e77e4357"
+    },
+    {
+      "status": "M",
+      "path": "Study.md",
+      "media_type": "text/markdown",
+      "bytes": 62798,
+      "sha256": "72dc1c947130a58dd4edf5b5c358974ad76ae253c39a3622106cec7900133798"
+    },
+    {
+      "status": "M",
+      "path": "compatibility/v1/matrix-v1.json",
+      "media_type": "application/json",
+      "bytes": 217132,
+      "sha256": "a96374d753f7aad789633475be701764998bc3969c2bd18e70ef973abf67f2c1"
+    },
+    {
+      "status": "M",
+      "path": "docs/README.md",
+      "media_type": "text/markdown",
+      "bytes": 9869,
+      "sha256": "40b3166a220441053796a619dcbf4c895f6f13bdb590ae42480e63d5a031f853"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/0012-use-bounded-little-endian-hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 31922,
+      "sha256": "f3e65f32ea1ec4b20596f76945f1be8cff77cca8f67edb57517d5c1e1df78ab4"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "media_type": "text/markdown",
+      "bytes": 103065,
+      "sha256": "f066489699ec541429277a52164d2aa21c3dc17a584f8ae0698a26b1a2117988"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/README.md",
+      "media_type": "text/markdown",
+      "bytes": 2136,
+      "sha256": "d71fb4ec81c9260bdcdd48fe3b624f19e2da609b9634c6f439e54e2c54f85d6f"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-type-tags.json",
+      "media_type": "application/json",
+      "bytes": 7543,
+      "sha256": "174aea2c07418d7d8110b3394a2ee86adffb57d9c916d78f6f6e211b3502835b"
+    },
+    {
+      "status": "A",
+      "path": "docs/formats/hdoc-v1-type-tags.md",
+      "media_type": "text/markdown",
+      "bytes": 19270,
+      "sha256": "f1cb8e3ed75ab3e907a0778daca385fecc739e8c792b9f23661fff5748bd12c7"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1.md",
+      "media_type": "text/markdown",
+      "bytes": 30581,
+      "sha256": "825dbb42d04b9c941a679c4d24b77cae423988bf9d913afb04c943a69e2e9ccb"
+    },
+    {
+      "status": "M",
+      "path": "fixtures/generation/report-v1.json",
+      "media_type": "application/json",
+      "bytes": 2547,
+      "sha256": "cd4a2e47084752b405bf2ea4d36a5ca5d7b91ae2a66619232b9f36806948d085"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-03/P03-003/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 32144,
+    "sha256": "3c5375173898b0807929e2d546f3336d31b5ac94f8ac018e0f40f276f823477f"
+  },
+  "verdict": "pass"
+}
