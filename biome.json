@@ -13,6 +13,7 @@
       "*.ts",
       "compatibility/**/*.mjs",
       "differential/**/*.{mjs,js}",
+      "fixtures/generation/**/*.json",
       "fixtures/**/*.mjs",
       "reference/**/*.mjs",
       "tests/**/*.mjs",

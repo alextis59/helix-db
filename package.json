@@ -29,6 +29,8 @@
     "fsevents": false
   },
   "scripts": {
+    "fixtures:check": "node fixtures/generation/check.mjs",
+    "fixtures:generate": "node fixtures/generation/generate.mjs --write",
     "policy:javascript": "biome check --error-on-warnings .",
     "policy:dependencies": "node tests/toolchain/check-dependency-policy.mjs",
     "test": "node tests/run-suite.mjs all",

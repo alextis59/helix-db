@@ -1,0 +1,126 @@
+{
+  "registry_schema": "helix.fixture-generator-registry/1",
+  "version": "1.0.0",
+  "hash_algorithm": "sha256",
+  "report": {
+    "path": "fixtures/generation/report-v1.json",
+    "schema_path": "fixtures/generation/schema/report-v1.schema.json"
+  },
+  "prng_algorithms": [
+    {
+      "id": "helix.splitmix64-fixed-gamma/1",
+      "word_bits": 64,
+      "seed_format": "0x plus 16 lowercase hexadecimal digits",
+      "security": "non-cryptographic deterministic fixture generation only",
+      "reference": "https://gee.cs.oswego.edu/dl/papers/oopsla14.pdf"
+    }
+  ],
+  "generators": [
+    {
+      "id": "toolchain.splitmix64-vectors",
+      "version": "1.0.0",
+      "status": "active",
+      "randomness": "seeded",
+      "seed": "0x48454c4958444231",
+      "algorithm": "helix.splitmix64-fixed-gamma/1",
+      "check": {
+        "program": "node",
+        "arguments": ["fixtures/generation/generate.mjs", "--check"]
+      },
+      "write": {
+        "program": "node",
+        "arguments": ["fixtures/generation/generate.mjs", "--write"]
+      },
+      "artifacts": [
+        {
+          "path": "fixtures/generation/vectors/splitmix64-v1.json",
+          "format": "json",
+          "schema_path": "fixtures/generation/schema/prng-vector-v1.schema.json",
+          "role": "generated-vector"
+        }
+      ],
+      "owner_task": "P02-008"
+    },
+    {
+      "id": "semantics.corpus-v1",
+      "version": "1.0.0",
+      "status": "active",
+      "randomness": "none",
+      "seed": null,
+      "algorithm": null,
+      "check": {
+        "program": "node",
+        "arguments": ["fixtures/semantic/generate-corpus.mjs", "--check"]
+      },
+      "write": {
+        "program": "node",
+        "arguments": ["fixtures/semantic/generate-corpus.mjs", "--write"]
+      },
+      "artifacts": [
+        {
+          "path": "fixtures/semantic/manifest.json",
+          "format": "json",
+          "schema_path": "fixtures/semantic/schema/semantic-corpus-manifest-v1.schema.json",
+          "role": "authority-manifest"
+        }
+      ],
+      "owner_task": "P01-019"
+    },
+    {
+      "id": "semantics.oracle-report-v1",
+      "version": "1.0.0",
+      "status": "active",
+      "randomness": "none",
+      "seed": null,
+      "algorithm": null,
+      "check": {
+        "program": "node",
+        "arguments": ["reference/semantic-oracle/cli.mjs", "--check-report"]
+      },
+      "write": {
+        "program": "node",
+        "arguments": ["reference/semantic-oracle/cli.mjs", "--write-report"]
+      },
+      "artifacts": [
+        {
+          "path": "fixtures/semantic/oracle-report-v1.json",
+          "format": "json",
+          "schema_path": "fixtures/semantic/schema/semantic-oracle-report-v1.schema.json",
+          "role": "generated-report"
+        }
+      ],
+      "owner_task": "P01-020"
+    },
+    {
+      "id": "compatibility.matrix-v1",
+      "version": "1.0.0",
+      "status": "active",
+      "randomness": "none",
+      "seed": null,
+      "algorithm": null,
+      "check": {
+        "program": "node",
+        "arguments": ["compatibility/v1/generate-matrix.mjs", "--check"]
+      },
+      "write": {
+        "program": "node",
+        "arguments": ["compatibility/v1/generate-matrix.mjs", "--write"]
+      },
+      "artifacts": [
+        {
+          "path": "compatibility/v1/matrix-v1.json",
+          "format": "json",
+          "schema_path": "compatibility/v1/schema/matrix-v1.schema.json",
+          "role": "generated-report"
+        },
+        {
+          "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+          "format": "markdown",
+          "schema_path": null,
+          "role": "derived-document"
+        }
+      ],
+      "owner_task": "P01-022"
+    }
+  ]
+}

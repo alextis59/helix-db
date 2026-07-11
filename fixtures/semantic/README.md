@@ -24,7 +24,7 @@ The committed v1 corpus inventory and integrity files are:
 - [Oracle report schema](schema/semantic-oracle-report-v1.schema.json)
 - [Reference oracle implementation](../../reference/semantic-oracle/README.md)
 
-Focused local checks available before Phase 2 toolchain automation:
+Focused component checks remain available beneath the Phase 2 aggregate command:
 
 ```bash
 python3 -c 'import json; from jsonschema import Draft202012Validator; s=json.load(open("fixtures/semantic/schema/semantic-fixture-v1.schema.json")); Draft202012Validator.check_schema(s)'
@@ -35,5 +35,7 @@ node fixtures/semantic/check-corpus.mjs
 node reference/semantic-oracle/test-oracle.mjs
 node reference/semantic-oracle/cli.mjs --check-report
 ```
+
+The Phase 2 [`fixtures:check`](../generation/README.md) command now aggregates this generator and its independent checks with the other registered deterministic artifacts. The semantic manifest remains the authority for the complete case inventory; the aggregate registry does not copy it.
 
 Corpus consumers must reject unknown schema/profile/action behavior, validate source and canonical hashes, preserve exact typed values/order/errors/state, and report skips/failures explicitly.

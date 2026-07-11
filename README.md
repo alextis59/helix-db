@@ -19,6 +19,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Build profiles](docs/architecture/build-profiles.md) — native, Wasm, browser, sanitizer, coverage, and benchmark build contracts.
 - [Code quality and dependency policy](docs/architecture/code-quality-and-dependency-policy.md) — formatting, lints, warnings, unsafe review, sources, licenses, and lifecycle scripts.
 - [Stable test command surface](docs/quality/test-command-surface.md) — maturity-labeled unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed entry points.
+- [Deterministic fixture generation](docs/quality/deterministic-fixture-generation.md) — versioned generators, committed seeds, artifact schemas, and byte-for-byte checks.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

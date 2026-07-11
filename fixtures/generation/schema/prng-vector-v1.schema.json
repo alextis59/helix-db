@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://helix-db.dev/schema/prng-vector-v1.schema.json",
+  "title": "HelixDB deterministic PRNG vector v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["vector_schema", "algorithm", "seed", "word_bits", "count", "outputs"],
+  "properties": {
+    "vector_schema": { "const": "helix.prng-vector/1" },
+    "algorithm": { "const": "helix.splitmix64-fixed-gamma/1" },
+    "seed": { "type": "string", "pattern": "^0x[0-9a-f]{16}$" },
+    "word_bits": { "const": 64 },
+    "count": { "const": 16 },
+    "outputs": {
+      "type": "array",
+      "minItems": 16,
+      "maxItems": 16,
+      "uniqueItems": true,
+      "items": { "type": "string", "pattern": "^0x[0-9a-f]{16}$" }
+    }
+  }
+}

@@ -1,0 +1,82 @@
+{
+  "generation_report_schema": "helix.fixture-generation-report/1",
+  "registry": {
+    "path": "fixtures/generation/registry-v1.json",
+    "bytes": 3717,
+    "sha256": "4e240f4b142e530dd76a3ed736e453758694af129013154c80a89a74a495e4eb"
+  },
+  "generators": [
+    {
+      "id": "toolchain.splitmix64-vectors",
+      "version": "1.0.0",
+      "randomness": "seeded",
+      "seed": "0x48454c4958444231",
+      "algorithm": "helix.splitmix64-fixed-gamma/1",
+      "artifacts": [
+        {
+          "path": "fixtures/generation/vectors/splitmix64-v1.json",
+          "format": "json",
+          "schema_path": "fixtures/generation/schema/prng-vector-v1.schema.json",
+          "bytes": 595,
+          "sha256": "15f0859962651223d64eb641e2c919022ad7a18d9afcf94280b1dab2920946cd"
+        }
+      ]
+    },
+    {
+      "id": "semantics.corpus-v1",
+      "version": "1.0.0",
+      "randomness": "none",
+      "seed": null,
+      "algorithm": null,
+      "artifacts": [
+        {
+          "path": "fixtures/semantic/manifest.json",
+          "format": "json",
+          "schema_path": "fixtures/semantic/schema/semantic-corpus-manifest-v1.schema.json",
+          "bytes": 10974,
+          "sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8"
+        }
+      ]
+    },
+    {
+      "id": "semantics.oracle-report-v1",
+      "version": "1.0.0",
+      "randomness": "none",
+      "seed": null,
+      "algorithm": null,
+      "artifacts": [
+        {
+          "path": "fixtures/semantic/oracle-report-v1.json",
+          "format": "json",
+          "schema_path": "fixtures/semantic/schema/semantic-oracle-report-v1.schema.json",
+          "bytes": 4863,
+          "sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+        }
+      ]
+    },
+    {
+      "id": "compatibility.matrix-v1",
+      "version": "1.0.0",
+      "randomness": "none",
+      "seed": null,
+      "algorithm": null,
+      "artifacts": [
+        {
+          "path": "compatibility/v1/matrix-v1.json",
+          "format": "json",
+          "schema_path": "compatibility/v1/schema/matrix-v1.schema.json",
+          "bytes": 217132,
+          "sha256": "1f116e0e6702526854d22c4e473530817139ca36f7423653ecc76c8324916a60"
+        },
+        {
+          "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+          "format": "markdown",
+          "schema_path": null,
+          "bytes": 103065,
+          "sha256": "c64d0421eac5a1d678dd5c716cc6f791f3774af13ba93b1f10a199cb1c7ae1d2"
+        }
+      ]
+    }
+  ],
+  "verdict": "pass"
+}

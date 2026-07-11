@@ -24,6 +24,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Build profiles](architecture/build-profiles.md) | Native, Wasm, browser, sanitizer, coverage, and benchmark build contracts |
 | [Code quality and dependency policy](architecture/code-quality-and-dependency-policy.md) | Formatting, lints, warnings, unsafe review, dependency sources, licenses, and lifecycle scripts |
 | [Stable test command surface](quality/test-command-surface.md) | Versioned unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed entry points |
+| [Deterministic fixture generation](quality/deterministic-fixture-generation.md) | Generator registry, seed/PRNG contract, schemas, byte identities, and external-artifact boundary |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 

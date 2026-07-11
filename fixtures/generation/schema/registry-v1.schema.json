@@ -1,0 +1,156 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://helix-db.dev/schema/fixture-generator-registry-v1.schema.json",
+  "title": "HelixDB deterministic fixture generator registry v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "registry_schema",
+    "version",
+    "hash_algorithm",
+    "report",
+    "prng_algorithms",
+    "generators"
+  ],
+  "properties": {
+    "registry_schema": { "const": "helix.fixture-generator-registry/1" },
+    "version": { "const": "1.0.0" },
+    "hash_algorithm": { "const": "sha256" },
+    "report": { "$ref": "#/$defs/schemaArtifact" },
+    "prng_algorithms": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/prng" }
+    },
+    "generators": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": { "$ref": "#/$defs/generator" }
+    }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "schemaArtifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "schema_path"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "schema_path": { "$ref": "#/$defs/relativePath" }
+      }
+    },
+    "prng": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "word_bits", "seed_format", "security", "reference"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]+/[1-9][0-9]*$" },
+        "word_bits": { "const": 64 },
+        "seed_format": { "const": "0x plus 16 lowercase hexadecimal digits" },
+        "security": { "const": "non-cryptographic deterministic fixture generation only" },
+        "reference": { "type": "string", "format": "uri", "pattern": "^https://" }
+      }
+    },
+    "command": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["program", "arguments"],
+      "properties": {
+        "program": { "const": "node" },
+        "arguments": {
+          "type": "array",
+          "minItems": 2,
+          "items": { "type": "string", "minLength": 1 }
+        }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "format", "schema_path", "role"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "format": { "enum": ["json", "markdown"] },
+        "schema_path": {
+          "oneOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }]
+        },
+        "role": {
+          "enum": ["generated-vector", "authority-manifest", "generated-report", "derived-document"]
+        }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "format": { "const": "json" } } },
+          "then": { "properties": { "schema_path": { "$ref": "#/$defs/relativePath" } } },
+          "else": { "properties": { "schema_path": { "type": "null" } } }
+        }
+      ]
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "version",
+        "status",
+        "randomness",
+        "seed",
+        "algorithm",
+        "check",
+        "write",
+        "artifacts",
+        "owner_task"
+      ],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]+$" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "status": { "const": "active" },
+        "randomness": { "enum": ["none", "seeded"] },
+        "seed": {
+          "oneOf": [{ "type": "string", "pattern": "^0x[0-9a-f]{16}$" }, { "type": "null" }]
+        },
+        "algorithm": {
+          "oneOf": [
+            { "type": "string", "pattern": "^[a-z][a-z0-9.-]+/[1-9][0-9]*$" },
+            { "type": "null" }
+          ]
+        },
+        "check": { "$ref": "#/$defs/command" },
+        "write": { "$ref": "#/$defs/command" },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "$ref": "#/$defs/artifact" }
+        },
+        "owner_task": { "type": "string", "pattern": "^P[0-9]{2}-[0-9]{3}$" }
+      },
+      "allOf": [
+        {
+          "if": { "properties": { "randomness": { "const": "seeded" } } },
+          "then": {
+            "properties": {
+              "seed": { "type": "string", "pattern": "^0x[0-9a-f]{16}$" },
+              "algorithm": {
+                "type": "string",
+                "pattern": "^[a-z][a-z0-9.-]+/[1-9][0-9]*$"
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "seed": { "type": "null" },
+              "algorithm": { "type": "null" }
+            }
+          }
+        }
+      ]
+    }
+  }
+}

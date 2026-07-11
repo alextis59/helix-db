@@ -24,7 +24,7 @@ This document establishes stable, reviewable locations for source code, conforma
 | [`examples/`](../../examples/README.md) | Minimal runnable usage and toolchain examples | Children are added with real examples | Empty contract; no functional examples |
 | [`evidence/releases/`](../../evidence/releases/README.md) | Immutable release proof indexes | One child per release candidate or published version | Empty contract; no release artifacts |
 
-The existing [`fixtures/`](../../fixtures/semantic/README.md), [`reference/`](../../reference/semantic-oracle/README.md), [`differential/`](../../differential/mongodb/README.md), [`compatibility/`](../../compatibility/v1/README.md), and task-scoped [`evidence/`](../../evidence/README.md) roots remain authoritative for the Phase 1 assets already committed. They are not moved merely to make the proposed tree visually uniform.
+The existing [`fixtures/`](../../fixtures/README.md), [`reference/`](../../reference/semantic-oracle/README.md), [`differential/`](../../differential/mongodb/README.md), [`compatibility/`](../../compatibility/v1/README.md), and task-scoped [`evidence/`](../../evidence/README.md) roots remain authoritative for the Phase 1 assets already committed. They are not moved merely to make the proposed tree visually uniform.
 
 ## Boundary rules
 

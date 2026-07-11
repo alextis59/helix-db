@@ -1,0 +1,75 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://helix-db.dev/schema/fixture-generation-report-v1.schema.json",
+  "title": "HelixDB deterministic fixture generation report v1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["generation_report_schema", "registry", "generators", "verdict"],
+  "properties": {
+    "generation_report_schema": { "const": "helix.fixture-generation-report/1" },
+    "registry": { "$ref": "#/$defs/source" },
+    "generators": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": { "$ref": "#/$defs/generator" }
+    },
+    "verdict": { "const": "pass" }
+  },
+  "$defs": {
+    "relativePath": {
+      "type": "string",
+      "minLength": 1,
+      "pattern": "^(?!/)(?!.*(?:^|/)\\.\\.(?:/|$))[A-Za-z0-9._/-]+$"
+    },
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "source": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "artifact": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "format", "schema_path", "bytes", "sha256"],
+      "properties": {
+        "path": { "$ref": "#/$defs/relativePath" },
+        "format": { "enum": ["json", "markdown"] },
+        "schema_path": {
+          "oneOf": [{ "$ref": "#/$defs/relativePath" }, { "type": "null" }]
+        },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "generator": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "randomness", "seed", "algorithm", "artifacts"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^[a-z][a-z0-9.-]+$" },
+        "version": { "type": "string", "pattern": "^[0-9]+\\.[0-9]+\\.[0-9]+$" },
+        "randomness": { "enum": ["none", "seeded"] },
+        "seed": {
+          "oneOf": [{ "type": "string", "pattern": "^0x[0-9a-f]{16}$" }, { "type": "null" }]
+        },
+        "algorithm": {
+          "oneOf": [
+            { "type": "string", "pattern": "^[a-z][a-z0-9.-]+/[1-9][0-9]*$" },
+            { "type": "null" }
+          ]
+        },
+        "artifacts": {
+          "type": "array",
+          "minItems": 1,
+          "items": { "$ref": "#/$defs/artifact" }
+        }
+      }
+    }
+  }
+}

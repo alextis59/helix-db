@@ -1,0 +1,25 @@
+{
+  "vector_schema": "helix.prng-vector/1",
+  "algorithm": "helix.splitmix64-fixed-gamma/1",
+  "seed": "0x48454c4958444231",
+  "word_bits": 64,
+  "count": 16,
+  "outputs": [
+    "0x7a7db846db2fdb97",
+    "0xbbd0047e57634f44",
+    "0x0e2b9c772010e31c",
+    "0x2b67208696a2788d",
+    "0xb8281a096394c894",
+    "0x7c7a6adb08fb4505",
+    "0xdfbafd5c1e3fa67d",
+    "0x5378e3ec6decb774",
+    "0xd9fa6e9ef3025163",
+    "0x446876f67483d7ab",
+    "0xb8a9790d4d5ce946",
+    "0x215b76f5bf94eba2",
+    "0x895bdd8f0f1ed84b",
+    "0x31e477037eb73883",
+    "0x5c1c14fb3658464d",
+    "0x2542b86b1aa42d34"
+  ]
+}
