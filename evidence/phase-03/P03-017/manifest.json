@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-017",
+  "verdict": "pass",
+  "requirements": ["CORE-001", "DATA-001", "DATA-002", "DATA-003", "INV-001", "INV-007"],
+  "accepted_adrs": ["0012"],
+  "base_commit": "b6849f918f09facf73ca40b3ff522398d528cc45",
+  "source_commits": ["794f0a29d556c960a9b96d0a6f648b9242ec1e30"],
+  "commit": "794f0a29d556c960a9b96d0a6f648b9242ec1e30",
+  "source_tree": "e40c3fd1b9fb189a320d964abe0eadd90badf0b6",
+  "diff_sha256": "331d36f654bbfb2ac9cdac1e309cb1d94c19835437f8774dd391e214f59e092b",
+  "recorded_at": "2026-07-11T23:54:42Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": ["22.23.1", "24.18.0"],
+      "rustc": "1.96.1",
+      "cargo": "1.96.1"
+    },
+    "network_required_for_replay": false,
+    "hosted_workflow_execution": false
+  },
+  "verification": {
+    "source_artifacts": 34,
+    "source_commits": 1,
+    "golden_vectors": 4,
+    "logical_value_comparisons": 4,
+    "typed_hash_comparisons": 4,
+    "integration_test_files": 1,
+    "integration_tests": 5,
+    "mutation_canaries": 10,
+    "node_lanes": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "verifier": {
+    "path": "verify.mjs",
+    "bytes": 9601,
+    "sha256": "7456ab40805cd6d0d41b76ed383fba619c111dcfec51837768979f88957a39a9"
+  }
+}

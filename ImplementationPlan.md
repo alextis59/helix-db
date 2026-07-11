@@ -225,7 +225,7 @@ Dependencies: `G01`, `G02`.
 - [x] **P03-014** Implement path registration, resolution, dictionary snapshots, and version pinning.
 - [x] **P03-015** Define and implement HDoc feature negotiation and migration hooks without committing an unsupported compatibility window.
 - [x] **P03-016** Commit golden vectors covering every type, nesting pattern, boundary, invalid encoding, and format version.
-- [ ] **P03-017** Add cross-language golden-vector readers for Rust and TypeScript.
+- [x] **P03-017** Add cross-language golden-vector readers for Rust and TypeScript.
 - [ ] **P03-018** Add round-trip, canonicalization, malformed-input, property, and mutation tests.
 - [ ] **P03-019** Add coverage-guided fuzzing for encoder, decoder, path lookup, rendering, and migration entry points.
 - [ ] **P03-020** Benchmark encoding, decoding, field lookup, document size, and dictionary savings across representative shapes.
