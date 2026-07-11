@@ -4,6 +4,7 @@
 - Verdict: **PASS**
 - Source commit: `45e05d1c11143d52a2e91cab466af2115d46d66b`
 - Hosted bootstrap correction: `11de2da9ec133cde18d2705c4443d2997d7ca520`
+- Hosted CI-marker correction: `4aa386c351f5fd99c3683f8aedfc085c09778522`
 - Source base: `7272da3790a82bb2fad39b757e59e1f5b428ac25`
 - Final source tree: `559f2fe4ea37b53ec5b878cb83786060ab0b0d8f`
 - Accepted ADR: `0012`
@@ -68,7 +69,7 @@ artifact gates pass.
 ## Source-bound verifier
 
 [verify.mjs](verify.mjs) binds the exact source commit, parent, tree, 47-file binary diff hash,
-the one-file hosted bootstrap correction, retained coverage report, verifier bytes,
+the two one-file hosted authority corrections, retained coverage report, verifier bytes,
 maturity/CI/test authorities, format/specification/study
 contracts, semantic limits and generated matrix, implementation trust-boundary markers, source
 hashes, and isolated mutation canaries. It is network-free and replayed with exact Node.js 22.23.1
@@ -78,6 +79,9 @@ Hosted run `29170249316` correctly rejected the first evidence head because the 
 claim had advanced while the independent validator retained the previous claim string. The
 correction changes only that validator authority and passes its complete rejection-canary suite on
 both contract Node versions.
+Hosted run `29170306940` then passed bootstrap and rejected the CI matrix check because its expected
+bootstrap success marker still named the previous maturity. The second correction changes only
+that exact marker; the complete CI contract passes on both Node versions.
 
 ## Commands
 

@@ -7,20 +7,36 @@
   "base_commit": "7272da3790a82bb2fad39b757e59e1f5b428ac25",
   "source_commits": [
     "45e05d1c11143d52a2e91cab466af2115d46d66b",
-    "11de2da9ec133cde18d2705c4443d2997d7ca520"
+    "11de2da9ec133cde18d2705c4443d2997d7ca520",
+    "4aa386c351f5fd99c3683f8aedfc085c09778522"
   ],
   "commit": "45e05d1c11143d52a2e91cab466af2115d46d66b",
   "source_tree": "559f2fe4ea37b53ec5b878cb83786060ab0b0d8f",
   "diff_sha256": "8c069ffd40142b9c54b5808267980e136bbb33309eb53d3fa5f62842a935aa79",
-  "hosted_fix": {
-    "commit": "11de2da9ec133cde18d2705c4443d2997d7ca520",
-    "parent": "116597b15d30703899ee15ecc214aa9f80927166",
-    "tree": "c513a197096f087afcd8e675d31f5428d8568015",
-    "diff_sha256": "a4516f6568c0f2232d176d5fb463ed46b1dabb89726f5c1b6c38af637661a823",
-    "failed_run": 29170249316,
-    "failed_job": 86590133889,
-    "failure": "bootstrap claim boundary authority drift"
-  },
+  "hosted_fixes": [
+    {
+      "commit": "11de2da9ec133cde18d2705c4443d2997d7ca520",
+      "parent": "116597b15d30703899ee15ecc214aa9f80927166",
+      "tree": "c513a197096f087afcd8e675d31f5428d8568015",
+      "path": "tests/toolchain/bootstrap-contract.mjs",
+      "marker": "canonical collection field-path dictionary snapshots with non-reuse lineage validation",
+      "diff_sha256": "a4516f6568c0f2232d176d5fb463ed46b1dabb89726f5c1b6c38af637661a823",
+      "failed_run": 29170249316,
+      "failed_job": 86590133889,
+      "failure": "bootstrap claim boundary authority drift"
+    },
+    {
+      "commit": "4aa386c351f5fd99c3683f8aedfc085c09778522",
+      "parent": "c7ba41ff653d137e5207299c837600f817197b2f",
+      "tree": "6c100731d1c8ddc4b45cefee227bd27ebae577c7",
+      "path": "tests/toolchain/check-ci-matrix.mjs",
+      "marker": "path dictionary format active",
+      "diff_sha256": "74e7430451a7db677eda5c895f3da8c59f2a40c3934abde0569be3a9700a929a",
+      "failed_run": 29170306940,
+      "failed_job": 86590306722,
+      "failure": "CI bootstrap success marker authority drift"
+    }
+  ],
   "recorded_at": "2026-07-11T22:14:53Z",
   "environment": {
     "os": "Linux 6.8.0-124-generic",
@@ -37,8 +53,8 @@
     "hosted_workflow_execution": false
   },
   "verification": {
-    "source_artifacts": 48,
-    "source_commits": 2,
+    "source_artifacts": 49,
+    "source_commits": 3,
     "retained_reports": 1,
     "helix_doc_tests": 28,
     "workspace_tests": 36,
@@ -58,7 +74,7 @@
   },
   "verifier": {
     "path": "verify.mjs",
-    "bytes": 16491,
-    "sha256": "1d5e231144e1e7d13030101205e70b0f3d996d9c4d7c10b833b3ddbfbefe14ee"
+    "bytes": 16301,
+    "sha256": "7657dbc05afccd0ce0178d6e3f98e9eaa43f39535049db93ee98596df4721788"
   }
 }
