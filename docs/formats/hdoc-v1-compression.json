@@ -233,7 +233,7 @@
     ],
     "canonical_reader_check": "decode-then-recreate-all-four-section-candidates-and-compare-selection-metadata-and-stored-bytes",
     "compressible_section_kinds": [1, 2, 3, 4],
-    "extension_area_compression": "forbidden-until-P03-015-registers-compatible-ownership",
+    "extension_area_compression": "forbidden-P03-015-registers-no-extension-future-matrix-required",
     "stream_must_contain_compressed_block": true,
     "stream_must_be_smaller_than_logical_section": true,
     "no_gaps_padding_or_trailing_bytes_inside_stream": true

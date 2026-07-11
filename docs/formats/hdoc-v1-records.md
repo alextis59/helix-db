@@ -141,8 +141,9 @@ This gives base-profile lookup:
 2. binary-search the target object's strict increasing field-ID span; and
 3. follow the validated value reference.
 
-The standalone [P03-013 collection dictionary](path-dictionary-v1.md) is implemented. `P03-015`
-may define a required-feature-gated HDoc reference profile, but it cannot
+The standalone [P03-013 collection dictionary](path-dictionary-v1.md) is implemented. The
+[P03-015 matrix](hdoc-v1-compatibility.md) keeps HDoc references unsupported, and any future
+required-feature-gated reference profile cannot
 reinterpret base bytes, reuse this namespace silently, or make a base HDoc depend on external
 state. Until that profile is present and understood, every HDoc is self-contained and retains all
 exact field-name bytes.
@@ -645,8 +646,8 @@ Reading never silently renumbers, canonicalizes, repairs, or rewrites an old HDo
 | `P03-010` (complete) | Owned values and allocation-free borrowed presentation/index views | Complete validation before exposure |
 | `P03-011` (complete) | Exact-name and nested-path raw lookup | Base field IDs, presentation semantics, complete validation before exposure |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Ordered tagged object/array conversion and exact-size import validation | Base field IDs, presentation semantics, and canonical layout |
-| [`P03-013`–`P03-014`](path-dictionary-v1.md) (complete); `P03-015` | Collection dictionary format/lifecycle and remaining feature-gated HDoc reference profile | Base document-local field IDs and self-containment |
-| `P03-015` | Feature/version reader-writer migration matrix | Existing IDs/flags/record meanings |
+| [`P03-013`–`P03-014`](path-dictionary-v1.md) (complete) | Collection dictionary format/lifecycle; HDoc reference profile remains unsupported | Base document-local field IDs and self-containment |
+| [`P03-015`](hdoc-v1-compatibility.md) (complete) | Exact-1.0 feature/version negotiation and no-rewrite migration assessment | Existing IDs/flags/record meanings |
 | `P03-016`–`P03-019` | Complete golden/malformed, independent readers, property/fuzz suites | Structural vectors and rejection expectations |
 | `P03-020`–`P03-021` | Lookup/size/alignment/compression experiments | Correctness rules or portable limits |
 

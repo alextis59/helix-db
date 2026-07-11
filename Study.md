@@ -384,9 +384,13 @@ snapshot bytes and fast path/ID indexes, so later versions cannot change an exis
 Recovery validates the full genesis-to-current chain before accepting an authoritative pin.
 
 This separation is useful: portable core owns deterministic state transition and validation, while
-later storage code owns candidate write/sync/manifest publication. HDoc reference records and
-capability negotiation remain `P03-015`. Until then, base HDoc stays self-contained and no numeric
-dictionary ID is accepted as document meaning.
+later storage code owns candidate write/sync/manifest publication. P03-015 now freezes a deliberately
+closed HDoc capability matrix: exact 1.0 base/compression is readable and writable; dictionary
+references, semantic/nonsemantic extensions, every other minor/major, mixed-version operation,
+downgrade, and automatic migration are unsupported. Negotiation follows full decoder validation,
+not header optimism. The migration hook accepts valid exact-current input only as a no-rewrite
+no-op, so it creates an integration seam without fabricating a compatibility window. Base HDoc
+stays self-contained and no numeric dictionary ID is accepted as document meaning.
 
 ### 6.4 Sidecar lifecycle
 

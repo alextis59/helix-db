@@ -75,6 +75,7 @@ same(
     'P03-012',
     'P03-013',
     'P03-014',
+    'P03-015',
   ],
   'CI matrix task history',
 );
@@ -324,7 +325,7 @@ same(
 );
 assert(
   runNode(['tests/toolchain/check-bootstrap.mjs', 'contract']).includes(
-    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 19 troubleshooting codes, path dictionary lifecycle active',
+    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 19 troubleshooting codes, HDoc feature negotiation active',
   ),
   'clean bootstrap contract did not pass',
 );

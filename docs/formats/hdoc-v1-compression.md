@@ -233,8 +233,8 @@ Otherwise it emits the uncompressed base profile. This final check includes chan
 directory metadata, and the unchanged 64-byte header/footer, so a locally smaller section cannot
 produce a larger stored document.
 
-For HDoc 1.0, compression of `extension_area` is forbidden. `P03-015` may register a compatible
-rule without changing the four base-section algorithm. A reader recreates all four candidates and
+For HDoc 1.0, compression of `extension_area` is forbidden. P03-015 registers no extension; a
+future matrix may add a compatible rule without changing the four base-section algorithm. A reader recreates all four candidates and
 compares section selection, directory metadata, block choices, and compressed bytes. Omitting a
 beneficial section, compressing a nonbeneficial section, or emitting an alternate valid LZ4 byte
 sequence is `DUR_CORRUPTION` in the decompression-canonicality class.
@@ -396,7 +396,7 @@ Reading never silently recompresses, repairs, or rewrites an HDoc.
 | `P03-010` (complete) | Borrowed views reusing bounded decoded sections and detached owned values | Whole-document validation and logical offsets |
 | `P03-011` (complete) | Exact-name lookup and bounded dotted traversal over retained sections | Whole-document validation and logical offsets |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Canonical lossless tagged rendering and strict detached import | Whole-document validation and logical offsets |
-| `P03-015` | Extension-area negotiation and any registered extension compression rule | Four-base-section profile and existing IDs |
+| [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; extension-area compression remains unsupported | Four-base-section profile and existing IDs |
 | `P03-016`–`P03-019` | Immutable fixtures, independent reader, properties, fuzz/sanitizer replay | Registry vectors and rejection expectations |
 | `P03-020`–`P03-021` | Formal format/compression/dictionary benchmarks | Correctness, canonicality, limits, or security rules |
 

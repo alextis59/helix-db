@@ -18,9 +18,10 @@ ID reuse or reinterpretation.
 
 `P03-013` implements complete snapshot encoding/decoding and explicit successor validation in
 `helix-doc`. `P03-014` implements optimistic atomic registration/publication, resolution indexes,
-durable snapshot handoff, complete-chain recovery, and immutable version pins. `P03-015` owns HDoc dictionary-reference records and
-reader/writer negotiation. Base HDoc 1.0 remains self-contained and does not emit the reserved
-dictionary feature bit yet.
+durable snapshot handoff, complete-chain recovery, and immutable version pins. The
+[P03-015 matrix](hdoc-v1-compatibility.md) explicitly rejects HDoc dictionary-reference records
+because their body grammar is not implemented. Base HDoc 1.0 remains self-contained and does not
+emit the reserved dictionary feature bit.
 
 ## Implemented registration and publication lifecycle
 
@@ -203,8 +204,9 @@ The in-memory preparation/publication and chain-validation lifecycle is implemen
 Readers reject unsupported versions and unknown flags. They never repair paths, renumber IDs,
 accept a different dictionary identity, or infer lineage from filename/order. A future compaction
 that changes IDs requires a new dictionary identity plus explicit HDoc/sidecar migration; it is not
-a v1 successor. HDoc dictionary references remain unsupported until `P03-015` defines their exact
-record, capability, preservation, downgrade, and rollback behavior.
+a v1 successor. HDoc dictionary references remain unsupported under the P03-015 closed-world
+matrix; enabling them requires a future exact record, capability, preservation, downgrade, and
+rollback decision with new fixtures.
 
 ## Verification obligations
 

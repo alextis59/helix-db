@@ -495,6 +495,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   lineage validation under `P03-013`.
 - [x] Implement atomic dictionary registration/publication, bidirectional resolution, complete-chain
   recovery, and immutable version pins under `P03-014`.
+- [x] Publish and implement exact-1.0 closed-world reader/writer feature negotiation plus a
+  no-rewrite migration assessment under `P03-015`, without claiming a compatibility window.
 - [ ] Commit immutable positive, boundary, noncanonical, unknown-feature/version, checksum, hash,
   overlap, truncation, padding, compression-bomb, and limit golden vectors under `P03-016`.
 - [ ] Prove Rust and TypeScript readers produce identical logical values and hashes under
@@ -510,7 +512,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 
 - Format, codec, and dictionary lifecycle work: `P03-002`–`P03-014`, `helix-doc`, format fixtures,
   and fuzz targets.
-- Dictionary reference/evolution work: `P03-015`–`P03-019`.
+- Dictionary reference/extension evolution remains unsupported; fixtures and hardening continue at
+  `P03-016`–`P03-019`.
 - Experiments/gate: `P03-020`, `P03-021`, `EXP-001`, `EXP-002`, and `G03`.
 - Later authoritative consumers: storage, WAL/value-log/SST, replication, backup/restore,
   migration, browser persistence, SDK/protocols, and compatibility adapters.
@@ -542,7 +545,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   consecutive versions, exact stored/logical integrity, and predecessor/successor non-reuse proof.
 - [x] `P03-014`: implement mutable registration, optimistic authoritative publication, exact
   resolution indexes, complete-chain recovery, and immutable version pinning.
-- [ ] `P03-015`: publish the HDoc reader/writer/feature migration matrix.
+- [x] `P03-015`: publish and implement the exact HDoc 1.0 reader/writer/feature matrix and
+  fail-closed no-rewrite migration assessment.
 - [ ] `P03-016`–`P03-021`: freeze independent fixtures, fuzz/corruption evidence, and experiment
   conclusions before `G03`.
 

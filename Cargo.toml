@@ -54,8 +54,8 @@ unimplemented = "deny"
 unwrap_used = "deny"
 
 [workspace.metadata.helix]
-plan-item = "P03-014"
-status = "path-dictionary-lifecycle"
+plan-item = "P03-015"
+status = "hdoc-feature-negotiation"
 database-functionality = true
 public-release = false
 rust-toolchain = "1.96.1"

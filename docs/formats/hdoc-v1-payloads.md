@@ -333,7 +333,7 @@ The remaining byte space is fully reserved:
 | Range | Class | Reader behavior | Allocation owner |
 | --- | --- | --- | --- |
 | `0x01`–`0x3f` | Future standard subtypes | Reject while unassigned | Accepted format change |
-| `0x40`–`0x7f` | Registered semantic extensions | Require understood registry and required feature | `P03-015` or successor |
+| `0x40`–`0x7f` | Registered semantic extensions | Require understood registry and required feature | P03-015 registers none; future successor only |
 | `0x80`–`0xef` | Experimental/private | Reject in supported HDoc | Explicit experimental profile only |
 | `0xf0`–`0xfe` | Future control | Reject | Future major format only |
 | `0xff` | Permanently invalid | Reject | Never allocated |
@@ -595,7 +595,7 @@ can replace this registry without data migration. After immutable fixtures or da
 | `P03-010` (complete) | Owned values and borrowed views | Validated logical value exposure without reinterpretation |
 | `P03-011` (complete) | Exact-name and dotted-path borrowed lookup | Payload identity and Missing/null distinction |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Exact tagged rendering/import payload conversion | Exact bits, widths, decimal tuples, identifiers, and vector family |
-| `P03-015` | Required-feature negotiation and registered subtype extensions | Existing subtype/encoding assignments |
+| [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; no subtype extensions registered | Existing subtype/encoding assignments |
 | `P03-016`–`P03-019` | Complete golden HDocs, independent readers, malformed/property/fuzz suites | Payload vectors and rejection expectations |
 
 ## Required validation cases

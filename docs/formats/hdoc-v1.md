@@ -64,8 +64,9 @@ no partially validated table or value escapes.
 Failures are redacted `DecodeError` values. Unsupported major/minor versions and required
 capabilities use stable `CAP_*` codes; malformed or noncanonical bytes use `DUR_CORRUPTION` plus a
 bounded `DecodeCheck` stage and byte offset. Errors never contain names, values, input fragments,
-or decompressed payloads. Unknown optional semantics are rejected until `P03-015` publishes an
-explicit preservation/negotiation matrix.
+or decompressed payloads. The [P03-015 compatibility matrix](hdoc-v1-compatibility.md) now
+publishes exact 1.0-only support and rejects every optional feature because no safe preservation
+grammar is implemented.
 
 ## Implemented P03-010 value and view layer
 
@@ -313,10 +314,10 @@ feature negotiation. Bits 5 through 31 are reserved and MUST be zero in HDoc 1.0
 | Bit | Mask | Name | Meaning/owner |
 | ---: | --- | --- | --- |
 | 0 | `0x00000001` | `HAS_COMPRESSED_SECTIONS` | At least one section entry uses registered compression |
-| 1 | `0x00000002` | `HAS_EXTENSION_AREA` | Exactly one `extension_area` section exists; `P03-015` |
-| 2 | `0x00000004` | `USES_PATH_DICTIONARY_REFERENCES` | Body depends on a pinned [path dictionary](path-dictionary-v1.md); reference records remain `P03-015` |
-| 3 | `0x00000008` | `HAS_SEMANTIC_EXTENSIONS` | Extension content contributes to meaning/hash; `P03-015` |
-| 4 | `0x00000010` | `HAS_NONSEMANTIC_EXTENSIONS` | Skippable/preservable nonsemantic extension content exists; `P03-015` |
+| 1 | `0x00000002` | `HAS_EXTENSION_AREA` | Reserved extension-area presence; explicitly unsupported by the [P03-015 matrix](hdoc-v1-compatibility.md) |
+| 2 | `0x00000004` | `USES_PATH_DICTIONARY_REFERENCES` | Reserved pinned dictionary dependency; explicitly unsupported by P03-015 |
+| 3 | `0x00000008` | `HAS_SEMANTIC_EXTENSIONS` | Reserved semantic extension presence; explicitly unsupported by P03-015 |
+| 4 | `0x00000010` | `HAS_NONSEMANTIC_EXTENSIONS` | Reserved nonsemantic extension presence; explicitly unsupported by P03-015 |
 
 The base uncompressed self-contained profile has `document_flags = 0`.
 
@@ -330,8 +331,8 @@ agree; either one without the other is corruption/noncanonical input.
 | Bit | Mask | Name | Required behavior |
 | ---: | --- | --- | --- |
 | 0 | `0x0000000000000001` | `SECTION_COMPRESSION` | Reader understands every present registered codec/profile; v1 assigns `1/1` |
-| 1 | `0x0000000000000002` | `PATH_DICTIONARY_REFERENCES` | Reader can resolve an exact [dictionary](path-dictionary-v1.md) identity/version; HDoc records remain `P03-015` |
-| 2 | `0x0000000000000004` | `SEMANTIC_EXTENSIONS` | Reader understands every semantic extension and typed-hash contribution (`P03-015`) |
+| 1 | `0x0000000000000002` | `PATH_DICTIONARY_REFERENCES` | Reserved exact dictionary identity/version dependency; rejected by P03-015 because no HDoc reference record exists |
+| 2 | `0x0000000000000004` | `SEMANTIC_EXTENSIONS` | Reserved semantic extension capability; rejected by P03-015 because no registry/hash framing exists |
 
 Bits 3 through 63 are unassigned. Any set unassigned required bit yields
 `CAP_FORMAT_UNSUPPORTED` before body/value exposure.
@@ -340,7 +341,7 @@ Bits 3 through 63 are unassigned. Any set unassigned required bit yields
 
 | Bit | Mask | Name | Optional behavior |
 | ---: | --- | --- | --- |
-| 0 | `0x0000000000000001` | `NONSEMANTIC_EXTENSIONS` | Reader may skip length-delimited nonsemantic data only under the preservation rules (`P03-015`) |
+| 0 | `0x0000000000000001` | `NONSEMANTIC_EXTENSIONS` | Reserved skip/preserve capability; rejected by P03-015 because no preservation grammar exists |
 
 Bits 1 through 63 are unassigned. An unknown optional bit is not automatically safe: a reader may
 skip it only if a known length-delimited section/extension grammar proves that the bytes cannot
@@ -624,7 +625,7 @@ Only major 1/minor 0 writing is defined here. A current reader:
   it;
 - rejects unknown required feature bits and unknown critical/semantic sections;
 - may skip an understood length-delimited optional nonsemantic extension only under P03-015's
-  exact preservation rules; and
+  exact preservation rules; P03-015 registers none and rejects the bit; and
 - never infers version from byte length, section count, filename, package version, or surrounding
   storage file.
 
@@ -641,7 +642,8 @@ ensured that partial format could not accidentally become one. P03-006 assigned 
 P03-009 added a bounded validating reader, P03-010 added logical views/owned values, P03-011
 added raw view lookup, and P03-012 added lossless tagged JSON conversion without publishing or
 persisting supported data.
-Immutable support fixtures remain P03-016, so the format can still be superseded without
+P03-015 adds closed-world exact-1.0 negotiation and a no-rewrite migration assessment; it does not
+add another readable/writable version or extension. Immutable support fixtures remain P03-016, so the format can still be superseded without
 stored-data migration before that fixture/data boundary.
 
 Once a nonzero hash profile and immutable HDoc 1.x vectors exist, changing this layout requires:
@@ -667,7 +669,7 @@ fields based on its own format version.
 | [`P03-006`](hdoc-v1-integrity.md) | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
 | [`P03-007`](hdoc-v1-compression.md) | Nonzero codec/profile IDs, bounded block grammar, and logical-coordinate derivation | Directory stride, logical/stored length fields, canonical limit |
 | [`P03-012`](hdoc-v1-tagged-json.md) | Lossless debug/SDK-boundary rendering and strict detached import | HDoc bytes, stored tags, validation order, or public wire grammar |
-| [`P03-013`–`P03-014`](path-dictionary-v1.md) complete; `P03-015` | Dictionary format/lifecycle and remaining HDoc reference records/negotiation | Existing flag/feature bit meanings or ID reuse |
+| [`P03-013`–`P03-014`](path-dictionary-v1.md), [`P03-015`](hdoc-v1-compatibility.md) complete | Dictionary format/lifecycle plus closed-world negotiation/migration assessment; reference records remain unsupported | Existing flag/feature bit meanings or ID reuse |
 
 Later tasks may fill their reserved registries but cannot silently reinterpret zero, a reserved bit,
 or an existing ID.

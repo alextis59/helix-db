@@ -212,7 +212,7 @@ vector representation fails.
 | --- | --- | --- | --- | --- |
 | `0x00` | Invalid sentinel | Reject | Forbidden | Never allocated |
 | `0x11`–`0x3f` | Future standard logical types | Reject while unassigned | Forbidden until registered | Accepted format change |
-| `0x40`–`0x7f` | Registered semantic extensions | Reject unless required feature and registry are understood | Forbidden until registered | `P03-015` or successor |
+| `0x40`–`0x7f` | Registered semantic extensions | Reject unless required feature and registry are understood | P03-015 registers none; forbidden until a future matrix registers one | Successor |
 | `0x80`–`0xef` | Experimental/private | Reject in supported HDoc | Forbidden in supported HDoc | Explicit experimental profile only |
 | `0xf0`–`0xfe` | Future control/escape space | Reject | Forbidden | Future major format only |
 | `0xff` | Permanently invalid | Reject | Forbidden | Never allocated |
@@ -341,7 +341,7 @@ change must preserve the historical decision. After fixtures/data exist:
 | [`P03-005`](hdoc-v1-records.md) | Field/array/container record positions for the one-byte tag | Tag width/assignments |
 | [`P03-006`](hdoc-v1-integrity.md) | Typed-hash framing including tag and payload | Tag identity or unknown-tag rule |
 | `P03-008`–`P03-012` (complete) | Encoder, decoder, owned/borrowed values, raw lookup, and tagged conversion | Closed-world registry semantics |
-| `P03-015` | Feature negotiation and registered extension governance | Existing assignments or no-reuse rule |
+| [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; no extension tags registered | Existing assignments or no-reuse rule |
 | `P03-016`–`P03-019` | Golden vectors, independent readers, malformed tests, fuzzing | Historical registry bytes/expectations |
 
 ## Required validation cases

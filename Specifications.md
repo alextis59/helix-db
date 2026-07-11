@@ -477,7 +477,8 @@ Object spans are strictly sorted by document-local field ID for bounded lookup w
 across one self-contained document, arrays use dense 12-byte entries in index order, and a
 root-first deterministic container tree uses 32-byte uniquely owned descriptors. Collection path
 dictionary IDs remain a separate feature-gated namespace under section 7.4; `P03-013` implements
-their standalone snapshot format while `P03-015` still owns HDoc reference records.
+their standalone snapshot format while the `P03-015` closed-world matrix explicitly keeps HDoc
+reference records unsupported.
 
 The one-byte `type_tag` assignments are fixed by the
 [HDoc 1.x Logical Type Tag Registry](docs/formats/hdoc-v1-type-tags.md) and its
@@ -650,11 +651,17 @@ so later registration cannot reinterpret an older consumer. Recovery accepts onl
 genesis-to-current successor chain. Storage phases own the physical sync/manifest transaction
 around the candidate bytes; no ambient I/O enters the portable document crate.
 
-A later dictionary-enabled HDoc profile records the exact dictionary identity/version
-needed to interpret collection path IDs; base HDoc remains self-contained with document-local
-exact-name IDs and bytes until `P03-015` defines that record and negotiation. The two namespaces are
-never guessed or silently reused. Query compilation resolves dotted paths into appropriate
-versioned path IDs only when that profile is negotiated.
+A future dictionary-enabled HDoc profile would need to record the exact dictionary identity/version
+needed to interpret collection path IDs. P03-015 deliberately does not invent that record: its
+implemented compatibility matrix supports only exact HDoc 1.0 base/compression, rejects dictionary
+references and every semantic/nonsemantic extension, and promises no previous-version, same-major
+minor, mixed-version, downgrade, or automatic-migration window. `negotiate_hdoc` returns a profile
+only after complete ordinary validation. `assess_hdoc_migration` accepts only valid exact 1.0 to
+exact 1.0 and reports a no-rewrite no-op; every other source/target fails with a typed capability
+error while preserving source bytes. Base HDoc therefore remains self-contained with document-local
+exact-name IDs and bytes. The two namespaces are never guessed or silently reused. Query
+compilation resolves dotted paths into versioned IDs only after a future matrix explicitly enables
+the reference profile.
 
 Benefits:
 
@@ -2528,7 +2535,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), and [path-dictionary format/lifecycle](docs/formats/path-dictionary-v1.md) implemented by `P03-008`–`P03-014`; immutable fixtures continue at `P03-016`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), [path-dictionary format/lifecycle](docs/formats/path-dictionary-v1.md), and [closed-world compatibility/migration assessment](docs/formats/hdoc-v1-compatibility.md) implemented by `P03-008`–`P03-015`; immutable fixtures continue at `P03-016`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

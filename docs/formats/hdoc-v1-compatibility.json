@@ -1,0 +1,43 @@
+{
+  "schema": "helix.hdoc-compatibility-matrix/1",
+  "matrix_version": "1.0.0",
+  "plan_item": "P03-015",
+  "current_format": { "major": 1, "minor": 0 },
+  "reader": {
+    "versions": [{ "major": 1, "minor": 0, "support": "read" }],
+    "document_flags_mask_hex": "0x00000001",
+    "required_features_mask_hex": "0x0000000000000001",
+    "optional_features_mask_hex": "0x0000000000000000",
+    "complete_validation_before_profile": true,
+    "read_causes_migration": false
+  },
+  "writer": {
+    "versions": [{ "major": 1, "minor": 0, "support": "write" }],
+    "profiles": ["base-uncompressed", "section-compression-1/1"],
+    "path_dictionary_references": false,
+    "semantic_extensions": false,
+    "nonsemantic_extensions": false
+  },
+  "features": [
+    { "id": "section-compression", "required_bit": 0, "document_flag": 0, "read": true, "write": true },
+    { "id": "path-dictionary-references", "required_bit": 1, "document_flag": 2, "read": false, "write": false },
+    { "id": "semantic-extensions", "required_bit": 2, "document_flag": 3, "read": false, "write": false },
+    { "id": "nonsemantic-extensions", "optional_bit": 0, "document_flag": 4, "read": false, "write": false }
+  ],
+  "migration": {
+    "supported_assessments": [
+      { "source": "1.0-valid-canonical", "target": "1.0", "result": "no-migration-required" }
+    ],
+    "rewrites_supported": false,
+    "automatic_migration": false,
+    "mixed_version_window": false,
+    "downgrade_window": false,
+    "rollback_boundary": "none-no-migration-or-new-byte-version-is-implemented",
+    "unsupported_source_or_target": "reject-with-capability-error-and-preserve-source"
+  },
+  "future_work": {
+    "immutable_fixture_owner": "P03-016",
+    "independent_reader_owner": "P03-017",
+    "migration_implementation_owner": "future-version-specific-plan-and-ADR"
+  }
+}

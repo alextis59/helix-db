@@ -22,10 +22,12 @@ support claim exists; each document states its own maturity boundary and owning 
 | [HDoc bounded section compression](hdoc-v1-compression.md) | 1.0 codec/profile registry | Accepted LZ4 profile `1/1`, 32 KiB blocks, coordinates, and selection | [Compression registry](hdoc-v1-compression.json) | `P03-007` |
 | [HDoc lossless tagged JSON](hdoc-v1-tagged-json.md) | `helix.hdoc-tagged-json/1` | Implemented canonical debug/SDK-boundary rendering and strict detached import | None; reuses semantic fixture value shapes | `P03-012` |
 | [Collection field-path dictionary](path-dictionary-v1.md) | `helix.path-dictionary/1.0` | Implemented canonical snapshots, non-reuse proof, atomic registration/resolution/recovery, and version pins | [Dictionary registry](path-dictionary-v1.json) | `P03-013`–`P03-014` |
+| [HDoc compatibility and migration matrix](hdoc-v1-compatibility.md) | Matrix `1.0.0` for exact HDoc `1.0` | Implemented closed-world negotiation and exact-current no-op migration assessment | [Compatibility registry](hdoc-v1-compatibility.json) | `P03-015` |
 
 HDoc's byte grammar, Rust writer/reader/value/lookup path, lossless tagged conversion, and the
-standalone collection dictionary format/lifecycle are implemented. HDoc dictionary references,
-immutable golden documents, independent readers, fuzzing, and migrations remain
+standalone collection dictionary format/lifecycle, and closed-world HDoc feature/migration
+assessment are implemented. HDoc dictionary references/extension records, immutable golden
+documents, independent readers, fuzzing, and actual version migrations remain
 subsequent `P03-*` work. No WAL, MANIFEST, SST, VLOG, CSEG, IDX, backup, or public
 protocol format has been specified here yet.
 

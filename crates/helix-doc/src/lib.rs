@@ -16,10 +16,16 @@ use std::iter::FusedIterator;
 use blake3::Hasher;
 use crc::{CRC_32_ISCSI, Crc};
 
+mod hdoc_negotiation;
 mod path_dictionary;
 mod path_dictionary_state;
 mod tagged_json;
 
+pub use hdoc_negotiation::{
+    HDOC_CURRENT_MAJOR, HDOC_CURRENT_MINOR, HDocCapabilities, HDocFeature, HDocMigrationAssessment,
+    HDocMigrationError, HDocMigrationTarget, HDocNegotiatedProfile, HDocStorageProfile,
+    assess_hdoc_migration, negotiate_hdoc,
+};
 pub use path_dictionary::{
     EncodedPathDictionary, PATH_DICTIONARY_FORMAT, PathDictionaryCheck, PathDictionaryEntry,
     PathDictionaryError, PathDictionaryInput, PathDictionaryInputEntry, PathDictionaryView,
@@ -37,7 +43,7 @@ pub use tagged_json::{
 pub const COMPONENT_NAME: &str = "helix-doc";
 
 /// Current implementation maturity.
-pub const MATURITY: &str = "path-dictionary-lifecycle";
+pub const MATURITY: &str = "hdoc-feature-negotiation";
 
 /// Internal `HelixDB` crates this portable leaf is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
@@ -3309,14 +3315,14 @@ fn parse_envelope(bytes: &[u8]) -> Result<ParsedEnvelope, DecodeError> {
     }
     validate_checksum(bytes, expected_checksum)?;
 
-    let unknown_required = required_features & !1;
+    let unknown_required = required_features & !hdoc_negotiation::HDOC_SUPPORTED_REQUIRED_FEATURES;
     if unknown_required != 0 {
         return Err(unsupported(DecodeCheck::Feature, unknown_required));
     }
-    if optional_features != 0 {
+    if optional_features & !hdoc_negotiation::HDOC_SUPPORTED_OPTIONAL_FEATURES != 0 {
         return Err(unsupported(DecodeCheck::Feature, optional_features << 32));
     }
-    let unsupported_flags = document_flags & !1;
+    let unsupported_flags = document_flags & !hdoc_negotiation::HDOC_SUPPORTED_DOCUMENT_FLAGS;
     if unsupported_flags != 0 {
         return Err(unsupported(
             DecodeCheck::Feature,
@@ -7569,7 +7575,7 @@ mod tests {
     #[test]
     fn metadata_error_codes_and_internal_guards_are_stable() -> Result<(), EncodeError> {
         assert_eq!(COMPONENT_NAME, "helix-doc");
-        assert_eq!(MATURITY, "path-dictionary-lifecycle");
+        assert_eq!(MATURITY, "hdoc-feature-negotiation");
         assert!(INTERNAL_DEPENDENCIES.is_empty());
         assert_eq!(CompressionMode::default(), CompressionMode::Canonical);
         assert_eq!(

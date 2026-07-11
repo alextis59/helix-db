@@ -14,9 +14,11 @@
     "record_registry": "docs/formats/hdoc-v1-records.json",
     "integrity_registry": "docs/formats/hdoc-v1-integrity.json",
     "compression_registry": "docs/formats/hdoc-v1-compression.json",
+    "compatibility_registry": "docs/formats/hdoc-v1-compatibility.json",
     "complete_byte_format": true,
     "completion_owner": "P03-007",
     "implementation_owners": ["P03-008", "P03-009"],
+    "negotiation_owner": "P03-015",
     "immutable_fixture_owner": "P03-016"
   },
   "magic": {

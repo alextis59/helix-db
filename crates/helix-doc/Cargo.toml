@@ -12,7 +12,7 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "path-dictionary-lifecycle"
+status = "hdoc-feature-negotiation"
 database-functionality = true
 
 [dependencies]
