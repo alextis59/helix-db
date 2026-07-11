@@ -1,0 +1,899 @@
+{
+  "schema": "helix.npm-license-refresh/1",
+  "plan_item": "P02-012",
+  "package_lock_sha256": "3dec0e13acf9c2303fd8d513bff7f8429a7969f63313b0315cdfeb478966812b",
+  "packages": [
+    {
+      "license_files": [
+        {
+          "bytes": 10858,
+          "path": "package/LICENSE-APACHE",
+          "sha256": "e2746aba8799f7a3378259f36a83a079e811ca7926cbdd248a2eb7ca9cbbac5d"
+        },
+        {
+          "bytes": 1091,
+          "path": "package/LICENSE-MIT",
+          "sha256": "4f6a0d776a00c0f46e1da1879321896071494229aa3219862a625e4560691a3a"
+        },
+        {
+          "bytes": 1112,
+          "path": "package/ROME-LICENSE-MIT",
+          "sha256": "dd3cd750e06451ce467ac3dbc1b437f4474e81fdde45153c95ab6ea1cffc6747"
+        }
+      ],
+      "path": "node_modules/@biomejs/biome",
+      "tarball_bytes": 89159
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@biomejs/cli-darwin-arm64",
+      "tarball_bytes": 20848355
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@biomejs/cli-darwin-x64",
+      "tarball_bytes": 21974877
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@biomejs/cli-linux-arm64",
+      "tarball_bytes": 21570361
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@biomejs/cli-linux-arm64-musl",
+      "tarball_bytes": 21122279
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@biomejs/cli-linux-x64",
+      "tarball_bytes": 22778836
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@biomejs/cli-linux-x64-musl",
+      "tarball_bytes": 22832715
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@biomejs/cli-win32-arm64",
+      "tarball_bytes": 22588179
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@biomejs/cli-win32-x64",
+      "tarball_bytes": 24122312
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1076,
+          "path": "package/LICENSE",
+          "sha256": "2088f55c6731498410b20c95ebd345ed4a4a800bf74c0fba4d282fd2a021daaa"
+        }
+      ],
+      "path": "node_modules/@emnapi/core",
+      "tarball_bytes": 246183
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1076,
+          "path": "package/LICENSE",
+          "sha256": "2088f55c6731498410b20c95ebd345ed4a4a800bf74c0fba4d282fd2a021daaa"
+        }
+      ],
+      "path": "node_modules/@emnapi/runtime",
+      "tarball_bytes": 67772
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1076,
+          "path": "package/LICENSE",
+          "sha256": "2088f55c6731498410b20c95ebd345ed4a4a800bf74c0fba4d282fd2a021daaa"
+        }
+      ],
+      "path": "node_modules/@emnapi/wasi-threads",
+      "tarball_bytes": 38848
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1080,
+          "path": "package/LICENSE",
+          "sha256": "769d154fbde32a915af110b1123650bc79f4cbe675acc66e005265bf069c6c6c"
+        }
+      ],
+      "path": "node_modules/@jridgewell/sourcemap-codec",
+      "tarball_bytes": 17469
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@napi-rs/wasm-runtime",
+      "tarball_bytes": 685134
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1119,
+          "path": "package/LICENSE",
+          "sha256": "95ced5ecf1133fbf41d409b5555c86c344f83f3b019926057ddbc07cfdcc27b3"
+        }
+      ],
+      "path": "node_modules/@oxc-project/types",
+      "tarball_bytes": 7717
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 11601,
+          "path": "package/LICENSE",
+          "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+        },
+        {
+          "bytes": 254,
+          "path": "package/NOTICE",
+          "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+        }
+      ],
+      "path": "node_modules/@playwright/test",
+      "tarball_bytes": 8750
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-android-arm64",
+      "tarball_bytes": 7334033
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-darwin-arm64",
+      "tarball_bytes": 7067543
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-darwin-x64",
+      "tarball_bytes": 7349472
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-freebsd-x64",
+      "tarball_bytes": 7721669
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-linux-arm-gnueabihf",
+      "tarball_bytes": 7047224
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-linux-arm64-gnu",
+      "tarball_bytes": 7398543
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-linux-arm64-musl",
+      "tarball_bytes": 7392085
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-linux-ppc64-gnu",
+      "tarball_bytes": 8645234
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-linux-s390x-gnu",
+      "tarball_bytes": 7815587
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-linux-x64-gnu",
+      "tarball_bytes": 7790863
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-linux-x64-musl",
+      "tarball_bytes": 7753314
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-openharmony-arm64",
+      "tarball_bytes": 7298733
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-wasm32-wasi",
+      "tarball_bytes": 3325762
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-win32-arm64-msvc",
+      "tarball_bytes": 7457263
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@rolldown/binding-win32-x64-msvc",
+      "tarball_bytes": 7800844
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1106,
+          "path": "package/LICENSE",
+          "sha256": "e1919b3b98b8bf6c1b99fcc60a0ed46027c97ac947432e1278446c9606f50161"
+        }
+      ],
+      "path": "node_modules/@rolldown/pluginutils",
+      "tarball_bytes": 6681
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1071,
+          "path": "package/LICENSE",
+          "sha256": "653b779005a3a4d64a7288c940f7b9a0e8f0b1e0375f6aa6af9473caf131e564"
+        }
+      ],
+      "path": "node_modules/@standard-schema/spec",
+      "tarball_bytes": 4178
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/@tybys/wasm-util",
+      "tarball_bytes": 139395
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1141,
+          "path": "package/LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/chai",
+      "tarball_bytes": 9924
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1141,
+          "path": "package/LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/deep-eql",
+      "tarball_bytes": 2014
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1141,
+          "path": "package/LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/estree",
+      "tarball_bytes": 5930
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1141,
+          "path": "package/LICENSE",
+          "sha256": "c2cfccb812fe482101a8f04597dfc5a9991a6b2748266c47ac91b6a5aae15383"
+        }
+      ],
+      "path": "node_modules/@types/node",
+      "tarball_bytes": 447075
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1102,
+          "path": "package/LICENSE",
+          "sha256": "04575fc5bfae19a9b63100f8691f901a2e15a399011ac02db435a9ef27295551"
+        }
+      ],
+      "path": "node_modules/@vitest/expect",
+      "tarball_bytes": 24924
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1102,
+          "path": "package/LICENSE",
+          "sha256": "04575fc5bfae19a9b63100f8691f901a2e15a399011ac02db435a9ef27295551"
+        }
+      ],
+      "path": "node_modules/@vitest/mocker",
+      "tarball_bytes": 56243
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1102,
+          "path": "package/LICENSE",
+          "sha256": "04575fc5bfae19a9b63100f8691f901a2e15a399011ac02db435a9ef27295551"
+        }
+      ],
+      "path": "node_modules/@vitest/pretty-format",
+      "tarball_bytes": 12888
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1102,
+          "path": "package/LICENSE",
+          "sha256": "04575fc5bfae19a9b63100f8691f901a2e15a399011ac02db435a9ef27295551"
+        }
+      ],
+      "path": "node_modules/@vitest/runner",
+      "tarball_bytes": 48429
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1102,
+          "path": "package/LICENSE",
+          "sha256": "04575fc5bfae19a9b63100f8691f901a2e15a399011ac02db435a9ef27295551"
+        }
+      ],
+      "path": "node_modules/@vitest/snapshot",
+      "tarball_bytes": 17410
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1102,
+          "path": "package/LICENSE",
+          "sha256": "04575fc5bfae19a9b63100f8691f901a2e15a399011ac02db435a9ef27295551"
+        }
+      ],
+      "path": "node_modules/@vitest/spy",
+      "tarball_bytes": 9566
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1102,
+          "path": "package/LICENSE",
+          "sha256": "04575fc5bfae19a9b63100f8691f901a2e15a399011ac02db435a9ef27295551"
+        }
+      ],
+      "path": "node_modules/@vitest/utils",
+      "tarball_bytes": 45448
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1108,
+          "path": "package/LICENSE",
+          "sha256": "2130216d5ab4c02134f8247f32999feda0abe1eaf028218baeac445c19ce4cea"
+        }
+      ],
+      "path": "node_modules/assertion-error",
+      "tarball_bytes": 2472
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1082,
+          "path": "package/LICENSE",
+          "sha256": "b181da80336ff9dd1043fc8be1a764d7382363433319aa872e4d2cb5ce2a3066"
+        }
+      ],
+      "path": "node_modules/chai",
+      "tarball_bytes": 30154
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1078,
+          "path": "package/LICENSE",
+          "sha256": "1fa6ee8bb95a81ae3d73a5bd074a3ac380ffec13697051063ca1a601921b91db"
+        }
+      ],
+      "path": "node_modules/convert-source-map",
+      "tarball_bytes": 4952
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 11357,
+          "path": "package/LICENSE",
+          "sha256": "b40930bbcf80744c86c46a12bc9da056641d722716c378f5659b9e555ef833e1"
+        }
+      ],
+      "path": "node_modules/detect-libc",
+      "tarball_bytes": 7776
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1085,
+          "path": "package/LICENSE",
+          "sha256": "8a4b6c44eebfb026d23719a348145a661a555568dbfdc11618ff2d0dd9306b00"
+        }
+      ],
+      "path": "node_modules/es-module-lexer",
+      "tarball_bytes": 56935
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1126,
+          "path": "package/LICENSE",
+          "sha256": "8a6dcbabe7179f9c8489c08a7d874d0f1e093ae7449e03756ccf87cb9d0e296e"
+        }
+      ],
+      "path": "node_modules/estree-walker",
+      "tarball_bytes": 3965
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 10760,
+          "path": "package/LICENSE",
+          "sha256": "7c6cc83c84eaa249a85bf12fe3eedd831bb50c696e8890b5248223ae68c7b408"
+        }
+      ],
+      "path": "node_modules/expect-type",
+      "tarball_bytes": 31799
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1053,
+          "path": "package/LICENSE",
+          "sha256": "9a39f2aadab11a3697edd668ff2d8ad885b649737b7ab4d3bf12b34e5ada0c86"
+        }
+      ],
+      "path": "node_modules/fdir",
+      "tarball_bytes": 9742
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1133,
+          "path": "package/LICENSE",
+          "sha256": "2a8a5d6197bb97a018b8a190dd3ed853d750ca87c8e80c17aad41d6c6ff448e1"
+        }
+      ],
+      "path": "node_modules/fsevents",
+      "tarball_bytes": 22066
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss",
+      "tarball_bytes": 86978
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-android-arm64",
+      "tarball_bytes": 3623980
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-darwin-arm64",
+      "tarball_bytes": 3452138
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-darwin-x64",
+      "tarball_bytes": 3860279
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-freebsd-x64",
+      "tarball_bytes": 3856640
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-linux-arm-gnueabihf",
+      "tarball_bytes": 3531290
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-linux-arm64-gnu",
+      "tarball_bytes": 3584504
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-linux-arm64-musl",
+      "tarball_bytes": 3583220
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-linux-x64-gnu",
+      "tarball_bytes": 3848191
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-linux-x64-musl",
+      "tarball_bytes": 3846393
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-win32-arm64-msvc",
+      "tarball_bytes": 3421578
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 15648,
+          "path": "package/LICENSE",
+          "sha256": "5eba353fe5076ac3432177f8ab1cf75e3afcd0584251e37c3bfead5f447d040e"
+        }
+      ],
+      "path": "node_modules/lightningcss-win32-x64-msvc",
+      "tarball_bytes": 3699964
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1051,
+          "path": "package/LICENSE",
+          "sha256": "1cbe51b907662f6cb1492b16c359384a595180bf0e4d101603ed525e75c4e484"
+        }
+      ],
+      "path": "node_modules/magic-string",
+      "tarball_bytes": 89981
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1095,
+          "path": "package/LICENSE",
+          "sha256": "da4db1480d9beea3483a2eda5c53b22238d0827d57da162b48f122e04d2d9987"
+        }
+      ],
+      "path": "node_modules/nanoid",
+      "tarball_bytes": 5627
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1205,
+          "path": "package/LICENSE",
+          "sha256": "ee48679d379ca6b4493d5e231094d85f818dd9be40b1a4f234fb7ff657ee35d9"
+        }
+      ],
+      "path": "node_modules/obug",
+      "tarball_bytes": 10210
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 3355,
+          "path": "package/LICENSE",
+          "sha256": "52e92576851154bad7737e90cc72818936f43665cb0e3f7428ed8edc8cc5709b"
+        }
+      ],
+      "path": "node_modules/pathe",
+      "tarball_bytes": 10514
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 787,
+          "path": "package/LICENSE",
+          "sha256": "6582629e2979466878f6014313dcc2f3756c9616148682227ce3063dde310750"
+        }
+      ],
+      "path": "node_modules/picocolors",
+      "tarball_bytes": 2625
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1091,
+          "path": "package/LICENSE",
+          "sha256": "d0cd141b0c322fded5dfad1d4645bb2fedfc05b7321fe1009469638190d59ef9"
+        }
+      ],
+      "path": "node_modules/picomatch",
+      "tarball_bytes": 24079
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 11601,
+          "path": "package/LICENSE",
+          "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+        },
+        {
+          "bytes": 254,
+          "path": "package/NOTICE",
+          "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+        },
+        {
+          "bytes": 705,
+          "path": "package/ThirdPartyNotices.txt",
+          "sha256": "b17ac0bd6f4b8207e440639cc8e0ba1bf1d9eaf9b12236764ab93b346c7abd8e"
+        }
+      ],
+      "path": "node_modules/playwright",
+      "tarball_bytes": 867610
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 11601,
+          "path": "package/LICENSE",
+          "sha256": "45873d00a0dd243596deb4aa23b2493b3d1f0671921bf2538ea431d7380220eb"
+        },
+        {
+          "bytes": 254,
+          "path": "package/NOTICE",
+          "sha256": "6d602191187b35b9b01d2cffa01c8469c2c8d9de8a96f1bf868e0f264f51c81d"
+        },
+        {
+          "bytes": 676,
+          "path": "package/ThirdPartyNotices.txt",
+          "sha256": "a549d329bad8806fe279f0ecae0fc0270dec7e7c2dc8ec10f90e394f7c32b144"
+        }
+      ],
+      "path": "node_modules/playwright-core",
+      "tarball_bytes": 2859694
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1095,
+          "path": "package/LICENSE",
+          "sha256": "5be1f3465bba68a626777f984878814aaf35e7ef8e9fd314d469bcf887050fb8"
+        }
+      ],
+      "path": "node_modules/postcss",
+      "tarball_bytes": 48702
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1302,
+          "path": "package/LICENSE",
+          "sha256": "23ecfff35a5a2e80d92142f75228912c3b1abc4b5a8337a821ff4397e2f9f734"
+        }
+      ],
+      "path": "node_modules/rolldown",
+      "tarball_bytes": 179825
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 744,
+          "path": "package/LICENSE",
+          "sha256": "3bdddf0b9b08aaa2fe4365b803fc958ed32c0597ca0bd727be8d9fcb8b248d18"
+        }
+      ],
+      "path": "node_modules/siginfo",
+      "tarball_bytes": 3064
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1526,
+          "path": "package/LICENSE",
+          "sha256": "6cb0631f71c7749763fd3dd1d5bee52dd1070ec17f2edc1710079ad070bd2fbd"
+        }
+      ],
+      "path": "node_modules/source-map-js",
+      "tarball_bytes": 35340
+    },
+    {
+      "license_files": [],
+      "path": "node_modules/stackback",
+      "tarball_bytes": 3165
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1079,
+          "path": "package/LICENCE",
+          "sha256": "a6f36438e46fb911859f3b9c4cad045ba64e1af3d8f4512c60258fa2d7552d28"
+        }
+      ],
+      "path": "node_modules/std-env",
+      "tarball_bytes": 6351
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1065,
+          "path": "package/LICENSE",
+          "sha256": "cebc084d54e6dd99e53292ddb4bc1cdb63d9bfcd9ce438fe3aa6eb106d79e2ea"
+        }
+      ],
+      "path": "node_modules/tinybench",
+      "tarball_bytes": 13668
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1065,
+          "path": "package/LICENSE",
+          "sha256": "f95f668fe64081ddb4153b322e34fdd719b991285ed08177d5ad7133b7988d92"
+        }
+      ],
+      "path": "node_modules/tinyexec",
+      "tarball_bytes": 8336
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1076,
+          "path": "package/LICENSE",
+          "sha256": "22c68811e174cbbfb3813d4135918df4f540959c14d872e601d9abe83d3cde8f"
+        }
+      ],
+      "path": "node_modules/tinyglobby",
+      "tarball_bytes": 7873
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1065,
+          "path": "package/LICENCE",
+          "sha256": "cebc084d54e6dd99e53292ddb4bc1cdb63d9bfcd9ce438fe3aa6eb106d79e2ea"
+        }
+      ],
+      "path": "node_modules/tinyrainbow",
+      "tarball_bytes": 2978
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 655,
+          "path": "package/LICENSE.txt",
+          "sha256": "210b19e543130388c68654b7497e967119ce17145f66ab7d85688fbd70f08751"
+        }
+      ],
+      "path": "node_modules/tslib",
+      "tarball_bytes": 18477
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 9197,
+          "path": "package/LICENSE.txt",
+          "sha256": "a7d00bfd54525bc694b6e32f64c7ebcf5e6b7ae3657be5cc12767bce74654a47"
+        },
+        {
+          "bytes": 37824,
+          "path": "package/ThirdPartyNoticeText.txt",
+          "sha256": "1af3c68039c57e539422da82a4faada506ce6d0ea6f90e0b699d02dbcdb7a90c"
+        }
+      ],
+      "path": "node_modules/typescript",
+      "tarball_bytes": 4515854
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1090,
+          "path": "package/LICENSE",
+          "sha256": "a6db8096b2707bc0102d256917d4d33f298ba36d8c3f25de067a2b5bb379db27"
+        }
+      ],
+      "path": "node_modules/undici-types",
+      "tarball_bytes": 21020
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 110976,
+          "path": "package/LICENSE.md",
+          "sha256": "b1d741c26b53de1bbc0d4d7d3365b79888f9fe511527544a8a7b8e24dec43147"
+        }
+      ],
+      "path": "node_modules/vite",
+      "tarball_bytes": 549023
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1133,
+          "path": "package/LICENSE",
+          "sha256": "2a8a5d6197bb97a018b8a190dd3ed853d750ca87c8e80c17aad41d6c6ff448e1"
+        }
+      ],
+      "path": "node_modules/vite/node_modules/fsevents",
+      "tarball_bytes": 22808
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 37726,
+          "path": "package/LICENSE.md",
+          "sha256": "881d660c26831481b697e39724d4a35c9f86e07b67156d4aeb693a0b39910435"
+        }
+      ],
+      "path": "node_modules/vitest",
+      "tarball_bytes": 474402
+    },
+    {
+      "license_files": [
+        {
+          "bytes": 1079,
+          "path": "package/LICENSE",
+          "sha256": "6a134e51aa31496c15a741592fc5d782b2dbf8d8b6b8524e15c8520ae0cd6374"
+        }
+      ],
+      "path": "node_modules/why-is-node-running",
+      "tarball_bytes": 3205
+    }
+  ],
+  "summary": {
+    "license_file_packages": 65,
+    "license_files": 73,
+    "locked_packages": 91,
+    "missing_license_text_packages": 26,
+    "tarball_bytes": 339376667
+  }
+}

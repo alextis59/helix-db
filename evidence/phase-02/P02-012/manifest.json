@@ -1,0 +1,137 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-012",
+  "requirements": ["INV-007", "QUAL-001", "SEC-001"],
+  "accepted_adrs": [],
+  "commit": "549025951e992ff6e93734eed661709766511ca0",
+  "recorded_at": "2026-07-11T02:59:56Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "active_node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "playwright": "1.61.1",
+      "chromium": "149.0.7827.55"
+    },
+    "javascript_lanes": ["22.23.1", "24.18.0"],
+    "npm_registry": "https://registry.npmjs.org/",
+    "hosted_workflow_execution": false
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "inspect npm audit signature output without --include-attestations",
+      "exit_code": 0,
+      "result": "registry signature verification was available but the response omitted full Sigstore bundles; the final command adds --include-attestations and retains the raw bundle-bearing response"
+    },
+    {
+      "command": "serialize the raw npm signature response directly as an evidence JSON file",
+      "exit_code": 0,
+      "result": "the 477675-byte response was valid but disproportionately large for line-oriented review; the exact bytes are now gzip-compressed, base64-wrapped, and bound by raw, gzip, and wrapper digests"
+    },
+    {
+      "command": "treat all lockfile packages as installed signature subjects",
+      "exit_code": 0,
+      "result": "39 optional platform packages are intentionally absent on Linux; the live report now verifies every one of the 52 actually installed registry packages and reports absent optional packages through the offline lock inventory"
+    },
+    {
+      "command": "report zero Rust advisories when Cargo.lock contains only workspace packages",
+      "exit_code": 0,
+      "result": "zero findings would imply a scanner execution that did not occur; the report now says not-applicable-no-external-packages and fails closed if the first external crate appears"
+    }
+  ],
+  "verification": {
+    "changed_paths": 23,
+    "retained_report_files": 5,
+    "locked_npm_development_packages": 91,
+    "installed_linux_registry_packages": 52,
+    "registry_signatures_verified": 52,
+    "provenance_attestations_verified": 27,
+    "npm_vulnerabilities": 0,
+    "license_tarballs_verified": 91,
+    "license_tarball_bytes": 339376667,
+    "license_files": 73,
+    "packages_with_license_files": 65,
+    "reviewed_missing_license_text_packages": 26,
+    "duplicate_package_families": 1,
+    "suppressed_lifecycle_scripts": 2,
+    "external_rust_packages": 0,
+    "wasm_tools_license_files": 3,
+    "playwright_browser_revisions": 5,
+    "node_lanes": 2,
+    "workflow_jobs": 8,
+    "workflow_steps": 41,
+    "native_tests": 9,
+    "mutation_canaries": 14,
+    "markdown_files": 143,
+    "local_links": 923,
+    "biome_files": 60
+  },
+  "commands": [
+    {
+      "command": "Node 22.23.1 clean install, dependency inventory, CI/policy/type/fixture/aggregate replay, live npm audit/signature/provenance observation, full license-tarball refresh, and wasm-tools license verification",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 24.18.0 clean install plus deterministic dependency inventory and CI-contract replay",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo fmt/check/Clippy/test plus source-gate rustdoc, portable targets, Wasm validation, browser smoke, and WGSL validation",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/P02-012/verify.mjs 549025951e992ff6e93734eed661709766511ca0",
+      "exit_code": 0
+    }
+  ],
+  "retained_artifacts": [
+    { "path": "reports/inventory-report.json", "media_type": "application/json", "bytes": 11227, "sha256": "48b8ab8c4564bdf77d3399542443ab5f94a2268c53d18cff3aedb170df0ed987" },
+    { "path": "reports/npm-audit.json", "media_type": "application/json", "bytes": 361, "sha256": "257b7c2e12ff0cc36d6c67a42a3b4d7efe5ccb313cbd966361df1f47e4815730" },
+    { "path": "reports/npm-license-refresh.json", "media_type": "application/json", "bytes": 24098, "sha256": "8475b0af5f8c899e085165236baee80c6700466ef949de21d55b0552ef1293c7" },
+    { "path": "reports/npm-signatures.json.gz.b64", "media_type": "application/gzip+base64", "bytes": 199795, "sha256": "aaf45b7053516abd337bda878b7e3d9369bac0472ee222df57fb926cdb94a218" },
+    { "path": "reports/observation-report.json", "media_type": "application/json", "bytes": 16167, "sha256": "3dff1df9262c6b8df559850ad6d4f410de02b7d6b85a78ecd82c317ea20c9e07" }
+  ],
+  "compressed_payload": {
+    "encoding": "base64(gzip(raw-json))",
+    "gzip_bytes": 147900,
+    "gzip_sha256": "9e31fb56fed5a1d8443985c08012d3358cfb8cf79008e7db14073a45e79971cb",
+    "raw_bytes": 477675,
+    "raw_sha256": "22d24606cf621894f5702999b2684f3972c7d5eb5592ee768b441209025c405d"
+  },
+  "artifacts": [
+    { "path": ".github/README.md", "media_type": "text/markdown", "bytes": 1270, "sha256": "653b70ba3a05cf64f2482bc19b017948f9fa031546cea690c490ad0127e000a0" },
+    { "path": ".github/ci/matrix.json", "media_type": "application/json", "bytes": 4613, "sha256": "16e67faecf9493ee55a65d0e3b98d95da0af318c907e11d365ffdc1b9cd6c98f" },
+    { "path": ".github/ci/npm-license-inventory.json", "media_type": "application/json", "bytes": 23923, "sha256": "9de026cad0a19f74b360b713688bd674026a059cefd2267260d32091874852eb" },
+    { "path": ".github/ci/wasm-tools.json", "media_type": "application/json", "bytes": 1647, "sha256": "a1bd6b0faa017dbf76b1cc47b9468b116f833a709aaaa9c0e9257c2a07777bdf" },
+    { "path": ".github/workflows/ci.yml", "media_type": "application/yaml", "bytes": 7297, "sha256": "e81a219574a529c9807af0c63e4d3f8ded3ecbd1b99b28e0a1164cd1ae59d255" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 3808, "sha256": "26190517a033e61397b625b3f92411ccad7d23fd513a48163bb3a57f9053aedf" },
+    { "path": "THIRD_PARTY_NOTICES.md", "media_type": "text/markdown", "bytes": 5063, "sha256": "67b0da96798b856e35a1aacb41f7dd1356a88f51bb4d180d3ec8c1a26647f2cc" },
+    { "path": "biome.json", "media_type": "application/json", "bytes": 1383, "sha256": "165863ba214b0bfffb1658b5f1d24ec2c0c823a82846fc7a52939902f9613ab9" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 8311, "sha256": "5b205f25f439751ed582684f9477ea878873fada67d465a494b8adf798ea7ee7" },
+    { "path": "docs/architecture/code-quality-and-dependency-policy.md", "media_type": "text/markdown", "bytes": 9289, "sha256": "271afa2cb0c76e8fbb41c78c84a7caf255a2451b664d31ae7ea52ae3215d682f" },
+    { "path": "docs/architecture/continuous-integration.md", "media_type": "text/markdown", "bytes": 8670, "sha256": "75b0ffd9422b766a8461cd58426ebfeb3b81a4f08da37207ee445c7a71d8a8c5" },
+    { "path": "docs/architecture/dependency-security-reporting.md", "media_type": "text/markdown", "bytes": 10500, "sha256": "6619bb7980ca95abb08cfdf8860b42871f644ce890fde0c12e308282dcd39c01" },
+    { "path": "docs/architecture/javascript-toolchain-policy.md", "media_type": "text/markdown", "bytes": 11604, "sha256": "775f529697fc0580f6c84e8d77be1657f3135c390356012ba56013626b6af3e4" },
+    { "path": "docs/architecture/wasm-browser-smoke-validation.md", "media_type": "text/markdown", "bytes": 7753, "sha256": "695ff7a8cdc55a6fdecc292f1cb862f7f638a3c9bc73c4a4f0db6e3184541f49" },
+    { "path": "docs/governance/licensing.md", "media_type": "text/markdown", "bytes": 7255, "sha256": "3bde17116c8c86a0b30dbe169c5d14639a28ae655d21cfefca4e11d1bc52657e" },
+    { "path": "package.json", "media_type": "application/json", "bytes": 3188, "sha256": "74c8faa10a39540745040147535db7a9c739049024dba493375a358aa374872f" },
+    { "path": "tests/toolchain/README.md", "media_type": "text/markdown", "bytes": 2708, "sha256": "107f39fb6e6d903ae873932a46e1b4535d004cf12b0e91ca00051f72e6bfdb24" },
+    { "path": "tests/toolchain/check-ci-matrix.mjs", "media_type": "text/javascript", "bytes": 14908, "sha256": "a19b4d9d4ae0f0453ad6cb3acb2f13360cbbc10087f86a69631f1f58d2209e2f" },
+    { "path": "tests/toolchain/check-dependency-policy.mjs", "media_type": "text/javascript", "bytes": 9038, "sha256": "68f4f7c2b08028181ca4e301e4a502a61a6b2a9065b371e9557cfaadb1b9137a" },
+    { "path": "tests/toolchain/check-dependency-reports.mjs", "media_type": "text/javascript", "bytes": 32339, "sha256": "65526dae85d1723aecfd3e80cb1d34af05ca3e678fecab3e4764a9ca8cc5eb6d" },
+    { "path": "tests/toolchain/dependency-policy.json", "media_type": "application/json", "bytes": 1738, "sha256": "5afaa8bc8d505940abad9b76f54afa654066f85bff5cd1383e5059dd76460bc3" },
+    { "path": "tests/toolchain/dependency-report-policy.json", "media_type": "application/json", "bytes": 4663, "sha256": "c188f2357e28fa699aa7032ca2a8527d6ee512067bb8c1406c8d92d52440b250" },
+    { "path": "tests/toolchain/install-wasm-tools.mjs", "media_type": "text/javascript", "bytes": 8961, "sha256": "f5b891ef999c04e2557491ad51df87d825a6e7a91c92f73a25346cf7c6324485" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-012/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 33740,
+    "sha256": "5a108e76dc18c221d3839ab024bc8c27d312a20524215e23c3a2991515f22c62"
+  },
+  "verdict": "pass"
+}
