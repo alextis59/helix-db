@@ -476,7 +476,8 @@ Object spans are strictly sorted by document-local field ID for bounded lookup w
 `presentation_ordinal` preserves observable input order. The name pool deduplicates exact names
 across one self-contained document, arrays use dense 12-byte entries in index order, and a
 root-first deterministic container tree uses 32-byte uniquely owned descriptors. Collection path
-dictionary IDs remain a separate feature-gated namespace under section 7.4 and `P03-013`.
+dictionary IDs remain a separate feature-gated namespace under section 7.4; `P03-013` implements
+their standalone snapshot format while `P03-015` still owns HDoc reference records.
 
 The one-byte `type_tag` assignments are fixed by the
 [HDoc 1.x Logical Type Tag Registry](docs/formats/hdoc-v1-type-tags.md) and its
@@ -623,10 +624,26 @@ Each collection maintains a dictionary:
 }
 ```
 
-The dictionary is versioned. A `P03-013` dictionary-enabled feature profile may reference its
-collection path IDs internally and records the exact dictionary version needed to interpret them;
-base HDoc remains self-contained with document-local exact-name IDs and bytes. The two namespaces
-are never guessed or silently reused. Query compilation resolves dotted paths into the appropriate
+The implemented standalone format identity is `helix.path-dictionary/1.0`. Each collection
+lineage has a nonzero 16-byte dictionary identity and an append-only sequence of canonical
+snapshots. Version zero is empty. Every nonempty snapshot stores dense IDs starting at one, reserves
+ID 1 for `_id`, retains exact validated dotted-path UTF-8, and records the consecutive dictionary
+version that first introduced each path. Multiple paths may enter one version. A successor advances
+exactly one version, appends at least one entry, preserves its complete predecessor prefix, and
+never removes, changes, or reuses an ID.
+
+The canonical snapshot is little-endian and consists of a 64-byte header, dense 24-byte entry
+table, concatenated exact path pool, minimum zero padding, and 64-byte footer. It is bounded by
+`dictionary.paths = 1,000,000` and `dictionary.snapshot_bytes = 67,108,864`. CRC-32C covers exact
+stored bytes with its slot zeroed; a domain-separated BLAKE3-256 hash identifies logical identity,
+version, IDs, introduction versions, and path bytes. The production writer, validating borrowed
+reader, and explicit predecessor/successor lineage proof are implemented under `P03-013`.
+
+`P03-014` owns mutable registration, resolution, durable snapshot publication, caching, and version
+pinning. A later dictionary-enabled HDoc profile records the exact dictionary identity/version
+needed to interpret collection path IDs; base HDoc remains self-contained with document-local
+exact-name IDs and bytes until `P03-015` defines that record and negotiation. The two namespaces are
+never guessed or silently reused. Query compilation resolves dotted paths into appropriate
 versioned path IDs only when that profile is negotiated.
 
 Benefits:
@@ -2501,7 +2518,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, and [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md) implemented by `P03-008`–`P03-012`; immutable fixtures continue at `P03-016`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), and [standalone path dictionary](docs/formats/path-dictionary-v1.md) implemented by `P03-008`–`P03-013`; immutable fixtures continue at `P03-016`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

@@ -2434,6 +2434,444 @@
           "mode": "unchanged"
         }
       }
+    },
+    {
+      "id": "dictionary-paths-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "dictionary.paths"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "1000000"
+          },
+          {
+            "t": "int64",
+            "value": "999999"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "dictionary.paths"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "1000000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "999999"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "dictionary-paths-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "dictionary.paths"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "1000000"
+          },
+          {
+            "t": "int64",
+            "value": "1000000"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "dictionary.paths"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "1000000"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "1000000"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "dictionary-paths-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "dictionary.paths"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "1000000"
+          },
+          {
+            "t": "int64",
+            "value": "1000001"
+          }
+        ],
+        "options": {
+          "unit": "count",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_committed",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "dictionary.paths",
+          "maximum": 1000000,
+          "observed": 1000001,
+          "unit": "count"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "dictionary-snapshot_bytes-below",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "dictionary.snapshot_bytes"
+          },
+          {
+            "t": "string",
+            "value": "below"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108863"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "dictionary.snapshot_bytes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "below"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "67108863"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "dictionary-snapshot_bytes-at",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "dictionary.snapshot_bytes"
+          },
+          {
+            "t": "string",
+            "value": "at"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "success",
+        "value": {
+          "t": "object",
+          "fields": [
+            {
+              "name": "limit_id",
+              "value": {
+                "t": "string",
+                "value": "dictionary.snapshot_bytes"
+              }
+            },
+            {
+              "name": "relation",
+              "value": {
+                "t": "string",
+                "value": "at"
+              }
+            },
+            {
+              "name": "maximum",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "observed",
+              "value": {
+                "t": "int64",
+                "value": "67108864"
+              }
+            },
+            {
+              "name": "accepted",
+              "value": {
+                "t": "bool",
+                "value": true
+              }
+            }
+          ]
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
+    },
+    {
+      "id": "dictionary-snapshot_bytes-above",
+      "action": {
+        "kind": "value_operation",
+        "operation": "fixture.generate-boundary",
+        "arguments": [
+          {
+            "t": "string",
+            "value": "dictionary.snapshot_bytes"
+          },
+          {
+            "t": "string",
+            "value": "above"
+          },
+          {
+            "t": "int64",
+            "value": "67108864"
+          },
+          {
+            "t": "int64",
+            "value": "67108865"
+          }
+        ],
+        "options": {
+          "unit": "bytes",
+          "mutation": true
+        }
+      },
+      "expect": {
+        "kind": "error",
+        "category": "quota",
+        "code": "QUOTA_LIMIT_EXCEEDED",
+        "phase": "validate",
+        "outcome": "not_committed",
+        "retry": {
+          "retryable": false,
+          "scope": "never",
+          "token": "absent"
+        },
+        "details_match": "exact",
+        "details": {
+          "limit_id": "dictionary.snapshot_bytes",
+          "maximum": 67108864,
+          "observed": 67108865,
+          "unit": "bytes"
+        },
+        "order": {
+          "mode": "not_applicable",
+          "basis": "not_applicable",
+          "row_count": 0,
+          "keys": []
+        },
+        "state": {
+          "mode": "unchanged"
+        }
+      }
     }
   ]
 }

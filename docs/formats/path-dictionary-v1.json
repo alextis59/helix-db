@@ -1,0 +1,78 @@
+{
+  "schema": "helix.path-dictionary-layout/1",
+  "format": {
+    "identity": "helix.path-dictionary/1.0",
+    "major_version": 1,
+    "minor_version": 0,
+    "byte_order": "little-endian",
+    "offset_base": "snapshot-start",
+    "alignment_bytes": 8,
+    "maximum_bytes": 67108864,
+    "maximum_paths": 1000000,
+    "implementation_owner": "P03-013",
+    "lifecycle_owner": "P03-014",
+    "hdoc_reference_owner": "P03-015"
+  },
+  "magic": {
+    "header_hex": "4850444943540d0a",
+    "header_ascii_escaped": "HPDICT\\r\\n",
+    "footer_hex": "485044454e440d0a",
+    "footer_ascii_escaped": "HPDEND\\r\\n"
+  },
+  "header": {
+    "bytes": 64,
+    "checksum_field_offset": 60,
+    "checksum_field_bytes": 4,
+    "fields": [
+      { "name": "magic", "offset": 0, "bytes": 8, "encoding": "octets", "constant_hex": "4850444943540d0a" },
+      { "name": "major_version", "offset": 8, "bytes": 2, "encoding": "u16-le", "constant": 1 },
+      { "name": "minor_version", "offset": 10, "bytes": 2, "encoding": "u16-le", "constant": 0 },
+      { "name": "header_bytes", "offset": 12, "bytes": 2, "encoding": "u16-le", "constant": 64 },
+      { "name": "entry_bytes", "offset": 14, "bytes": 2, "encoding": "u16-le", "constant": 24 },
+      { "name": "flags", "offset": 16, "bytes": 4, "encoding": "u32-le", "constant": 0 },
+      { "name": "total_length", "offset": 20, "bytes": 4, "encoding": "u32-le" },
+      { "name": "dictionary_version", "offset": 24, "bytes": 8, "encoding": "u64-le" },
+      { "name": "dictionary_id", "offset": 32, "bytes": 16, "encoding": "octets", "constraint": "nonzero-collection-scoped-identity" },
+      { "name": "entry_count", "offset": 48, "bytes": 4, "encoding": "u32-le" },
+      { "name": "maximum_path_id", "offset": 52, "bytes": 4, "encoding": "u32-le", "derived": "entry_count" },
+      { "name": "footer_offset", "offset": 56, "bytes": 4, "encoding": "u32-le" },
+      { "name": "crc32c", "offset": 60, "bytes": 4, "encoding": "u32-le" }
+    ]
+  },
+  "entry": {
+    "bytes": 24,
+    "fields": [
+      { "name": "path_id", "offset": 0, "bytes": 4, "encoding": "u32-le", "derived": "one-based-entry-index" },
+      { "name": "flags", "offset": 4, "bytes": 2, "encoding": "u16-le", "constant": 0 },
+      { "name": "segment_count", "offset": 6, "bytes": 2, "encoding": "u16-le" },
+      { "name": "introduced_version", "offset": 8, "bytes": 8, "encoding": "u64-le" },
+      { "name": "path_offset", "offset": 16, "bytes": 4, "encoding": "u32-le", "coordinate_space": "snapshot" },
+      { "name": "path_length", "offset": 20, "bytes": 2, "encoding": "u16-le" },
+      { "name": "reserved", "offset": 22, "bytes": 2, "encoding": "u16-le", "constant": 0 }
+    ]
+  },
+  "footer": {
+    "bytes": 64,
+    "fields": [
+      { "name": "magic", "offset": 0, "bytes": 8, "encoding": "octets", "constant_hex": "485044454e440d0a" },
+      { "name": "footer_bytes", "offset": 8, "bytes": 2, "encoding": "u16-le", "constant": 64 },
+      { "name": "hash_algorithm_id", "offset": 10, "bytes": 2, "encoding": "u16-le", "constant": 1 },
+      { "name": "hash_profile_id", "offset": 12, "bytes": 2, "encoding": "u16-le", "constant": 1 },
+      { "name": "footer_version", "offset": 14, "bytes": 2, "encoding": "u16-le", "constant": 1 },
+      { "name": "total_length_copy", "offset": 16, "bytes": 4, "encoding": "u32-le" },
+      { "name": "entry_count_copy", "offset": 20, "bytes": 4, "encoding": "u32-le" },
+      { "name": "dictionary_version_copy", "offset": 24, "bytes": 8, "encoding": "u64-le" },
+      { "name": "content_hash", "offset": 32, "bytes": 32, "encoding": "blake3-256-profile-1" }
+    ]
+  },
+  "canonical_order": ["header", "entry_table", "path_pool", "zero_padding_to_8", "footer"],
+  "checksum": {
+    "algorithm": "CRC-32C-Castagnoli",
+    "coverage": "complete-stored-snapshot-with-header-bytes-60-through-63-zero"
+  },
+  "content_hash": {
+    "algorithm": "BLAKE3-256",
+    "domain_hex": "48454c49582d504154482d44494354494f4e4152592d563100",
+    "framing": ["dictionary_id[16]", "dictionary_version:u64-le", "entry_count:u32-le", "for-each-entry:path_id:u32-le", "introduced_version:u64-le", "path_length:u32-le", "path:utf8-bytes"]
+  }
+}

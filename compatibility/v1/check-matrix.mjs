@@ -650,7 +650,7 @@ console.log(
     `${matrixArtifact.value.counts.mongodb_unsupported_rows} MongoDB unsupported, ` +
     `${matrixArtifact.value.counts.redis_unsupported_rows} Redis unsupported`,
 );
-console.log('PASS registry reconciliation: 16 values, 17 primitives, 23 limits, 74 errors');
+console.log('PASS registry reconciliation: 16 values, 17 primitives, 25 limits, 74 errors');
 console.log('PASS matrix mutation canaries: native, claim, adapter, input, MongoDB, Redis, skip');
 console.log(
   `PASS matrix source: ${sha256Hex(matrixArtifact.bytes)} ${matrixArtifact.bytes.length} bytes`,

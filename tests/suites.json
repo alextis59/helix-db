@@ -23,7 +23,7 @@
       "allowed_files": [],
       "steps": ["rust-unit", "javascript-unit-inventory"],
       "expectations": {
-        "rust_tests": 32,
+        "rust_tests": 36,
         "javascript_test_files": 0
       }
     },
@@ -53,9 +53,9 @@
         "accepted_examples": 4,
         "rejected_examples": 3,
         "semantic_fixtures": 17,
-        "semantic_steps": 313,
+        "semantic_steps": 319,
         "oracle_assertions": 382,
-        "compatibility_rows": 263,
+        "compatibility_rows": 265,
         "mongodb_cases": 16
       }
     },

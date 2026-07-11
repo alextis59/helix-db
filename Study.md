@@ -362,7 +362,23 @@ Path dictionaries can reduce repeated names and give sidecar columns stable iden
 - How concurrent writers agree on path IDs in distributed mode.
 - How imports preserve names without trusting external numeric IDs.
 
-The safest default is monotonic, non-reused IDs with explicit dictionary versions. Old readers should either understand the version or reject it; they should not reinterpret IDs.
+The implemented `helix.path-dictionary/1.0` format adopts that safest default. One nonzero
+collection-lineage identity has an empty version-zero snapshot followed by consecutive append-only
+versions. IDs are dense from one, `_id` is always ID 1, exact dotted paths are unique, and each
+entry records its introduction version. A lineage validator proves that a successor advances one
+version, adds entries, and preserves the predecessor as an exact prefix. This makes non-reuse an
+executable relationship between snapshots instead of a convention inferred from filenames.
+
+Snapshots use a bounded portable layout: 64-byte header, 24-byte entries, concatenated UTF-8 path
+pool, zero alignment padding, and 64-byte footer. CRC-32C protects stored bytes and a
+domain-separated BLAKE3 hash identifies logical snapshot content. One snapshot is limited to one
+million retained paths and 64 MiB. The codec validates the whole artifact before exposing borrowed
+paths and returns redacted staged corruption diagnostics.
+
+This resolves the durable low-level representation, but not the mutable lifecycle. Concurrent path
+registration, authoritative publication/recovery, cache behavior, and version pinning remain
+`P03-014`; HDoc reference records and capability negotiation remain `P03-015`. Until those steps,
+base HDoc stays self-contained and no numeric dictionary ID is accepted as document meaning.
 
 ### 6.4 Sidecar lifecycle
 

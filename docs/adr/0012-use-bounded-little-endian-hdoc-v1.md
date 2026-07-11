@@ -253,8 +253,9 @@ Canonical writers and validating readers enforce all of the following:
 Object presentation order is part of the ordered stored document and therefore can change HDoc
 bytes. It is not part of object mapping equality or the canonical typed content hash. A path-
 dictionary encoding MUST resolve to the same exact field-name bytes and content hash; dictionary
-numeric IDs never become object meaning. P03-013 through P03-015 define the dictionary's own
-authoritative version, recovery, and negotiation rules.
+numeric IDs never become object meaning. The
+[P03-013 format](../formats/path-dictionary-v1.md) and P03-014 through P03-015 define the
+dictionary's own authoritative version, recovery, and negotiation rules.
 
 ### CRC-32C stored-byte checksum
 
@@ -421,7 +422,8 @@ partially decoded value, repair bytes silently, or trust a derived index/sidecar
 - P03-005 fixes field/nested tables, section order, and overlap rules.
 - P03-006 fixes the BLAKE3 domain/framing and exact checksum/hash fields/vectors.
 - P03-007 fixes codec/profile `1/1`, deterministic block bytes, coordinate spaces, and selection.
-- P03-013 through P03-015 define path-dictionary bytes, negotiation, and migrations.
+- [P03-013](../formats/path-dictionary-v1.md) defines path-dictionary bytes and non-reuse lineage;
+  P03-014 through P03-015 define lifecycle, negotiation, and migrations.
 - Performance remains an experiment: alignment or compression profiles are retained only if
   `EXP-001`/`EXP-002` evidence justifies them without weakening correctness.
 
@@ -489,6 +491,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   including Missing/null, array fan-out/provenance, and fail-before-publication limits.
 - [x] Implement canonical lossless tagged rendering and strict detached import under `P03-012`,
   reusing the semantic-fixture value model while keeping public protocol/SDK grammar out of scope.
+- [x] Implement canonical collection path-dictionary snapshots and explicit append-only non-reuse
+  lineage validation under `P03-013`.
 - [ ] Commit immutable positive, boundary, noncanonical, unknown-feature/version, checksum, hash,
   overlap, truncation, padding, compression-bomb, and limit golden vectors under `P03-016`.
 - [ ] Prove Rust and TypeScript readers produce identical logical values and hashes under
@@ -502,8 +506,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 
 ## Implementation impact
 
-- Format and codec work: `P03-002`–`P03-012`, `helix-doc`, format fixtures, and fuzz targets.
-- Dictionary/evolution work: `P03-013`–`P03-019`.
+- Format and codec work: `P03-002`–`P03-013`, `helix-doc`, format fixtures, and fuzz targets.
+- Dictionary lifecycle/evolution work: `P03-014`–`P03-019`.
 - Experiments/gate: `P03-020`, `P03-021`, `EXP-001`, `EXP-002`, and `G03`.
 - Later authoritative consumers: storage, WAL/value-log/SST, replication, backup/restore,
   migration, browser persistence, SDK/protocols, and compatibility adapters.
@@ -531,6 +535,10 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   array provenance, contextual path errors, candidate preflight, native/Wasm replay, and coverage.
 - [x] `P03-012`: implement canonical lossless tagged rendering and strict detached import with
   duplicate/Unicode/type/limit rejection, exact HDoc-size validation, and active coverage.
+- [x] `P03-013`: implement the canonical collection path-dictionary format, stable dense IDs,
+  consecutive versions, exact stored/logical integrity, and predecessor/successor non-reuse proof.
+- [ ] `P03-014`: implement mutable registration, resolution, authoritative snapshot publication,
+  recovery, caching, and version pinning.
 - [ ] `P03-015`: publish the HDoc reader/writer/feature migration matrix.
 - [ ] `P03-016`–`P03-021`: freeze independent fixtures, fuzz/corruption evidence, and experiment
   conclusions before `G03`.

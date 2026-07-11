@@ -39,6 +39,8 @@ export const LIMITS = Object.freeze({
   'document.canonical_bytes': { maximum: 16_777_216n, unit: 'bytes', mutation: true },
   'document.depth': { maximum: 100n, unit: 'levels', mutation: true },
   'document.total_fields': { maximum: 100_000n, unit: 'count', mutation: true },
+  'dictionary.paths': { maximum: 1_000_000n, unit: 'count', mutation: true },
+  'dictionary.snapshot_bytes': { maximum: 67_108_864n, unit: 'bytes', mutation: true },
   'field_name.scalars': { maximum: 256n, unit: 'count', mutation: true },
   'field_name.utf8_bytes': { maximum: 1_024n, unit: 'bytes', mutation: true },
   'id.payload_bytes': { maximum: 1_024n, unit: 'bytes', mutation: true },

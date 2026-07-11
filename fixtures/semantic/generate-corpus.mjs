@@ -1445,6 +1445,8 @@ const documentLimits = [
   ['array.elements', 1000000, 'count', true],
   ['vector.dimension', 4096, 'count', true],
   ['id.payload_bytes', 1024, 'bytes', true],
+  ['dictionary.paths', 1000000, 'count', true],
+  ['dictionary.snapshot_bytes', 67108864, 'bytes', true],
 ];
 const commandLimits = [
   ['command.raw_bytes', 67108864, 'bytes', false],

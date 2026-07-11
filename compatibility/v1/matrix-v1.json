@@ -39,13 +39,13 @@
   "inputs": {
     "specifications": {
       "path": "Specifications.md",
-      "bytes": 86545,
-      "sha256": "a4b1753829938b98897d6b86a4ab6c9a75e99beb0a9a52f32ecc251d85f8c0ec"
+      "bytes": 87999,
+      "sha256": "042132a614afd0d46a139f9ef8bc9a7bdd8c8228222ad8443c2f886c80d45019"
     },
     "semantic_coverage": {
       "path": "fixtures/semantic/coverage-v1.json",
-      "bytes": 4494,
-      "sha256": "81e9cb30e88786f9bab38abfa69ab04a2395181c7c01928809703aac96c4c5ef"
+      "bytes": 4551,
+      "sha256": "9bfecda0e6133dab6a9d25ca6fa84468f9b16e94d50f22d9d7bdd4ee103b6327"
     },
     "semantic_operations": {
       "path": "fixtures/semantic/operations-v1.json",
@@ -60,27 +60,27 @@
     "semantic_manifest": {
       "path": "fixtures/semantic/manifest.json",
       "bytes": 10974,
-      "sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8"
+      "sha256": "06f80fb774894eaab6de354dea0124a9ce5619b55a81515ece6338f459e0957d"
     },
     "oracle_report": {
       "path": "fixtures/semantic/oracle-report-v1.json",
       "bytes": 4863,
-      "sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+      "sha256": "34a7b3a49998539a5f8d1b117dafa9bcca7988f6302a2cf56b9af07057c08d11"
     },
     "mongodb_cases": {
       "path": "differential/mongodb/cases-v1.json",
       "bytes": 13825,
-      "sha256": "c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5"
+      "sha256": "f7dd5b9ac0609ebe770fec60bde3e9856068479a28a639c6dcd06b290f1ef38a"
     },
     "mongodb_observations": {
       "path": "differential/mongodb/upstream-observations-v1.json",
       "bytes": 34775,
-      "sha256": "462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8"
+      "sha256": "6b26cc57e7d03ae954c47bbcb673ae4c444dad15db6038b5109ae2d5415b914e"
     },
     "mongodb_report": {
       "path": "differential/mongodb/report-v1.json",
       "bytes": 11604,
-      "sha256": "6a04b5d3cf93662ed9727de9dd5753d646acff12b914b785f6604cd61ef5b019"
+      "sha256": "7355078293509879c9d985b608c0fb207f8c256ea74c1642078e3262d5881197"
     }
   },
   "claims": {
@@ -2170,6 +2170,40 @@
       "id": "limit.command.raw_bytes",
       "domain": "limit",
       "feature": "command.raw_bytes",
+      "release": "v1_required",
+      "semantic_status": "oracle_boundary",
+      "implementation_status": "reference_only",
+      "requirements": [
+        "QUERY-002",
+        "SEC-002"
+      ],
+      "evidence": [
+        "docs/architecture/limits-v1.md",
+        "fixtures/semantic/oracle-report-v1.json"
+      ],
+      "note": "Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties."
+    },
+    {
+      "id": "limit.dictionary.paths",
+      "domain": "limit",
+      "feature": "dictionary.paths",
+      "release": "v1_required",
+      "semantic_status": "oracle_boundary",
+      "implementation_status": "reference_only",
+      "requirements": [
+        "QUERY-002",
+        "SEC-002"
+      ],
+      "evidence": [
+        "docs/architecture/limits-v1.md",
+        "fixtures/semantic/oracle-report-v1.json"
+      ],
+      "note": "Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties."
+    },
+    {
+      "id": "limit.dictionary.snapshot_bytes",
+      "domain": "limit",
+      "feature": "dictionary.snapshot_bytes",
       "release": "v1_required",
       "semantic_status": "oracle_boundary",
       "implementation_status": "reference_only",
@@ -5991,12 +6025,12 @@
     }
   ],
   "counts": {
-    "native_rows": 263,
+    "native_rows": 265,
     "native_by_status": {
       "contract_only": 56,
       "deferred_post_v1": 12,
       "explicitly_unsupported_v1": 39,
-      "oracle_boundary": 23,
+      "oracle_boundary": 25,
       "oracle_command": 17,
       "oracle_executable": 41,
       "oracle_primitive": 1,

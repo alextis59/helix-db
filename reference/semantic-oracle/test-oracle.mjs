@@ -385,15 +385,15 @@ unusedCapability.initial_state.capabilities = {
 throwsCode(() => runFixture(unusedCapability), FixtureDiagnostic, 'oracle.capability.unused');
 
 equal(ERROR_CODES.length, 74, 'independent error registry size');
-equal(Object.keys(LIMITS).length, 23, 'independent limit registry size');
+equal(Object.keys(LIMITS).length, 25, 'independent limit registry size');
 const corpus = runCorpus(repository, { draft: false });
 equal(
   corpus.report.counts,
-  { fixtures: 17, steps: 313, passed: 313, failed: 0, skipped: 0 },
+  { fixtures: 17, steps: 319, passed: 319, failed: 0, skipped: 0 },
   'full corpus',
 );
 equal(corpus.report.verdict, 'pass', 'corpus verdict');
 
 console.log(`PASS oracle unit/property/negative tests: ${assertions} assertions`);
 console.log('PASS expectation mutation canaries: value, error, order, state');
-console.log('PASS semantic oracle corpus: 17 fixtures, 313 passed, 0 failed, 0 skipped');
+console.log('PASS semantic oracle corpus: 17 fixtures, 319 passed, 0 failed, 0 skipped');

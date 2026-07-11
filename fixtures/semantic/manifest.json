@@ -9,9 +9,9 @@
   },
   "counts": {
     "fixtures": 17,
-    "steps": 313,
-    "successes": 183,
-    "errors": 130
+    "steps": 319,
+    "successes": 187,
+    "errors": 132
   },
   "coverage": {
     "CORE-002": [
@@ -157,9 +157,9 @@
     {
       "id": "limits.document-values",
       "path": "fixtures/semantic/cases/limits/document-values.json",
-      "bytes": 54726,
-      "source_sha256": "7488b899c5891125aa22ece2001dbf984ff7aa366eee5a3a3bef618084fa3d6f",
-      "canonical_sha256": "29b61d9bc86be00e97222116dadf91c07880912e9f39c1fa634be4286f7271e3",
+      "bytes": 64705,
+      "source_sha256": "367c760c16dc18a1cf5a83191a11784cf9c3a79337e1b8fdb87040e1be662db0",
+      "canonical_sha256": "ca5ae79ebbbfe42ede531838c4c13bcead1244cb7de326b5cb68fe2782672e8e",
       "requirements": [
         "DATA-001",
         "QUERY-002",
@@ -170,7 +170,7 @@
         "document-limit",
         "limit"
       ],
-      "steps": 33
+      "steps": 39
     },
     {
       "id": "ordering.profiles",

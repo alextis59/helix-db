@@ -34,7 +34,7 @@
           "format": "json",
           "schema_path": "fixtures/semantic/schema/semantic-corpus-manifest-v1.schema.json",
           "bytes": 10974,
-          "sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8"
+          "sha256": "06f80fb774894eaab6de354dea0124a9ce5619b55a81515ece6338f459e0957d"
         }
       ]
     },
@@ -50,7 +50,7 @@
           "format": "json",
           "schema_path": "fixtures/semantic/schema/semantic-oracle-report-v1.schema.json",
           "bytes": 4863,
-          "sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+          "sha256": "34a7b3a49998539a5f8d1b117dafa9bcca7988f6302a2cf56b9af07057c08d11"
         }
       ]
     },
@@ -65,15 +65,15 @@
           "path": "compatibility/v1/matrix-v1.json",
           "format": "json",
           "schema_path": "compatibility/v1/schema/matrix-v1.schema.json",
-          "bytes": 217132,
-          "sha256": "58ab474834bdf32d8b8892a97ed97f4fafb4c40203fc2cbd5961e85fb4c69d76"
+          "bytes": 218324,
+          "sha256": "f0718ff37f4c6656c77a46c430218fb2ef0a0829d4994b7104c80f85c6cccba4"
         },
         {
           "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
           "format": "markdown",
           "schema_path": null,
-          "bytes": 103065,
-          "sha256": "72c08f05bbabc893dde23f945f3646a890f7a02860315a4aae53eaf61486cc6c"
+          "bytes": 103739,
+          "sha256": "812af6a420194cccb78f36a309c5832305204148f2111a00e7ed9361a3f16b77"
         }
       ]
     }

@@ -21,9 +21,9 @@
   },
   "inputs": {
     "cases_path": "differential/mongodb/cases-v1.json",
-    "cases_sha256": "c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5",
-    "corpus_manifest_sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8",
-    "oracle_report_sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+    "cases_sha256": "f7dd5b9ac0609ebe770fec60bde3e9856068479a28a639c6dcd06b290f1ef38a",
+    "corpus_manifest_sha256": "06f80fb774894eaab6de354dea0124a9ce5619b55a81515ece6338f459e0957d",
+    "oracle_report_sha256": "34a7b3a49998539a5f8d1b117dafa9bcca7988f6302a2cf56b9af07057c08d11"
   },
   "counts": {
     "cases": 16,
@@ -40,7 +40,7 @@
   "observations": {
     "path": "differential/mongodb/upstream-observations-v1.json",
     "bytes": 34775,
-    "sha256": "462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8"
+    "sha256": "6b26cc57e7d03ae954c47bbcb673ae4c444dad15db6038b5109ae2d5415b914e"
   },
   "cases": [
     {

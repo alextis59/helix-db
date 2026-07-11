@@ -12,7 +12,7 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "hdoc-tagged-json"
+status = "path-dictionary-format"
 database-functionality = true
 
 [dependencies]

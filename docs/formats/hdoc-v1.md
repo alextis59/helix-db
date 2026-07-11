@@ -314,7 +314,7 @@ feature negotiation. Bits 5 through 31 are reserved and MUST be zero in HDoc 1.0
 | ---: | --- | --- | --- |
 | 0 | `0x00000001` | `HAS_COMPRESSED_SECTIONS` | At least one section entry uses registered compression |
 | 1 | `0x00000002` | `HAS_EXTENSION_AREA` | Exactly one `extension_area` section exists; `P03-015` |
-| 2 | `0x00000004` | `USES_PATH_DICTIONARY_REFERENCES` | Body depends on a pinned path dictionary; `P03-013` |
+| 2 | `0x00000004` | `USES_PATH_DICTIONARY_REFERENCES` | Body depends on a pinned [path dictionary](path-dictionary-v1.md); reference records remain `P03-015` |
 | 3 | `0x00000008` | `HAS_SEMANTIC_EXTENSIONS` | Extension content contributes to meaning/hash; `P03-015` |
 | 4 | `0x00000010` | `HAS_NONSEMANTIC_EXTENSIONS` | Skippable/preservable nonsemantic extension content exists; `P03-015` |
 
@@ -330,7 +330,7 @@ agree; either one without the other is corruption/noncanonical input.
 | Bit | Mask | Name | Required behavior |
 | ---: | --- | --- | --- |
 | 0 | `0x0000000000000001` | `SECTION_COMPRESSION` | Reader understands every present registered codec/profile; v1 assigns `1/1` |
-| 1 | `0x0000000000000002` | `PATH_DICTIONARY_REFERENCES` | Reader can resolve the exact pinned dictionary version (`P03-013`–`P03-015`) |
+| 1 | `0x0000000000000002` | `PATH_DICTIONARY_REFERENCES` | Reader can resolve an exact [dictionary](path-dictionary-v1.md) identity/version; HDoc records remain `P03-015` |
 | 2 | `0x0000000000000004` | `SEMANTIC_EXTENSIONS` | Reader understands every semantic extension and typed-hash contribution (`P03-015`) |
 
 Bits 3 through 63 are unassigned. Any set unassigned required bit yields
@@ -667,7 +667,7 @@ fields based on its own format version.
 | [`P03-006`](hdoc-v1-integrity.md) | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
 | [`P03-007`](hdoc-v1-compression.md) | Nonzero codec/profile IDs, bounded block grammar, and logical-coordinate derivation | Directory stride, logical/stored length fields, canonical limit |
 | [`P03-012`](hdoc-v1-tagged-json.md) | Lossless debug/SDK-boundary rendering and strict detached import | HDoc bytes, stored tags, validation order, or public wire grammar |
-| `P03-013`–`P03-015` | Path dictionary and extension record grammars/negotiation | Existing flag/feature bit meanings or ID reuse |
+| [`P03-013`](path-dictionary-v1.md) complete; `P03-014`–`P03-015` | Dictionary lifecycle and HDoc reference records/negotiation | Existing flag/feature bit meanings or ID reuse |
 
 Later tasks may fill their reserved registries but cannot silently reinterpret zero, a reserved bit,
 or an existing ID.

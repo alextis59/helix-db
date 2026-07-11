@@ -52,10 +52,10 @@
     "reason": "Phase 2 has crate-boundary constants and test harnesses but no executable database product logic; the first instrumented product region activates every applicable threshold"
   },
   "active_product_scope": {
-    "allowed_status": "hdoc-tagged-json",
+    "allowed_status": "path-dictionary-format",
     "requires_database_functionality": true,
     "activated_by": "P03-008",
-    "reason": "The safe deterministic HDoc encoder, validating decoder, borrowed and owned logical values, exact-name and nested-path lookup, and strict lossless tagged JSON rendering/import are executable semantic-critical product logic, so an empty denominator is forbidden and every applicable aggregate and per-file threshold must pass"
+    "reason": "The safe deterministic HDoc encoder, validating decoder, borrowed and owned logical values, exact-name and nested-path lookup, strict lossless tagged JSON rendering/import, and canonical path-dictionary snapshot/lineage codec are executable semantic-critical product logic, so an empty denominator is forbidden and every applicable aggregate and per-file threshold must pass"
   },
   "groups": [
     {

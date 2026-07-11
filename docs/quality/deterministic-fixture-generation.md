@@ -21,7 +21,7 @@ Committed fixtures must be reproducible from reviewed inputs without wall time, 
 | Generator | Randomness | Authority artifact | Independent check |
 | --- | --- | --- | --- |
 | `toolchain.splitmix64-vectors` 1.0.0 | Seeded | Portable 16-word vector | Independent Python recomputation plus schema/hash checks |
-| `semantics.corpus-v1` 1.0.0 | None | Corpus manifest binding 17 fixtures/313 steps | Corpus generator and independent corpus checker |
+| `semantics.corpus-v1` 1.0.0 | None | Corpus manifest binding 17 fixtures/319 steps | Corpus generator and independent corpus checker |
 | `semantics.oracle-report-v1` 1.0.0 | None | Oracle report | Oracle generation check and 382-assertion oracle tests |
 | `compatibility.matrix-v1` 1.0.0 | None | Matrix JSON plus derived Markdown | Matrix generator and independent matrix checker |
 

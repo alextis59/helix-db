@@ -23,7 +23,7 @@ The oracle reads expected values only in the final comparison layer. Action exec
 
 | Module | Responsibility |
 | --- | --- |
-| `registry.mjs` | Frozen profiles, 17 operation arities, 23 limits, 74 error defaults, diagnostics |
+| `registry.mjs` | Frozen profiles, 17 operation arities, 25 limits, 74 error defaults, diagnostics |
 | `canonical.mjs` | Independent fixture-profile RFC 8785 canonical bytes and SHA-256 |
 | `value.mjs` | Typed validation, exact rational numeric comparison, decimal/integer arithmetic, equality/identity/order, paths, time, arrays, vectors |
 | `raw-json.mjs` | Fatal UTF-8 decoding, duplicate-aware recursive JSON parsing, compression bounds, typed-wrapper validation |

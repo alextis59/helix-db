@@ -21,19 +21,19 @@ Native rows distinguish executable reference semantics from accepted contracts a
 
 | Input | Path | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| `specifications` | [Specifications.md](../../Specifications.md) | `a4b1753829938b98897d6b86a4ab6c9a75e99beb0a9a52f32ecc251d85f8c0ec` | 86545 |
-| `semantic_coverage` | [fixtures/semantic/coverage-v1.json](../../fixtures/semantic/coverage-v1.json) | `81e9cb30e88786f9bab38abfa69ab04a2395181c7c01928809703aac96c4c5ef` | 4494 |
+| `specifications` | [Specifications.md](../../Specifications.md) | `042132a614afd0d46a139f9ef8bc9a7bdd8c8228222ad8443c2f886c80d45019` | 87999 |
+| `semantic_coverage` | [fixtures/semantic/coverage-v1.json](../../fixtures/semantic/coverage-v1.json) | `9bfecda0e6133dab6a9d25ca6fa84468f9b16e94d50f22d9d7bdd4ee103b6327` | 4551 |
 | `semantic_operations` | [fixtures/semantic/operations-v1.json](../../fixtures/semantic/operations-v1.json) | `d5aaa5ecb693d58607635a94f6e7361613ce4fa42922ce8bb331fe25ec365474` | 3066 |
 | `semantic_errors` | [fixtures/semantic/error-cases-v1.json](../../fixtures/semantic/error-cases-v1.json) | `798d6d47afcc5992373acb98ae4ebbda22379c25ea986c6da50816d5d9859f68` | 16242 |
-| `semantic_manifest` | [fixtures/semantic/manifest.json](../../fixtures/semantic/manifest.json) | `ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8` | 10974 |
-| `oracle_report` | [fixtures/semantic/oracle-report-v1.json](../../fixtures/semantic/oracle-report-v1.json) | `8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f` | 4863 |
-| `mongodb_cases` | [differential/mongodb/cases-v1.json](../../differential/mongodb/cases-v1.json) | `c848f62c41ab817c4d29fcfe64ffb9aa3f6da9973f18402e5e7470eaa0fbfcc5` | 13825 |
-| `mongodb_observations` | [differential/mongodb/upstream-observations-v1.json](../../differential/mongodb/upstream-observations-v1.json) | `462b9c239c222dcba3f7b0371e9afccb0c556238d5197b8b196ab1183586dfc8` | 34775 |
-| `mongodb_report` | [differential/mongodb/report-v1.json](../../differential/mongodb/report-v1.json) | `6a04b5d3cf93662ed9727de9dd5753d646acff12b914b785f6604cd61ef5b019` | 11604 |
+| `semantic_manifest` | [fixtures/semantic/manifest.json](../../fixtures/semantic/manifest.json) | `06f80fb774894eaab6de354dea0124a9ce5619b55a81515ece6338f459e0957d` | 10974 |
+| `oracle_report` | [fixtures/semantic/oracle-report-v1.json](../../fixtures/semantic/oracle-report-v1.json) | `34a7b3a49998539a5f8d1b117dafa9bcca7988f6302a2cf56b9af07057c08d11` | 4863 |
+| `mongodb_cases` | [differential/mongodb/cases-v1.json](../../differential/mongodb/cases-v1.json) | `f7dd5b9ac0609ebe770fec60bde3e9856068479a28a639c6dcd06b290f1ef38a` | 13825 |
+| `mongodb_observations` | [differential/mongodb/upstream-observations-v1.json](../../differential/mongodb/upstream-observations-v1.json) | `6b26cc57e7d03ae954c47bbcb673ae4c444dad15db6038b5109ae2d5415b914e` | 34775 |
+| `mongodb_report` | [differential/mongodb/report-v1.json](../../differential/mongodb/report-v1.json) | `7355078293509879c9d985b608c0fb207f8c256ea74c1642078e3262d5881197` | 11604 |
 
 ## Summary
 
-- Native semantic rows: 263.
+- Native semantic rows: 265.
 - Experimental MongoDB differential rows: 16 (12 exact, 4 different).
 - Currently supported MongoDB adapter rows: 0.
 - Explicit MongoDB unsupported-category rows: 56, plus the closed-world unlisted rule.
@@ -171,6 +171,8 @@ Native rows distinguish executable reference semantics from accepted contracts a
 | `limit.batch.items` | limit | `batch.items` | `oracle_boundary` | `reference_only` | `v1_required` | [docs/architecture/limits-v1.md](../../docs/architecture/limits-v1.md) | Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties. |
 | `limit.command.expanded_bytes` | limit | `command.expanded_bytes` | `oracle_boundary` | `reference_only` | `v1_required` | [docs/architecture/limits-v1.md](../../docs/architecture/limits-v1.md) | Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties. |
 | `limit.command.raw_bytes` | limit | `command.raw_bytes` | `oracle_boundary` | `reference_only` | `v1_required` | [docs/architecture/limits-v1.md](../../docs/architecture/limits-v1.md) | Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties. |
+| `limit.dictionary.paths` | limit | `dictionary.paths` | `oracle_boundary` | `reference_only` | `v1_required` | [docs/architecture/limits-v1.md](../../docs/architecture/limits-v1.md) | Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties. |
+| `limit.dictionary.snapshot_bytes` | limit | `dictionary.snapshot_bytes` | `oracle_boundary` | `reference_only` | `v1_required` | [docs/architecture/limits-v1.md](../../docs/architecture/limits-v1.md) | Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties. |
 | `limit.document.canonical_bytes` | limit | `document.canonical_bytes` | `oracle_boundary` | `reference_only` | `v1_required` | [docs/architecture/limits-v1.md](../../docs/architecture/limits-v1.md) | Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties. |
 | `limit.document.depth` | limit | `document.depth` | `oracle_boundary` | `reference_only` | `v1_required` | [docs/architecture/limits-v1.md](../../docs/architecture/limits-v1.md) | Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties. |
 | `limit.document.total_fields` | limit | `document.total_fields` | `oracle_boundary` | `reference_only` | `v1_required` | [docs/architecture/limits-v1.md](../../docs/architecture/limits-v1.md) | Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties. |

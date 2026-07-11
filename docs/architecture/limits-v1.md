@@ -2,7 +2,7 @@
 
 - Status: Accepted semantic baseline
 - Profile ID: `limits-v1`
-- Last updated: 2026-07-10
+- Last updated: 2026-07-11
 - Owner: Query semantics owner
 - Plan item: `P01-011`
 - Governing requirements: `DATA-001`, `QUERY-001`, `QUERY-002`, `SEC-002`
@@ -40,6 +40,8 @@ All byte units are exact octets; KiB/MiB are powers of 1,024.
 | `regex.pattern_bytes` | Regex pattern UTF-8 bytes | 65,536 | Decoded pattern text; engine step/memory limits remain additional |
 | `vector.top_k` | Exact vector top-k `k` | 10,000 | Positive requested result count |
 | `path.candidates` | Path candidates per document | 1,000,000 | Values produced by one dotted traversal before predicate reduction |
+| `dictionary.paths` | Retained paths in one collection dictionary | 1,000,000 | Complete append-only registration history; also the maximum assigned path ID |
+| `dictionary.snapshot_bytes` | Canonical path-dictionary snapshot | 67,108,864 bytes (64 MiB) | Complete stored snapshot including header, entries, path bytes, padding, footer, checksum, and hash |
 
 Stable limit IDs are the `errors-v1` `details.limit_id`, fixture, metric, explain, quota-policy, and compatibility identifiers. They are never localized/reused; changing their measurement/maximum follows the `limits-v1` version/migration rules.
 
@@ -130,6 +132,20 @@ Rules:
 - Root/system path mutation restrictions are checked after parsing and before authorization-sensitive execution.
 
 The path candidate cap prevents a traversal from materializing more than 1,000,000 values for one document. Reaching a greater count is a typed resource/limit error, not truncation or partial predicate evaluation.
+
+## Field-path dictionary limits
+
+One collection dictionary retains at most 1,000,000 exact unique dotted paths. Because IDs are
+dense from one and never reused, this is also the largest assignable path ID. Removed or renamed
+application fields do not free an ID; a new path appends a new ID. The complete canonical snapshot
+is capped at 64 MiB before allocation or publication. Its exact header, entry, path-pool, padding,
+footer, checksum, and content-hash bytes all count. These limits apply independently: a snapshot
+must satisfy both even when its paths are individually valid under `path.utf8_bytes` and
+`path.segments`.
+
+The empty version-zero snapshot consumes 128 bytes. Every nonempty snapshot includes `_id` at ID
+one. A host that cannot retain or reopen a valid snapshot rejects the collection capability; it
+does not discard old entries, compact IDs, or silently create a second namespace.
 
 ## Array length
 
@@ -226,6 +242,8 @@ Every numeric limit has below/at/above fixtures, including combinations where a 
 - Per-object and total field boundaries across nested arrays/objects.
 - Field names by UTF-8 byte/scalar boundaries, invalid controls/dot/dollar/empty/reserved names, and multibyte cases.
 - Path byte/segment/numeric overflow/candidate boundaries.
+- Dictionary retained-path and complete snapshot-byte boundaries, including non-reuse after
+  application-level field removal.
 - Array length and vector dimension/k boundaries with checked prospective mutations.
 - Raw versus compressed/expanded command boundaries and decompression bombs.
 - Batch/stage/AST/depth/list/sort/projection/regex boundaries before/after normalization.

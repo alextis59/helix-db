@@ -14,7 +14,7 @@ The generated [manifest](manifest.json) is the machine authority for exact IDs, 
 
 ```text
 fixtures:  17
-steps:     313
+steps:     319
 successes: 183
 errors:    130
 ```
@@ -101,7 +101,7 @@ Draft 2020-12 validation is additionally required for every case and the manifes
 
 ## Explicit follow-up boundary
 
-- The [`P01-020` independent executable oracle](../../reference/semantic-oracle/README.md) agrees with all 313 committed expectations, with zero failures/skips and four mutation canaries proving value/error/order/state mismatch detection.
+- The [`P01-020` independent executable oracle](../../reference/semantic-oracle/README.md) agrees with all 319 committed expectations, with zero failures/skips and four mutation canaries proving value/error/order/state mismatch detection.
 - These are semantic fixtures, not HDoc/protocol/WAL/backup byte fixtures.
 - Compact boundaries do not replace real allocation/decompression/stream/atomicity tests.
 - `fixture.raise-error` does not replace real authorization, GPU loss, corruption, durability, or recovery fault injection.

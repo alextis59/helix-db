@@ -4,9 +4,9 @@
   "semantic_profile": "helix-native-v1",
   "expected_counts": {
     "fixtures": 17,
-    "steps": 313,
-    "successes": 183,
-    "errors": 130
+    "steps": 319,
+    "successes": 187,
+    "errors": 132
   },
   "required_case_ids": [
     "errors.registry",
@@ -53,6 +53,8 @@
     "batch.items",
     "command.expanded_bytes",
     "command.raw_bytes",
+    "dictionary.paths",
+    "dictionary.snapshot_bytes",
     "document.canonical_bytes",
     "document.depth",
     "document.total_fields",

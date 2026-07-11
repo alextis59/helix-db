@@ -18,8 +18,8 @@
   "semantic_inputs": {
     "fixture_schema": "helix.semantic-fixture/1",
     "semantic_profile": "helix-native-v1",
-    "corpus_manifest_sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8",
-    "oracle_report_sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+    "corpus_manifest_sha256": "06f80fb774894eaab6de354dea0124a9ce5619b55a81515ece6338f459e0957d",
+    "oracle_report_sha256": "34a7b3a49998539a5f8d1b117dafa9bcca7988f6302a2cf56b9af07057c08d11"
   },
   "sources": [
     "https://www.mongodb.com/docs/v6.0/reference/bson-type-comparison-order/",
