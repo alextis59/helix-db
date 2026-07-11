@@ -1,0 +1,108 @@
+{
+  "schema": "helix.wgsl-validation-report/1",
+  "manifest_sha256": "6ab55aaed558e2ac041238c76517db333de2209b7753e033afd28df59e567fa5",
+  "validator": {
+    "adapter": {
+      "architecture": "swiftshader",
+      "description": "SwiftShader Device (Subzero)",
+      "device": "0xc0de",
+      "vendor": "google"
+    },
+    "backend": "dawn-swiftshader",
+    "browser": "chromium",
+    "browser_version": "149.0.7827.55",
+    "flags": [
+      "--enable-unsafe-webgpu",
+      "--use-webgpu-adapter=swiftshader",
+      "--enable-dawn-backend-validation",
+      "--enable-dawn-features=allow_unsafe_apis",
+      "--disable-dawn-features=use_dxc",
+      "--enable-webgpu-developer-features",
+      "--use-gpu-in-tests"
+    ],
+    "operation": "shader-module-validation-and-compute-pipeline-creation",
+    "playwright_version": "1.61.1",
+    "secure_context": true,
+    "trusted_repository_sources_only": true
+  },
+  "fixtures": [
+    {
+      "compilation_messages": [],
+      "expected_outcome": "accept",
+      "id": "valid-noop-compute",
+      "passed": true,
+      "path": "valid/noop-compute.wgsl",
+      "pipeline_created": true,
+      "pipeline_rejected": false,
+      "source_sha256": "adc0c0186ec26eda6839d1377a685adfcc7f17639bc8ae284ff884d2fffaa215",
+      "validation_error": false
+    },
+    {
+      "compilation_messages": [],
+      "expected_outcome": "accept",
+      "id": "valid-storage-binding-layout",
+      "passed": true,
+      "path": "valid/storage-binding-layout.wgsl",
+      "pipeline_created": true,
+      "pipeline_rejected": false,
+      "source_sha256": "0c6900ac304b5310bc8712008030ec3b6c2a3d324c7790e710c3b0a63d554406",
+      "validation_error": false
+    },
+    {
+      "compilation_messages": [
+        {
+          "length": 1,
+          "lineNum": 2,
+          "linePos": 10,
+          "message": "expected ')' for function declaration",
+          "offset": 37,
+          "type": "error"
+        }
+      ],
+      "expected_outcome": "reject",
+      "id": "invalid-malformed-function",
+      "passed": true,
+      "path": "invalid/malformed-function.wgsl",
+      "pipeline_created": false,
+      "pipeline_rejected": true,
+      "source_sha256": "5538e78a7318f0c88d81c25fd09c6e65fcdc63dcd433d090b2087669f3127644",
+      "validation_error": true
+    },
+    {
+      "compilation_messages": [
+        {
+          "length": 43,
+          "lineNum": 2,
+          "linePos": 23,
+          "message": "entry point 'main' references multiple variables that use the same resource binding '@group(0)', '@binding(0)'",
+          "offset": 88,
+          "type": "error"
+        },
+        {
+          "length": 42,
+          "lineNum": 1,
+          "linePos": 23,
+          "message": "first resource binding usage declared here",
+          "offset": 22,
+          "type": "info"
+        }
+      ],
+      "expected_outcome": "reject",
+      "id": "invalid-duplicate-resource-binding",
+      "passed": true,
+      "path": "invalid/duplicate-resource-binding.wgsl",
+      "pipeline_created": false,
+      "pipeline_rejected": true,
+      "source_sha256": "a45fbdda64979fbed45abff03a590cf0afea9e9ddf2eb6395817dd63b5c1528e",
+      "validation_error": true
+    }
+  ],
+  "summary": {
+    "accepted": 2,
+    "failed": 0,
+    "fixtures": 4,
+    "passed": 4,
+    "pipelines_created": 2,
+    "rejected": 2
+  }
+}

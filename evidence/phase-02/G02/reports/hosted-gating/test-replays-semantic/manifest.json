@@ -1,0 +1,103 @@
+{
+  "schema": "helix.retained-artifact-bundle/1",
+  "plan_item": "P02-015",
+  "profile": "test-replays",
+  "variant": "semantic",
+  "status": "complete",
+  "recorded_at": "2026-07-11T07:02:56.525Z",
+  "execution_id": "github-29143784086-1",
+  "source_control": {
+    "commit": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+    "dirty": false
+  },
+  "environment": {
+    "provider": "github-actions",
+    "platform": "linux",
+    "architecture": "x64",
+    "node": "v22.23.1",
+    "github_run_id": "29143784086",
+    "github_run_attempt": 1
+  },
+  "retention": {
+    "ci_days": 30,
+    "durable": "permanent-when-used-by-gate-or-release",
+    "promotion_required": true,
+    "sensitivity": "public-repository-data-only"
+  },
+  "producer": {
+    "command": [
+      "node",
+      "tests/toolchain/collect-retained-artifacts.mjs",
+      "test-replays",
+      "semantic"
+    ],
+    "upstream_command": [
+      "node",
+      "tests/run-suite.mjs",
+      "conformance"
+    ],
+    "exit_code": 0
+  },
+  "source_inputs": [
+    {
+      "path": "fixtures/semantic/manifest.json",
+      "bytes": 10974,
+      "sha256": "ff4088a1d791dabb8ecc6ffd885f3d08c09c55e1a08871312163d915e6b843e8"
+    },
+    {
+      "path": "fixtures/semantic/oracle-report-v1.json",
+      "bytes": 4863,
+      "sha256": "8427fc0d3a5e3c09fc9d4c89018822898b45f94b7a9abaef659b6ba9607d8d1f"
+    },
+    {
+      "path": "compatibility/v1/matrix-v1.json",
+      "bytes": 217132,
+      "sha256": "1f116e0e6702526854d22c4e473530817139ca36f7423653ecc76c8324916a60"
+    },
+    {
+      "path": "differential/mongodb/report-v1.json",
+      "bytes": 11604,
+      "sha256": "6a04b5d3cf93662ed9727de9dd5753d646acff12b914b785f6604cd61ef5b019"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "conformance.log",
+      "media_type": "text/plain",
+      "role": "raw-test-log",
+      "bytes": 3441,
+      "sha256": "1a906147c69f9d1e24b6a653dcec326ea6d9e478ebebedadbf7ded277fea7819"
+    },
+    {
+      "path": "dependency/inventory-report.json",
+      "media_type": "application/json",
+      "role": "dependency-diagnostic",
+      "bytes": 11271,
+      "sha256": "446bb4c7f3b62f65f675b08fa074eef8e2feb6de6fadff844a326c32317c190d"
+    },
+    {
+      "path": "dependency/npm-audit.json",
+      "media_type": "application/json",
+      "role": "dependency-diagnostic",
+      "bytes": 361,
+      "sha256": "257b7c2e12ff0cc36d6c67a42a3b4d7efe5ccb313cbd966361df1f47e4815730"
+    },
+    {
+      "path": "dependency/npm-signatures.json",
+      "media_type": "application/json",
+      "role": "dependency-diagnostic",
+      "bytes": 477675,
+      "sha256": "77c45f55f77a062cc0b6f25b8323a636da4deb66162f65eec063ca03d8ae5b12"
+    },
+    {
+      "path": "dependency/observation-report.json",
+      "media_type": "application/json",
+      "role": "dependency-diagnostic",
+      "bytes": 16211,
+      "sha256": "6829e192e15fa8c3b901a7978b2752b2cfcb2d663dd7387564bbcd74310fcd89"
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "This diagnostic CI bundle proves only its named foundation replay; it is not durable gate evidence or a product, format, recovery, browser-support, or release claim until promoted and independently reviewed.",
+  "verdict": "pass"
+}

@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "gate_id": "G02",
+  "reviewed_commit": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+  "reviewed_tree": "695ac421358f9d078c2fa11fb8962aa3b9995e1c",
+  "recorded_at": "2026-07-11T07:12:00Z",
+  "requirements": [
+    "COMPAT-001",
+    "CORE-001",
+    "CORE-003",
+    "INV-001",
+    "INV-003",
+    "INV-004",
+    "INV-006",
+    "INV-007",
+    "INV-009",
+    "INV-010",
+    "PLAT-001",
+    "PLAT-002",
+    "PLAT-003",
+    "QUAL-001",
+    "QUAL-002",
+    "SEC-001",
+    "SEC-002"
+  ],
+  "accepted_adrs": ["0001"],
+  "gate_checked_at_reviewed_commit": false,
+  "task_evidence": {
+    "directory": "evidence/phase-02",
+    "tasks": 17,
+    "distinct_source_commits": 17,
+    "source_artifact_records": 439,
+    "retained_artifact_records": 21,
+    "produced_artifact_records": 5,
+    "removed_artifact_records": 4,
+    "verifier_records": 17,
+    "verdict_required": "pass"
+  },
+  "hosted_runs": {
+    "failed_gating": {
+      "id": 29143529811,
+      "head_sha": "3c526f521bfa230d10d57451d432a93e8625034f",
+      "conclusion": "failure",
+      "failed_job_id": 86521027391
+    },
+    "accepted_gating": {
+      "id": 29143784086,
+      "head_sha": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+      "conclusion": "success",
+      "jobs": 12,
+      "emitted_lanes": 11,
+      "artifacts": 5
+    },
+    "accepted_nightly": {
+      "id": 29143911392,
+      "head_sha": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+      "conclusion": "success",
+      "jobs": 3,
+      "native_lanes": 2
+    }
+  },
+  "hosted_observation": {
+    "path": "hosted-observation.json",
+    "media_type": "application/json",
+    "bytes": 71186,
+    "sha256": "bea01e34871d3bd6e00e96bf3744e1a7b538fa2f0668376cf547e7eda81422c3"
+  },
+  "promotion": {
+    "path": "reports/hosted-gating/promotion-manifest.json",
+    "media_type": "application/json",
+    "bytes": 12119,
+    "sha256": "e54c972ba036a2ac0c85054e6fd2bd27f14129157985f734932d747faafaf6d4"
+  },
+  "gate_documents": [
+    {
+      "path": "README.md",
+      "media_type": "text/markdown",
+      "bytes": 6915,
+      "sha256": "68223b9690ee43fcab2f24780e95b75056206918c60da09a98839f39ab93b23b"
+    },
+    {
+      "path": "review.md",
+      "media_type": "text/markdown",
+      "bytes": 9096,
+      "sha256": "695b00520659af446777202fc9dcd22aa930a8f3c34aef8371310e7c1f2eb99f"
+    }
+  ],
+  "preserved_attempts": [
+    {
+      "id": "2026-07-11-hosted-evidence-missing",
+      "path": "attempts/2026-07-11-hosted-evidence-missing/README.md",
+      "reviewed_commit": "2c252e0b8663fae198c15bef833417c8dd4c6dfe",
+      "verdict": "blocked"
+    }
+  ],
+  "diagnostic_attempts": [
+    {
+      "command": "initial read-only G02 gate review",
+      "exit_code": 1,
+      "result": "correctly blocked because no hosted workflow or artifact-service evidence existed"
+    },
+    {
+      "command": "GitHub Actions CI run 29143529811",
+      "exit_code": 1,
+      "result": "11 jobs passed; Windows x64 exposed CRLF checkout drift in the standalone Cargo.lock"
+    },
+    {
+      "command": "gh workflow run ci-nightly.yml --ref main using the environment token",
+      "exit_code": 1,
+      "result": "HTTP 403 because that token lacked Actions write scope; no source or setting changed"
+    },
+    {
+      "command": "nightly dispatch using the existing owner keyring credential with workflow scope",
+      "exit_code": 0,
+      "result": "run 29143911392 executed the exact reviewed commit"
+    }
+  ],
+  "verification": {
+    "implementation_plan_items": 522,
+    "phase_02_tasks": 17,
+    "distinct_source_commits": 17,
+    "source_artifact_records": 439,
+    "retained_artifact_records": 21,
+    "produced_artifact_records": 5,
+    "removed_artifact_records": 4,
+    "verifier_records": 17,
+    "accepted_adrs": 1,
+    "gate_requirements": 17,
+    "gating_lanes": 11,
+    "gating_workflow_jobs": 12,
+    "nightly_native_lanes": 2,
+    "nightly_workflow_jobs": 3,
+    "observational_lanes": 1,
+    "bootstrap_profiles": 4,
+    "troubleshooting_codes": 17,
+    "node_lanes": 2,
+    "native_tests": 9,
+    "browser_engines": 3,
+    "hosted_successful_jobs": 15,
+    "hosted_artifacts": 5,
+    "hosted_archive_bytes": 167881,
+    "promoted_source_files": 21,
+    "promoted_identity_files": 20,
+    "promoted_encoded_files": 1,
+    "evidence_rejection_canaries": 4,
+    "failed_hosted_attempts": 1,
+    "resolved_findings": 5,
+    "tracked_later_findings": 1,
+    "workflow_files": 3,
+    "workflow_jobs": 9,
+    "workflow_steps": 56,
+    "reviewed_tracked_files": 418,
+    "reviewed_markdown_files": 160,
+    "reviewed_local_links": 1074,
+    "specification_requirements": 44,
+    "gate_checked_at_reviewed_commit": false
+  },
+  "commands": [
+    {
+      "command": "corepack npm run policy:javascript; examples:test; examples:policy; ci:check; toolchain:types",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo fmt/check/Clippy/test plus native example",
+      "exit_code": 0
+    },
+    {
+      "command": "fresh core.autocrlf=true clone with byte-identical locks and native example",
+      "exit_code": 0
+    },
+    {
+      "command": "GitHub Actions CI run 29143784086",
+      "exit_code": 0
+    },
+    {
+      "command": "GitHub Actions CI Nightly run 29143911392",
+      "exit_code": 0
+    },
+    {
+      "command": "download, SHA-256 compare, and ZIP-test all five hosted artifacts",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/G02/verify.mjs 33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/G02/test-verifier.mjs",
+      "exit_code": 0
+    }
+  ],
+  "review": "review.md",
+  "verifier": {
+    "path": "evidence/phase-02/G02/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 35088,
+    "sha256": "61970518d80cdf484f15130355ab602b6825d55685cdd76bd8ea77c3163de70e"
+  },
+  "verifier_test": {
+    "path": "evidence/phase-02/G02/test-verifier.mjs",
+    "media_type": "text/javascript",
+    "bytes": 5476,
+    "sha256": "7d1f01e0b563345dab93c1eebba1987b1225f06a42d0a5ac530c32b1e3c11e0e"
+  },
+  "verdict": "pass"
+}

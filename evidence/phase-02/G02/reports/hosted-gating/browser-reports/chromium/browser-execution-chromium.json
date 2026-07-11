@@ -1,0 +1,40 @@
+{
+  "schema": "helix.browser-execution-report/1",
+  "plan_item": "P02-015",
+  "recorded_at": "2026-07-11T07:02:38.069Z",
+  "selection": "chromium",
+  "playwright_version": "1.61.1",
+  "browser_identities": [
+    {
+      "engine": "chromium",
+      "revision": "1228",
+      "browser_version": "149.0.7827.55",
+      "launcher_bytes": 278568152,
+      "launcher_sha256": "2d18db9d8608b052b6a552ee00ec1e830f93692e928b65ecc67d693bd33fe801"
+    }
+  ],
+  "stats": {
+    "duration_ms": 1310,
+    "expected": 1,
+    "skipped": 0,
+    "unexpected": 0,
+    "flaky": 0
+  },
+  "tests": [
+    {
+      "file": "tests/browser/bundle-smoke.spec.ts",
+      "line": 5,
+      "column": 1,
+      "title": "shows its non-database boundary and instantiates the bundled core Wasm",
+      "project": "chromium",
+      "status": "passed",
+      "expected_status": "passed",
+      "retry": 0,
+      "duration_ms": 285,
+      "errors": [],
+      "attachments": []
+    }
+  ],
+  "failures": [],
+  "verdict": "pass"
+}

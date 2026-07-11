@@ -1,0 +1,116 @@
+{
+  "schema": "helix.retained-artifact-bundle/1",
+  "plan_item": "P02-015",
+  "profile": "browser-reports",
+  "variant": "chromium",
+  "status": "complete",
+  "recorded_at": "2026-07-11T07:02:40.155Z",
+  "execution_id": "github-29143784086-1",
+  "source_control": {
+    "commit": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+    "dirty": false
+  },
+  "environment": {
+    "provider": "github-actions",
+    "platform": "linux",
+    "architecture": "x64",
+    "node": "v22.23.1",
+    "github_run_id": "29143784086",
+    "github_run_attempt": 1
+  },
+  "retention": {
+    "ci_days": 30,
+    "durable": "supported-platform-lifetime-when-used-by-release",
+    "promotion_required": true,
+    "sensitivity": "public-repository-data-only"
+  },
+  "producer": {
+    "command": [
+      "node",
+      "tests/toolchain/collect-retained-artifacts.mjs",
+      "browser-reports",
+      "chromium"
+    ],
+    "upstream_command": [
+      "node",
+      "tests/toolchain/run-browser-smoke.mjs",
+      "chromium"
+    ],
+    "exit_code": 0
+  },
+  "source_inputs": [
+    {
+      "path": "examples/examples.json",
+      "bytes": 1599,
+      "sha256": "27b932a45af5cc076bd933a650a212e707c89bcd9fbd29a36e2a513abe85bc3f"
+    },
+    {
+      "path": "examples/browser-toolchain/README.md",
+      "bytes": 1242,
+      "sha256": "1b64445409bd02681ba9d021eea5926fb8bf5aece3fc27dc0a96046e994e1571"
+    },
+    {
+      "path": "examples/browser-toolchain/index.html",
+      "bytes": 949,
+      "sha256": "c10a7449177067747da2a273525eb3deacd21678cc642db390bd0b65d9ad582d"
+    },
+    {
+      "path": "examples/browser-toolchain/main.ts",
+      "bytes": 2355,
+      "sha256": "2dee0ebdbe5e43e5033aea6ca371aa40e98728bfb5e9882d6f20e2e53f28ed7c"
+    },
+    {
+      "path": "examples/browser-toolchain/report.ts",
+      "bytes": 963,
+      "sha256": "150e863669cd4040cb76c69e4882c75d8ae04821ae942bcd16b905d984313e44"
+    },
+    {
+      "path": "playwright.config.ts",
+      "bytes": 807,
+      "sha256": "a010467c099a140434e25f6ccdb5050e4844feeba7ab1bd92c4bc4dc25e043bc"
+    },
+    {
+      "path": "tests/browser/bundle-smoke.spec.ts",
+      "bytes": 2601,
+      "sha256": "100fc8b926c2de464f7e7203b1a0d423e299998c48c951e42b6210f3c9ba5d0d"
+    },
+    {
+      "path": "tests/toolchain/dependency-report-policy.json",
+      "bytes": 4707,
+      "sha256": "e8f1c3040adb5304368b40b13993fccb80f253b5eea1fcd479446bfa40719b77"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "browser-bundle-smoke.json",
+      "media_type": "application/json",
+      "role": "browser-validation-report",
+      "bytes": 1252,
+      "sha256": "bbf4afbf3558bdb1a4b715a5e5085fd00013c23d05363e661ea9924fd66bb7ef"
+    },
+    {
+      "path": "browser-execution-chromium.json",
+      "media_type": "application/json",
+      "role": "browser-execution-report",
+      "bytes": 989,
+      "sha256": "bd6ddcf023235b4164753687af61d537f6cbee8ea995115f0bcb69400fa08232"
+    },
+    {
+      "path": "wasm-browser-smoke.json",
+      "media_type": "application/json",
+      "role": "browser-validation-report",
+      "bytes": 722,
+      "sha256": "c6247306c995312862ac48173abe4d1960d2a5790e673af5eff83af4db60593e"
+    },
+    {
+      "path": "wgsl-fixtures.json",
+      "media_type": "application/json",
+      "role": "wgsl-validation-report",
+      "bytes": 3316,
+      "sha256": "5f1179f4106a45cfcbd0954342c73f4decde7543cc22a31cc86100c6782a7955"
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "This diagnostic CI bundle proves only its named foundation replay; it is not durable gate evidence or a product, format, recovery, browser-support, or release claim until promoted and independently reviewed.",
+  "verdict": "pass"
+}

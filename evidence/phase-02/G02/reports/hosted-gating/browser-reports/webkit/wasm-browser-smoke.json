@@ -1,0 +1,32 @@
+{
+  "schema": "helix.wasm-smoke-report/1",
+  "plan_item": "P02-010",
+  "mode": "browser",
+  "rust_toolchain": "1.96.1",
+  "validator": "1.253.0",
+  "artifacts": [
+    {
+      "id": "browser-core",
+      "path": "target/wasm32-unknown-unknown/browser/helix_core.wasm",
+      "format": "core-module-v1",
+      "bytes": 86,
+      "sha256": "c3231bfcaaa248bda3c8a762c35f5f778e1e4f319b93eef3882e7a9c6a0fde93",
+      "imports": [],
+      "exports": [
+        {
+          "name": "memory",
+          "kind": "memory"
+        },
+        {
+          "name": "__data_end",
+          "kind": "global"
+        },
+        {
+          "name": "__heap_base",
+          "kind": "global"
+        }
+      ]
+    }
+  ],
+  "verdict": "pass"
+}

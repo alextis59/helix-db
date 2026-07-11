@@ -1,0 +1,2369 @@
+{
+  "schema": "helix.gate-hosted-observation/1",
+  "gate": "G02",
+  "observed_at": "2026-07-11T07:11:29Z",
+  "repository": "alextis59/helix-db",
+  "reviewed_commit": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+  "reviewed_tree": "695ac421358f9d078c2fa11fb8962aa3b9995e1c",
+  "origin_main": {
+    "sha": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+    "protected": false,
+    "required_checks": []
+  },
+  "failed_gating_run": {
+    "id": 29143529811,
+    "workflow_id": 311134088,
+    "run_number": 1,
+    "run_attempt": 1,
+    "event": "push",
+    "head_branch": "main",
+    "head_sha": "3c526f521bfa230d10d57451d432a93e8625034f",
+    "status": "completed",
+    "conclusion": "failure",
+    "created_at": "2026-07-11T06:52:11Z",
+    "updated_at": "2026-07-11T06:54:54Z",
+    "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811",
+    "jobs": [
+      {
+        "id": 86520984643,
+        "name": "Matrix contract",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:14Z",
+        "completed_at": "2026-07-11T06:52:45Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003868",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86520984643",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Validate clean bootstrap contract",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Validate CI contract",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Emit gating matrices",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027387,
+        "name": "Portable Rust / wasm32-wasip2",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:53:17Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003869",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027387",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Compile portable core with strict lints",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build and validate portable artifact",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027390,
+        "name": "Node 22.23.1 / Linux x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:54:10Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003871",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027390",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked JavaScript tools without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run JavaScript and dependency policy",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Refresh dependency vulnerability and provenance observation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Run deterministic fixture checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Run aggregate tests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Collect semantic replay and dependency reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Retain semantic replay and dependency reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Post Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 22,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 23,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027391,
+        "name": "Native / windows-x64",
+        "status": "completed",
+        "conclusion": "failure",
+        "started_at": "2026-07-11T06:52:55Z",
+        "completed_at": "2026-07-11T06:54:53Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003876",
+        "labels": [
+          "windows-2025"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027391",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner and Rust identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run strict native workspace checks",
+            "status": "completed",
+            "conclusion": "failure"
+          },
+          {
+            "number": 6,
+            "name": "Enforce Rust product coverage thresholds",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 7,
+            "name": "Build warning-free documentation",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Collect Rust coverage replay",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 9,
+            "name": "Retain Rust coverage replay",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 17,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 18,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027397,
+        "name": "Browser bundle smoke / firefox",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:49Z",
+        "completed_at": "2026-07-11T06:53:52Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003870",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027397",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked browser harness without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Install the Playwright-coupled browser and operating-system dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Parse, validate, and compile trusted WGSL fixtures",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Build and execute the browser bundle smoke",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Collect browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Retain browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027399,
+        "name": "Portable Rust / wasm32-unknown-unknown",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:53:19Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003875",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027399",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Compile portable core with strict lints",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build and validate portable artifact",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027400,
+        "name": "Native / macos-arm64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:53:21Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003877",
+        "labels": [
+          "macos-15"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027400",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner and Rust identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run strict native workspace checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Enforce Rust product coverage thresholds",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 7,
+            "name": "Build warning-free documentation",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Collect Rust coverage replay",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 9,
+            "name": "Retain Rust coverage replay",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 17,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027401,
+        "name": "Node 24.18.0 / Linux x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:53:56Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003874",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027401",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 24.18.0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked JavaScript tools without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run JavaScript and dependency policy",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Refresh dependency vulnerability and provenance observation",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Run deterministic fixture checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Run aggregate tests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Collect semantic replay and dependency reports",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 11,
+            "name": "Retain semantic replay and dependency reports",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 21,
+            "name": "Post Select Node.js 24.18.0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 22,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 23,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027403,
+        "name": "Browser bundle smoke / chromium",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:53:46Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003872",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027403",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked browser harness without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Install the Playwright-coupled browser and operating-system dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Parse, validate, and compile trusted WGSL fixtures",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Build and execute the browser bundle smoke",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Collect browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Retain browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027404,
+        "name": "Sanitizer / asan-linux-x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:53:14Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003879",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027404",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Compile the fully instrumented ASan target",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027405,
+        "name": "Browser bundle smoke / webkit",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:53:55Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003873",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027405",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked browser harness without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Install the Playwright-coupled browser and operating-system dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Parse, validate, and compile trusted WGSL fixtures",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Build and execute the browser bundle smoke",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Collect browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Retain browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521027423,
+        "name": "Native / linux-x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T06:52:48Z",
+        "completed_at": "2026-07-11T06:53:19Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003878",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143529811/job/86521027423",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner and Rust identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run strict native workspace checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Enforce Rust product coverage thresholds",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Build warning-free documentation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Collect Rust coverage replay",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Retain Rust coverage replay",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 17,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "expected_failure": {
+      "job_id": 86521027391,
+      "job_name": "Native / windows-x64",
+      "step": "Run strict native workspace checks",
+      "cause": "Git checkout converted the standalone Cargo.lock to CRLF because no repository newline policy existed; the strict native example verifier rejected the noncanonical header.",
+      "remediation_commit": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b"
+    }
+  },
+  "gating_run": {
+    "id": 29143784086,
+    "workflow_id": 311134088,
+    "run_number": 2,
+    "run_attempt": 1,
+    "event": "push",
+    "head_branch": "main",
+    "head_sha": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-07-11T07:01:08Z",
+    "updated_at": "2026-07-11T07:03:56Z",
+    "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086",
+    "jobs": [
+      {
+        "id": 86521694096,
+        "name": "Matrix contract",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:11Z",
+        "completed_at": "2026-07-11T07:01:41Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003880",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521694096",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Validate clean bootstrap contract",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Validate CI contract",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Emit gating matrices",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737079,
+        "name": "Sanitizer / asan-linux-x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:46Z",
+        "completed_at": "2026-07-11T07:02:15Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003882",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737079",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Compile the fully instrumented ASan target",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737084,
+        "name": "Native / macos-arm64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:45Z",
+        "completed_at": "2026-07-11T07:02:34Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003885",
+        "labels": [
+          "macos-15"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737084",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner and Rust identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run strict native workspace checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Enforce Rust product coverage thresholds",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 7,
+            "name": "Build warning-free documentation",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Collect Rust coverage replay",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 9,
+            "name": "Retain Rust coverage replay",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 17,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737088,
+        "name": "Node 24.18.0 / Linux x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:44Z",
+        "completed_at": "2026-07-11T07:02:51Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003884",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737088",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 24.18.0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked JavaScript tools without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run JavaScript and dependency policy",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Refresh dependency vulnerability and provenance observation",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Run deterministic fixture checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Run aggregate tests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Collect semantic replay and dependency reports",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 11,
+            "name": "Retain semantic replay and dependency reports",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 21,
+            "name": "Post Select Node.js 24.18.0",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 22,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 23,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737089,
+        "name": "Native / linux-x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:46Z",
+        "completed_at": "2026-07-11T07:02:22Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003890",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737089",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner and Rust identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run strict native workspace checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Enforce Rust product coverage thresholds",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Build warning-free documentation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Collect Rust coverage replay",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Retain Rust coverage replay",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 17,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737090,
+        "name": "Node 22.23.1 / Linux x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:45Z",
+        "completed_at": "2026-07-11T07:03:01Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003888",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737090",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked JavaScript tools without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Run JavaScript and dependency policy",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Refresh dependency vulnerability and provenance observation",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Run deterministic fixture checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Run aggregate tests",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Collect semantic replay and dependency reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Retain semantic replay and dependency reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Post Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 22,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 23,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737091,
+        "name": "Portable Rust / wasm32-unknown-unknown",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:44Z",
+        "completed_at": "2026-07-11T07:02:11Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003883",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737091",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Compile portable core with strict lints",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build and validate portable artifact",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737093,
+        "name": "Portable Rust / wasm32-wasip2",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:45Z",
+        "completed_at": "2026-07-11T07:02:13Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003887",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737093",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Compile portable core with strict lints",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Build and validate portable artifact",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 12,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 13,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737097,
+        "name": "Browser bundle smoke / webkit",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:45Z",
+        "completed_at": "2026-07-11T07:02:56Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003881",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737097",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked browser harness without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Install the Playwright-coupled browser and operating-system dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Parse, validate, and compile trusted WGSL fixtures",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Build and execute the browser bundle smoke",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Collect browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Retain browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737100,
+        "name": "Native / windows-x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:49Z",
+        "completed_at": "2026-07-11T07:03:55Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003886",
+        "labels": [
+          "windows-2025"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737100",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner and Rust identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run strict native workspace checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Enforce Rust product coverage thresholds",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 7,
+            "name": "Build warning-free documentation",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Collect Rust coverage replay",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 9,
+            "name": "Retain Rust coverage replay",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 17,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 18,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737103,
+        "name": "Browser bundle smoke / chromium",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:45Z",
+        "completed_at": "2026-07-11T07:02:44Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003889",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737103",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked browser harness without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Install the Playwright-coupled browser and operating-system dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Parse, validate, and compile trusted WGSL fixtures",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 8,
+            "name": "Build and execute the browser bundle smoke",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Collect browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Retain browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86521737110,
+        "name": "Browser bundle smoke / firefox",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:01:45Z",
+        "completed_at": "2026-07-11T07:02:47Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003891",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143784086/job/86521737110",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner identity",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Install locked browser harness without lifecycle scripts",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 6,
+            "name": "Install the Playwright-coupled browser and operating-system dependencies",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 7,
+            "name": "Parse, validate, and compile trusted WGSL fixtures",
+            "status": "completed",
+            "conclusion": "skipped"
+          },
+          {
+            "number": 8,
+            "name": "Build and execute the browser bundle smoke",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Collect browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Retain browser execution and validation reports",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 19,
+            "name": "Post Select Node.js 22.23.1",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 20,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 21,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ],
+    "artifacts": [
+      {
+        "id": 8246068711,
+        "name": "test-replays-semantic-node-22.23.1-29143784086-1",
+        "size_in_bytes": 152724,
+        "digest": "sha256:4cb1db3af733416e51f3f3973cff8c4e5cb7034736511e0e23ac7ce29a5a8c39",
+        "expired": false,
+        "created_at": "2026-07-11T07:02:59Z",
+        "updated_at": "2026-07-11T07:02:59Z",
+        "expires_at": "2026-08-10T07:02:59Z",
+        "archive_download_url": "https://api.github.com/repos/alextis59/helix-db/actions/artifacts/8246068711/zip"
+      },
+      {
+        "id": 8246067773,
+        "name": "browser-reports-webkit-29143784086-1",
+        "size_in_bytes": 3408,
+        "digest": "sha256:fde066351f3445a79d2773b19414812b1d7e591788e980d53d1e943937bfafde",
+        "expired": false,
+        "created_at": "2026-07-11T07:02:54Z",
+        "updated_at": "2026-07-11T07:02:54Z",
+        "expires_at": "2026-08-10T07:02:53Z",
+        "archive_download_url": "https://api.github.com/repos/alextis59/helix-db/actions/artifacts/8246067773/zip"
+      },
+      {
+        "id": 8246066137,
+        "name": "browser-reports-firefox-29143784086-1",
+        "size_in_bytes": 3414,
+        "digest": "sha256:4a93580c6a259b9d76de28b949e48dd126fd34b5a72377a0c341aff30ac0f7b9",
+        "expired": false,
+        "created_at": "2026-07-11T07:02:44Z",
+        "updated_at": "2026-07-11T07:02:44Z",
+        "expires_at": "2026-08-10T07:02:43Z",
+        "archive_download_url": "https://api.github.com/repos/alextis59/helix-db/actions/artifacts/8246066137/zip"
+      },
+      {
+        "id": 8246065720,
+        "name": "browser-reports-chromium-29143784086-1",
+        "size_in_bytes": 4708,
+        "digest": "sha256:edbfec93784d3b207240a3581aa422a4bb8a7272d0d775719dc8a5c3f529214a",
+        "expired": false,
+        "created_at": "2026-07-11T07:02:41Z",
+        "updated_at": "2026-07-11T07:02:41Z",
+        "expires_at": "2026-08-10T07:02:40Z",
+        "archive_download_url": "https://api.github.com/repos/alextis59/helix-db/actions/artifacts/8246065720/zip"
+      },
+      {
+        "id": 8246062251,
+        "name": "test-replays-coverage-linux-x64-29143784086-1",
+        "size_in_bytes": 3627,
+        "digest": "sha256:49d6fc97dccffd27cd741c8111f2910d83d0d800e61cf051567e341a588365b6",
+        "expired": false,
+        "created_at": "2026-07-11T07:02:19Z",
+        "updated_at": "2026-07-11T07:02:19Z",
+        "expires_at": "2026-08-10T07:02:18Z",
+        "archive_download_url": "https://api.github.com/repos/alextis59/helix-db/actions/artifacts/8246062251/zip"
+      }
+    ]
+  },
+  "nightly_run": {
+    "id": 29143911392,
+    "workflow_id": 311134087,
+    "run_number": 1,
+    "run_attempt": 1,
+    "event": "workflow_dispatch",
+    "head_branch": "main",
+    "head_sha": "33f9fd790738211a4a1ffb281d7c3f4f50507a0b",
+    "status": "completed",
+    "conclusion": "success",
+    "created_at": "2026-07-11T07:05:37Z",
+    "updated_at": "2026-07-11T07:08:01Z",
+    "url": "https://github.com/alextis59/helix-db/actions/runs/29143911392",
+    "jobs": [
+      {
+        "id": 86522034758,
+        "name": "Nightly matrix contract",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:05:41Z",
+        "completed_at": "2026-07-11T07:06:08Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003892",
+        "labels": [
+          "ubuntu-24.04"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143911392/job/86522034758",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Validate CI contract",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Emit nightly matrices",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86522073130,
+        "name": "Nightly native / macos-x64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:06:12Z",
+        "completed_at": "2026-07-11T07:08:00Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003893",
+        "labels": [
+          "macos-15-intel"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143911392/job/86522073130",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner and Rust identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run strict native workspace checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      },
+      {
+        "id": 86522073151,
+        "name": "Nightly native / linux-arm64",
+        "status": "completed",
+        "conclusion": "success",
+        "started_at": "2026-07-11T07:06:16Z",
+        "completed_at": "2026-07-11T07:06:45Z",
+        "runner_group_name": "GitHub Actions",
+        "runner_name": "GitHub Actions 1000003894",
+        "labels": [
+          "ubuntu-24.04-arm"
+        ],
+        "url": "https://github.com/alextis59/helix-db/actions/runs/29143911392/job/86522073151",
+        "steps": [
+          {
+            "number": 1,
+            "name": "Set up job",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 2,
+            "name": "Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 3,
+            "name": "Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 4,
+            "name": "Verify runner and Rust identities",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 5,
+            "name": "Run strict native workspace checks",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 9,
+            "name": "Post Select contract Node.js",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 10,
+            "name": "Post Check out source",
+            "status": "completed",
+            "conclusion": "success"
+          },
+          {
+            "number": 11,
+            "name": "Complete job",
+            "status": "completed",
+            "conclusion": "success"
+          }
+        ]
+      }
+    ]
+  },
+  "dispatch": {
+    "environment_token_attempt": {
+      "exit_code": 1,
+      "result": "HTTP 403 Resource not accessible by personal access token"
+    },
+    "existing_keyring_workflow_scope_attempt": {
+      "exit_code": 0,
+      "run_id": 29143911392
+    }
+  },
+  "hosted_green_for_reviewed_commit": true,
+  "verdict": "pass"
+}
