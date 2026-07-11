@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-007",
+  "requirements": [
+    "INV-003",
+    "INV-004",
+    "INV-007",
+    "INV-009",
+    "PLAT-001",
+    "PLAT-002",
+    "CORE-003",
+    "QUAL-001",
+    "QUAL-002",
+    "COMPAT-001"
+  ],
+  "accepted_adrs": ["0001"],
+  "commit": "0dbb58e323bf9b272e46d3e6e9cb2233ee3a0a2a",
+  "recorded_at": "2026-07-11T00:36:45Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "vitest": "4.1.10",
+      "playwright": "1.61.1"
+    },
+    "javascript_lanes": ["22.23.1", "24.18.0"]
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "corepack npm run policy:javascript",
+      "exit_code": 1,
+      "result": "initial policy pass found one import-order and two formatting diagnostics; safe Biome fixes followed"
+    },
+    {
+      "command": "corepack npm test",
+      "exit_code": 1,
+      "result": "initial aggregate run exposed order-sensitive benchmark allowlist comparison; exact inventory comparison now sorts both sets"
+    }
+  ],
+  "verification": {
+    "artifact_files": 19,
+    "stable_category_commands": 8,
+    "stable_npm_scripts": 11,
+    "active_suites": 2,
+    "reserved_suites": 6,
+    "rust_unit_tests": 9,
+    "javascript_unit_files": 0,
+    "cargo_integration_targets": 0,
+    "fuzz_targets": 0,
+    "browser_tests": 0,
+    "crash_histories": 0,
+    "cargo_benchmark_targets": 0,
+    "benchmark_workloads": 0,
+    "distributed_histories": 0,
+    "semantic_fixtures": 17,
+    "semantic_steps": 313,
+    "oracle_assertions": 382,
+    "compatibility_rows": 263,
+    "mongodb_offline_cases": 16,
+    "javascript_lanes": 2,
+    "mutation_canaries": 8,
+    "markdown_files": 129,
+    "local_links": 823
+  },
+  "commands": [
+    {
+      "command": "Node 22.23.1 clean install, policies, all 8 named suite aliases",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 24.18.0 clean install, policies, test:commands, npm test aggregate",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo fmt/check/clippy/doc with frozen all-target/all-feature workspace",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/P02-007/verify.mjs 0dbb58e323bf9b272e46d3e6e9cb2233ee3a0a2a",
+      "exit_code": 0
+    }
+  ],
+  "artifacts": [
+    { "path": "Cargo.toml", "media_type": "application/toml", "bytes": 3353, "sha256": "77c5e95a0be457cfea8b77fe6daeb036bdde19735fdc5059cd8cbb27ecd84d85" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 2896, "sha256": "933a6da05861b5fcdad14423d715162f321c1f4ecfa0f6a603b57f4cb219a56e" },
+    { "path": "benchmarks/README.md", "media_type": "text/markdown", "bytes": 805, "sha256": "5dd29bf72dc73ef336563117d3a163a8f8d0a93df052f0a9c565775c5f6556f4" },
+    { "path": "conformance/README.md", "media_type": "text/markdown", "bytes": 845, "sha256": "869a09f9ee76274bc61973dc468c116c9cb1aff52dc3158ab5613bd56d19f5c4" },
+    { "path": "crates/README.md", "media_type": "text/markdown", "bytes": 522, "sha256": "b6bf17c5b6b7284fef8f3372caf78006d669ce43b6dc9d6d861490cf76c5d976" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 7392, "sha256": "5df81e43cf32d565616b8b3089bd6bffb07485c54214a4b6a42ff699a70c2024" },
+    { "path": "docs/architecture/repository-layout.md", "media_type": "text/markdown", "bytes": 4900, "sha256": "f843529a1e92cba332e7f5cadf04df6c6865c8b2c5f003d96436869b9a409ccf" },
+    { "path": "docs/quality/test-command-surface.md", "media_type": "text/markdown", "bytes": 6023, "sha256": "a81149dff77ceb4974d2fbd89956cf13213951cdb9ec5d4d9151469988125f58" },
+    { "path": "package.json", "media_type": "application/json", "bytes": 2132, "sha256": "331d945e9a6b8addca7dafe518c4f2835112fd44c7ab0b4fd5bed8b2f7c2e98c" },
+    { "path": "tests/README.md", "media_type": "text/markdown", "bytes": 1118, "sha256": "daed9c90cf6e842312f4087816a25e54657937538fc3cb08934513f9b88ff03b" },
+    { "path": "tests/browser/README.md", "media_type": "text/markdown", "bytes": 353, "sha256": "c51346272736be8e4eefca7a80224879646b3523ce907419108e0022bf20b348" },
+    { "path": "tests/crash/README.md", "media_type": "text/markdown", "bytes": 303, "sha256": "0862a24d7ea4e5cf213c9ca8801a2cc32b8444c9ad5b3110409c50d3293a3171" },
+    { "path": "tests/distributed/README.md", "media_type": "text/markdown", "bytes": 336, "sha256": "e3bf83c16df0303021dc409b961a0c49c52c690ac2b68099f42a9b7505d6ea21" },
+    { "path": "tests/fuzz/README.md", "media_type": "text/markdown", "bytes": 328, "sha256": "1c074587770ca4053ae2fc6722071bfd904d1f08d0b6d4315335298b5a31b968" },
+    { "path": "tests/integration/README.md", "media_type": "text/markdown", "bytes": 369, "sha256": "b771c5afc1aa330382bef7f16fe9c24dd56b4787dc57fafecc1f6172a04272e1" },
+    { "path": "tests/run-suite.mjs", "media_type": "text/javascript", "bytes": 13054, "sha256": "b161a5ba798c6e6ec87a637fde3ac05aeb66f816e0fe7e7e725e5ba46450d381" },
+    { "path": "tests/suites.json", "media_type": "application/json", "bytes": 3887, "sha256": "0df3b58e53f3cfefcfddc191925a54a6b615f07c615ceae0659813dc482d013e" },
+    { "path": "tests/toolchain/README.md", "media_type": "text/markdown", "bytes": 972, "sha256": "1d16c15975a0a082cfa968e0d28a98453774827e63bc56c51dad2206bde8cf39" },
+    { "path": "tests/toolchain/check-test-command-surface.mjs", "media_type": "text/javascript", "bytes": 6485, "sha256": "4746da66cb4be6998da9df1e6488be73ca079d37d5d0182a4d541e6f5caff709" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-007/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 17940,
+    "sha256": "1505117a66119ab308ab7cce54479ebd3cbcb800fc2b3e834dbea2ecbd112771"
+  },
+  "verdict": "pass"
+}
