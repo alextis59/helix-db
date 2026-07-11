@@ -1,6 +1,6 @@
 # HDoc 1.x Logical Type Tag Registry
 
-- Status: Accepted type-identity registry; container bytes remain incomplete
+- Status: Accepted type-identity registry; containing records fixed by `P03-005`
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner with Query semantics review
 - Format identity: HDoc major `1`, initial minor `0`
@@ -20,10 +20,10 @@ rejection, extension allocation classes, and the relationship between tags, sema
 typed hashing, fixtures, and subordinate payload/table work.
 
 This registry does not itself define the bytes following a tag. Canonical noncontainer bytes are
-now fixed by the [HDoc 1.0 payload registry](hdoc-v1-payloads.md); field/name/object/array/container
-records remain `P03-005`. The parent envelope therefore remains an incomplete byte format, and
-hash profile zero remains invalid until `P03-006`. A tag plus invented host bytes is not a valid
-HDoc value.
+fixed by the [HDoc 1.0 payload registry](hdoc-v1-payloads.md), and field/name/object/array/container
+positions are fixed by the [HDoc 1.0 record registry](hdoc-v1-records.md). The parent envelope
+therefore remains incomplete only at the hash/compression layers, and hash profile zero remains
+invalid until `P03-006`. A tag plus invented host bytes is not a valid HDoc value.
 
 ## Tag field contract
 
@@ -132,8 +132,9 @@ or format feature applies.
 
 ### Object and array
 
-`object` and `array` select container records defined by P03-005. They are not alternative tags for
-inline versus external tables or empty versus nonempty containers.
+`object` and `array` select container records defined by the
+[record registry](hdoc-v1-records.md). They are not alternative tags for inline versus external
+tables or empty versus nonempty containers.
 
 Object mapping identity and presentation order remain separate: the object tag is identical for
 every object, while container records preserve exact unique names and presentation metadata and
@@ -181,8 +182,8 @@ Consequences:
 - a decoder encountering a purported Missing/zero tag rejects corruption instead of materializing
   absence.
 
-This distinction is required for `DATA-002`, but P03-005 still owns the exact presence/table
-encoding before physical missing/null support can be considered complete.
+This distinction is required for `DATA-002`; the record registry now fixes the exact physical
+absence versus tagged-null representation.
 
 ## Semantic fixture reconciliation
 
@@ -314,7 +315,8 @@ The 16 core assignments are stable for HDoc major 1. A minor/profile cannot rein
 reader supporting 1.x may add a registered type only through required feature negotiation; an older
 reader rejects it before value exposure.
 
-No valid HDoc golden fixture exists after P03-004 because tables/hash framing remain incomplete.
+No valid HDoc golden fixture exists after P03-005 because hash framing/compression remain
+incomplete.
 Before P03-016, this registry can be superseded without stored-data migration, but the superseding
 change must preserve the historical decision. After fixtures/data exist:
 
@@ -331,7 +333,7 @@ change must preserve the historical decision. After fixtures/data exist:
 | Task | Owns next | Cannot change from P03-003 |
 | --- | --- | --- |
 | [`P03-004`](hdoc-v1-payloads.md) | Canonical noncontainer payload bytes and validation | Tag values or logical meanings |
-| `P03-005` | Field/array/container record positions for the one-byte tag | Tag width/assignments |
+| [`P03-005`](hdoc-v1-records.md) | Field/array/container record positions for the one-byte tag | Tag width/assignments |
 | `P03-006` | Typed-hash framing including tag and payload | Tag identity or unknown-tag rule |
 | `P03-008`–`P03-010` | Encoder/decoder/owned/borrowed implementation | Closed-world registry semantics |
 | `P03-015` | Feature negotiation and registered extension governance | Existing assignments or no-reuse rule |
@@ -370,4 +372,5 @@ Later golden/property/fuzz suites must include:
 - [Identifier semantics](../architecture/identifier-semantics.md)
 - [Vector semantics](../architecture/vector-semantics.md)
 - [HDoc 1.0 canonical noncontainer payloads](hdoc-v1-payloads.md)
+- [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
 - [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)

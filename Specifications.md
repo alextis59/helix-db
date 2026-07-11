@@ -456,16 +456,27 @@ Footer (64 bytes)
   document-level typed content hash
 ```
 
-Field table entry:
+The exact table/container grammar is fixed by the
+[HDoc 1.0 Field, Name, Value-Reference, and Container Records](docs/formats/hdoc-v1-records.md)
+and its [machine-readable registry](docs/formats/hdoc-v1-records.json). Its compact base field
+entry is:
 
 ```text
-field_id: u32
-field_name_offset: u32
+field_id: u32                 // document-local exact-name record ID
+field_name_offset: u32        // absolute document offset
+field_name_length: u16
 type_tag: u8
-value_offset: u32
-value_length: u32
-flags: u16
+flags: u8                     // zero in the base profile
+value_offset: u32             // payload or container descriptor
+value_length: u32             // exact payload length or descriptor width
+presentation_ordinal: u32
 ```
+
+Object spans are strictly sorted by document-local field ID for bounded lookup while
+`presentation_ordinal` preserves observable input order. The name pool deduplicates exact names
+across one self-contained document, arrays use dense 12-byte entries in index order, and a
+root-first deterministic container tree uses 32-byte uniquely owned descriptors. Collection path
+dictionary IDs remain a separate feature-gated namespace under section 7.4 and `P03-013`.
 
 The one-byte `type_tag` assignments are fixed by the
 [HDoc 1.x Logical Type Tag Registry](docs/formats/hdoc-v1-type-tags.md) and its
@@ -479,8 +490,9 @@ The exact noncontainer bytes are fixed by the
 [machine-readable registry](docs/formats/hdoc-v1-payloads.json). It defines empty null, strict
 Boolean bytes, fixed little-endian integers/binary64/temporal counts, canonical decimal128 BID,
 exact UTF-8 and subtype-prefixed binary, RFC-order UUID/opaque ObjectId bytes, and dimensioned
-finite f32/f16 vectors. Every payload has one exact length/alignment/canonicality rule. Field,
-array, object, and value-area record positions remain `P03-005`.
+finite f32/f16 vectors. Every payload has one exact length/alignment/canonicality rule. The record
+registry fixes their containing field/array references, canonical value-area occurrence order,
+zero-length cursors, container references, and minimal external padding.
 
 Design requirements:
 
@@ -505,9 +517,9 @@ Footer Format](docs/formats/hdoc-v1.md) and its
 [machine-readable companion](docs/formats/hdoc-v1-envelope.json). It fixes the 64-byte header,
 32-byte directory entries, body section registry/order, structural/feature flags, length/count/CRC
 slots, and 64-byte footer while deliberately keeping the complete byte format invalid until
-`P03-005`–`P03-007` assign the remaining container/table, hash, and compression registries and the
-first nonzero hash profile. The type-tag and noncontainer-payload registries are already fixed by
-`P03-003`/`P03-004` but do not form a complete HDoc on their own.
+`P03-006` assigns the first nonzero hash profile and `P03-007` closes the compression registry.
+`P03-003`–`P03-005` now fix all base tags, payloads, records, names, value placement, and container
+bytes, but no partial structural example is yet a persisted HDoc fixture.
 
 ### 7.4 Field path dictionary
 
@@ -524,7 +536,11 @@ Each collection maintains a dictionary:
 }
 ```
 
-The dictionary is versioned. Documents reference field IDs internally. Query compilation resolves dotted paths into field IDs.
+The dictionary is versioned. A `P03-013` dictionary-enabled feature profile may reference its
+collection path IDs internally and records the exact dictionary version needed to interpret them;
+base HDoc remains self-contained with document-local exact-name IDs and bytes. The two namespaces
+are never guessed or silently reused. Query compilation resolves dotted paths into the appropriate
+versioned path IDs only when that profile is negotiated.
 
 Benefits:
 

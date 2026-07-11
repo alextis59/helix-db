@@ -233,9 +233,16 @@ The [HDoc 1.0 noncontainer payload registry](docs/formats/hdoc-v1-payloads.md) n
 with explicit fixed/variable/dimensioned lengths, little-endian numeric/temporal/vector values,
 canonical decimal128 BID mapping, exact UTF-8 and binary subtype bytes, and canonical opaque
 identifier order. Its machine vectors make cohort aliases, invalid UTF-8/subtypes, temporal
-overflow, nonfinite vectors, and trailing/length errors executable. The remaining
-`P03-005`–`P03-007` contracts must still define complete tables/containers, hash framing, and
-compression before a valid HDoc fixture or writer exists.
+overflow, nonfinite vectors, and trailing/length errors executable.
+
+The [HDoc 1.0 record registry](docs/formats/hdoc-v1-records.md) now closes `P03-005` with 24-byte
+canonically sorted object-field entries plus presentation ordinals, a deduplicated exact-name pool,
+dense 12-byte array entries, 32-byte uniquely owned breadth-first container descriptors, and one
+minimal-aligned value-area occurrence per noncontainer reference. Its structural vectors exercise
+empty spans, zero-byte null/string cursors, nested objects/arrays, recursive field counts, and
+absolute references without confusing document-local name IDs with the later collection path
+dictionary. `P03-006` and `P03-007` must still close hash framing and compression before a valid
+complete HDoc fixture or writer exists.
 
 ### 6.3 Field-path dictionaries
 

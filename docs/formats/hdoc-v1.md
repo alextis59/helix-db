@@ -21,11 +21,11 @@ octets.
 
 This is not yet permission to emit a valid persistent HDoc. The stable logical tags/extension
 ranges and exact noncontainer bytes are now fixed by the
-[HDoc 1.x type-tag registry](hdoc-v1-type-tags.md) and
-[HDoc 1.0 payload registry](hdoc-v1-payloads.md). The following byte contracts remain open and are
+[HDoc 1.x type-tag registry](hdoc-v1-type-tags.md),
+[HDoc 1.0 payload registry](hdoc-v1-payloads.md), and
+[HDoc 1.0 record registry](hdoc-v1-records.md). The following byte contracts remain open and are
 required before the first complete golden document or writer:
 
-- field, name, object, array, container, and value-area table entries (`P03-005`);
 - the first nonzero content-hash profile and exact typed-hash framing (`P03-006`); and
 - compression codecs, block tables, settings, and rejection fixtures (`P03-007`).
 
@@ -81,9 +81,10 @@ The base uncompressed profile has four directory entries, so its `header_bytes` 
 64 + 4 × 32 = 192
 ```
 
-The structural lower bound before any body payload bytes is therefore 256 bytes: 192 header and
-directory bytes plus the 64-byte footer. P03-005 can require nonzero section payloads, so 256 is a
-parser bound, not an accepted empty-document fixture.
+The structural lower bound before any body bytes is 256 bytes: 192 header/directory bytes plus the
+64-byte footer. The record grammar requires at least one 32-byte root descriptor, so the unique
+empty-root structure is 288 bytes. It is still not an accepted document: normal rows require root
+`_id`, and hash profile zero remains invalid until `P03-006`.
 
 ## Header magic
 
@@ -182,12 +183,13 @@ Compression cannot make an oversized canonical document valid.
 
 Array elements do not increment this count merely for occupying an array position; object fields
 inside an array do. The field-table directory entry's `item_count` MUST equal this header value.
-P03-005 defines the root and per-container ranges that reproduce the same total. The count is at
+The [record registry](hdoc-v1-records.md) defines the root and per-container ranges that reproduce
+the same total. The count is at
 most the `document.total_fields` limit of 100,000, while each individual object remains at most
 10,000 fields.
 
-Format parsing permits `field_count = 0` until P03-005 defines the empty-root representation. A
-database row is not publishable until the higher-level `DATA-001` rule verifies its required `_id`.
+The unique empty-root structure has `field_count = 0`, but a normal database row is not publishable
+until the higher-level `DATA-001` rule verifies its required `_id`.
 
 ### `crc32c`
 
@@ -312,13 +314,13 @@ uncompressed form. Unknown codec/profile pairs are rejected before allocating or
 `item_count` is not a generic byte count. Its exact meaning belongs to the section grammar:
 
 - `field_table`: total field entries; MUST equal header/footer `field_count`;
-- `name_pool`: name-record count, defined by P03-005;
-- `value_area`: value-record or chunk count, defined by P03-004/P03-005;
-- `container_tables`: container-record count, including the root descriptor, defined by P03-005;
+- `name_pool`: distinct document-local exact-name record count;
+- `value_area`: noncontainer reference-occurrence count, including zero-length payloads;
+- `container_tables`: container-descriptor count, including the root descriptor;
 - `extension_area`: extension-record count, defined by P03-015.
 
-Until the owning task defines an internal grammar, a writer cannot claim that section version 1 is
-complete merely by filling in an arbitrary count.
+The exact equations and record meanings for the four required sections are fixed by the
+[record registry](hdoc-v1-records.md). A future extension cannot reinterpret these counts.
 
 ## Top-level section registry
 
@@ -539,7 +541,7 @@ fields based on its own format version.
 | --- | --- | --- |
 | [`P03-003`](hdoc-v1-type-tags.md) | Stable value type tags and reserved tag ranges | Header/directory/footer offsets or section kinds |
 | [`P03-004`](hdoc-v1-payloads.md) | Canonical noncontainer bytes inside `value_area` | Envelope endianness, lengths, placement, or footer |
-| `P03-005` | Field/name/container entries and `item_count` meanings | Absolute offset base, entry stride, top-level order |
+| [`P03-005`](hdoc-v1-records.md) | Field/name/container entries and `item_count` meanings | Absolute offset base, directory stride, top-level order |
 | `P03-006` | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
 | `P03-007` | Nonzero codec/profile IDs and internal bounded block grammar | Directory stride, logical/stored length fields, canonical limit |
 | `P03-013`–`P03-015` | Path dictionary and extension record grammars/negotiation | Existing flag/feature bit meanings or ID reuse |
@@ -574,6 +576,7 @@ bytes. P03-016/P03-018 must eventually include at least:
 - [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)
 - [HDoc 1.x logical type tags](hdoc-v1-type-tags.md)
 - [HDoc 1.0 canonical noncontainer payloads](hdoc-v1-payloads.md)
+- [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
 - [Logical value model](../architecture/value-model.md)
 - [Object semantics and typed content hashes](../architecture/object-semantics.md)
 - [Portable v1 limits](../architecture/limits-v1.md)

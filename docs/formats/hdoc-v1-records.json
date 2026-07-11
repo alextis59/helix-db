@@ -1,0 +1,511 @@
+{
+  "schema": "helix.hdoc-record-layout/1",
+  "format": {
+    "name": "HDoc",
+    "major_version": 1,
+    "minor_version": 0,
+    "profile": "base-self-contained",
+    "byte_order": "little-endian",
+    "offset_base": "document-start",
+    "offset_width_bits": 32,
+    "complete_table_and_container_format": true,
+    "complete_hdoc_format": false,
+    "remaining_completion_owners": ["P03-006", "P03-007"]
+  },
+  "constants": {
+    "field_entry_bytes": 24,
+    "name_record_bytes": 8,
+    "array_entry_bytes": 12,
+    "container_descriptor_bytes": 32,
+    "root_container_id": 0,
+    "root_parent_sentinel": 4294967295,
+    "object_type_tag": 9,
+    "array_type_tag": 10,
+    "base_reference_flags": 0,
+    "base_container_flags": 0
+  },
+  "sections": [
+    {
+      "kind": "field_table",
+      "kind_id": 1,
+      "item_count_meaning": "total-recursive-object-field-entry-count",
+      "length_equation": "item_count * 24",
+      "internal_alignment_bytes": 8,
+      "empty_allowed": true
+    },
+    {
+      "kind": "name_pool",
+      "kind_id": 2,
+      "item_count_meaning": "distinct-document-local-name-record-count",
+      "length_equation": "item_count * 8 + sum(name_length)",
+      "internal_alignment_bytes": 8,
+      "empty_allowed": true
+    },
+    {
+      "kind": "value_area",
+      "kind_id": 3,
+      "item_count_meaning": "noncontainer-value-reference-occurrence-count-including-zero-length-payloads",
+      "length_equation": "minimal-aligned-concatenation-of-each-noncontainer-payload-occurrence",
+      "internal_alignment_bytes": 1,
+      "empty_allowed": true
+    },
+    {
+      "kind": "container_tables",
+      "kind_id": 4,
+      "item_count_meaning": "container-descriptor-count-including-root",
+      "length_equation": "item_count * 32 + total-array-element-count * 12",
+      "internal_alignment_bytes": 8,
+      "empty_allowed": false,
+      "minimum_length": 32,
+      "minimum_item_count": 1
+    }
+  ],
+  "record_layouts": {
+    "field_entry": {
+      "bytes": 24,
+      "section": "field_table",
+      "fields": [
+        {
+          "name": "field_id",
+          "offset": 0,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "zero-based-document-local-name-record-id"
+        },
+        {
+          "name": "field_name_offset",
+          "offset": 4,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "absolute-offset-of-exact-name-bytes"
+        },
+        {
+          "name": "field_name_length",
+          "offset": 8,
+          "bytes": 2,
+          "encoding": "u16-le",
+          "minimum": 1,
+          "maximum": 1024
+        },
+        {
+          "name": "type_tag",
+          "offset": 10,
+          "bytes": 1,
+          "encoding": "u8",
+          "registry": "docs/formats/hdoc-v1-type-tags.json"
+        },
+        {
+          "name": "flags",
+          "offset": 11,
+          "bytes": 1,
+          "encoding": "u8",
+          "constant": 0
+        },
+        {
+          "name": "value_offset",
+          "offset": 12,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "absolute-payload-or-container-descriptor-offset"
+        },
+        {
+          "name": "value_length",
+          "offset": 16,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "exact-payload-length-or-32-for-container-reference"
+        },
+        {
+          "name": "presentation_ordinal",
+          "offset": 20,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "zero-based-position-in-owning-object-presentation-order"
+        }
+      ]
+    },
+    "name_record": {
+      "bytes": 8,
+      "section": "name_pool",
+      "id_source": "zero-based-record-index",
+      "fields": [
+        {
+          "name": "name_offset",
+          "offset": 0,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "absolute-offset-into-name-byte-suffix"
+        },
+        {
+          "name": "name_length",
+          "offset": 4,
+          "bytes": 2,
+          "encoding": "u16-le",
+          "minimum": 1,
+          "maximum": 1024
+        },
+        {
+          "name": "scalar_count",
+          "offset": 6,
+          "bytes": 2,
+          "encoding": "u16-le",
+          "minimum": 1,
+          "maximum": 256
+        }
+      ]
+    },
+    "array_entry": {
+      "bytes": 12,
+      "section": "container_tables-array-entry-suffix",
+      "fields": [
+        {
+          "name": "type_tag",
+          "offset": 0,
+          "bytes": 1,
+          "encoding": "u8",
+          "registry": "docs/formats/hdoc-v1-type-tags.json"
+        },
+        {
+          "name": "flags",
+          "offset": 1,
+          "bytes": 1,
+          "encoding": "u8",
+          "constant": 0
+        },
+        {
+          "name": "reserved_0",
+          "offset": 2,
+          "bytes": 2,
+          "encoding": "u16-le",
+          "constant": 0
+        },
+        {
+          "name": "value_offset",
+          "offset": 4,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "absolute-payload-or-container-descriptor-offset"
+        },
+        {
+          "name": "value_length",
+          "offset": 8,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "exact-payload-length-or-32-for-container-reference"
+        }
+      ]
+    },
+    "container_descriptor": {
+      "bytes": 32,
+      "section": "container_tables-descriptor-prefix",
+      "fields": [
+        {
+          "name": "container_id",
+          "offset": 0,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "zero-based-descriptor-index"
+        },
+        {
+          "name": "type_tag",
+          "offset": 4,
+          "bytes": 1,
+          "encoding": "u8",
+          "allowed": [9, 10]
+        },
+        {
+          "name": "flags",
+          "offset": 5,
+          "bytes": 1,
+          "encoding": "u8",
+          "constant": 0
+        },
+        {
+          "name": "depth",
+          "offset": 6,
+          "bytes": 2,
+          "encoding": "u16-le",
+          "minimum": 1,
+          "maximum": 100
+        },
+        {
+          "name": "item_offset",
+          "offset": 8,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "absolute-first-field-or-array-entry-cursor"
+        },
+        {
+          "name": "item_count",
+          "offset": 12,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "immediate-object-fields-or-dense-array-elements"
+        },
+        {
+          "name": "recursive_field_count",
+          "offset": 16,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "object-field-count-in-this-container-subtree"
+        },
+        {
+          "name": "parent_container_id",
+          "offset": 20,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "owning-container-id-or-root-sentinel"
+        },
+        {
+          "name": "parent_slot",
+          "offset": 24,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "meaning": "canonical-object-member-ordinal-or-array-index-or-root-sentinel"
+        },
+        {
+          "name": "reserved_0",
+          "offset": 28,
+          "bytes": 4,
+          "encoding": "u32-le",
+          "constant": 0
+        }
+      ]
+    }
+  },
+  "container_kinds": [
+    {
+      "type_tag": 9,
+      "tag_hex": "0x09",
+      "name": "object",
+      "item_record": "field_entry",
+      "item_table": "field_table",
+      "item_order": "strictly-increasing-field-id-canonical-name-order",
+      "maximum_immediate_items": 10000
+    },
+    {
+      "type_tag": 10,
+      "tag_hex": "0x0a",
+      "name": "array",
+      "item_record": "array_entry",
+      "item_table": "container_tables-array-entry-suffix",
+      "item_order": "dense-zero-based-logical-element-order",
+      "maximum_immediate_items": 1000000
+    }
+  ],
+  "name_pool": {
+    "deduplication_scope": "whole-document-exact-name-bytes",
+    "record_order": "strict-binary_utf8_v1-ascending",
+    "record_table_offset": "name_pool.section_offset",
+    "byte_suffix_offset": "name_pool.section_offset + item_count * 8",
+    "byte_suffix_order": "record-order-exact-concatenation",
+    "terminators": false,
+    "internal_padding": false,
+    "normalization": false,
+    "unused_records_allowed": false,
+    "field_id_meaning": "name-record-index",
+    "collection_path_dictionary_id": "not-the-same-namespace-deferred-to-P03-013"
+  },
+  "container_tree": {
+    "root": {
+      "container_id": 0,
+      "type_tag": 9,
+      "depth": 1,
+      "parent_container_id": 4294967295,
+      "parent_slot": 4294967295
+    },
+    "id_assignment": "breadth-first-root-queue",
+    "child_scan_order": "object-canonical-field-order-or-array-index-order",
+    "ownership": "every-nonroot-container-has-exactly-one-reference-and-matching-parent-tuple",
+    "cycles": "reject",
+    "aliases": "reject-and-serialize-repeated-host-subgraphs-by-value",
+    "descriptor_order": "container-id-ascending",
+    "object_field_span_order": "object-descriptor-container-id-ascending",
+    "array_entry_span_order": "array-descriptor-container-id-ascending"
+  },
+  "value_references": {
+    "noncontainer": {
+      "target_section": "value_area",
+      "value_length": "exact-P03-004-payload-length",
+      "value_offset": "absolute-canonical-packed-payload-cursor",
+      "occurrence_order": "container-id-then-object-canonical-field-or-array-index",
+      "deduplication": false,
+      "nonzero_aliasing": false,
+      "zero_length_rule": "offset-is-current-aligned-cursor-and-equal-offsets-are-permitted",
+      "alignment_rule": "align-current-cursor-to-P03-004-payload-alignment-with-minimum-zero-padding"
+    },
+    "container": {
+      "target_section": "container_tables-descriptor-prefix",
+      "value_offset": "container_tables.section_offset + child_container_id * 32",
+      "value_length": 32,
+      "tag_must_match_descriptor": true,
+      "payload_bytes_in_value_area": false
+    },
+    "missing": {
+      "field_entry": false,
+      "array_entry": false,
+      "stored_tag": false
+    }
+  },
+  "canonicalization": [
+    {
+      "step": 1,
+      "rule": "validate-root-object-tree-names-types-and-limits-before-byte-allocation"
+    },
+    {
+      "step": 2,
+      "rule": "sort-distinct-exact-field-name-bytes-and-assign-dense-field-ids"
+    },
+    {
+      "step": 3,
+      "rule": "assign-container-ids-by-root-first-breadth-first-canonical-child-scan"
+    },
+    {
+      "step": 4,
+      "rule": "emit-object-field-records-by-container-id-and-strict-field-id-order"
+    },
+    {
+      "step": 5,
+      "rule": "emit-name-records-then-exact-name-bytes-in-field-id-order"
+    },
+    {
+      "step": 6,
+      "rule": "emit-each-noncontainer-payload-occurrence-in-container-child-scan-order-with-minimal-zero-alignment-padding"
+    },
+    {
+      "step": 7,
+      "rule": "emit-container-descriptors-by-id-then-array-entries-by-array-container-id-and-index"
+    },
+    {
+      "step": 8,
+      "rule": "validate-exact-section-coverage-tree-reachability-recursive-counts-and-root-id-semantics"
+    }
+  ],
+  "validation_rules": [
+    "all-count-length-products-and-offset-additions-use-checked-wide-arithmetic",
+    "field-table-length-equals-directory-item-count-times-24",
+    "field-table-item-count-equals-header-and-footer-field-count",
+    "name-record-table-and-name-byte-suffix-exactly-fill-name-pool",
+    "name-records-are-strictly-sorted-distinct-valid-canonical-utf8-names",
+    "every-name-record-is-referenced-and-every-field-name-tuple-matches-its-record",
+    "each-object-field-id-span-is-strictly-increasing-without-duplicates",
+    "each-object-presentation-ordinal-set-is-exactly-zero-through-item-count-minus-one",
+    "array-entry-spans-are-dense-contiguous-and-completely-cover-the-array-entry-suffix",
+    "container-descriptor-prefix-and-array-entry-suffix-exactly-fill-container-tables",
+    "container-zero-is-the-only-root-and-is-an-object-at-depth-one",
+    "every-nonroot-container-has-one-matching-reference-parent-and-depth",
+    "container-ids-and-physical-descriptor-order-follow-the-canonical-breadth-first-assignment",
+    "recursive-field-counts-match-bottom-up-and-root-matches-document-field-count",
+    "noncontainer-reference-count-equals-value-area-directory-item-count",
+    "noncontainer-payloads-and-only-minimum-zero-padding-exactly-fill-value-area",
+    "nonzero-payload-ranges-never-overlap-alias-or-leave-gaps",
+    "zero-length-payloads-use-the-current-canonical-cursor-and-own-no-byte-range",
+    "container-references-target-the-exact-matching-32-byte-descriptor",
+    "base-profile-flags-and-reserved-fields-are-zero",
+    "missing-has-no-record-and-null-has-a-tagged-zero-length-record",
+    "normal-root-document-contains-exactly-one-valid-protected-_id-field",
+    "complete-structure-payload-semantics-limits-checksum-and-content-hash-pass-before-exposure"
+  ],
+  "limits": {
+    "canonical_document_bytes": 16777216,
+    "container_depth": 100,
+    "object_fields": 10000,
+    "document_fields": 100000,
+    "field_name_bytes": 1024,
+    "field_name_scalars": 256,
+    "array_elements": 1000000,
+    "checked_arithmetic_minimum_bits": 64
+  },
+  "structural_examples": [
+    {
+      "id": "empty-root-structure",
+      "semantic_status": "reject-normal-document-missing-_id",
+      "logical_presentation": "{}",
+      "directory": {
+        "field_table": { "offset": 192, "length": 0, "item_count": 0 },
+        "name_pool": { "offset": 192, "length": 0, "item_count": 0 },
+        "value_area": { "offset": 192, "length": 0, "item_count": 0 },
+        "container_tables": { "offset": 192, "length": 32, "item_count": 1 }
+      },
+      "footer_offset": 224,
+      "total_length": 288,
+      "field_table_hex": "",
+      "name_pool_hex": "",
+      "value_area_hex": "",
+      "container_tables_hex": "0000000009000100c00000000000000000000000ffffffffffffffff00000000"
+    },
+    {
+      "id": "root-scalars-presentation",
+      "semantic_status": "structurally-and-logically-valid-before-hash-profile",
+      "logical_presentation": "{s:string(\"\"),_id:uuid(00000000-0000-0000-0000-000000000000),n:null}",
+      "directory": {
+        "field_table": { "offset": 192, "length": 72, "item_count": 3 },
+        "name_pool": { "offset": 264, "length": 29, "item_count": 3 },
+        "value_area": { "offset": 296, "length": 16, "item_count": 3 },
+        "container_tables": { "offset": 312, "length": 32, "item_count": 1 }
+      },
+      "footer_offset": 344,
+      "total_length": 408,
+      "field_table_hex": "000000002001000003000d00280100001000000001000000010000002301000001000100380100000000000002000000020000002401000001000700380100000000000000000000",
+      "name_pool_hex": "2001000003000300230100000100010024010000010001005f69646e73",
+      "value_area_hex": "00000000000000000000000000000000",
+      "container_tables_hex": "0000000009000100c00000000300000003000000ffffffffffffffff00000000"
+    },
+    {
+      "id": "internal-payload-alignment",
+      "semantic_status": "structurally-and-logically-valid-before-hash-profile",
+      "logical_presentation": "{b:int64(1),_id:uuid(00000000-0000-0000-0000-000000000000),a:true}",
+      "directory": {
+        "field_table": { "offset": 192, "length": 72, "item_count": 3 },
+        "name_pool": { "offset": 264, "length": 29, "item_count": 3 },
+        "value_area": { "offset": 296, "length": 32, "item_count": 3 },
+        "container_tables": { "offset": 328, "length": 32, "item_count": 1 }
+      },
+      "footer_offset": 360,
+      "total_length": 424,
+      "field_table_hex": "000000002001000003000d00280100001000000001000000010000002301000001000200380100000100000002000000020000002401000001000400400100000800000000000000",
+      "name_pool_hex": "2001000003000300230100000100010024010000010001005f69646162",
+      "value_area_hex": "0000000000000000000000000000000001000000000000000100000000000000",
+      "container_tables_hex": "0000000009000100c00000000300000003000000ffffffffffffffff00000000"
+    },
+    {
+      "id": "nested-object-array",
+      "semantic_status": "structurally-and-logically-valid-before-hash-profile",
+      "logical_presentation": "{z:[null,{a:true}],_id:objectId(000102030405060708090a0b),a:{}}",
+      "directory": {
+        "field_table": { "offset": 192, "length": 96, "item_count": 4 },
+        "name_pool": { "offset": 288, "length": 29, "item_count": 3 },
+        "value_area": { "offset": 320, "length": 13, "item_count": 3 },
+        "container_tables": { "offset": 336, "length": 152, "item_count": 4 }
+      },
+      "footer_offset": 488,
+      "total_length": 552,
+      "field_table_hex": "000000003801000003000e00400100000c00000001000000010000003b01000001000900700100002000000002000000020000003c01000001000a00900100002000000000000000010000003b010000010002004c0100000100000000000000",
+      "name_pool_hex": "38010000030003003b010000010001003c010000010001005f6964617a",
+      "value_area_hex": "000102030405060708090a0b01",
+      "container_tables_hex": "0000000009000100c00000000300000004000000ffffffffffffffff000000000100000009000200080100000000000000000000000000000100000000000000020000000a000200d001000002000000010000000000000002000000000000000300000009000300080100000100000001000000020000000100000000000000010000004c0100000000000009000000b001000020000000"
+    }
+  ],
+  "deferrals": [
+    {
+      "owner": "P03-006",
+      "scope": "crc-replay-content-hash-profile-domain-framing-and-complete-envelope-vectors"
+    },
+    {
+      "owner": "P03-007",
+      "scope": "compressed-section-block-grammar-codecs-and-profiles"
+    },
+    {
+      "owner": "P03-013",
+      "scope": "feature-gated-collection-path-dictionary-ids-and-name-elision-profile"
+    },
+    {
+      "owner": "P03-015",
+      "scope": "extension-and-reader-writer-feature-migration-matrix"
+    },
+    {
+      "owner": "P03-016",
+      "scope": "immutable-complete-hdoc-golden-and-malformed-fixtures"
+    }
+  ]
+}

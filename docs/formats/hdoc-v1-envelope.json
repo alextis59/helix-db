@@ -10,6 +10,8 @@
     "section_alignment_bytes": 8,
     "maximum_canonical_bytes": 16777216,
     "minimum_envelope_bytes_without_section_payloads": 256,
+    "minimum_base_structural_root_bytes_before_hash_profile": 288,
+    "record_registry": "docs/formats/hdoc-v1-records.json",
     "complete_byte_format": false,
     "completion_gate": "P03-007"
   },

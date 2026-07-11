@@ -7,8 +7,10 @@
     "tag_width_bits": 8,
     "unknown_tag_behavior": "reject-cap-format-unsupported",
     "missing_is_storable": false,
-    "complete_payload_format": false,
-    "payload_completion_owner": "P03-004"
+    "complete_payload_format": true,
+    "payload_completion_owner": "P03-005",
+    "payload_registry": "docs/formats/hdoc-v1-payloads.json",
+    "record_registry": "docs/formats/hdoc-v1-records.json"
   },
   "tags": [
     {

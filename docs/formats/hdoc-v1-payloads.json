@@ -6,10 +6,11 @@
     "minor_version": 0,
     "type_tag_registry": "docs/formats/hdoc-v1-type-tags.json",
     "containing_length_owner": "P03-005",
+    "containing_record_registry": "docs/formats/hdoc-v1-records.json",
     "integer_byte_order": "little-endian",
     "opaque_sequence_order": "exact-as-documented",
     "complete_noncontainer_payload_format": true,
-    "complete_container_payload_format": false,
+    "complete_container_payload_format": true,
     "container_completion_owner": "P03-005",
     "complete_hdoc_format": false
   },

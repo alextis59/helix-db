@@ -1,6 +1,6 @@
 # HDoc 1.0 Canonical Noncontainer Payload Encoding
 
-- Status: Accepted noncontainer payload registry; container records remain incomplete
+- Status: Accepted noncontainer payload registry; containing records fixed by `P03-005`
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner with Query semantics review
 - Format identity: HDoc major `1`, initial minor `0`
@@ -21,12 +21,11 @@ UUID, ObjectId, and both vector families. It also assigns the base binary-subtyp
 alignment, exact length equations, semantic range checks, decimal BID mapping, vector dimension
 prefix, noncanonical rejection, and payload-level reference vectors.
 
-It does not define the field, array-element, object, or array record that carries a tag, offset,
-and length. Those records, value-area ordering, zero padding, container references, and exact use of
-zero-length payload offsets remain `P03-005`. CRC and typed-hash framing remain `P03-006`, and
-compression remains `P03-007`. Therefore the parent envelope is still an incomplete byte format,
-hash profile zero remains invalid, and no payload example here is a complete or valid HDoc
-document.
+The [HDoc 1.0 record registry](hdoc-v1-records.md) now fixes the field/array record carrying each
+tag, offset, and length, plus value-area ordering, zero padding, container references, and exact
+zero-length cursors. CRC and typed-hash framing remain `P03-006`, and compression remains
+`P03-007`. Therefore the parent envelope is still an incomplete byte format, hash profile zero
+remains invalid, and no payload example here is a complete or valid HDoc document.
 
 ## Normative notation
 
@@ -490,8 +489,9 @@ Physical CPU/GPU conversion, normalization, or candidate scoring never changes s
 
 ## Placement, alignment, and length ownership
 
-This task defines each payload's required start alignment and intrinsic bytes. P03-005 must define
-the complete value-area algorithm with these invariants:
+This task defines each payload's required start alignment and intrinsic bytes. The
+[record registry](hdoc-v1-records.md) defines the complete value-area algorithm with these
+invariants:
 
 - the value-area section begins at an 8-byte boundary under the parent envelope;
 - each payload starts at the smallest offset at or after the previous payload end satisfying its
@@ -503,8 +503,8 @@ the complete value-area algorithm with these invariants:
 - zero-length null/empty-string offsets and container references receive one unambiguous canonical
   rule rather than host-dependent special cases.
 
-Until P03-005 assigns those records/order/offset rules, concatenating examples from this document
-does not make a canonical value area.
+The record registry's occurrence order and zero-length cursor rules are required; concatenating
+examples from this document in any other order does not make a canonical value area.
 
 ## Validation order and atomic exposure
 
@@ -585,7 +585,7 @@ can replace this registry without data migration. After immutable fixtures or da
 
 | Task | Owns next | Cannot change from P03-004 |
 | --- | --- | --- |
-| `P03-005` | Containing records, value-area order, offsets, external padding, object/array tables | Payload bytes, lengths, or alignments listed here |
+| [`P03-005`](hdoc-v1-records.md) | Containing records, value-area order, offsets, external padding, object/array tables | Payload bytes, lengths, or alignments listed here |
 | `P03-006` | CRC replay and typed-hash domain/length/tree framing | Canonical logical payload identity |
 | `P03-007` | Deterministic bounded compression blocks/codecs | Expanded canonical payload bytes |
 | `P03-008`–`P03-010` | Safe encoder, validating decoder, owned/borrowed values | Host-independent encoding and fail-closed rules |
@@ -613,8 +613,8 @@ Later complete fixtures/property/fuzz suites must include:
 - identical Rust/TypeScript/native/Wasm/browser values, bytes, typed hashes, errors, and diagnostics.
 
 The payload examples in the machine registry are normative test inputs, not complete HDoc golden
-documents. `P03-016` must embed them in immutable complete documents only after P03-005–P03-007
-close the remaining byte grammar.
+documents. `P03-016` must embed them in immutable complete documents only after `P03-006` and
+`P03-007` close the remaining hash/compression grammar.
 
 ## References
 
@@ -631,6 +631,7 @@ close the remaining byte grammar.
 - [Portable v1 limits](../architecture/limits-v1.md)
 - [Versioned error semantics](../architecture/error-semantics.md)
 - [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)
+- [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
 - [IEEE 754-2019 standard landing page](https://standards.ieee.org/ieee/754/6210/)
 - [MongoDB Decimal128 specification](https://specifications.readthedocs.io/en/latest/bson-decimal128/decimal128/)
 - [RFC 9562 UUID format](https://www.rfc-editor.org/rfc/rfc9562)
