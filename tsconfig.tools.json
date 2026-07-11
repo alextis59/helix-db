@@ -3,5 +3,10 @@
   "compilerOptions": {
     "types": ["node"]
   },
-  "files": ["playwright.config.ts", "vite.config.ts", "vitest.config.ts"]
+  "files": [
+    "playwright.config.ts",
+    "vite.config.ts",
+    "vitest.config.ts",
+    "vitest.integration.config.ts"
+  ]
 }

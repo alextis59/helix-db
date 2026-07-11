@@ -20,6 +20,7 @@ const suiteOrder = [
 const allowedSteps = new Set([
   'rust-unit',
   'rust-integration-inventory',
+  'hdoc-cross-language',
   'javascript-unit-inventory',
   'semantic-conformance',
   'browser-example-build',
@@ -204,6 +205,24 @@ const executeRustIntegrationInventory = (suite) => {
   );
 };
 
+const executeHDocCrossLanguage = (suite) => {
+  const output = run('corepack', [
+    'npm',
+    'exec',
+    '--',
+    'vitest',
+    'run',
+    '--config',
+    'vitest.integration.config.ts',
+  ]);
+  requireText(output, `${suite.expectations.test_files} passed`, 'HDoc integration test files');
+  requireText(output, `${suite.expectations.test_cases} passed`, 'HDoc integration test cases');
+  assert(
+    suite.expectations.golden_vectors === 4,
+    'HDoc integration suite must bind all four immutable positive vectors',
+  );
+};
+
 const executeSemanticConformance = (suite) => {
   const examples = run(process.execPath, ['fixtures/semantic/schema/check-semantic-examples.mjs']);
   requireText(
@@ -351,6 +370,7 @@ const executeBenchmarkBaseline = (suite) => {
 const stepExecutors = {
   'rust-unit': executeRustUnit,
   'rust-integration-inventory': executeRustIntegrationInventory,
+  'hdoc-cross-language': executeHDocCrossLanguage,
   'javascript-unit-inventory': executeJavaScriptUnitInventory,
   'semantic-conformance': executeSemanticConformance,
   'browser-example-build': executeBrowserExampleBuild,

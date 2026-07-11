@@ -27,7 +27,7 @@ const expectedStates = {
   crash: 'reserved',
   distributed: 'reserved',
   fuzz: 'reserved',
-  integration: 'reserved',
+  integration: 'active',
   unit: 'active',
 };
 const expectedActivationTasks = {
@@ -37,7 +37,7 @@ const expectedActivationTasks = {
   crash: ['P05-021'],
   distributed: ['P17-016'],
   fuzz: ['P03-019'],
-  integration: ['P03-017'],
+  integration: [],
   unit: [],
 };
 const expectedSteps = {
@@ -47,7 +47,7 @@ const expectedSteps = {
   crash: [],
   distributed: [],
   fuzz: [],
-  integration: ['rust-integration-inventory'],
+  integration: ['rust-integration-inventory', 'hdoc-cross-language'],
   unit: ['rust-unit', 'javascript-unit-inventory'],
 };
 
@@ -177,7 +177,7 @@ for (const suite of manifest.suites) {
 }
 
 process.stdout.write(
-  'PASS test command surface: 8 stable suites, 4 active, 4 reserved, 11 npm scripts\n',
+  'PASS test command surface: 8 stable suites, 5 active, 3 reserved, 11 npm scripts\n',
 );
 process.stdout.write('PASS runner contract: exact list/describe output and 3 rejection canaries\n');
 process.stdout.write(

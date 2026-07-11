@@ -499,7 +499,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   no-rewrite migration assessment under `P03-015`, without claiming a compatibility window.
 - [x] Commit immutable positive, boundary, noncanonical, unknown-feature/version, checksum, hash,
   overlap, truncation, padding, compression-bomb, and limit golden vectors under `P03-016`.
-- [ ] Prove Rust and TypeScript readers produce identical logical values and hashes under
+- [x] Prove Rust and TypeScript readers produce identical logical values and hashes under
   `P03-017`.
 - [ ] Run property/mutation tests, coverage-guided fuzzing, ASan, and Wasm/browser replay under
   `P03-018` and `P03-019`.
@@ -548,8 +548,9 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] `P03-015`: publish and implement the exact HDoc 1.0 reader/writer/feature matrix and
   fail-closed no-rewrite migration assessment.
 - [x] `P03-016`: freeze immutable positive/boundary and exact rejection HDoc 1.0 fixtures.
-- [ ] `P03-017`–`P03-021`: complete independent reading, fuzz/corruption evidence, and experiment
-  conclusions before `G03`.
+- [x] `P03-017`: prove independent TypeScript and production Rust golden-reader parity.
+- [ ] `P03-018`–`P03-021`: complete property/fuzz/corruption evidence and experiment conclusions
+  before `G03`.
 
 ## References
 

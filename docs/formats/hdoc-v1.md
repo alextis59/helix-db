@@ -35,6 +35,9 @@ reader, `P03-010` implements lifetime-bound borrowed views plus detached owned l
 `P03-011` implements exact-name and dotted-path lookup over those validated views. `P03-012`
 implements canonical lossless tagged rendering and strict detached import. `P03-016` freezes the
 [immutable supported golden files](../../fixtures/hdoc/v1/README.md).
+`P03-017` activates the cross-language integration suite: production Rust and an independent
+TypeScript implementation must reconstruct identical lossless values and typed hashes for every
+positive golden file, including bounded compression profile `1/1`.
 Footer `hash_profile_id = 1` is the only assigned base integrity profile; zero remains permanently
 invalid. The exact envelopes in the integrity and compression registries are normative executable
 references until the immutable corpus is published.

@@ -160,7 +160,7 @@ golden vectors. The active workspace
 metadata is now:
 
 ```text
-status = "hdoc-golden-v1"
+status = "hdoc-cross-language-v1"
 database-functionality = true
 ```
 

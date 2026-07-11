@@ -319,8 +319,9 @@ Selected boundary digests:
 | `[true,null]` | `0x0a` | reversed values | `43e535fac3e406f196186829860e77528c8bc6a7e689c19dfc937c4258d9a53d` |
 
 The complete vector bodies—not only these summaries—are normative. `P03-008` replays them in the
-production encoder tests; `P03-017` must independently replay
-them through production and independent implementations.
+production encoder tests; `P03-017` now independently replays complete immutable HDoc bodies
+through production Rust and a separate TypeScript CRC/LZ4/tree-hash implementation. The four
+complete logical trees and root digests agree without treating manifest/footer hashes as answers.
 
 ## Uncompressed integrity-reference envelopes
 

@@ -347,9 +347,11 @@ route around the encoder even though it does not yet persist or encode the retur
 
 The tradeoff is intentional scope: tagged JSON is an internal debug/future SDK-boundary profile,
 not the public command/protocol syntax and not MongoDB Extended JSON. Future wire and SDK work may
-negotiate or adapt it, but cannot silently call ordinary JSON lossless. P03-016 now freezes 24
-immutable supported HDoc 1.0 positive/rejection files with SHA-256 identities and exact outcomes;
-`P03-017`–`P03-019` still own independent-reader/property/fuzz evidence.
+negotiate or adapt it, but cannot silently call ordinary JSON lossless. P03-016 freezes 24
+immutable supported HDoc 1.0 positive/rejection files with SHA-256 identities and exact outcomes.
+P03-017 adds a genuinely independent TypeScript byte reader: its CRC, bounded LZ4 expansion,
+complete logical reconstruction, and recursive BLAKE3 calculation agree with production Rust on
+all four positive files. `P03-018`–`P03-019` still own broader property/mutation/fuzz evidence.
 
 ### 6.3 Field-path dictionaries
 

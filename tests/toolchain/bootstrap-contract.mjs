@@ -386,6 +386,7 @@ export const validateBootstrapSources = (contract, sources = loadBootstrapSource
       'P03-014',
       'P03-015',
       'P03-016',
+      'P03-017',
     ],
     'bootstrap CI task history',
   );

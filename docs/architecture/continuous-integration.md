@@ -72,6 +72,10 @@ P03-016 activates the golden-format profile for the 24 immutable supported HDoc 
 strict manifest. Crash-matrix and packaged-release profiles remain reserved until `P05-021` and
 `P16-010`; the policy rejects producers for those classes rather than uploading placeholders.
 
+P03-017 activates the integration suite on every Node/native lane through the stable root test
+command. Its dedicated Vitest configuration drives the production Rust fixture reader and the
+independent TypeScript CRC/LZ4/logical-tree/hash reader over the four positive immutable vectors.
+
 ## Workflow security and reproducibility
 
 - Workflow permissions are `contents: read`; no job receives write, package, deployment, OIDC, or artifact-attestation permission.

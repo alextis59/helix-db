@@ -3,7 +3,7 @@
 - Status: Accepted bootstrap command contract; feature suites remain maturity-labeled
 - Last updated: 2026-07-11
 - Owner: Quality and release owner
-- Plan item: `P02-007`; benchmark activation completed by `P02-014`; browser boundary activation completed by `P02-016`
+- Plan item: `P02-007`; benchmark activation completed by `P02-014`; browser boundary activation completed by `P02-016`; integration activation completed by `P03-017`
 - Governing gate: `G02`
 - Machine authority: [`helix.test-command-surface/1`](../../tests/suites.json)
 - Runner: [`tests/run-suite.mjs`](../../tests/run-suite.mjs)
@@ -19,7 +19,7 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 | Command | Bootstrap state | Current behavior | Activation or expansion |
 | --- | --- | --- | --- |
 | `npm run test:unit` | Active | Runs all-feature Rust library tests and inventories JavaScript unit files; currently 18 Rust tests and 0 JavaScript files | Counts change with reviewed implementation tests |
-| `npm run test:integration` | Reserved | Requires only the integration contract README | First cross-language golden readers under `P03-017` |
+| `npm run test:integration` | Active | Runs one five-case Vitest file: fixed inventory plus complete logical-value and independently recomputed typed-hash parity across all four immutable HDoc 1.0 positive vectors | Later cross-crate, language, and process boundaries extend the same command |
 | `npm run test:conformance` | Active | Replays semantic examples, canonical bytes, the 17-fixture/319-step corpus, 382 oracle assertions, the 265-row compatibility matrix, and offline MongoDB artifacts | Later format, host, engine, and adapter bindings extend the same command |
 | `npm run test:fuzz` | Reserved | Requires only the fuzz contract README; no property test is relabeled as fuzzing | First coverage-guided codec targets under `P03-019` |
 | `npm run test:browser` | Active | Rebuilds and validates the non-database browser example, then lists exactly one case expanded across Chromium, Firefox, and WebKit (3 tests in 1 file) without downloading or launching browsers | `P11-014` expands the same suite to product lifecycle/capability/storage behavior |
@@ -34,6 +34,12 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 The common runner invokes fixed program/argument arrays without a shell. Cargo commands are frozen/offline; suite scripts never install a dependency, browser binary, container image, or toolchain. A command may read existing cached tools selected by the pinned Rust and npm policies, but mutable setup remains an explicit bootstrap or CI responsibility.
 
 The unit command selects Rust library targets so integration, examples, binaries, and doctests cannot drift into its count accidentally. JavaScript uses Vitest's explicit empty-suite switch only while the manifest records zero files. The conformance command is offline and deterministic: it validates committed MongoDB observations but does not start MongoDB. The separately retained Phase 1 live differential remains an evidence/gate workflow until a later differential command policy is accepted.
+
+The active integration command runs its dedicated Vitest configuration and invokes Cargo with a
+fixed frozen/offline argument vector. The Rust oracle uses the production validating decoder and
+lossless tagged renderer. The TypeScript reader independently validates the envelope CRC, expands
+profile-1 LZ4 blocks, reconstructs every type/container, and recomputes the complete typed BLAKE3
+tree; it does not treat the manifest or footer digest as its expected answer.
 
 The [`P02-013` product coverage command](code-coverage-policy.md) is a quality gate over the same Rust library tests, not a ninth feature-suite alias. It recompiles with exact instrumentation, excludes test-only source ranges from the denominator, and enforces product/critical thresholds. `test:unit` remains the stable behavior command; `coverage:check` remains the bounded reporting command.
 

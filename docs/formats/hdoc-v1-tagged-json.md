@@ -166,8 +166,9 @@ Unicode, duplicate properties, noncanonical numeric/bit/identifier payloads, cou
 limits, and root document rules. The semantic-critical coverage policy requires 100% product lines
 and functions and at least 95% regions for this implementation on the compiler-matched LLVM tools.
 
-P03-016 now freezes immutable supported HDoc byte fixtures. `P03-017` still owns an independent
-TypeScript reader/converter. `P03-018` and `P03-019` still own broader property, mutation, fuzz,
+P03-016 freezes immutable supported HDoc byte fixtures. `P03-017` implements an independent
+TypeScript reader and proves its complete tagged logical values equal the production Rust renderer
+for every positive fixture. `P03-018` and `P03-019` still own broader property, mutation, fuzz,
 sanitizer, and browser replay. This profile's implementation does not pre-claim those gates.
 
 ## Change and compatibility rule

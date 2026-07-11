@@ -30,14 +30,17 @@
     {
       "id": "integration",
       "npm_script": "test:integration",
-      "state": "reserved",
+      "state": "active",
       "root": "tests/integration",
       "description": "Cross-crate, cross-language, and multi-process integration tests.",
-      "activation_tasks": ["P03-017"],
-      "allowed_files": ["README.md"],
-      "steps": ["rust-integration-inventory"],
+      "activation_tasks": [],
+      "allowed_files": [],
+      "steps": ["rust-integration-inventory", "hdoc-cross-language"],
       "expectations": {
-        "executable_targets": 0
+        "executable_targets": 0,
+        "golden_vectors": 4,
+        "test_cases": 5,
+        "test_files": 1
       }
     },
     {

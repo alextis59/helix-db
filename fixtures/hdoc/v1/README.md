@@ -20,5 +20,8 @@ node fixtures/hdoc/v1/check.mjs --check
 cargo run --frozen -p helix-doc --example hdoc_v1_golden -- --check
 ```
 
-`P03-017` adds an independent TypeScript reader over these exact bytes. `P03-018` expands
-property/mutation breadth, and `P03-019` adds coverage-guided fuzzing; neither may rewrite v1 files.
+`P03-017` adds an independent TypeScript reader over every positive file. The active integration
+suite requires it to validate CRC-32C, expand the bounded LZ4 stream, reconstruct the complete
+lossless logical tree, and recompute the recursive BLAKE3-256 identity independently; those values
+must equal the production Rust reader's output. `P03-018` expands property/mutation breadth, and
+`P03-019` adds coverage-guided fuzzing; neither may rewrite v1 files.
