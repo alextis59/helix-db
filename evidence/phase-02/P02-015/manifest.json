@@ -1,0 +1,363 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-015",
+  "requirements": [
+    "INV-007",
+    "QUAL-001"
+  ],
+  "accepted_adrs": [],
+  "base_commit": "3fcb4e88c30fe68b647ce72bdf4df83c2efd4e86",
+  "source_commits": [
+    "d87e8c3e996bf7d2a975ffa7ba9a49aaf9a8e3e2",
+    "b44bd478b2f7a13e8b99fea7ff622a94d730d69f"
+  ],
+  "commit": "b44bd478b2f7a13e8b99fea7ff622a94d730d69f",
+  "recorded_at": "2026-07-11T05:07:46.691Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "cpu": "11th Gen Intel(R) Core(TM) i5-11300H @ 3.10GHz",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "active_node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "python_jsonschema": "4.23.0",
+      "pyyaml": "6.0",
+      "playwright": "1.61.1",
+      "chromium": "149.0.7827.55",
+      "firefox": "151.0",
+      "webkit": "26.5"
+    },
+    "javascript_lanes": [
+      "22.23.1",
+      "24.18.0"
+    ],
+    "hosted_workflow_execution": false,
+    "github_environment_simulation": true
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "collect all five dependency outputs from the P02-012 report directory",
+      "exit_code": 1,
+      "result": "rejected because routine CI deliberately does not regenerate the 339 MB license refresh; the semantic bundle now requires exactly inventory, audit, signatures/provenance, and compact observation"
+    },
+    {
+      "command": "collect a locally present dependency report set by filename alone",
+      "exit_code": 1,
+      "result": "rejected after a clean-workflow simulation exposed stale inventory/observation linkage; GitHub collection now validates current policy and lock hashes, raw report linkage, freshness, zero vulnerabilities, signatures, and required provenance"
+    },
+    {
+      "command": "write the bundle manifest before validating dependency diagnostics",
+      "exit_code": 1,
+      "result": "rejected because stale diagnostics could leave an invalid complete manifest; collection now records a coherent failed manifest with the exact dependency-validation reason and exits nonzero"
+    },
+    {
+      "command": "activate golden-format, crash-matrix, and release-package uploads immediately",
+      "exit_code": 1,
+      "result": "rejected because those artifacts do not exist; profiles remain producer-free and reserved until P03-016, P05-021, and P16-010"
+    },
+    {
+      "command": "treat a 30-day GitHub artifact as permanent task or release evidence",
+      "exit_code": 1,
+      "result": "rejected by the promotion-required policy; every gate or release input must be committed or moved to an approved immutable store before expiry"
+    }
+  ],
+  "verification": {
+    "source_artifacts": 31,
+    "retained_artifacts": 8,
+    "schemas": 3,
+    "profiles": 5,
+    "active_profiles": 2,
+    "reserved_profiles": 3,
+    "producer_definitions": 3,
+    "resolved_bundle_variants": 5,
+    "bundle_manifests": 5,
+    "bundle_payloads": 16,
+    "bundle_payload_bytes": 535823,
+    "source_rejection_canaries": 38,
+    "evidence_rejection_canaries": 18,
+    "total_rejection_canaries": 56,
+    "node_lanes": 2,
+    "workflow_jobs": 9,
+    "workflow_steps": 55,
+    "workflow_action_uses": 22,
+    "upload_steps": 4,
+    "native_tests": 9,
+    "browser_engines": 3,
+    "markdown_files": 151,
+    "local_links": 1003,
+    "biome_files": 78
+  },
+  "commands": [
+    {
+      "command": "Node 22.23.1 clean install, JavaScript/dependency/CI/type/fixture/aggregate replay, live vulnerability/signature/provenance observation, GitHub-environment semantic collection, and strict bundle check",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 24.18.0 clean install plus JavaScript/dependency/CI/type/fixture/aggregate and artifact-policy replay",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo fmt/check/Clippy/test, warning-free docs, both portable Clippy targets, ASan, compiler-matched coverage, and retained coverage replay",
+      "exit_code": 0
+    },
+    {
+      "command": "WASIp2/core-module validation, Chromium WGSL compilation, Chromium/Firefox/WebKit smoke, launcher identity capture, and five bundle validation",
+      "exit_code": 0
+    },
+    {
+      "command": "Draft 2020-12 validation of policy/manifests/browser reports, independent YAML parse of 9 jobs/55 steps, and 151-file Markdown link validation",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/P02-015/verify.mjs b44bd478b2f7a13e8b99fea7ff622a94d730d69f",
+      "exit_code": 0
+    }
+  ],
+  "retained_artifacts": [
+    {
+      "path": "reports/semantic-manifest.json",
+      "media_type": "application/json",
+      "bytes": 3176,
+      "sha256": "3ec7d202d2ed65926256084b42ef8296bc83527c1ea01484ecf08a1b9d27cacf"
+    },
+    {
+      "path": "reports/coverage-manifest.json",
+      "media_type": "application/json",
+      "bytes": 2015,
+      "sha256": "f87e7c02761dc6028379430fd10dd3ac7adc64bee0bcafa9c11d840e5c1fa7bb"
+    },
+    {
+      "path": "reports/browser-chromium-manifest.json",
+      "media_type": "application/json",
+      "bytes": 2799,
+      "sha256": "67486880898a211f770922bf6cb45e9f13cce5050927a011d230b970742daa46"
+    },
+    {
+      "path": "reports/browser-firefox-manifest.json",
+      "media_type": "application/json",
+      "bytes": 2562,
+      "sha256": "3c7dd553ec32885b1072cb2280066533889021853c4817eae2a5d21e1a639464"
+    },
+    {
+      "path": "reports/browser-webkit-manifest.json",
+      "media_type": "application/json",
+      "bytes": 2558,
+      "sha256": "cd4f1ecb91cac7ef2b31775a33e62f2f3268120888d7eddae04df8c1b19553ec"
+    },
+    {
+      "path": "reports/browser-execution-chromium.json",
+      "media_type": "application/json",
+      "bytes": 985,
+      "sha256": "92c69b035ff9d006c2d3b7f4dd3c2065cc529aae5d6965481a355f1bb06d5125"
+    },
+    {
+      "path": "reports/browser-execution-firefox.json",
+      "media_type": "application/json",
+      "bytes": 971,
+      "sha256": "9d3bdde66b0c2d0d26c7683cefcedc50720a3b45abcfd4c1410d0856e529c4aa"
+    },
+    {
+      "path": "reports/browser-execution-webkit.json",
+      "media_type": "application/json",
+      "bytes": 965,
+      "sha256": "0eb44ca14db6395082619ff84910cbfb8ace8759f62d8c017fbe0b8184edee9c"
+    }
+  ],
+  "source_artifacts": [
+    {
+      "path": ".github/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1886,
+      "sha256": "444a4d221156b4bd81e9af5d629f30ee918428c0b11ec759e8f61f3e26126203"
+    },
+    {
+      "path": ".github/ci/matrix.json",
+      "media_type": "application/json",
+      "bytes": 5244,
+      "sha256": "d4523d85354fe1c5cbc67f9405d69a3a0b6de1e6b59da9b206fbf87f8327b377"
+    },
+    {
+      "path": ".github/workflows/benchmark-baseline.yml",
+      "media_type": "application/yaml",
+      "bytes": 1828,
+      "sha256": "0364e39f411f4bef189bf1aa857706769606bfa785c6e0673fa47a61d8733dd7"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "media_type": "application/yaml",
+      "bytes": 9658,
+      "sha256": "c84c56124cc2f58015d2dc3a691a18469f9bcdaec4454f56d9c727139ed65a9a"
+    },
+    {
+      "path": "README.md",
+      "media_type": "text/markdown",
+      "bytes": 4319,
+      "sha256": "146f2d695a66a319160632a27a9dadcc147b9de0db37c6d0a4e15bcd457c1d2e"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "media_type": "text/markdown",
+      "bytes": 6332,
+      "sha256": "72c18b2779e022899f725a533546c7b894111a605e934d253b515708175e1059"
+    },
+    {
+      "path": "biome.json",
+      "media_type": "application/json",
+      "bytes": 1481,
+      "sha256": "3f372034a052fe44d9721922366292ab09b1200c1a5db1393ccfff5448dccec0"
+    },
+    {
+      "path": "docs/README.md",
+      "media_type": "text/markdown",
+      "bytes": 8883,
+      "sha256": "19592f673e0fb2b0a712568de62c1a41b5b5bba4d981778cb90f02ba74eb0ba0"
+    },
+    {
+      "path": "docs/architecture/continuous-integration.md",
+      "media_type": "text/markdown",
+      "bytes": 12756,
+      "sha256": "0aec2433caee4045f796d987cd828508fb42232b2aac4e598cd201664d759bc0"
+    },
+    {
+      "path": "docs/architecture/dependency-security-reporting.md",
+      "media_type": "text/markdown",
+      "bytes": 10950,
+      "sha256": "b98740bb4a99757391850c59eb5ae634a7c361e30db5a07e804613d0e82e4455"
+    },
+    {
+      "path": "docs/architecture/wasm-browser-smoke-validation.md",
+      "media_type": "text/markdown",
+      "bytes": 8552,
+      "sha256": "5b03c4824c07a3b484cafffb06b424fcb8f93d59ea772870d9cf2a2b75ed1410"
+    },
+    {
+      "path": "docs/architecture/wgsl-fixture-validation.md",
+      "media_type": "text/markdown",
+      "bytes": 8741,
+      "sha256": "c00616d4bda3df3584421a59b42deba093ce0d14afe6a14b4f27801e6feefb5c"
+    },
+    {
+      "path": "docs/governance/requirements.md",
+      "media_type": "text/markdown",
+      "bytes": 22707,
+      "sha256": "b82ab3d5e998e4bc046e4d82bc2dcfbcaef1d3d7937e07b64247ea55ed2e767b"
+    },
+    {
+      "path": "docs/quality/artifact-retention.md",
+      "media_type": "text/markdown",
+      "bytes": 11900,
+      "sha256": "681cd2abbdbc799ef193912f7d00300c5ed381abd9d9dadf1e87539d3d5f5d46"
+    },
+    {
+      "path": "docs/quality/benchmark-results.md",
+      "media_type": "text/markdown",
+      "bytes": 12902,
+      "sha256": "aa8b466de14ddee4cd428e1d72c0c35de5487bcffa73f915b7c5d968eff19593"
+    },
+    {
+      "path": "docs/quality/code-coverage-policy.md",
+      "media_type": "text/markdown",
+      "bytes": 11925,
+      "sha256": "d4d65014663af3f62348fa0a70c64d6b4627d634cf672dea717d189be1574cd3"
+    },
+    {
+      "path": "package.json",
+      "media_type": "application/json",
+      "bytes": 4123,
+      "sha256": "ef96e1b340d4021c5b86400dd9e67e945ef27f4e18d75d171d97fea684acdbc9"
+    },
+    {
+      "path": "tests/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1468,
+      "sha256": "1d06e0d83181e0257c2c4fc6b6bcee723877aaeaf382dd9564b1f6b2b8b4cb8a"
+    },
+    {
+      "path": "tests/toolchain/README.md",
+      "media_type": "text/markdown",
+      "bytes": 4365,
+      "sha256": "eac3d906096e9851e01c8f7603d7c94b50ed3e69696b297512ee03ab0037e290"
+    },
+    {
+      "path": "tests/toolchain/artifact-retention-contract.mjs",
+      "media_type": "text/javascript",
+      "bytes": 40832,
+      "sha256": "2cccc0f0381dbb33cbda5abeb2ef4f7c15a3cb2daf2a983c9f6fe1f7546c90b7"
+    },
+    {
+      "path": "tests/toolchain/artifact-retention-policy.json",
+      "media_type": "application/json",
+      "bytes": 5368,
+      "sha256": "a16a3704b5c48cc06d46dad8e7ade48ad9d9d8b952372dc0654afe8046f5dc6a"
+    },
+    {
+      "path": "tests/toolchain/check-ci-matrix.mjs",
+      "media_type": "text/javascript",
+      "bytes": 23371,
+      "sha256": "16c37e5e7f2d2c8e953df4cad0909d251491dc3e41877597d969ef71bc27d285"
+    },
+    {
+      "path": "tests/toolchain/check-dependency-reports.mjs",
+      "media_type": "text/javascript",
+      "bytes": 32383,
+      "sha256": "c8b3b626649259fbc1df90ccd1d4576f0065141110e1861c4ac355ff89429707"
+    },
+    {
+      "path": "tests/toolchain/check-retained-artifacts.mjs",
+      "media_type": "text/javascript",
+      "bytes": 2098,
+      "sha256": "80e3b971ed58bbcb57e4dfb7f446a71487ff44b7823d25d87371aea6636781dd"
+    },
+    {
+      "path": "tests/toolchain/collect-retained-artifacts.mjs",
+      "media_type": "text/javascript",
+      "bytes": 11115,
+      "sha256": "c47582934f13eecb8fa5c7eda2eeceb47cc15727342c8efea746a0ebaf4c0e01"
+    },
+    {
+      "path": "tests/toolchain/dependency-report-policy.json",
+      "media_type": "application/json",
+      "bytes": 4707,
+      "sha256": "e8f1c3040adb5304368b40b13993fccb80f253b5eea1fcd479446bfa40719b77"
+    },
+    {
+      "path": "tests/toolchain/run-browser-smoke.mjs",
+      "media_type": "text/javascript",
+      "bytes": 7861,
+      "sha256": "34dff7108859b42db06fb15b6d0db935635200f515f4fdca15c593add5a90c2f"
+    },
+    {
+      "path": "tests/toolchain/schema/artifact-retention-policy-v1.schema.json",
+      "media_type": "application/json",
+      "bytes": 5225,
+      "sha256": "581b9a693a1f9a41219d6970802a6b1a809a66e431a2bc18c8d41e12109fb301"
+    },
+    {
+      "path": "tests/toolchain/schema/browser-execution-report-v1.schema.json",
+      "media_type": "application/json",
+      "bytes": 4320,
+      "sha256": "862d845f1ff078418a4a2469d3bbde2956a33ad50d5b698954eeadf182448131"
+    },
+    {
+      "path": "tests/toolchain/schema/retained-artifact-bundle-v1.schema.json",
+      "media_type": "application/json",
+      "bytes": 4816,
+      "sha256": "dfe973e2a133169b3487918207f1bc5654152ed8533aac25aa8d29847c659af8"
+    },
+    {
+      "path": "tests/toolchain/test-artifact-retention-contract.mjs",
+      "media_type": "text/javascript",
+      "bytes": 15749,
+      "sha256": "14cf99e34799579b908c03530dd54eb435d3e8c213e3a45067e0f065f5596018"
+    }
+  ],
+  "verifier": {
+    "path": "verify.mjs",
+    "bytes": 37531,
+    "sha256": "e38f7a3d44fe729a7eaff8e4d4c39296d88e4b748a4c005d0b68c89dc9d56d62"
+  },
+  "verdict": "pass"
+}

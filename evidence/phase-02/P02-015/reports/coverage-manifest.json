@@ -1,0 +1,70 @@
+{
+  "schema": "helix.retained-artifact-bundle/1",
+  "plan_item": "P02-015",
+  "profile": "test-replays",
+  "variant": "coverage",
+  "status": "complete",
+  "recorded_at": "2026-07-11T04:58:06.659Z",
+  "execution_id": "local-2026-07-11T04:58:06.659Z",
+  "source_control": {
+    "commit": "b44bd478b2f7a13e8b99fea7ff622a94d730d69f",
+    "dirty": false
+  },
+  "environment": {
+    "provider": "local",
+    "platform": "linux",
+    "architecture": "x64",
+    "node": "v22.19.0",
+    "github_run_id": null,
+    "github_run_attempt": null
+  },
+  "retention": {
+    "ci_days": 30,
+    "durable": "permanent-when-used-by-gate-or-release",
+    "promotion_required": true,
+    "sensitivity": "public-repository-data-only"
+  },
+  "producer": {
+    "command": [
+      "node",
+      "tests/toolchain/collect-retained-artifacts.mjs",
+      "test-replays",
+      "coverage"
+    ],
+    "upstream_command": [
+      "node",
+      "tests/toolchain/check-rust-coverage.mjs",
+      "run"
+    ],
+    "exit_code": 0
+  },
+  "source_inputs": [
+    {
+      "path": "tests/toolchain/rust-coverage-policy.json",
+      "bytes": 2983,
+      "sha256": "887b840685b7c1b76aec818a2e08d800d9d8fbe595abef6e8b325922955b4234"
+    },
+    {
+      "path": "rust-toolchain.toml",
+      "bytes": 211,
+      "sha256": "3aeb3323922706566dcd057bc0225469d7f26dee2fbcf68a9d426396bdef5195"
+    },
+    {
+      "path": "Cargo.lock",
+      "bytes": 884,
+      "sha256": "402998e8435a81159574c2bd063de4efc74e47730a57396349fb23dee5fd99c6"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "rust-coverage.json",
+      "media_type": "application/json",
+      "role": "coverage-report",
+      "bytes": 15650,
+      "sha256": "2ff8c9fae4a3d8e5cb3f0063a0a76c1805afcc9f222caf01e578746bb87183f2"
+    }
+  ],
+  "failures": [],
+  "claim_boundary": "This diagnostic CI bundle proves only its named foundation replay; it is not durable gate evidence or a product, format, recovery, browser-support, or release claim until promoted and independently reviewed.",
+  "verdict": "pass"
+}

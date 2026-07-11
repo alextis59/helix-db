@@ -1,7 +1,7 @@
 # HelixDB Complete Implementation Plan
 
 - Status: Active planning baseline
-- Last updated: 2026-07-10
+- Last updated: 2026-07-11
 - Scope: Complete implementation from repository bootstrap through production distributed release
 - Normative source: [Specifications.md](Specifications.md)
 - Design analysis: [Study.md](Study.md)
@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 55
-- Open checklist items: 467
+- Completed checklist items: 56
+- Open checklist items: 466
 - Total checklist items: 522
 - Current phase: Phase 2 — Workspace, toolchain, and continuous integration
 - Next release gate: `G02`
@@ -196,7 +196,7 @@ Dependencies: `G00`; may proceed in parallel with Phase 1.
 - [x] **P02-012** Configure dependency vulnerability, provenance, license, and duplicate-version reporting.
 - [x] **P02-013** Add code coverage reporting with explicit exclusions and minimum thresholds for semantic and recovery-critical modules.
 - [x] **P02-014** Add benchmark result schemas and a non-gating baseline job that preserves raw results.
-- [ ] **P02-015** Add artifact retention for golden formats, test replays, crash matrices, browser reports, and packaged releases.
+- [x] **P02-015** Add artifact retention for golden formats, test replays, crash matrices, browser reports, and packaged releases.
 - [ ] **P02-016** Create minimal native and browser examples that prove the toolchain without implying database functionality.
 - [ ] **P02-017** Document clean-machine bootstrap, development commands, and troubleshooting.
 - [ ] **G02** Close the toolchain gate after a clean checkout builds and tests native and browser skeletons using only documented commands.
