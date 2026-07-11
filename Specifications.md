@@ -551,7 +551,7 @@ invalid placement/overlap/padding, malformed compressed streams, noncanonical pa
 trees, root-ID violations, checksum/hash disagreement, and any stored-byte form that does not
 exactly rebuild under the selected profile.
 
-`P03-010` now implements the logical value-access layer without weakening that validation boundary.
+`P03-010` implements the logical value-access layer without weakening that validation boundary.
 `DecodedHDoc` borrows each uncompressed section directly from the validated input and owns only the
 fresh bounded section buffers required by compression. `DocumentView`, `ObjectView`, `ArrayView`,
 `FieldView`, and `ValueView` borrow that retained backing and therefore cannot outlive the validated
@@ -561,9 +561,33 @@ identifier, and vector views preserve exact logical type and payload bits. `to_o
 recursively detaches names, variable payloads, containers, and vector bits into `OwnedDocument` /
 `OwnedValue` while retaining the same presentation order and typed values. Missing has no view or
 owned variant, whereas a present null remains `ValueView::Null` / `OwnedValue::Null`. Neither path
-can expose partially validated data. Optimized exact-name and nested-path lookup remains
-`P03-011`; canonical rendering/import remains `P03-012`; the normative reference envelopes are not
-yet the immutable supported fixtures owned by `P03-016`.
+can expose partially validated data.
+
+`P03-011` adds allocation-free lookup over those validated raw views. `DocumentView::get_field()` /
+`ObjectView::get_field()` first binary-search the globally sorted UTF-8 name table and then the
+owning object's strictly field-ID-sorted contiguous span; `get()` returns only the exact borrowed
+value. Lookup never scans presentation order, normalizes a name, copies a payload, or collapses an
+absent field into explicit null.
+
+`FieldPath::parse()` validates the 4,096-byte/100-segment dotted grammar into fixed bounded storage
+that can be reused across documents. Each segment retains exact UTF-8 bytes and the normal field
+name limits; there is no escaping or case/normalization rewrite. `lookup_path()` preflights the
+complete traversal before publishing an exact-size `PathCandidates` iterator. Object steps use the
+same two binary searches. A canonical numeric segment selects one dense array element; a
+nonnumeric array step fans out only across immediate object elements in source order; nested arrays
+are not implicitly flattened. Each `PathCandidate` retains the borrowed `ValueView` and the ordered
+array indices crossed by explicit selection or fan-out. Zero candidates is Missing, while a present
+null is one candidate whose value is `ValueView::Null`.
+
+Canonical numeric text too large for the portable dense-array index domain remains available as an
+exact object field name but returns redacted `VAL_INVALID_PATH` if traversal applies it to an array.
+Syntax/grammar failures use the same code; path byte/segment/field and one-million-candidate limits
+use `QUOTA_LIMIT_EXCEEDED` with stable `limits-v1` IDs. Candidate count and contextual numeric
+validity are audited over the complete immutable view before iteration, so a caller never receives
+a truncated or partially successful sequence. Lookup allocates no heap storage after decode and
+cannot outlive the validated wrapper or borrowed path text. Canonical rendering/import remains
+`P03-012`; the normative reference envelopes are not yet the immutable supported fixtures owned by
+`P03-016`, and formal lookup measurements remain `P03-020`.
 
 ### 7.4 Field path dictionary
 
@@ -2458,7 +2482,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, borrowed views, and owned values implemented by `P03-008`–`P03-010`; lookup/fixtures continue at `P03-011` onward) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, borrowed/owned values, and raw lookup implemented by `P03-008`–`P03-011`; rendering/fixtures continue at `P03-012` onward) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

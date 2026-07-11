@@ -31,9 +31,9 @@ documents complete the HDoc 1.0 byte grammar.
 
 Completion of the grammar alone was not an implementation or release-support claim. `P03-008`
 implements the production writer, `P03-009` implements the bounded whole-envelope validating
-reader, and `P03-010` implements lifetime-bound borrowed views plus detached owned logical values.
-`P03-011` still owns optimized exact-name/nested-path lookup, and `P03-016` owns immutable supported
-golden files.
+reader, `P03-010` implements lifetime-bound borrowed views plus detached owned logical values, and
+`P03-011` implements exact-name and dotted-path lookup over those validated views. `P03-016` owns
+immutable supported golden files.
 Footer `hash_profile_id = 1` is the only assigned base integrity profile; zero remains permanently
 invalid. The exact envelopes in the integrity and compression registries are normative executable
 references until the immutable corpus is published.
@@ -91,11 +91,47 @@ octets, and remains valid after all HDoc backing is dropped. The owned inventory
 stored logical types as `ValueView`; Missing deliberately has no variant and present null has an
 explicit variant in both paths.
 
-These APIs do not yet promise exact-name or nested-path lookup. `ObjectView::field_at()` is a
-presentation-position accessor, while `ArrayView::get()` is a direct semantic index accessor.
-`P03-011` owns allocation-free name/path resolution and its measurements. `P03-012` owns canonical
-rendering/import. Public view formatting is not used as a data export contract, and `DecodedHDoc`'s
-debug representation reports only bounded metadata rather than names or payloads.
+`ObjectView::field_at()` remains a presentation-position accessor, while `ArrayView::get()` is a
+direct semantic index accessor. Public view formatting is not used as a data export contract, and
+`DecodedHDoc`'s debug representation reports only bounded metadata rather than names or payloads.
+
+## Implemented P03-011 exact-name and dotted-path lookup
+
+`DocumentView::get_field()` / `ObjectView::get_field()` binary-search exact UTF-8 bytes in the
+globally sorted name pool, then binary-search the owning object's strictly field-ID-sorted span.
+`get()` returns the same field's `ValueView`. These operations allocate nothing, do not scan or
+change presentation order, do not normalize names, and distinguish an absent field (`None`) from a
+present `ValueView::Null`.
+
+`FieldPath::parse()` validates one reusable path into fixed bounded storage:
+
+- path text is 1–4,096 UTF-8 bytes with 1–100 nonempty dot-separated segments;
+- every segment obeys the field-name byte/scalar/control/dollar grammar;
+- segments retain exact bytes, with no escaping, normalization, or case folding; and
+- canonical numeric segments are classified only when an array is reached, so large numeric object
+  names remain exact object names while an unrepresentable dense-array index is invalid.
+
+`DocumentView::lookup_path()` / `ObjectView::lookup_path()` return an allocation-free exact-size
+`PathCandidates` iterator. Traversal applies these frozen semantic rules:
+
+1. An object step uses exact-name lookup and consumes one segment; absence or a noncontainer before
+   the terminal segment ends that branch.
+2. A canonical numeric segment on an array selects one dense zero-based element. Actual
+   out-of-range is Missing; an index at or beyond the portable one-million-element domain is
+   `VAL_INVALID_PATH`.
+3. A nonnumeric segment on an array visits immediate object elements in source index order without
+   consuming the segment until the object lookup. Scalars/null contribute nothing, and nested
+   arrays are not implicitly flattened.
+4. Each result carries all explicit/fan-out array indices crossed in order. Zero results represents
+   Missing; explicit null is one present candidate.
+
+Construction audits the entire traversal first. Contextual numeric errors and the
+`path.candidates = 1,000,000` cap therefore fail before any candidate is exposed; there is no
+partial/truncated iterator. Syntax and contextual-index diagnostics are redacted
+`VAL_INVALID_PATH`; byte/segment/field/candidate limit failures are redacted
+`QUOTA_LIMIT_EXCEEDED` with stable limit IDs. Lookup borrows the validated logical sections and path
+text and cannot outlive either. `P03-012` owns canonical rendering/import, and `P03-020` owns formal
+lookup measurements.
 
 ## Normative notation
 
@@ -600,8 +636,8 @@ change. Unassigned reserved bits/IDs are not free for local experimentation in c
 No valid HDoc fixture or persisted HDoc row existed at P03-002; its then-unassigned profile zero
 ensured that partial format could not accidentally become one. P03-006 assigned integrity profile
 1, P03-007 completed compression and the full byte grammar, P03-008 added a production encoder,
-P03-009 added a bounded validating reader, and P03-010 added logical views/owned values without
-publishing or persisting supported data.
+P03-009 added a bounded validating reader, P03-010 added logical views/owned values, and P03-011
+added raw view lookup without publishing or persisting supported data.
 Immutable support fixtures remain P03-016, so the format can still be superseded without
 stored-data migration before that fixture/data boundary.
 

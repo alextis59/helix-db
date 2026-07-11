@@ -340,7 +340,7 @@ change must preserve the historical decision. After fixtures/data exist:
 | [`P03-004`](hdoc-v1-payloads.md) | Canonical noncontainer payload bytes and validation | Tag values or logical meanings |
 | [`P03-005`](hdoc-v1-records.md) | Field/array/container record positions for the one-byte tag | Tag width/assignments |
 | [`P03-006`](hdoc-v1-integrity.md) | Typed-hash framing including tag and payload | Tag identity or unknown-tag rule |
-| `P03-008`–`P03-010` (complete) | Encoder, decoder, owned-value, and borrowed-view implementation | Closed-world registry semantics |
+| `P03-008`–`P03-011` (complete) | Encoder, decoder, owned/borrowed values, and raw lookup implementation | Closed-world registry semantics |
 | `P03-015` | Feature negotiation and registered extension governance | Existing assignments or no-reuse rule |
 | `P03-016`–`P03-019` | Golden vectors, independent readers, malformed tests, fuzzing | Historical registry bytes/expectations |
 

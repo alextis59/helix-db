@@ -20,7 +20,7 @@ use crc::{CRC_32_ISCSI, Crc};
 pub const COMPONENT_NAME: &str = "helix-doc";
 
 /// Current implementation maturity.
-pub const MATURITY: &str = "hdoc-values";
+pub const MATURITY: &str = "hdoc-path-lookup";
 
 /// Internal `HelixDB` crates this portable leaf is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
@@ -42,6 +42,9 @@ const MAX_OBJECT_FIELDS: u64 = 10_000;
 const MAX_DOCUMENT_FIELDS: u64 = 100_000;
 const MAX_FIELD_NAME_BYTES: u64 = 1_024;
 const MAX_FIELD_NAME_SCALARS: u64 = 256;
+const MAX_PATH_BYTES: u64 = 4_096;
+const MAX_PATH_SEGMENTS: usize = 100;
+const MAX_PATH_CANDIDATES: u64 = 1_000_000;
 const MAX_ARRAY_ELEMENTS: u64 = 1_000_000;
 const MAX_VECTOR_DIMENSION: u64 = 4_096;
 const MAX_ID_PAYLOAD_BYTES: u64 = 1_024;
@@ -315,6 +318,12 @@ pub enum LimitId {
     FieldNameUtf8Bytes,
     /// `field_name.scalars`.
     FieldNameScalars,
+    /// `path.utf8_bytes`.
+    PathUtf8Bytes,
+    /// `path.segments`.
+    PathSegments,
+    /// `path.candidates`.
+    PathCandidates,
     /// `array.elements`.
     ArrayElements,
     /// `vector.dimension`.
@@ -334,6 +343,9 @@ impl LimitId {
             Self::DocumentTotalFields => "document.total_fields",
             Self::FieldNameUtf8Bytes => "field_name.utf8_bytes",
             Self::FieldNameScalars => "field_name.scalars",
+            Self::PathUtf8Bytes => "path.utf8_bytes",
+            Self::PathSegments => "path.segments",
+            Self::PathCandidates => "path.candidates",
             Self::ArrayElements => "array.elements",
             Self::VectorDimension => "vector.dimension",
             Self::IdPayloadBytes => "id.payload_bytes",
@@ -557,6 +569,216 @@ impl fmt::Display for DecodeError {
 }
 
 impl Error for DecodeError {}
+
+/// A safe dotted-path validation or traversal failure with no path text in its diagnostic shape.
+#[derive(Clone, Debug, Eq, PartialEq)]
+pub enum PathError {
+    /// The path is empty or contains an empty segment.
+    InvalidSyntax,
+    /// One segment violates the v1 field-name grammar.
+    InvalidSegment {
+        /// Zero-based segment position, without the rejected text.
+        segment_index: usize,
+    },
+    /// A canonical numeric segment cannot denote a permitted dense-array index.
+    InvalidArrayIndex {
+        /// Zero-based segment position, without the rejected text.
+        segment_index: usize,
+    },
+    /// A named portable path limit was exceeded.
+    LimitExceeded {
+        /// Stable `limits-v1` identifier.
+        limit: LimitId,
+        /// Inclusive maximum.
+        maximum: u64,
+        /// Observed value.
+        observed: u64,
+    },
+}
+
+impl PathError {
+    /// Returns the stable public error-family code for this failure.
+    #[must_use]
+    pub const fn code(&self) -> &'static str {
+        match self {
+            Self::InvalidSyntax | Self::InvalidSegment { .. } | Self::InvalidArrayIndex { .. } => {
+                "VAL_INVALID_PATH"
+            }
+            Self::LimitExceeded { .. } => "QUOTA_LIMIT_EXCEEDED",
+        }
+    }
+}
+
+impl fmt::Display for PathError {
+    fn fmt(&self, formatter: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            Self::InvalidSyntax => formatter.write_str(self.code()),
+            Self::InvalidSegment { segment_index } | Self::InvalidArrayIndex { segment_index } => {
+                write!(formatter, "{}: segment {segment_index}", self.code())
+            }
+            Self::LimitExceeded {
+                limit,
+                maximum,
+                observed,
+            } => write!(
+                formatter,
+                "{}: {} maximum {maximum}, observed {observed}",
+                self.code(),
+                limit.as_str()
+            ),
+        }
+    }
+}
+
+impl Error for PathError {}
+
+#[derive(Clone, Copy)]
+enum ArrayIndexSegment {
+    NotNumeric,
+    Index(usize),
+    Invalid,
+}
+
+/// Validated allocation-free v1 dotted path reusable across decoded documents.
+#[derive(Clone, Copy)]
+pub struct FieldPath<'a> {
+    text: &'a str,
+    segment_ends: [u16; MAX_PATH_SEGMENTS],
+    segment_count: usize,
+}
+
+impl<'a> FieldPath<'a> {
+    /// Parses and validates canonical UTF-8 path syntax and all context-independent limits.
+    ///
+    /// Canonical numeric segments that exceed the dense-array index domain remain usable as exact
+    /// object names. Traversal reports `InvalidArrayIndex` only if such a segment reaches an array.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`PathError`] for empty segments, invalid field grammar, or any portable path/field
+    /// limit violation. Diagnostics never retain or print the rejected path text.
+    pub fn parse(text: &'a str) -> Result<Self, PathError> {
+        if bounded_usize_to_u64(text.len()) > MAX_PATH_BYTES {
+            return Err(PathError::LimitExceeded {
+                limit: LimitId::PathUtf8Bytes,
+                maximum: MAX_PATH_BYTES,
+                observed: bounded_usize_to_u64(text.len()),
+            });
+        }
+        if text.is_empty() {
+            return Err(PathError::InvalidSyntax);
+        }
+        let segment_count = text.split('.').count();
+        if segment_count > MAX_PATH_SEGMENTS {
+            return Err(PathError::LimitExceeded {
+                limit: LimitId::PathSegments,
+                maximum: bounded_usize_to_u64(MAX_PATH_SEGMENTS),
+                observed: bounded_usize_to_u64(segment_count),
+            });
+        }
+
+        let mut segment_ends = [0_u16; MAX_PATH_SEGMENTS];
+        let mut start = 0_usize;
+        for (segment_index, segment) in text.split('.').enumerate() {
+            if segment.is_empty() {
+                return Err(PathError::InvalidSyntax);
+            }
+            if bounded_usize_to_u64(segment.len()) > MAX_FIELD_NAME_BYTES {
+                return Err(PathError::LimitExceeded {
+                    limit: LimitId::FieldNameUtf8Bytes,
+                    maximum: MAX_FIELD_NAME_BYTES,
+                    observed: bounded_usize_to_u64(segment.len()),
+                });
+            }
+            let scalar_count = segment.chars().count();
+            if bounded_usize_to_u64(scalar_count) > MAX_FIELD_NAME_SCALARS {
+                return Err(PathError::LimitExceeded {
+                    limit: LimitId::FieldNameScalars,
+                    maximum: MAX_FIELD_NAME_SCALARS,
+                    observed: bounded_usize_to_u64(scalar_count),
+                });
+            }
+            if !valid_decoded_field_name(segment) {
+                return Err(PathError::InvalidSegment { segment_index });
+            }
+            let end = start + segment.len();
+            segment_ends[segment_index] = bounded_usize_to_u16(end);
+            start = end + 1;
+        }
+        Ok(Self {
+            text,
+            segment_ends,
+            segment_count,
+        })
+    }
+
+    /// Returns the exact validated path text.
+    #[must_use]
+    pub const fn as_str(self) -> &'a str {
+        self.text
+    }
+
+    /// Returns the number of nonempty dotted segments.
+    #[must_use]
+    pub const fn len(self) -> usize {
+        self.segment_count
+    }
+
+    /// Reports whether the path contains no segments. Successfully parsed paths are never empty.
+    #[must_use]
+    pub const fn is_empty(self) -> bool {
+        self.segment_count == 0
+    }
+
+    /// Returns one exact segment without allocating or normalizing it.
+    #[must_use]
+    pub fn segment(self, index: usize) -> Option<&'a str> {
+        if index >= self.segment_count {
+            return None;
+        }
+        let start = if index == 0 {
+            0
+        } else {
+            usize::from(*self.segment_ends.get(index - 1)?) + 1
+        };
+        let end = usize::from(*self.segment_ends.get(index)?);
+        self.text.get(start..end)
+    }
+
+    fn parsed_segment(self, index: usize) -> Option<(&'a str, ArrayIndexSegment)> {
+        let segment = self.segment(index)?;
+        Some((segment, classify_array_index_segment(segment)))
+    }
+}
+
+fn classify_array_index_segment(segment: &str) -> ArrayIndexSegment {
+    let bytes = segment.as_bytes();
+    let canonical = bytes == b"0"
+        || bytes
+            .first()
+            .is_some_and(|first| matches!(first, b'1'..=b'9'))
+            && bytes
+                .get(1..)
+                .is_some_and(|tail| tail.iter().all(u8::is_ascii_digit));
+    if !canonical {
+        return ArrayIndexSegment::NotNumeric;
+    }
+    let mut value = 0_usize;
+    for digit in bytes {
+        let Some(next) = value
+            .checked_mul(10)
+            .and_then(|current| current.checked_add(usize::from(*digit - b'0')))
+        else {
+            return ArrayIndexSegment::Invalid;
+        };
+        value = next;
+    }
+    if bounded_usize_to_u64(value) >= MAX_ARRAY_ELEMENTS {
+        ArrayIndexSegment::Invalid
+    } else {
+        ArrayIndexSegment::Index(value)
+    }
+}
 
 /// An owned root document detached from its encoded `HDoc` backing.
 #[derive(Clone, Debug)]
@@ -926,6 +1148,41 @@ impl<'a> DocumentView<'a> {
         self.root().field_at(presentation_index)
     }
 
+    /// Returns one root field by exact, non-normalized UTF-8 name.
+    ///
+    /// Lookup performs binary search over the validated raw name table and the root's sorted field
+    /// span without allocating.
+    #[must_use]
+    pub fn get_field(self, name: &str) -> Option<FieldView<'a>> {
+        self.root().get_field(name)
+    }
+
+    /// Returns one root value by exact, non-normalized UTF-8 name.
+    #[must_use]
+    pub fn get(self, name: &str) -> Option<ValueView<'a>> {
+        self.root().get(name)
+    }
+
+    /// Resolves one prevalidated dotted path to ordered borrowed candidates and array provenance.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`PathError`] if an oversized numeric segment reaches an array or if complete
+    /// preflight exceeds the candidate limit.
+    pub fn lookup_path<'p>(self, path: FieldPath<'p>) -> Result<PathCandidates<'a, 'p>, PathError> {
+        self.root().lookup_path(path)
+    }
+
+    /// Parses and resolves dotted path text without heap allocation.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`PathError`] for invalid syntax/limits, an invalid contextual array index, or a
+    /// complete traversal that exceeds the candidate limit.
+    pub fn lookup_path_text<'p>(self, path: &'p str) -> Result<PathCandidates<'a, 'p>, PathError> {
+        self.lookup_path(FieldPath::parse(path)?)
+    }
+
     /// Iterates root fields in preserved presentation order.
     #[must_use]
     pub fn fields(self) -> ObjectFields<'a> {
@@ -975,8 +1232,8 @@ impl<'a> ObjectView<'a> {
 
     /// Returns one field by preserved presentation position.
     ///
-    /// Name and nested-path lookup are deliberately owned by `P03-011`; this positional access is
-    /// an O(1) read over validation-built presentation metadata.
+    /// This positional access remains an O(1) read over validation-built presentation metadata;
+    /// exact-name access is separately available through [`Self::get_field`].
     #[must_use]
     pub fn field_at(self, presentation_index: usize) -> Option<FieldView<'a>> {
         let container = self.data.containers.get(self.container_id)?;
@@ -987,17 +1244,46 @@ impl<'a> ObjectView<'a> {
         }
         let order_index = container.item_start.checked_add(presentation_index)?;
         let field_index = *self.data.presentation_fields.get(order_index)?;
-        let field = self.data.fields.get(field_index)?;
-        let name = self
-            .data
-            .names
-            .get(bounded_u64_to_usize(u64::from(field.field_id)))?;
-        let name = std::str::from_utf8(name_bytes(self.data.sections[1], name).ok()?).ok()?;
-        Some(FieldView {
-            name,
-            value: value_view(self.data, field.value)?,
-            presentation_ordinal: field.presentation_ordinal,
-        })
+        field_view(self.data, field_index)
+    }
+
+    /// Returns one field by exact, non-normalized UTF-8 name using two bounded binary searches.
+    #[must_use]
+    pub fn get_field(self, name: &str) -> Option<FieldView<'a>> {
+        let container = self.data.containers.get(self.container_id)?;
+        if container.tag != ValueType::Object.hdoc_tag() {
+            return None;
+        }
+        let field_id = lookup_name_id(self.data, name)?;
+        let field_index = lookup_object_field_index(self.data, container, field_id)?;
+        field_view(self.data, field_index)
+    }
+
+    /// Returns one exact field value, preserving explicit null as `ValueView::Null` and absence as
+    /// `None`.
+    #[must_use]
+    pub fn get(self, name: &str) -> Option<ValueView<'a>> {
+        self.get_field(name).map(FieldView::value)
+    }
+
+    /// Resolves one prevalidated dotted path from this object.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`PathError`] if an oversized numeric segment reaches an array or if complete
+    /// preflight exceeds the candidate limit.
+    pub fn lookup_path<'p>(self, path: FieldPath<'p>) -> Result<PathCandidates<'a, 'p>, PathError> {
+        PathCandidates::new(self, path)
+    }
+
+    /// Parses and resolves dotted path text from this object without heap allocation.
+    ///
+    /// # Errors
+    ///
+    /// Returns [`PathError`] for invalid syntax/limits, an invalid contextual array index, or a
+    /// complete traversal that exceeds the candidate limit.
+    pub fn lookup_path_text<'p>(self, path: &'p str) -> Result<PathCandidates<'a, 'p>, PathError> {
+        self.lookup_path(FieldPath::parse(path)?)
     }
 
     /// Iterates fields in preserved presentation order.
@@ -1277,6 +1563,229 @@ impl ValueView<'_> {
             Self::VectorF32(value) => OwnedValue::VectorF32(value.iter().collect()),
             Self::VectorF16(value) => OwnedValue::VectorF16(value.iter().collect()),
         }
+    }
+}
+
+/// One borrowed dotted-path result with the ordered array indices crossed to reach it.
+#[derive(Clone, Copy)]
+pub struct PathCandidate<'a> {
+    value: ValueView<'a>,
+    array_positions: [u32; MAX_PATH_SEGMENTS],
+    array_position_count: usize,
+}
+
+impl<'a> PathCandidate<'a> {
+    /// Returns the exact present value. Explicit null remains [`ValueView::Null`].
+    #[must_use]
+    pub const fn value(self) -> ValueView<'a> {
+        self.value
+    }
+
+    /// Returns every explicit-index or fan-out array position crossed in traversal order.
+    #[must_use]
+    pub fn array_positions(&self) -> &[u32] {
+        &self.array_positions[..self.array_position_count]
+    }
+}
+
+#[derive(Clone, Copy)]
+struct FanoutFrame {
+    container_id: usize,
+    next_index: usize,
+    segment_index: usize,
+    provenance_prefix: usize,
+}
+
+const EMPTY_FANOUT_FRAME: FanoutFrame = FanoutFrame {
+    container_id: 0,
+    next_index: 0,
+    segment_index: 0,
+    provenance_prefix: 0,
+};
+
+#[derive(Clone)]
+struct PathWalker<'data, 'path> {
+    data: ViewData<'data>,
+    path: FieldPath<'path>,
+    current: Option<(ValueView<'data>, usize)>,
+    fanouts: [FanoutFrame; MAX_PATH_SEGMENTS],
+    fanout_count: usize,
+    array_positions: [u32; MAX_PATH_SEGMENTS],
+    array_position_count: usize,
+}
+
+impl<'data, 'path> PathWalker<'data, 'path> {
+    fn new(root: ObjectView<'data>, path: FieldPath<'path>) -> Self {
+        Self {
+            data: root.data,
+            path,
+            current: Some((ValueView::Object(root), 0)),
+            fanouts: [EMPTY_FANOUT_FRAME; MAX_PATH_SEGMENTS],
+            fanout_count: 0,
+            array_positions: [0; MAX_PATH_SEGMENTS],
+            array_position_count: 0,
+        }
+    }
+
+    fn advance(&mut self) -> Result<Option<PathCandidate<'data>>, PathError> {
+        loop {
+            if let Some((value, segment_index)) = self.current.take() {
+                if segment_index == self.path.len() {
+                    return Ok(Some(PathCandidate {
+                        value,
+                        array_positions: self.array_positions,
+                        array_position_count: self.array_position_count,
+                    }));
+                }
+                let (segment, array_index) = self
+                    .path
+                    .parsed_segment(segment_index)
+                    .unwrap_or(("", ArrayIndexSegment::NotNumeric));
+                match value {
+                    ValueView::Object(object) => {
+                        self.current = object.get(segment).map(|child| (child, segment_index + 1));
+                    }
+                    ValueView::Array(array) => match array_index {
+                        ArrayIndexSegment::Index(index) => {
+                            if let Some(child) = array.get(index) {
+                                self.push_array_position(index);
+                                self.current = Some((child, segment_index + 1));
+                            }
+                        }
+                        ArrayIndexSegment::NotNumeric => {
+                            self.push_fanout(array, segment_index);
+                        }
+                        ArrayIndexSegment::Invalid => {
+                            return Err(PathError::InvalidArrayIndex { segment_index });
+                        }
+                    },
+                    ValueView::Null
+                    | ValueView::Bool(_)
+                    | ValueView::Int32(_)
+                    | ValueView::Int64(_)
+                    | ValueView::Float64Bits(_)
+                    | ValueView::Decimal128(_)
+                    | ValueView::String(_)
+                    | ValueView::Binary(_)
+                    | ValueView::Timestamp(_)
+                    | ValueView::Date(_)
+                    | ValueView::Uuid(_)
+                    | ValueView::ObjectId(_)
+                    | ValueView::VectorF32(_)
+                    | ValueView::VectorF16(_) => {}
+                }
+            } else if !self.resume_fanout() {
+                return Ok(None);
+            }
+        }
+    }
+
+    fn push_fanout(&mut self, array: ArrayView<'data>, segment_index: usize) {
+        debug_assert!(self.fanout_count < MAX_PATH_SEGMENTS);
+        self.fanouts[self.fanout_count] = FanoutFrame {
+            container_id: array.container_id,
+            next_index: 0,
+            segment_index,
+            provenance_prefix: self.array_position_count,
+        };
+        self.fanout_count += 1;
+    }
+
+    fn resume_fanout(&mut self) -> bool {
+        while self.fanout_count != 0 {
+            let frame_index = self.fanout_count - 1;
+            let mut selected = None;
+            let provenance_prefix;
+            {
+                let frame = &mut self.fanouts[frame_index];
+                provenance_prefix = frame.provenance_prefix;
+                let array = ArrayView {
+                    data: self.data,
+                    container_id: frame.container_id,
+                };
+                while frame.next_index < array.len() {
+                    let index = frame.next_index;
+                    frame.next_index += 1;
+                    if let Some(ValueView::Object(object)) = array.get(index) {
+                        selected = Some((object, index, frame.segment_index));
+                        break;
+                    }
+                }
+            }
+            self.array_position_count = provenance_prefix;
+            if let Some((object, index, segment_index)) = selected {
+                self.push_array_position(index);
+                self.current = Some((ValueView::Object(object), segment_index));
+                return true;
+            }
+            self.fanout_count -= 1;
+        }
+        false
+    }
+
+    fn push_array_position(&mut self, index: usize) {
+        debug_assert!(self.array_position_count < MAX_PATH_SEGMENTS);
+        self.array_positions[self.array_position_count] = bounded_usize_to_u32(index);
+        self.array_position_count += 1;
+    }
+}
+
+/// Exact-size allocation-free iterator over ordered dotted-path candidates.
+///
+/// Construction audits the full traversal first, so syntax, numeric-index, and candidate-limit
+/// failures are returned before a caller can observe a partial candidate sequence.
+#[derive(Clone)]
+pub struct PathCandidates<'data, 'path> {
+    walker: PathWalker<'data, 'path>,
+    remaining: usize,
+}
+
+impl<'data, 'path> PathCandidates<'data, 'path> {
+    fn new(root: ObjectView<'data>, path: FieldPath<'path>) -> Result<Self, PathError> {
+        let walker = PathWalker::new(root, path);
+        let mut audit = walker.clone();
+        let mut candidate_count = 0_u64;
+        while audit.advance()?.is_some() {
+            candidate_count += 1;
+            enforce_path_candidate_limit(candidate_count)?;
+        }
+        Ok(Self {
+            walker,
+            remaining: bounded_u64_to_usize(candidate_count),
+        })
+    }
+}
+
+impl<'data> Iterator for PathCandidates<'data, '_> {
+    type Item = PathCandidate<'data>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let candidate = self.walker.advance().unwrap_or_default();
+        if candidate.is_some() {
+            self.remaining -= 1;
+        } else {
+            self.remaining = 0;
+        }
+        candidate
+    }
+
+    fn size_hint(&self) -> (usize, Option<usize>) {
+        (self.remaining, Some(self.remaining))
+    }
+}
+
+impl ExactSizeIterator for PathCandidates<'_, '_> {}
+impl FusedIterator for PathCandidates<'_, '_> {}
+
+fn enforce_path_candidate_limit(observed: u64) -> Result<(), PathError> {
+    if observed > MAX_PATH_CANDIDATES {
+        Err(PathError::LimitExceeded {
+            limit: LimitId::PathCandidates,
+            maximum: MAX_PATH_CANDIDATES,
+            observed,
+        })
+    } else {
+        Ok(())
     }
 }
 
@@ -2661,7 +3170,7 @@ const fn bounded_usize_to_u32(value: usize) -> u32 {
 
 #[allow(
     clippy::cast_possible_truncation,
-    reason = "the only callers convert four directory IDs after validation"
+    reason = "callers convert four directory IDs or path offsets bounded to 4096 bytes"
 )]
 const fn bounded_usize_to_u16(value: usize) -> u16 {
     value as u16
@@ -3618,6 +4127,54 @@ fn decoded_child_index(
     Ok(bounded_u64_to_usize(
         u64::from(relative) / CONTAINER_DESCRIPTOR_BYTES,
     ))
+}
+
+fn lookup_name_id(data: ViewData<'_>, name: &str) -> Option<u32> {
+    let needle = name.as_bytes();
+    let mut start = 0_usize;
+    let mut end = data.names.len();
+    while start < end {
+        let middle = start + (end - start) / 2;
+        let candidate = name_bytes(data.sections[1], data.names.get(middle)?).ok()?;
+        match candidate.cmp(needle) {
+            std::cmp::Ordering::Less => start = middle + 1,
+            std::cmp::Ordering::Equal => return Some(bounded_usize_to_u32(middle)),
+            std::cmp::Ordering::Greater => end = middle,
+        }
+    }
+    None
+}
+
+fn lookup_object_field_index(
+    data: ViewData<'_>,
+    container: &ContainerRecord,
+    field_id: u32,
+) -> Option<usize> {
+    let mut start = container.item_start;
+    let mut end = start.checked_add(container.item_count)?;
+    while start < end {
+        let middle = start + (end - start) / 2;
+        let candidate = data.fields.get(middle)?.field_id;
+        match candidate.cmp(&field_id) {
+            std::cmp::Ordering::Less => start = middle + 1,
+            std::cmp::Ordering::Equal => return Some(middle),
+            std::cmp::Ordering::Greater => end = middle,
+        }
+    }
+    None
+}
+
+fn field_view(data: ViewData<'_>, field_index: usize) -> Option<FieldView<'_>> {
+    let field = data.fields.get(field_index)?;
+    let name = data
+        .names
+        .get(bounded_u64_to_usize(u64::from(field.field_id)))?;
+    let name = std::str::from_utf8(name_bytes(data.sections[1], name).ok()?).ok()?;
+    Some(FieldView {
+        name,
+        value: value_view(data, field.value)?,
+        presentation_ordinal: field.presentation_ordinal,
+    })
 }
 
 fn value_view(data: ViewData<'_>, reference: ValueReference) -> Option<ValueView<'_>> {
@@ -4817,6 +5374,304 @@ mod tests {
             OwnedValue::String(value) if value == &"view-storage-sentinel-".repeat(256)
         ));
         assert_eq!(detached.into_fields().len(), 2);
+        Ok(())
+    }
+
+    #[test]
+    #[allow(
+        clippy::too_many_lines,
+        reason = "one nested fixture proves the complete exact-name, path, fan-out, and error API"
+    )]
+    fn raw_views_support_bounded_exact_name_and_nested_path_lookup() -> Result<(), Box<dyn Error>> {
+        let profile_fields = [
+            EncodeField::new("name", EncodeValue::String("Ada")),
+            EncodeField::new("0", EncodeValue::Bool(true)),
+        ];
+        let details_zero = [EncodeField::new("sku", EncodeValue::String("A"))];
+        let details_one = [EncodeField::new("sku", EncodeValue::String("B"))];
+        let item_zero_fields = [
+            EncodeField::new("price", EncodeValue::Int32(1)),
+            EncodeField::new(
+                "details",
+                EncodeValue::Object(EncodeObject::new(&details_zero)),
+            ),
+            EncodeField::new("00", EncodeValue::Int32(10)),
+        ];
+        let item_one_fields = [
+            EncodeField::new("price", EncodeValue::Null),
+            EncodeField::new(
+                "details",
+                EncodeValue::Object(EncodeObject::new(&details_one)),
+            ),
+        ];
+        let item_two_fields = [EncodeField::new("other", EncodeValue::Bool(true))];
+        let nested_item_fields = [EncodeField::new("price", EncodeValue::Int32(3))];
+        let nested_item_array = [EncodeValue::Object(EncodeObject::new(&nested_item_fields))];
+        let items = [
+            EncodeValue::Object(EncodeObject::new(&item_zero_fields)),
+            EncodeValue::Object(EncodeObject::new(&item_one_fields)),
+            EncodeValue::Object(EncodeObject::new(&item_two_fields)),
+            EncodeValue::Int32(99),
+            EncodeValue::Array(&nested_item_array),
+        ];
+        let matrix_zero_fields = [EncodeField::new("x", EncodeValue::Int32(10))];
+        let matrix_one_fields = [EncodeField::new("x", EncodeValue::Int32(20))];
+        let matrix_zero = [EncodeValue::Object(EncodeObject::new(&matrix_zero_fields))];
+        let matrix_one = [EncodeValue::Object(EncodeObject::new(&matrix_one_fields))];
+        let matrix = [
+            EncodeValue::Array(&matrix_zero),
+            EncodeValue::Array(&matrix_one),
+        ];
+        let numbers = [EncodeValue::Int32(4), EncodeValue::Int32(5)];
+        let large_numeric_object = [EncodeField::new("1000000", EncodeValue::Int32(6))];
+        let mixed_object = [EncodeField::new(
+            "value",
+            EncodeValue::Object(EncodeObject::new(&large_numeric_object)),
+        )];
+        let mixed_array = [EncodeField::new("value", EncodeValue::Array(&numbers))];
+        let mixed = [
+            EncodeValue::Object(EncodeObject::new(&mixed_object)),
+            EncodeValue::Object(EncodeObject::new(&mixed_array)),
+        ];
+        let root_fields = [
+            EncodeField::new("items", EncodeValue::Array(&items)),
+            EncodeField::new("_id", EncodeValue::Uuid([7; 16])),
+            EncodeField::new(
+                "profile",
+                EncodeValue::Object(EncodeObject::new(&profile_fields)),
+            ),
+            EncodeField::new("explicit_null", EncodeValue::Null),
+            EncodeField::new("matrix", EncodeValue::Array(&matrix)),
+            EncodeField::new("numbers", EncodeValue::Array(&numbers)),
+            EncodeField::new("mixed", EncodeValue::Array(&mixed)),
+            EncodeField::new("scalar", EncodeValue::Int32(7)),
+            EncodeField::new("1000000", EncodeValue::String("object-name")),
+        ];
+        let encoded = encode_with_options(EncodeDocument::new(&root_fields), disabled())?;
+        let decoded = decode(encoded.as_bytes())?;
+        let view = decoded.view();
+
+        assert_eq!(view.get_field("items").map(FieldView::name), Some("items"));
+        assert!(matches!(view.get("_id"), Some(ValueView::Uuid(value)) if value == [7; 16]));
+        assert!(view.get("price").is_none());
+        assert!(view.get("not-present").is_none());
+        assert!(view.get("$invalid").is_none());
+        let Some(ValueView::Object(profile)) = view.get("profile") else {
+            return Err(EncodeError::ArithmeticOverflow.into());
+        };
+        assert_eq!(profile.get_field("name").map(FieldView::name), Some("name"));
+        assert!(matches!(profile.get("0"), Some(ValueView::Bool(true))));
+        assert!(profile.get("price").is_none());
+        let Some(ValueView::Array(items_view)) = view.get("items") else {
+            return Err(EncodeError::ArithmeticOverflow.into());
+        };
+        assert!(
+            ObjectView {
+                data: view.data,
+                container_id: items_view.container_id,
+            }
+            .get_field("items")
+            .is_none()
+        );
+
+        let reusable = FieldPath::parse("profile.name")?;
+        assert_eq!(reusable.as_str(), "profile.name");
+        assert_eq!(reusable.len(), 2);
+        assert!(!reusable.is_empty());
+        assert_eq!(reusable.segment(0), Some("profile"));
+        assert_eq!(reusable.segment(1), Some("name"));
+        assert_eq!(reusable.segment(2), None);
+        let mut name = view.lookup_path(reusable)?;
+        assert_eq!(name.len(), 1);
+        assert_eq!(name.size_hint(), (1, Some(1)));
+        let name = name.next().ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(name.value(), ValueView::String("Ada")));
+        assert!(name.array_positions().is_empty());
+
+        let null = view
+            .lookup_path_text("explicit_null")?
+            .next()
+            .ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(null.value(), ValueView::Null));
+        assert_eq!(view.lookup_path_text("missing")?.len(), 0);
+        assert_eq!(view.lookup_path_text("scalar.child")?.len(), 0);
+        assert!(matches!(
+            view.lookup_path_text("1000000")?
+                .next()
+                .map(PathCandidate::value),
+            Some(ValueView::String("object-name"))
+        ));
+        assert!(matches!(
+            profile
+                .lookup_path_text("name")?
+                .next()
+                .map(PathCandidate::value),
+            Some(ValueView::String("Ada"))
+        ));
+
+        let mut prices = view.lookup_path_text("items.price")?;
+        assert_eq!(prices.len(), 2);
+        let first_price = prices.next().ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(first_price.value(), ValueView::Int32(1)));
+        assert_eq!(first_price.array_positions(), [0]);
+        assert_eq!(prices.len(), 1);
+        let second_price = prices.next().ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(second_price.value(), ValueView::Null));
+        assert_eq!(second_price.array_positions(), [1]);
+        assert!(prices.next().is_none());
+        assert!(prices.next().is_none());
+        assert_eq!(prices.size_hint(), (0, Some(0)));
+
+        let direct = view
+            .lookup_path_text("items.0.details.sku")?
+            .next()
+            .ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(direct.value(), ValueView::String("A")));
+        assert_eq!(direct.array_positions(), [0]);
+        assert_eq!(view.lookup_path_text("items.8.price")?.len(), 0);
+        assert_eq!(view.lookup_path_text("items.price.1000000")?.len(), 0);
+        assert!(matches!(
+            view.lookup_path_text("items.00")?
+                .next()
+                .map(PathCandidate::value),
+            Some(ValueView::Int32(10))
+        ));
+        assert_eq!(view.lookup_path_text("items.price")?.clone().len(), 2);
+
+        assert_eq!(view.lookup_path_text("items.4.price")?.len(), 1);
+        let nested = view
+            .lookup_path_text("items.4.price")?
+            .next()
+            .ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(nested.value(), ValueView::Int32(3)));
+        assert_eq!(nested.array_positions(), [4, 0]);
+        assert_eq!(view.lookup_path_text("matrix.x")?.len(), 0);
+        let matrix_value = view
+            .lookup_path_text("matrix.0.x")?
+            .next()
+            .ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(matrix_value.value(), ValueView::Int32(10)));
+        assert_eq!(matrix_value.array_positions(), [0, 0]);
+        let terminal_array = view
+            .lookup_path_text("items")?
+            .next()
+            .ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(terminal_array.value(), ValueView::Array(value) if value.len() == 5));
+        assert!(terminal_array.array_positions().is_empty());
+
+        for invalid in ["", ".a", "a.", "a..b"] {
+            assert_eq!(
+                FieldPath::parse(invalid).err(),
+                Some(PathError::InvalidSyntax)
+            );
+        }
+        for invalid in ["$operator", "a.\u{1f}"] {
+            assert!(matches!(
+                FieldPath::parse(invalid).err(),
+                Some(PathError::InvalidSegment { .. })
+            ));
+        }
+        let too_many_segments = vec!["a"; MAX_PATH_SEGMENTS + 1].join(".");
+        assert_eq!(
+            FieldPath::parse(&too_many_segments).err(),
+            Some(PathError::LimitExceeded {
+                limit: LimitId::PathSegments,
+                maximum: 100,
+                observed: 101,
+            })
+        );
+        let too_many_bytes = "a".repeat(bounded_u64_to_usize(MAX_PATH_BYTES + 1));
+        assert_eq!(
+            FieldPath::parse(&too_many_bytes).err(),
+            Some(PathError::LimitExceeded {
+                limit: LimitId::PathUtf8Bytes,
+                maximum: MAX_PATH_BYTES,
+                observed: MAX_PATH_BYTES + 1,
+            })
+        );
+        let long_segment = "a".repeat(bounded_u64_to_usize(MAX_FIELD_NAME_BYTES + 1));
+        assert!(matches!(
+            FieldPath::parse(&long_segment).err(),
+            Some(PathError::LimitExceeded {
+                limit: LimitId::FieldNameUtf8Bytes,
+                ..
+            })
+        ));
+        let many_scalars = "é".repeat(bounded_u64_to_usize(MAX_FIELD_NAME_SCALARS + 1));
+        assert!(matches!(
+            FieldPath::parse(&many_scalars).err(),
+            Some(PathError::LimitExceeded {
+                limit: LimitId::FieldNameScalars,
+                ..
+            })
+        ));
+
+        let Some(invalid_index) = view.lookup_path_text("numbers.1000000").err() else {
+            return Err(EncodeError::ArithmeticOverflow.into());
+        };
+        assert_eq!(
+            invalid_index,
+            PathError::InvalidArrayIndex { segment_index: 1 }
+        );
+        assert_eq!(invalid_index.code(), "VAL_INVALID_PATH");
+        assert_eq!(invalid_index.to_string(), "VAL_INVALID_PATH: segment 1");
+        assert!(matches!(
+            view.lookup_path_text("numbers.999999999999999999999999999999999999")
+                .err(),
+            Some(PathError::InvalidArrayIndex { segment_index: 1 })
+        ));
+        assert!(matches!(
+            view.lookup_path_text("mixed.value.1000000").err(),
+            Some(PathError::InvalidArrayIndex { segment_index: 2 })
+        ));
+        assert!(matches!(
+            view.lookup_path_text("mixed.0.value.1000000")?
+                .next()
+                .map(PathCandidate::value),
+            Some(ValueView::Int32(6))
+        ));
+        assert_eq!(view.lookup_path_text("numbers.999999")?.len(), 0);
+        let syntax = PathError::InvalidSyntax;
+        assert_eq!(syntax.code(), "VAL_INVALID_PATH");
+        assert_eq!(syntax.to_string(), "VAL_INVALID_PATH");
+        let invalid_segment = PathError::InvalidSegment { segment_index: 2 };
+        assert_eq!(invalid_segment.to_string(), "VAL_INVALID_PATH: segment 2");
+        assert_eq!(enforce_path_candidate_limit(MAX_PATH_CANDIDATES), Ok(()));
+        let Some(candidate_limit) = enforce_path_candidate_limit(MAX_PATH_CANDIDATES + 1).err()
+        else {
+            return Err(EncodeError::ArithmeticOverflow.into());
+        };
+        assert_eq!(candidate_limit.code(), "QUOTA_LIMIT_EXCEEDED");
+        assert_eq!(
+            candidate_limit.to_string(),
+            "QUOTA_LIMIT_EXCEEDED: path.candidates maximum 1000000, observed 1000001"
+        );
+
+        let invalid_path = FieldPath::parse("numbers.1000000")?;
+        let mut invalid_walker = PathWalker::new(view.root(), invalid_path);
+        assert_eq!(
+            invalid_walker.advance().err(),
+            Some(PathError::InvalidArrayIndex { segment_index: 1 })
+        );
+
+        let large = "path-lookup-compressed-sentinel-".repeat(256);
+        let compressed_nested = [EncodeField::new("payload", EncodeValue::String(&large))];
+        let compressed_fields = [
+            EncodeField::new("_id", EncodeValue::Uuid([9; 16])),
+            EncodeField::new(
+                "nested",
+                EncodeValue::Object(EncodeObject::new(&compressed_nested)),
+            ),
+        ];
+        let compressed = encode(EncodeDocument::new(&compressed_fields))?;
+        assert!(compressed.compressed_section_count() > 0);
+        let compressed_decoded = decode(compressed.as_bytes())?;
+        let compressed_value = compressed_decoded
+            .view()
+            .lookup_path_text("nested.payload")?
+            .next()
+            .ok_or(EncodeError::ArithmeticOverflow)?;
+        assert!(matches!(compressed_value.value(), ValueView::String(value) if value == large));
         Ok(())
     }
 
@@ -6697,7 +7552,7 @@ mod tests {
     #[test]
     fn metadata_error_codes_and_internal_guards_are_stable() -> Result<(), EncodeError> {
         assert_eq!(COMPONENT_NAME, "helix-doc");
-        assert_eq!(MATURITY, "hdoc-values");
+        assert_eq!(MATURITY, "hdoc-path-lookup");
         assert!(INTERNAL_DEPENDENCIES.is_empty());
         assert_eq!(CompressionMode::default(), CompressionMode::Canonical);
         assert_eq!(
@@ -6745,6 +7600,9 @@ mod tests {
                 LimitId::DocumentTotalFields,
                 LimitId::FieldNameUtf8Bytes,
                 LimitId::FieldNameScalars,
+                LimitId::PathUtf8Bytes,
+                LimitId::PathSegments,
+                LimitId::PathCandidates,
                 LimitId::ArrayElements,
                 LimitId::VectorDimension,
                 LimitId::IdPayloadBytes,
@@ -6757,6 +7615,9 @@ mod tests {
                 "document.total_fields",
                 "field_name.utf8_bytes",
                 "field_name.scalars",
+                "path.utf8_bytes",
+                "path.segments",
+                "path.candidates",
                 "array.elements",
                 "vector.dimension",
                 "id.payload_bytes",

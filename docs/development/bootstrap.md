@@ -13,7 +13,7 @@ clean-checkout review. It separates ordinary cross-platform foundation work, rea
 the diagnostics that currently have a narrower host contract. Commands are written from the
 repository root unless a step explicitly says otherwise.
 
-This contract documents foundation setup and validation; HelixDB now includes safe deterministic HDoc encoding, whole-envelope validation, borrowed logical views, and detached owned logical values, while field/path lookup, rendering/import, query, storage, durability, GPU execution, network service, compatibility, security, performance, and release functionality remain unimplemented.
+This contract documents foundation setup and validation; HelixDB now includes safe deterministic HDoc encoding, whole-envelope validation, borrowed and owned logical values, and allocation-free exact-name and nested-path lookup, while rendering/import, query, storage, durability, GPU execution, network service, compatibility, security, performance, and release functionality remain unimplemented.
 
 HelixDB is the accepted development name and `helix-db` is the repository directory. The public
 name/package decision remains `P16-016`; bootstrap success must not be presented as public-name,

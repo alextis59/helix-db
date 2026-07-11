@@ -1,6 +1,6 @@
 [package]
 name = "helix-doc"
-description = "Portable deterministic HDoc encoding, validation, values, and canonical semantics for HelixDB"
+description = "Portable deterministic HDoc encoding, validation, values, path lookup, and canonical semantics for HelixDB"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,7 +12,7 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "hdoc-values"
+status = "hdoc-path-lookup"
 database-functionality = true
 
 [dependencies]

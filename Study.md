@@ -298,7 +298,7 @@ validating reader. It verifies length/version/feature/checksum trust order, stor
 placement, fresh-output decompression, canonical tables/tree/value occurrence, payload grammars,
 root `_id`, typed identity, and exact recompression/rebuild before returning metadata.
 
-`P03-010` now retains that validated logical backing and exposes it through lifetime-bound read-only
+`P03-010` retains that validated logical backing and exposes it through lifetime-bound read-only
 document/object/array/field/value views. Uncompressed sections remain slices of the accepted input;
 compressed sections reuse the decoder's already bounded owned output, so opening or traversing a
 view performs no payload copy. A validation-built presentation permutation makes full object reads
@@ -308,8 +308,28 @@ temporal counts, identifier bytes, binary subtype/data, and vector family/dimens
 Recursive detachment produces owned fields/values that survive the HDoc buffer without introducing
 a Missing value or normalizing any payload. The all-type, presentation, compression, and defensive
 view tests extend the existing complete-envelope, truncation, per-byte mutation, native, Wasm, and
-coverage replay. Optimized raw name/path lookup remains `P03-011`, and `P03-016` still owns
-immutable supported fixtures.
+coverage replay.
+
+`P03-011` demonstrates that the chosen tables support bounded raw lookup without adding a second
+document representation. Exact-name access performs `O(log N)` raw-name-table search followed by
+`O(log F)` search in the current object's sorted field-ID span, while full reads continue using the
+separate presentation permutation. A reusable `FieldPath` occupies fixed bounded storage for at
+most 100 segments; no per-lookup vector, string, map, or payload allocation is required. This keeps
+lookup behavior identical for input-borrowed and decompressed-owned logical sections.
+
+The dotted walker uses a fixed-depth DFS over immutable views. It follows exact object fields,
+directly indexes canonical numeric array segments, and fans nonnumeric segments out only over
+immediate object elements. It does not recursively flatten nested arrays. Results remain in source
+array order and carry every crossed array index, preserving the provenance needed by later
+`$elemMatch`, multikey, verification, and diagnostic work. Missing is represented by an empty
+candidate iterator; explicit null remains a present candidate. A complete audit pass checks
+contextual numeric-index validity and the one-million-candidate cap before any candidate is exposed,
+trading one bounded replay for a fail-before-publication API and deterministic exact-size iteration.
+
+This closes correctness and allocation behavior, not the performance hypothesis: `P03-020` still
+owns representative lookup latency/throughput measurements and may motivate internal tuning
+without changing the path result contract. `P03-012` still owns canonical rendering/import, and
+`P03-016` still owns immutable supported fixtures.
 
 ### 6.3 Field-path dictionaries
 
