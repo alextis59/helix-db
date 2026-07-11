@@ -25,5 +25,6 @@
 /.nvmrc @alextis59
 /tsconfig*.json @alextis59
 /vite.config.ts @alextis59
+/vitest.config.ts @alextis59
 /playwright.config.ts @alextis59
 /biome.json @alextis59

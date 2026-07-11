@@ -53,9 +53,9 @@ The workspace glob is `packages/*`. `P02-004` creates the package directories an
 | --- | ---: | --- | --- |
 | TypeScript | 6.0.3 | Project/reference type checking and configuration contract | No emitted production bundle; strict no-emit base config |
 | `@types/node` | 22.20.1 | Lowest-supported Node API type surface for tool configuration | Code cannot assume Node 24-only globals without a guarded profile |
-| Vite | 8.1.4 | Browser dev server and production bundler | No framework plugin selected; no bundle claim until `P02-010`/`P02-016` |
+| Vite | 8.1.4 | Browser dev server and production bundler | No framework plugin selected; P02-010 internal smoke only, no product bundle claim until later gates |
 | Vitest | 4.1.10 | Unit, property, and JS-side conformance test runner | Empty-run smoke only in P02-003; stable commands/suites land later |
-| Playwright Test | 1.61.1 | Browser lifecycle and end-to-end harness | Browser binaries and real smoke tests land under `P02-010`/`P02-016` |
+| Playwright Test | 1.61.1 | Browser lifecycle and end-to-end harness | P02-010 runs a toolchain smoke; P02-016/P11 expand to example and product-host behavior |
 
 [Vite's official guide](https://vite.dev/guide/) describes its dev server/bundler roles and current Node floor. [Vitest](https://vitest.dev/guide/why.html) shares Vite's transform/config pipeline, avoiding a second incompatible TypeScript transform. [Playwright's browser documentation](https://playwright.dev/docs/browsers) defines its version-coupled browser installation and Chromium, Firefox, and WebKit support.
 
@@ -77,19 +77,21 @@ The project therefore pins TypeScript 6.0.3 for the initial workspace so `P02-00
 - case-consistent paths and full library checking; and
 - no ambient `@types` packages unless a child project opts in explicitly.
 
-The root `tsconfig.json` is an empty build-graph anchor. Package-specific configs added later extend the base, list explicit sources/types, and become project references. Vite transforms browser TypeScript, while `tsc --build` remains the type authority; transpilation success is never a substitute for type checking.
+The root `tsconfig.json` is the build-graph anchor and currently references the browser-smoke type boundary. Package-specific configs added later extend the base, list explicit sources/types, and become project references. Vite transforms browser TypeScript, while `tsc --build` remains the type authority; transpilation success is never a substitute for type checking.
+
+`vitest.config.ts` fixes JavaScript unit discovery at the repository root and excludes the Playwright browser tree, generated/evidence output, and dependencies. This prevents the dedicated Vite smoke-app root from silently redirecting unit discovery or causing Playwright specs to execute under Vitest.
 
 ## Browser harness matrix
 
 Playwright is selected for Chromium, Firefox, and WebKit. `P02-003` installs only the harness package and lists its empty suite; it does not download hundreds of megabytes of mutable browser binaries during npm install.
 
-The [P02-009 CI matrix](continuous-integration.md) now gives Chromium, Firefox, and WebKit separate gating inventory jobs on Linux x64 and records broader native architectures as gating or nightly. `P02-010` will install the Playwright-coupled browser revisions, validate a real Vite/Wasm bundle, and retain smoke outputs. Branded Chrome/Edge and Safari are separate profiles; bundled Chromium/WebKit must not be mislabeled as those branded products.
+The [CI matrix](continuous-integration.md) gives Chromium, Firefox, and WebKit separate gating smoke jobs on Linux x64 and records broader native architectures as gating or nightly. The [P02-010 contract](wasm-browser-smoke-validation.md) installs only the Playwright-coupled selected engine, validates a real Vite/Wasm bundle, and executes it with one worker. Branded Chrome/Edge and Safari are separate profiles; bundled Chromium/WebKit must not be mislabeled as those branded products.
 
 ## Browser build profile added by P02-005
 
 The shared [`vite.config.ts`](../../vite.config.ts) establishes a framework-free production build boundary with a relative base, custom application type, explicit `HELIX_PUBLIC_` environment prefix, ES2022 transform target, external assets, hidden source maps, Oxc minification, and `dist/browser` output. The [build-profile policy](build-profiles.md) records why each option is selected.
 
-No input entry is configured yet. Resolving the configuration is a build-profile check, while emitting and executing a real bundle remains blocked on `P02-010` and `P02-016`. ES2022 is a deterministic emitted-language target, not a branded-browser/version support claim.
+The fixed `tests/browser/smoke-app` root is an internal toolchain input. Vite emits it to `dist/browser`, a deterministic checker validates the four-file output, and Playwright serves only that output on fixed loopback. It is not a user-facing example or database bundle; `P02-016` owns that next boundary. ES2022 is a deterministic emitted-language target, not a branded-browser/version support claim.
 
 ## Required selection checks
 
@@ -103,6 +105,8 @@ corepack npm exec -- playwright --version
 corepack npm run toolchain:types
 corepack npm run toolchain:test-runner
 corepack npm run toolchain:browser-harness
+corepack npm run browser:build
+corepack npm run browser:smoke
 ```
 
 The evidence replays these commands on Node 22.23.1 and Node 24.18.0, checks a byte-identical lockfile before/after `npm ci`, rejects alternate lockfiles, verifies exact resolved direct/transitive versions and integrity fields, and confirms that no Playwright browser cache is created inside the repository.

@@ -135,6 +135,8 @@ jobs:
         run: node tests/toolchain/check-ci-runtime.mjs ${{ matrix.id }}
       - name: Compile portable core with strict lints
         run: cargo clippy --frozen --target ${{ matrix.target }} --package helix-core -- -D warnings
+      - name: Build and validate portable artifact
+        run: node tests/toolchain/check-wasm-artifacts.mjs ${{ matrix.artifact }}
 
   sanitizer:
     name: Sanitizer / ${{ matrix.id }}
@@ -160,10 +162,10 @@ jobs:
         run: node tests/toolchain/run-build-profile.mjs sanitizer
 
   browser:
-    name: Browser inventory / ${{ matrix.engine }}
+    name: Browser bundle smoke / ${{ matrix.engine }}
     needs: contract
     runs-on: ${{ matrix.runner }}
-    timeout-minutes: 15
+    timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix: ${{ fromJSON(needs.contract.outputs.browser) }}
@@ -181,5 +183,7 @@ jobs:
         run: node tests/toolchain/check-ci-runtime.mjs ${{ matrix.id }}
       - name: Install locked browser harness without lifecycle scripts
         run: corepack npm ci --ignore-scripts
-      - name: Verify reserved browser-engine lane
-        run: corepack npm run ci:browser-inventory -- ${{ matrix.engine }}
+      - name: Install the Playwright-coupled browser and operating-system dependencies
+        run: corepack npm exec -- playwright install --with-deps ${{ matrix.engine }}
+      - name: Build and execute the browser bundle smoke
+        run: corepack npm run ci:browser-smoke -- ${{ matrix.engine }}

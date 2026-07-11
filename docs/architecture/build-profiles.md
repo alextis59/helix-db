@@ -19,9 +19,9 @@ The [Cargo profile reference](https://doc.rust-lang.org/cargo/reference/profiles
 | --- | --- | --- | --- | --- |
 | Native debug | Cargo `dev` | Host; workspace, all targets/features | No optimization, full debug info/assertions/overflow checks, unwind, incremental builds | Not sanitizer/recovery evidence |
 | Native release | Cargo `release` | Host; workspace, all targets/features | Optimization 3, thin LTO, one codegen unit, line tables, overflow checks, unwind, no incremental build | Not a packaged/production binary |
-| Component Wasm | Cargo `wasm` | `wasm32-wasip2`; portable `helix-core` closure | Size optimization, fat LTO, abort panic, stripped symbols | Not WASIp3/server-edge support or a component-validity claim |
-| Browser Wasm | Cargo `browser` | `wasm32-unknown-unknown`; portable `helix-core` closure | Size-first optimization, fat LTO, abort panic, stripped symbols | Not a JavaScript binding, bundle, or browser run |
-| Browser JavaScript | Vite production config | Future standards-based browser entry | Relative base, `custom` app, ES2022, assets kept external, hidden maps, Oxc minification, public-env allow-prefix | No input exists; no bundle/browser support claim |
+| Component Wasm | Cargo `wasm` | `wasm32-wasip2`; portable `helix-core` closure | Size optimization, fat LTO, abort panic, stripped symbols; P02-010 validates the Component Model binary | Not WASIp3/server-edge support or a production ABI claim |
+| Browser Wasm | Cargo `browser` | `wasm32-unknown-unknown`; portable `helix-core` closure | Size-first optimization, fat LTO, abort panic, stripped symbols; P02-010 validates/instantiates the core module | Not a JavaScript binding or database behavior claim |
+| Browser JavaScript | Vite production config | Internal standards-based smoke fixture | Relative base, `custom` app, ES2022, assets kept external, hidden maps, Oxc minification, public-env allow-prefix | Not a user-facing example or browser support claim |
 | AddressSanitizer | Cargo `sanitizer` | `x86_64-unknown-linux-gnuasan`; workspace libraries/all features | Optimization 1, full debug/assertions/overflow checks, one codegen unit, fully instrumented distributed standard library | Not portable to unlisted hosts; not Thread/MemorySanitizer |
 | Coverage | Cargo `coverage` plus exact stable rustflag | Host; workspace libraries/all features | No optimization, full debug/assertions/overflow checks, one codegen unit, `-C instrument-coverage`, unique raw profiles | Raw instrumentation only; no report, exclusion, or threshold claim |
 | Benchmark | Cargo `bench` | Host; workspace/all targets/features | Same optimization/LTO/codegen/overflow posture as native release, with line tables | Build readiness only; no workload or performance result |
@@ -68,7 +68,7 @@ corepack npm run toolchain:types
 corepack npm run toolchain:browser-profile
 ```
 
-`P02-016` adds the first honest input/example. `P02-010` then validates the Wasm/component/bundle artifacts and executes a browser smoke test. Until those tasks close, `vite build` is intentionally not a passing command.
+`P02-010` adds the first honest internal input solely to validate the Rust/Wasm/Vite/Playwright toolchain. It is not listed under `examples/` and exposes no database API. The [smoke-validation contract](wasm-browser-smoke-validation.md) checks the exact Wasm and bundle outputs and launches all three engines. `P02-016` still owns the first user-facing minimal example.
 
 ## Artifact and reproducibility rules
 

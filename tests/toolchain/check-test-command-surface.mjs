@@ -32,7 +32,7 @@ const expectedStates = {
 };
 const expectedActivationTasks = {
   benchmark: ['P02-014'],
-  browser: ['P02-010', 'P02-016'],
+  browser: ['P02-016'],
   conformance: [],
   crash: ['P05-021'],
   distributed: ['P17-016'],
@@ -181,5 +181,5 @@ process.stdout.write(
 );
 process.stdout.write('PASS runner contract: exact list/describe output and 3 rejection canaries\n');
 process.stdout.write(
-  'PASS claim boundary: empty suites remain explicit and activation-task owned\n',
+  'PASS claim boundary: reserved suite inventories remain explicit and activation-task owned\n',
 );

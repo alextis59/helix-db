@@ -279,7 +279,7 @@ const executeBrowserInventory = (suite) => {
   ]);
   requireText(
     output,
-    `Total: ${suite.expectations.browser_tests} tests in 0 files`,
+    `Total: ${suite.expectations.browser_tests} tests in ${suite.expectations.browser_test_files} file`,
     'browser harness inventory',
   );
 };

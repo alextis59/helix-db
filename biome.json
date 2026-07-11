@@ -18,6 +18,7 @@
       "fixtures/**/*.mjs",
       "reference/**/*.mjs",
       "tests/**/*.mjs",
+      "tests/**/*.ts",
       "!package-lock.json",
       "!!evidence",
       "!!target",

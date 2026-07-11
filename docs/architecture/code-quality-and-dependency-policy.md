@@ -88,6 +88,8 @@ The [npm lock documentation](https://docs.npmjs.com/cli/v11/configuring-npm/pack
 
 For Rust it currently requires exactly the eight unpublished MIT workspace paths, no registry/git/external package, no build script, and no unsafe token. External dependencies are introduced only with exact lock changes, license/source review, Wasm/host impact, maintenance/security rationale, and the checks selected by `P02-012`.
 
+Downloaded development executables are not smuggled into npm/Cargo dependency graphs. The first such tool, the P02-010 component validator, has a separate machine authority that pins its official release URL, host, archive inventory, byte counts, archive/executable SHA-256 values, license forms, and exact version output. It is installed only under ignored `target/toolchain`, reverified on every use, and disclosed in third-party notices. `P02-012` must incorporate this authority into retained provenance/vulnerability/license reporting.
+
 ## License boundary
 
 The machine check validates SPDX metadata and the [notice inventory](../../THIRD_PARTY_NOTICES.md). The twelve MPL-2.0 entries are build-only Vite tooling and are not permitted in runtime/package contents without explicit revalidation. Metadata screening does not prove that upstream license texts/provenance are complete.

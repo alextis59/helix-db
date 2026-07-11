@@ -77,12 +77,19 @@
       "npm_script": "test:browser",
       "state": "reserved",
       "root": "tests/browser",
-      "description": "Real-browser bundle, lifecycle, capability, storage, and fallback tests.",
-      "activation_tasks": ["P02-010", "P02-016"],
-      "allowed_files": ["README.md"],
+      "description": "Toolchain bundle smoke plus future lifecycle, capability, storage, and fallback tests.",
+      "activation_tasks": ["P02-016"],
+      "allowed_files": [
+        "README.md",
+        "bundle-smoke.spec.ts",
+        "smoke-app/index.html",
+        "smoke-app/main.ts",
+        "smoke-app/report.ts"
+      ],
       "steps": ["browser-harness-inventory"],
       "expectations": {
-        "browser_tests": 0
+        "browser_tests": 3,
+        "browser_test_files": 1
       }
     },
     {

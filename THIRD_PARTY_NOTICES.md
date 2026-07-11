@@ -31,7 +31,13 @@ The MPL-2.0 entries are `lightningcss` 1.32.0 and its eleven optional platform p
 
 The lock records two optional Darwin-only `fsevents` install scripts (2.3.2 and 2.3.3). Deterministic installs suppress lifecycle scripts; any future enablement requires a focused review.
 
-No external Rust crate is locked: all eight Cargo packages are unpublished MIT workspace paths. No vendored code, third-party shader, generated SDK, benchmark dataset, or browser binary is committed.
+No external Rust crate is locked: all eight Cargo packages are unpublished MIT workspace paths. No vendored code, third-party shader, generated SDK, benchmark dataset, component validator, or browser binary is committed.
+
+## Explicit downloaded validation tools
+
+`P02-010` selects the Bytecode Alliance `wasm-tools` 1.253.0 Linux x64 release binary solely as a CI/development component validator. Its upstream release carries Apache-2.0 with LLVM exception, Apache-2.0, and MIT license files. [`helix.wasm-tools/1`](.github/ci/wasm-tools.json) records the official release source plus exact archive/executable sizes and SHA-256 hashes; installation stays under ignored `target/toolchain` and is not a production dependency or shipped artifact.
+
+Playwright 1.61.1 explicitly downloads its coupled Chromium, Firefox, or WebKit revision for real-browser smoke execution. Those binaries remain in the external Playwright cache, are not npm lifecycle downloads, and are not committed or packaged. Browser licenses and redistribution obligations must be re-evaluated if a later release ever embeds a browser rather than testing against one.
 
 The machine-readable allow/exception inventory and checker are in [`tests/toolchain/dependency-policy.json`](tests/toolchain/dependency-policy.json) and [`check-dependency-policy.mjs`](tests/toolchain/check-dependency-policy.mjs). Package license identifiers are screening metadata, not a substitute for retaining required upstream license texts in distributed artifacts.
 

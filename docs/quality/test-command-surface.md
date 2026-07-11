@@ -1,7 +1,7 @@
 # Stable Test Command Surface
 
 - Status: Accepted bootstrap command contract; feature suites remain maturity-labeled
-- Last updated: 2026-07-11
+- Last updated: 2026-07-10
 - Owner: Quality and release owner
 - Plan item: `P02-007`
 - Governing gate: `G02`
@@ -12,7 +12,7 @@
 
 HelixDB has one stable local entry point for each required test class before feature code accumulates. The names are durable automation interfaces; the suite manifest separately states whether a class is `active` or `reserved`, what it executes, its exact bootstrap inventory, and the plan item that must activate it.
 
-A zero-target class is never presented as implemented coverage. A reserved command succeeds only after it proves that its source inventory is still exactly the reviewed empty contract, optionally runs a bounded toolchain probe, and prints `RESERVED` with its activation task. Adding a file below a reserved suite root without updating the manifest and runner fails the command.
+A zero-target class is never presented as implemented coverage. A reserved command succeeds only after it proves that its source inventory is still exactly the reviewed manifest, optionally runs a bounded toolchain probe, and prints `RESERVED` with its activation task. Adding a file below a reserved suite root without updating the manifest and runner fails the command.
 
 ## Stable commands
 
@@ -22,7 +22,7 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 | `npm run test:integration` | Reserved | Requires only the integration contract README | First cross-language golden readers under `P03-017` |
 | `npm run test:conformance` | Active | Replays semantic examples, canonical bytes, the 17-fixture/313-step corpus, 382 oracle assertions, the 263-row compatibility matrix, and offline MongoDB artifacts | Later format, host, engine, and adapter bindings extend the same command |
 | `npm run test:fuzz` | Reserved | Requires only the fuzz contract README; no property test is relabeled as fuzzing | First coverage-guided codec targets under `P03-019` |
-| `npm run test:browser` | Reserved | Lists the pinned Playwright suite without downloading or launching browsers and requires 0 tests | Bundle/browser smoke work under `P02-010` and `P02-016` |
+| `npm run test:browser` | Reserved | Lists exactly one internal smoke case expanded across Chromium, Firefox, and WebKit (3 tests in 1 file) without downloading or launching browsers | P02-010 executes this toolchain smoke in CI; P02-016 expands/activates the user-facing browser suite |
 | `npm run test:crash` | Reserved | Requires only the crash-history contract README | Storage crash/reopen histories under `P05-021` |
 | `npm run test:benchmark` | Reserved | Compiles all eight crates through the fixed benchmark profile and requires 0 workloads | Result schema and baseline job under `P02-014` |
 | `npm run test:distributed` | Reserved | Requires only the distributed-history contract README | Deterministic replication simulations under `P17-016` |
@@ -35,7 +35,7 @@ The common runner invokes fixed program/argument arrays without a shell. Cargo c
 
 The unit command selects Rust library targets so integration, examples, binaries, and doctests cannot drift into its count accidentally. JavaScript uses Vitest's explicit empty-suite switch only while the manifest records zero files. The conformance command is offline and deterministic: it validates committed MongoDB observations but does not start MongoDB. The separately retained Phase 1 live differential remains an evidence/gate workflow until a later differential command policy is accepted.
 
-The browser command uses Playwright list mode and its explicit empty-suite option. It does not install or execute Chromium, Firefox, or WebKit. The benchmark command uses the accepted `bench` compilation profile; it does not time code, emit a report, compare machines, or create a performance claim.
+The stable browser command uses Playwright list mode. It does not install or execute Chromium, Firefox, or WebKit; explicit `browser:install`, `browser:smoke`, and CI commands own that network/platform boundary under the [P02-010 validation contract](../architecture/wasm-browser-smoke-validation.md). The benchmark command uses the accepted `bench` compilation profile; it does not time code, emit a report, compare machines, or create a performance claim.
 
 The underlying CLI behavior follows the official [Cargo test command](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [Vitest CLI](https://vitest.dev/guide/cli), [Playwright test CLI](https://playwright.dev/docs/test-cli), and [Rust Fuzz Book](https://rust-fuzz.github.io/book/) documentation. Tool versions remain governed by the Rust and JavaScript toolchain policies rather than by those mutable pages.
 

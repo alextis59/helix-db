@@ -115,9 +115,11 @@ cargo clippy --frozen --workspace --all-targets --all-features -- -D warnings
 RUSTDOCFLAGS="-D warnings" cargo doc --frozen --workspace --no-deps --all-features
 cargo check --frozen --target wasm32-unknown-unknown -p helix-core
 cargo check --frozen --target wasm32-wasip2 -p helix-core
+corepack npm run wasm:install-validator
+corepack npm run wasm:validate
 ```
 
-The metadata check requires all eight packages to report `rust_version = 1.96.1`. The target checks prove compilation only; `P02-010` adds component/bundle validation and smoke artifacts.
+The metadata check requires all eight packages to report `rust_version = 1.96.1`. The [P02-010 smoke-validation contract](wasm-browser-smoke-validation.md) now promotes the `helix-core` `cdylib` outputs only after pinned component validation or core-module validation/instantiation; target compilation alone remains insufficient.
 
 ## Upgrade procedure
 

@@ -1,6 +1,6 @@
 # Toolchain Profile Checks
 
-This directory contains bounded verification entry points for the build profiles selected by `P02-005`.
+This directory contains bounded verification entry points for foundation build profiles, policies, CI, Wasm artifacts, and browser plumbing.
 
 - `run-build-profile.mjs` runs exactly one named Rust build/instrumentation profile with fixed Cargo arguments.
 - `check-browser-profile.mjs` resolves the pinned Vite production configuration without creating a bundle.
@@ -10,6 +10,9 @@ This directory contains bounded verification entry points for the build profiles
 - `check-ci-matrix.mjs` validates gating/nightly lanes, immutable action pins, workflow security, emitted matrices, Playwright projects, and explicit exclusions.
 - `emit-ci-matrix.mjs` emits compact trusted `fromJSON` matrices for gating or nightly workflow contract jobs.
 - `check-ci-runtime.mjs` rejects a provisioned runner whose OS, architecture, Node version, or process identity differs from its matrix entry.
-- `check-browser-engine-lane.mjs` proves one named Playwright project remains an inventory-only zero-test lane until `P02-010`.
+- `install-wasm-tools.mjs` downloads or reuses only the official hash-pinned Linux x64 component validator and verifies archive, inventory, executable, and version identities.
+- `check-wasm-artifacts.mjs` builds and validates the WASIp2 component and browser core-module forms and emits deterministic ignored reports.
+- `build-browser-smoke.mjs` checks the exact four-file Vite output and byte identity of its Wasm asset.
+- `run-browser-smoke.mjs` executes the built bundle in one selected engine or all three pinned engines.
 
-These checks prove toolchain configuration only. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; real bundles and browser execution remain `P02-010`/`P02-016` work.
+These checks prove toolchain configuration and artifact plumbing only. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; user-facing browser examples and product-host behavior remain `P02-016`/`P11-*` work.

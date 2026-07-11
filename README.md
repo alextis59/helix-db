@@ -20,7 +20,8 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Code quality and dependency policy](docs/architecture/code-quality-and-dependency-policy.md) — formatting, lints, warnings, unsafe review, sources, licenses, and lifecycle scripts.
 - [Stable test command surface](docs/quality/test-command-surface.md) — maturity-labeled unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed entry points.
 - [Deterministic fixture generation](docs/quality/deterministic-fixture-generation.md) — versioned generators, committed seeds, artifact schemas, and byte-for-byte checks.
-- [Continuous integration matrix](docs/architecture/continuous-integration.md) — fixed gating/nightly platforms, targets, Node lines, browser inventories, and action pins.
+- [Continuous integration matrix](docs/architecture/continuous-integration.md) — fixed gating/nightly platforms, targets, Node lines, browser smoke lanes, and action pins.
+- [Wasm/component/browser smoke validation](docs/architecture/wasm-browser-smoke-validation.md) — pinned component validation, byte-identical Vite bundling, and real three-engine execution.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

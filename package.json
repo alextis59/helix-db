@@ -29,7 +29,11 @@
     "fsevents": false
   },
   "scripts": {
-    "ci:browser-inventory": "node tests/toolchain/check-browser-engine-lane.mjs",
+    "browser:build": "node tests/toolchain/build-browser-smoke.mjs",
+    "browser:install": "playwright install chromium firefox webkit",
+    "browser:serve": "vite preview",
+    "browser:smoke": "node tests/toolchain/run-browser-smoke.mjs all",
+    "ci:browser-smoke": "node tests/toolchain/run-browser-smoke.mjs",
     "ci:check": "node tests/toolchain/check-ci-matrix.mjs",
     "fixtures:check": "node fixtures/generation/check.mjs",
     "fixtures:generate": "node fixtures/generation/generate.mjs --write",
@@ -48,8 +52,10 @@
     "test:unit": "node tests/run-suite.mjs unit",
     "toolchain:types": "tsc --build --pretty false && tsc --project tsconfig.tools.json --pretty false",
     "toolchain:test-runner": "vitest run --passWithNoTests",
-    "toolchain:browser-harness": "playwright test --list --pass-with-no-tests",
-    "toolchain:browser-profile": "node tests/toolchain/check-browser-profile.mjs"
+    "toolchain:browser-harness": "playwright test --list",
+    "toolchain:browser-profile": "node tests/toolchain/check-browser-profile.mjs",
+    "wasm:install-validator": "node tests/toolchain/install-wasm-tools.mjs",
+    "wasm:validate": "node tests/toolchain/check-wasm-artifacts.mjs all"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.3",

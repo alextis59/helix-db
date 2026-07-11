@@ -5,6 +5,8 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { validateWasmToolsAuthority } from './install-wasm-tools.mjs';
+
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const readText = (file) => readFileSync(path.join(repository, file), 'utf8');
 const readJson = (file) => JSON.parse(readText(file));
@@ -50,11 +52,11 @@ const githubExpression = (body) => `\${{ ${body} }}`;
 
 same(
   sorted(Object.keys(matrix)),
-  ['actions', 'gating', 'nightly', 'plan_item', 'schema', 'unsupported'],
+  ['actions', 'gating', 'nightly', 'plan_items', 'schema', 'unsupported'],
   'matrix fields',
 );
-assert(matrix.schema === 'helix.ci-matrix/1', 'CI matrix schema mismatch');
-assert(matrix.plan_item === 'P02-009', 'CI matrix task mismatch');
+assert(matrix.schema === 'helix.ci-matrix/2', 'CI matrix schema mismatch');
+same(matrix.plan_items, ['P02-009', 'P02-010'], 'CI matrix task history');
 same(
   matrix.actions,
   {
@@ -137,9 +139,12 @@ same(
   'nightly native lanes',
 );
 same(
-  matrix.gating.portable.map(({ target }) => target),
-  ['wasm32-unknown-unknown', 'wasm32-wasip2'],
-  'portable Rust targets',
+  matrix.gating.portable.map(({ artifact, target }) => ({ artifact, target })),
+  [
+    { artifact: 'browser', target: 'wasm32-unknown-unknown' },
+    { artifact: 'component', target: 'wasm32-wasip2' },
+  ],
+  'portable Rust target/artifact modes',
 );
 same(
   matrix.gating.sanitizer.map(({ target }) => target),
@@ -153,10 +158,10 @@ same(
 );
 assert(
   matrix.gating.browser.every(
-    ({ execution, activation_task: activationTask }) =>
-      execution === 'inventory-only' && activationTask === 'P02-010',
+    ({ execution, expansion_task: expansionTask }) =>
+      execution === 'toolchain-smoke' && expansionTask === 'P02-016',
   ),
-  'browser activation boundary mismatch',
+  'browser smoke/expansion boundary mismatch',
 );
 same(
   matrix.unsupported.map(({ platform }) => platform),
@@ -196,28 +201,41 @@ expectFailure(
 
 same(
   {
-    'ci:browser-inventory': packageJson.scripts['ci:browser-inventory'],
+    'ci:browser-smoke': packageJson.scripts['ci:browser-smoke'],
     'ci:check': packageJson.scripts['ci:check'],
+    'wasm:install-validator': packageJson.scripts['wasm:install-validator'],
+    'wasm:validate': packageJson.scripts['wasm:validate'],
   },
   {
-    'ci:browser-inventory': 'node tests/toolchain/check-browser-engine-lane.mjs',
+    'ci:browser-smoke': 'node tests/toolchain/run-browser-smoke.mjs',
     'ci:check': 'node tests/toolchain/check-ci-matrix.mjs',
+    'wasm:install-validator': 'node tests/toolchain/install-wasm-tools.mjs',
+    'wasm:validate': 'node tests/toolchain/check-wasm-artifacts.mjs all',
   },
   'CI npm scripts',
+);
+const { authority: wasmTools, host: wasmToolsHost } = validateWasmToolsAuthority();
+assert(wasmTools.version === '1.253.0', 'component validator version mismatch');
+assert(
+  wasmToolsHost.platform === 'linux' && wasmToolsHost.architecture === 'x64',
+  'validator host',
 );
 const playwright = readText('playwright.config.ts');
 for (const marker of [
   "testDir: './tests/browser'",
+  "testMatch: '**/*.spec.ts'",
   "{ name: 'chromium', use: { browserName: 'chromium', headless: true } }",
   "{ name: 'firefox', use: { browserName: 'firefox', headless: true } }",
   "{ name: 'webkit', use: { browserName: 'webkit', headless: true } }",
   'workers: 1',
   'retries: 0',
   'forbidOnly: true',
+  "baseURL: 'http://127.0.0.1:4173'",
+  "command: 'corepack npm run browser:serve'",
+  "url: 'http://127.0.0.1:4173/index.html'",
 ]) {
   assert(playwright.includes(marker), `Playwright matrix marker absent: ${marker}`);
 }
-assert(!playwright.includes('webServer'), 'P02-009 must not start a browser bundle server');
 
 const workflowPaths = ['.github/workflows/ci.yml', '.github/workflows/ci-nightly.yml'];
 const actionUses = [];
@@ -283,7 +301,9 @@ for (const marker of [
   `matrix: ${githubExpression('fromJSON(needs.contract.outputs.sanitizer)')}`,
   `matrix: ${githubExpression('fromJSON(needs.contract.outputs.browser)')}`,
   `cargo clippy --frozen --target ${githubExpression('matrix.target')} --package helix-core -- -D warnings`,
-  `corepack npm run ci:browser-inventory -- ${githubExpression('matrix.engine')}`,
+  `node tests/toolchain/check-wasm-artifacts.mjs ${githubExpression('matrix.artifact')}`,
+  `playwright install --with-deps ${githubExpression('matrix.engine')}`,
+  `corepack npm run ci:browser-smoke -- ${githubExpression('matrix.engine')}`,
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }
@@ -302,8 +322,8 @@ for (const marker of [
   'ubuntu-24.04-arm',
   'macos-15-intel',
   'windows-2025',
-  'inventory-only',
-  'P02-010',
+  'toolchain-smoke',
+  'wasm-tools',
   'https://docs.github.com/en/actions/reference/runners/github-hosted-runners',
   'https://playwright.dev/docs/ci',
   'does not prove',
@@ -313,8 +333,11 @@ for (const marker of [
 
 process.stdout.write('PASS CI matrix: 11 gating lanes and 2 nightly native lanes\n');
 process.stdout.write('PASS platforms: Linux/Windows/macOS and x64/arm64 with 2 portable targets\n');
-process.stdout.write('PASS JavaScript/browser: 2 Node lines and 3 inventory-only engines\n');
+process.stdout.write('PASS JavaScript/browser: 2 Node lines and 3 real bundle-smoke engines\n');
 process.stdout.write(
   'PASS workflow policy: 16 full-SHA action uses, read-only permissions, fixed runners\n',
+);
+process.stdout.write(
+  'PASS portable artifacts: core module plus pinned-validator WASIp2 component\n',
 );
 process.stdout.write('PASS matrix rejection: unknown emitter/runtime lanes fail\n');
