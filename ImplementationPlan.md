@@ -190,7 +190,7 @@ Dependencies: `G00`; may proceed in parallel with Phase 1.
 - [x] **P02-006** Configure strict formatting, linting, warnings, unsafe-code review, dependency-policy, and license checks.
 - [x] **P02-007** Add unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed-test commands with stable names.
 - [x] **P02-008** Establish deterministic fixture generation with committed seeds and artifact schemas.
-- [ ] **P02-009** Add CI for supported operating systems, architectures, Rust targets, Node versions, and browser engines.
+- [x] **P02-009** Add CI for supported operating systems, architectures, Rust targets, Node versions, and browser engines.
 - [ ] **P02-010** Add Wasm component validation and browser bundle smoke tests to CI.
 - [ ] **P02-011** Add WGSL parsing or validation and shader-fixture compilation to CI before GPU runtime work.
 - [ ] **P02-012** Configure dependency vulnerability, provenance, license, and duplicate-version reporting.

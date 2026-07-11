@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-009",
+  "requirements": ["PLAT-001", "PLAT-002", "PLAT-003", "INV-003", "INV-004", "INV-007", "CORE-001", "CORE-003", "QUAL-001"],
+  "accepted_adrs": ["0001"],
+  "commit": "21cbbea30f2fda6dd8c8f56fa43c9764b4396898",
+  "recorded_at": "2026-07-10T21:59:00Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "python": "3.10.12",
+      "pyyaml": "6.0"
+    },
+    "javascript_lanes": ["22.23.1", "24.18.0"],
+    "hosted_workflow_execution": false
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "corepack npm run policy:javascript during P02-009 source implementation",
+      "exit_code": 1,
+      "result": "initial strict pass found ten checker formatting/interpolation issues; explicit literal-expression construction and mechanical formatting passed without changing the accepted matrix"
+    },
+    {
+      "command": "ad-hoc Specifications.md requirement heading count",
+      "exit_code": 1,
+      "result": "the first diagnostic assumed heading-form IDs; the corrected table/ledger comparison found the complete matching 44-ID set"
+    },
+    {
+      "command": "corepack npm exec -- biome check evidence/phase-02/P02-009/verify.mjs",
+      "exit_code": 1,
+      "result": "the repository intentionally excludes sealed evidence verifiers from Biome source scope; node --check, verifier self-hash, diff checks, and the clean-room replay are used instead"
+    }
+  ],
+  "verification": {
+    "artifact_files": 21,
+    "gating_lanes": 11,
+    "nightly_lanes": 2,
+    "native_os_families": 3,
+    "architecture_families": 2,
+    "portable_targets": 2,
+    "sanitizer_targets": 1,
+    "node_lanes": 2,
+    "browser_engines": 3,
+    "browser_tests": 0,
+    "explicit_exclusions": 2,
+    "approved_actions": 2,
+    "immutable_action_uses": 16,
+    "workflow_jobs": 8,
+    "workflow_steps": 37,
+    "mutation_canaries": 8,
+    "markdown_files": 136,
+    "local_links": 863
+  },
+  "commands": [
+    { "command": "independent Python/PyYAML BaseLoader parse of both workflows", "exit_code": 0 },
+    { "command": "Node 22.23.1 clean install, CI/policy/type/fixture/test replay and browser inventories", "exit_code": 0 },
+    { "command": "Node 24.18.0 clean install and CI/policy/type/fixture/test replay", "exit_code": 0 },
+    { "command": "native format/check/Clippy/test/docs plus both portable targets and Linux x64 ASan", "exit_code": 0 },
+    { "command": "node evidence/phase-02/P02-009/verify.mjs 21cbbea30f2fda6dd8c8f56fa43c9764b4396898", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": ".github/CODEOWNERS", "media_type": "text/plain", "bytes": 746, "sha256": "6e6f4abc160a8026e3a31db78b2f9e5b6ad21318af60bdb2cace9cf5038e0fea" },
+    { "path": ".github/README.md", "media_type": "text/markdown", "bytes": 726, "sha256": "588b0f2deef7e8486c2a86f42ce6c9dd3b568eed4c7efdef7932b7456c9339b8" },
+    { "path": ".github/ci/matrix.json", "media_type": "application/json", "bytes": 4525, "sha256": "007e5c085062fd4b278ef12d80dded21d126b8d9ce58cf06faf9b160fe6aad6a" },
+    { "path": ".github/workflows/ci-nightly.yml", "media_type": "application/yaml", "bytes": 2200, "sha256": "9ad2ec2fe745c9059981ba7d608998bdc9c1d8be54b493f44be6598d54b60bdd" },
+    { "path": ".github/workflows/ci.yml", "media_type": "application/yaml", "bytes": 6579, "sha256": "21bbb4741e6b9687f31698e7eb38b6aa1213fa140545c56858c314261dd66e7e" },
+    { "path": "Cargo.toml", "media_type": "application/toml", "bytes": 3519, "sha256": "a5a337be2ea1aee608d0fa10d72582ec6255ecb8501745a141b3da0c53f0c8a8" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 3244, "sha256": "92a1bcf0064530b0647b60a53da9c13a6e447bfeb1e86c7bd0d66ed798fe4335" },
+    { "path": "biome.json", "media_type": "application/json", "bytes": 1301, "sha256": "e0f05acee400aa7aa39b43bd3d4ca36623a3b5cc6e69c22174361e4bf095175c" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 7742, "sha256": "9f0398f6ac4c785d52151ca6dc8b4243d343bff397e903df0f241321a0be5493" },
+    { "path": "docs/architecture/continuous-integration.md", "media_type": "text/markdown", "bytes": 6043, "sha256": "9f68a4d83f540b46d61c0d8f9c44d3f576141eb00f04712321a380f7757fcb19" },
+    { "path": "docs/architecture/javascript-toolchain-policy.md", "media_type": "text/markdown", "bytes": 10606, "sha256": "10a657eb2a127177230b7ad938c460f983240a230d369025631649d19b494181" },
+    { "path": "docs/architecture/rust-toolchain-policy.md", "media_type": "text/markdown", "bytes": 10320, "sha256": "78b83da6d5eba6769d1d8ab744269ad56f77383857b033d179ec13f3036c7467" },
+    { "path": "package.json", "media_type": "application/json", "bytes": 2408, "sha256": "7ec6e96f2e0924c0fc0a21a92b59a3992ac233f30897b04d842b75eac9b07654" },
+    { "path": "playwright.config.ts", "media_type": "text/javascript", "bytes": 476, "sha256": "4ad312b3e2a0e6ac044be784e866bdf9410570b016223ac7a3550f10943350bc" },
+    { "path": "tests/browser/README.md", "media_type": "text/markdown", "bytes": 432, "sha256": "c873da115874384046d8aac7c2b83c54ade3fa058582457e9aa96d36e8e1df21" },
+    { "path": "tests/toolchain/README.md", "media_type": "text/markdown", "bytes": 1516, "sha256": "3e4f6352c8c858cb57278eed72a79ed25f39264c9cd61c250e8f7ce45bd3ece4" },
+    { "path": "tests/toolchain/check-browser-engine-lane.mjs", "media_type": "text/javascript", "bytes": 1843, "sha256": "07de1ee614266ca1345c68469d4ae7e1fe404ad425278f51c3e64e3deb1f13b3" },
+    { "path": "tests/toolchain/check-ci-matrix.mjs", "media_type": "text/javascript", "bytes": 11454, "sha256": "ac47c23e50b7059d9d8d17578e41ede873393dc79d864ae40e7fd5e5ff39323e" },
+    { "path": "tests/toolchain/check-ci-runtime.mjs", "media_type": "text/javascript", "bytes": 1703, "sha256": "c6fcc5ee293e3de85af8d1df595541a5fedbc93b697a40878ad531e73551bd39" },
+    { "path": "tests/toolchain/emit-ci-matrix.mjs", "media_type": "text/javascript", "bytes": 716, "sha256": "92b91c541e05b990a4d4903209a082e3421d734454a6a4cb58e97edca95b1e3d" },
+    { "path": "tsconfig.tools.json", "media_type": "application/json", "bytes": 145, "sha256": "d704746b9fcf708d68db1c05f31413524208446ab0d9c3cc0bb8215bd60cd2f4" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-009/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 17792,
+    "sha256": "c74a669dd4c6c53b9e8003e1db3d2a9e1dc3955c6350b7c7ad727bd1b02199ee"
+  },
+  "verdict": "pass"
+}
