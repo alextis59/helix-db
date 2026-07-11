@@ -16,7 +16,11 @@ import os from 'node:os';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
-import { jsonBytes, validateBrowserExecutionReport } from './artifact-retention-contract.mjs';
+import {
+  jsonBytes,
+  sanitizeBrowserDiagnostic,
+  validateBrowserExecutionReport,
+} from './artifact-retention-contract.mjs';
 
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const selected = process.argv[2];
@@ -48,10 +52,10 @@ const run = (program, args, { allowFailure = false } = {}) => {
 };
 
 const sanitizeText = (value) =>
-  String(value)
-    .replaceAll(repository, '<repository>')
-    .replaceAll(os.homedir(), '<home>')
-    .slice(0, 2000);
+  sanitizeBrowserDiagnostic(value, [
+    [repository, '<repository>'],
+    [os.homedir(), '<home>'],
+  ]);
 
 const hashFile = (file) => {
   const details = statSync(file);

@@ -16,6 +16,7 @@ import {
   loadPolicy,
   readBytes,
   retentionClaimBoundary,
+  sanitizeBrowserDiagnostic,
   sha256,
   validateBrowserExecutionReport,
   validateBundleManifest,
@@ -26,6 +27,17 @@ import {
 
 const policy = loadPolicy();
 validateSchemas();
+
+const escapeCharacter = String.fromCodePoint(27);
+const sanitizedDiagnostic = sanitizeBrowserDiagnostic(
+  `prefix${escapeCharacter}[31mred${escapeCharacter}[0m${String.fromCodePoint(0)}${String.fromCodePoint(11)}suffix`,
+  [['prefix', 'safe-']],
+);
+assert(sanitizedDiagnostic === 'safe-redsuffix', 'browser diagnostic control sanitization');
+assert(
+  sanitizeBrowserDiagnostic('x'.repeat(2100)).length === 2000,
+  'browser diagnostic length bound',
+);
 
 const expectRejection = (label, marker, mutate, validate = validatePolicy) => {
   const candidate = structuredClone(policy);

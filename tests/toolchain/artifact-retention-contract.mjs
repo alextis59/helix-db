@@ -77,6 +77,28 @@ const shortString = (value, label, maximum = 1000) => {
   );
 };
 
+const ansiControlSequence = new RegExp(`${String.fromCodePoint(27)}\\[[0-?]*[ -/]*[@-~]`, 'g');
+
+export const sanitizeBrowserDiagnostic = (value, replacements = []) => {
+  let sanitized = String(value);
+  for (const [source, replacement] of replacements) {
+    assert(typeof source === 'string' && source.length > 0, 'diagnostic replacement source');
+    assert(typeof replacement === 'string', 'diagnostic replacement value');
+    sanitized = sanitized.replaceAll(source, replacement);
+  }
+  sanitized = sanitized.replace(ansiControlSequence, '');
+  return [...sanitized]
+    .filter((character) => {
+      const codePoint = character.codePointAt(0);
+      return (
+        codePoint === undefined ||
+        !(codePoint <= 8 || (codePoint >= 11 && codePoint <= 31) || codePoint === 127)
+      );
+    })
+    .join('')
+    .slice(0, 2000);
+};
+
 const shaPattern = /^[0-9a-f]{64}$/;
 const commitPattern = /^[0-9a-f]{40}$/;
 const sensitiveKey = /(?:^|_)(?:actor|email|host_?name|password|secret|token|user_?name)(?:_|$)/i;
