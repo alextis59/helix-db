@@ -1,0 +1,228 @@
+{
+  "schema": "helix.benchmark-summary/1",
+  "plan_item": "P02-014",
+  "recorded_at": "2026-07-11T04:04:21.135Z",
+  "execution_id": "local-2026-07-11T04:04:21.135Z",
+  "claim_boundary": {
+    "eligible": false,
+    "scope": "harness-integrity-only",
+    "reason": "The workspace contains no database implementation, so this calibration cannot support a database, product, backend-comparison, or release performance claim."
+  },
+  "workload": {
+    "id": "harness.sha256-buffer/1",
+    "path": "benchmarks/workloads/harness-calibration-v1.json",
+    "sha256": "9b1518ce22fc5668f3be67e9f9d3c0bd681ee5c9b10a0d85848c34f212d089e2"
+  },
+  "raw_result": {
+    "path": "dist/benchmarks/baseline/raw.json",
+    "bytes": 53031,
+    "sha256": "6a37d68358757c97e33222eec40e0fd071e0bd1e74a1834669cdcb76a73f1869"
+  },
+  "source_control": {
+    "commit": "7a3a232a51cee61671952bd6c384bba70530739c",
+    "dirty": false
+  },
+  "environment_identity": {
+    "platform": "linux",
+    "architecture": "x64",
+    "os_release": "6.8.0-124-generic",
+    "cpu_model": "11th Gen Intel(R) Core(TM) i5-11300H @ 3.10GHz",
+    "logical_cpus": 8,
+    "memory_bytes": 16503111680,
+    "node": "v22.23.1",
+    "v8": "12.4.254.21-node.56",
+    "openssl": "3.5.7",
+    "provider": "local"
+  },
+  "counts": {
+    "warmups": 5,
+    "measurements": 20,
+    "passed": 25,
+    "failed": 0,
+    "fallbacks": 0,
+    "measured_operations": 160,
+    "measured_input_bytes": 167772160
+  },
+  "stage_distributions": [
+    {
+      "name": "parse_plan",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "storage_read",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "sidecar_decode",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "prepare",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "transfer_in",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "queue_wait",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "execute",
+      "unit": "nanoseconds",
+      "applicable": true,
+      "samples": 20,
+      "min": 4626987,
+      "p50": 4648958,
+      "p95": 4842266,
+      "p99": 4895982,
+      "max": 4895982,
+      "mean": 4690309
+    },
+    {
+      "name": "transfer_out",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "verify",
+      "unit": "nanoseconds",
+      "applicable": true,
+      "samples": 20,
+      "min": 2120,
+      "p50": 2844,
+      "p95": 7703,
+      "p99": 9885,
+      "max": 9885,
+      "mean": 3843
+    },
+    {
+      "name": "row_fetch",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "projection_sort",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "serialization",
+      "unit": "nanoseconds",
+      "applicable": false,
+      "samples": 0,
+      "min": null,
+      "p50": null,
+      "p95": null,
+      "p99": null,
+      "max": null,
+      "mean": null
+    },
+    {
+      "name": "materialize",
+      "unit": "nanoseconds",
+      "applicable": true,
+      "samples": 20,
+      "min": 1135,
+      "p50": 1590,
+      "p95": 5917,
+      "p99": 16776,
+      "max": 16776,
+      "mean": 3013
+    },
+    {
+      "name": "end_to_end",
+      "unit": "nanoseconds",
+      "applicable": true,
+      "samples": 20,
+      "min": 4632371,
+      "p50": 4654190,
+      "p95": 4875613,
+      "p99": 4911142,
+      "max": 4911142,
+      "mean": 4700194
+    }
+  ],
+  "result_validation": {
+    "expected_digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+    "verified_measurements": 20,
+    "failed_measurements": 0,
+    "fallback_measurements": 0
+  },
+  "acceptance": {
+    "kind": "integrity-only",
+    "performance_threshold": null,
+    "integrity_passed": true
+  },
+  "verdict": "pass"
+}

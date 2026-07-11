@@ -1,0 +1,328 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-014",
+  "requirements": [
+    "INV-007",
+    "QUAL-001"
+  ],
+  "accepted_adrs": [],
+  "commit": "7a3a232a51cee61671952bd6c384bba70530739c",
+  "recorded_at": "2026-07-11T04:04:21.135Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "active_node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "python_jsonschema": "4.23.0",
+      "pyyaml": "6.0",
+      "playwright": "1.61.1",
+      "chromium": "149.0.7827.55"
+    },
+    "javascript_lanes": [
+      "22.23.1",
+      "24.18.0"
+    ],
+    "benchmark_lane": "linux-x64",
+    "hosted_workflow_execution": false
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "decide whether the first timed baseline should enforce a speed threshold",
+      "exit_code": 0,
+      "result": "rejected because no database implementation or stable runner baseline exists; acceptance is integrity-only and performance_threshold is explicitly null"
+    },
+    {
+      "command": "model only the stages exercised by a host-memory hash",
+      "exit_code": 0,
+      "result": "rejected because absent transfer, queue, storage, and materialization-adjacent costs would become invisible; all 14 stages are retained with explicit applicability and zero-only non-applicable durations"
+    },
+    {
+      "command": "retain only a compact timing summary",
+      "exit_code": 0,
+      "result": "rejected because a summary cannot expose filtered failures, fallbacks, warmups, or raw distributions; the summary binds the exact canonical raw bytes by size and SHA-256"
+    },
+    {
+      "command": "use the upload-artifact v7.0.1 release tag directly",
+      "exit_code": 0,
+      "result": "rejected as mutable; git ls-remote against the official repository mapped v7.0.1 to full commit 043fb46d1a93c77aae656e7c1c64a875d1fc6a0a, which is the only accepted workflow pin"
+    },
+    {
+      "command": "place the baseline in the pull-request workflow",
+      "exit_code": 0,
+      "result": "rejected as a performance-gate ambiguity; the retained result job is schedule/manual only while ordinary tests enforce only schema, correctness, completeness, and claim-boundary integrity"
+    }
+  ],
+  "verification": {
+    "changed_paths": 33,
+    "schemas": 3,
+    "workloads": 1,
+    "retained_report_files": 2,
+    "raw_report_bytes": 53031,
+    "summary_report_bytes": 5117,
+    "warmup_observations": 5,
+    "measured_observations": 20,
+    "measured_operations": 160,
+    "measured_input_bytes": 167772160,
+    "stages_per_observation": 14,
+    "applicable_stages": 4,
+    "in_source_rejection_canaries": 19,
+    "evidence_rejection_canaries": 23,
+    "total_rejection_canaries": 42,
+    "node_lanes": 2,
+    "workflow_jobs": 9,
+    "workflow_steps": 49,
+    "workflow_action_uses": 19,
+    "native_tests": 9,
+    "browser_engines": 3,
+    "markdown_files": 149,
+    "local_links": 978,
+    "biome_files": 70
+  },
+  "commands": [
+    {
+      "command": "Node 22.23.1 clean install, JavaScript/dependency/CI/type/fixture/command/aggregate replay, benchmark generation, report verification, and 19 in-source rejection canaries",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 24.18.0 clean install plus JavaScript/dependency/CI/type/fixture/aggregate and benchmark replay",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo fmt/check/Clippy/test, warning-free docs, both portable Clippy targets, ASan, compiler-matched coverage, both Wasm forms, WGSL compilation, and Chromium/Firefox/WebKit smoke",
+      "exit_code": 0
+    },
+    {
+      "command": "Draft 2020-12 validation of workload/raw/summary, independent YAML parse of 9 jobs/49 steps, and 149-file Markdown link validation",
+      "exit_code": 0
+    },
+    {
+      "command": "node evidence/phase-02/P02-014/verify.mjs 7a3a232a51cee61671952bd6c384bba70530739c",
+      "exit_code": 0
+    }
+  ],
+  "retained_artifacts": [
+    {
+      "path": "reports/raw.json",
+      "media_type": "application/json",
+      "bytes": 53031,
+      "sha256": "6a37d68358757c97e33222eec40e0fd071e0bd1e74a1834669cdcb76a73f1869"
+    },
+    {
+      "path": "reports/summary.json",
+      "media_type": "application/json",
+      "bytes": 5117,
+      "sha256": "4f7d4ce3f61324c5937e6b5dc138417aa3e6f664d96c77d978cace503d7423ad"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": ".github/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1591,
+      "sha256": "008ff282f90f534641f72d150492586faadd8c0b525c35b5de72f6cc7d11ec5b"
+    },
+    {
+      "path": ".github/ci/matrix.json",
+      "media_type": "application/json",
+      "bytes": 5233,
+      "sha256": "1f1c580e73a8c5e312e592aab2ae1b30d5713b17c2fc5f907469e5477ec924ff"
+    },
+    {
+      "path": ".github/workflows/benchmark-baseline.yml",
+      "media_type": "application/yaml",
+      "bytes": 1804,
+      "sha256": "99fdf3ba443501242d5c22bf30902a525bb342f48c93bc707cd974352bfb6629"
+    },
+    {
+      "path": "README.md",
+      "media_type": "text/markdown",
+      "bytes": 4126,
+      "sha256": "310667cda70620bd8442c0043f6f8405cbd709be700db00a03ec97802855097f"
+    },
+    {
+      "path": "THIRD_PARTY_NOTICES.md",
+      "media_type": "text/markdown",
+      "bytes": 6308,
+      "sha256": "ea8c82938bca5e1bc9b0bbb599d2e16f218a60e6caa12bdafbc50693bc2d5c48"
+    },
+    {
+      "path": "benchmarks/README.md",
+      "media_type": "text/markdown",
+      "bytes": 1376,
+      "sha256": "7bd0569c9523ae5b64b5a02b7975af8e809d05bce23baffc8d6ef474c82b31d9"
+    },
+    {
+      "path": "benchmarks/benchmark-contract.mjs",
+      "media_type": "text/javascript",
+      "bytes": 28900,
+      "sha256": "7fb8409ff6f2200818c6edbe000c6463e682167eb3c0e0beafbff54aa42e86e5"
+    },
+    {
+      "path": "benchmarks/check-benchmark-artifacts.mjs",
+      "media_type": "text/javascript",
+      "bytes": 1238,
+      "sha256": "13d51989230cda4b24ce2605cd91eb7b8004f1a723ff6c0550ceff789203fb20"
+    },
+    {
+      "path": "benchmarks/datasets/README.md",
+      "media_type": "text/markdown",
+      "bytes": 488,
+      "sha256": "4209cab4ccedba9e0625520c51e063c5a0dee67cc89352ba19ea55a2a2ff540e"
+    },
+    {
+      "path": "benchmarks/reports/README.md",
+      "media_type": "text/markdown",
+      "bytes": 487,
+      "sha256": "e517cedd78550832ff6a454392a43239ac929f49af0b7b4a2cc78a7c3a08e526"
+    },
+    {
+      "path": "benchmarks/run-baseline.mjs",
+      "media_type": "text/javascript",
+      "bytes": 11061,
+      "sha256": "3c9a9d4795f4364231c515c9d013422019cb8ec24e0725fd395947b8faf57bab"
+    },
+    {
+      "path": "benchmarks/schema/README.md",
+      "media_type": "text/markdown",
+      "bytes": 433,
+      "sha256": "d1b684ded65c0005212c4a78f713eced516a0b445f54a189f74770466fc4a786"
+    },
+    {
+      "path": "benchmarks/schema/raw-result-v1.schema.json",
+      "media_type": "application/json",
+      "bytes": 11695,
+      "sha256": "3b76f59dd4b011779dba59ea8ecf1620ef513c9d9de08a26aa486bc13673c9cc"
+    },
+    {
+      "path": "benchmarks/schema/summary-v1.schema.json",
+      "media_type": "application/json",
+      "bytes": 6922,
+      "sha256": "8b627a4cdc8593954f507c0c510af416cbfa9b2a0dfa53eb9e138016e0fe933f"
+    },
+    {
+      "path": "benchmarks/schema/workload-v1.schema.json",
+      "media_type": "application/json",
+      "bytes": 4943,
+      "sha256": "7cc4ddc2e09879574fa157507a526a64b3d00f901d9ef630a2389269a1c3d373"
+    },
+    {
+      "path": "benchmarks/workloads/README.md",
+      "media_type": "text/markdown",
+      "bytes": 498,
+      "sha256": "15024f95b59064488c3389dd4a7068c7deea7631dea68246d3fd1ba32205ab3f"
+    },
+    {
+      "path": "benchmarks/workloads/harness-calibration-v1.json",
+      "media_type": "application/json",
+      "bytes": 2195,
+      "sha256": "9b1518ce22fc5668f3be67e9f9d3c0bd681ee5c9b10a0d85848c34f212d089e2"
+    },
+    {
+      "path": "biome.json",
+      "media_type": "application/json",
+      "bytes": 1442,
+      "sha256": "18103810c0daa5cf350ae7a1acbefbf0e349718db72af6e7f0f22224db9e7b07"
+    },
+    {
+      "path": "docs/README.md",
+      "media_type": "text/markdown",
+      "bytes": 8672,
+      "sha256": "338923e33b4cbce4697f0b7bc768034eaa59d8a9403ceda925721e8a5e44bd97"
+    },
+    {
+      "path": "docs/architecture/build-profiles.md",
+      "media_type": "text/markdown",
+      "bytes": 9454,
+      "sha256": "d69b93a2fa517e1beed9d803dd8c196cec8e843d92c3344a98834ee1004178ba"
+    },
+    {
+      "path": "docs/architecture/continuous-integration.md",
+      "media_type": "text/markdown",
+      "bytes": 10601,
+      "sha256": "63a44716e79271cdf60e05e77f35df20d10356367f98b862f5f6365f2b515e1c"
+    },
+    {
+      "path": "docs/architecture/repository-layout.md",
+      "media_type": "text/markdown",
+      "bytes": 5129,
+      "sha256": "d97f2cf6168926f1877b2e59ea1b6c0a96a2f071cd8ea4c9508ded79ddefb140"
+    },
+    {
+      "path": "docs/governance/licensing.md",
+      "media_type": "text/markdown",
+      "bytes": 7626,
+      "sha256": "917a42bff6a7732dff26df78744321cd62136a988bc892fde259f8070d0610d0"
+    },
+    {
+      "path": "docs/governance/requirements.md",
+      "media_type": "text/markdown",
+      "bytes": 22565,
+      "sha256": "94be28b70bd3114abaef6084cb3a39d11decfb8b646ec98f9253828c39861ab5"
+    },
+    {
+      "path": "docs/quality/benchmark-results.md",
+      "media_type": "text/markdown",
+      "bytes": 12779,
+      "sha256": "0edc0e4644bcb189f6818ee6bf5cb1d3e2f8f0e455a7997decab69279c282c54"
+    },
+    {
+      "path": "docs/quality/test-command-surface.md",
+      "media_type": "text/markdown",
+      "bytes": 7122,
+      "sha256": "62ccf2179f99a353f03d1cc069c5df9d6972386697ee815aec3762aa7377ff1c"
+    },
+    {
+      "path": "package.json",
+      "media_type": "application/json",
+      "bytes": 3637,
+      "sha256": "f9de917efc9f0b328f0520a838a3bc5089858811803d4ed35f4902549c530a1b"
+    },
+    {
+      "path": "tests/run-suite.mjs",
+      "media_type": "text/javascript",
+      "bytes": 14694,
+      "sha256": "89a42a2f988f3d0ac1a3954f457c9cf8add28711fee88515db52e439180f61f9"
+    },
+    {
+      "path": "tests/suites.json",
+      "media_type": "application/json",
+      "bytes": 4091,
+      "sha256": "3bc5f652a67eac323cdcd610f93c000e532196801806eb2828dee6b4d7b718c2"
+    },
+    {
+      "path": "tests/toolchain/check-ci-matrix.mjs",
+      "media_type": "text/javascript",
+      "bytes": 19060,
+      "sha256": "668a785642273d30a7fe2f900f4be63a0a54bd231d8252b53df3cee3cef3ac67"
+    },
+    {
+      "path": "tests/toolchain/check-ci-runtime.mjs",
+      "media_type": "text/javascript",
+      "bytes": 1752,
+      "sha256": "aacda56b6b2fc9cd17b9632b3d0ad41e8e5aa083500829a973c3bd224e9d5b63"
+    },
+    {
+      "path": "tests/toolchain/check-test-command-surface.mjs",
+      "media_type": "text/javascript",
+      "bytes": 6499,
+      "sha256": "833b8c17695b421c45792557940a25392d205ea18d6bb585dd111150923c1a29"
+    },
+    {
+      "path": "tests/toolchain/test-benchmark-contract.mjs",
+      "media_type": "text/javascript",
+      "bytes": 5189,
+      "sha256": "4f1e08b1f0dc4ee4acc923b3270963db453cccabe36ea3293fb4f93febe15e58"
+    }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-014/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 33831,
+    "sha256": "c6ae3d7102f8b15e00e404e615d041f6459bd7f89d3cfa9885d03c1c3f065c54"
+  },
+  "verdict": "pass"
+}

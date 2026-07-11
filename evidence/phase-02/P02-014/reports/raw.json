@@ -1,0 +1,2291 @@
+{
+  "schema": "helix.benchmark-raw-result/1",
+  "plan_item": "P02-014",
+  "recorded_at": "2026-07-11T04:04:21.135Z",
+  "execution_id": "local-2026-07-11T04:04:21.135Z",
+  "claim_boundary": {
+    "eligible": false,
+    "scope": "harness-integrity-only",
+    "reason": "The workspace contains no database implementation, so this calibration cannot support a database, product, backend-comparison, or release performance claim."
+  },
+  "workload": {
+    "id": "harness.sha256-buffer/1",
+    "version": "1.0.0",
+    "path": "benchmarks/workloads/harness-calibration-v1.json",
+    "bytes": 2195,
+    "sha256": "9b1518ce22fc5668f3be67e9f9d3c0bd681ee5c9b10a0d85848c34f212d089e2"
+  },
+  "sources": [
+    {
+      "path": "benchmarks/workloads/harness-calibration-v1.json",
+      "bytes": 2195,
+      "sha256": "9b1518ce22fc5668f3be67e9f9d3c0bd681ee5c9b10a0d85848c34f212d089e2"
+    },
+    {
+      "path": "benchmarks/schema/workload-v1.schema.json",
+      "bytes": 4943,
+      "sha256": "7cc4ddc2e09879574fa157507a526a64b3d00f901d9ef630a2389269a1c3d373"
+    },
+    {
+      "path": "benchmarks/schema/raw-result-v1.schema.json",
+      "bytes": 11695,
+      "sha256": "3b76f59dd4b011779dba59ea8ecf1620ef513c9d9de08a26aa486bc13673c9cc"
+    },
+    {
+      "path": "benchmarks/schema/summary-v1.schema.json",
+      "bytes": 6922,
+      "sha256": "8b627a4cdc8593954f507c0c510af416cbfa9b2a0dfa53eb9e138016e0fe933f"
+    },
+    {
+      "path": "benchmarks/benchmark-contract.mjs",
+      "bytes": 28900,
+      "sha256": "7fb8409ff6f2200818c6edbe000c6463e682167eb3c0e0beafbff54aa42e86e5"
+    },
+    {
+      "path": "benchmarks/run-baseline.mjs",
+      "bytes": 11061,
+      "sha256": "3c9a9d4795f4364231c515c9d013422019cb8ec24e0725fd395947b8faf57bab"
+    }
+  ],
+  "source_control": {
+    "commit": "7a3a232a51cee61671952bd6c384bba70530739c",
+    "dirty": false
+  },
+  "environment": {
+    "hardware": {
+      "architecture": "x64",
+      "cpu_model": "11th Gen Intel(R) Core(TM) i5-11300H @ 3.10GHz",
+      "logical_cpus": 8,
+      "memory_bytes": 16503111680,
+      "gpu": null,
+      "storage": null
+    },
+    "software": {
+      "platform": "linux",
+      "os_release": "6.8.0-124-generic",
+      "node": "v22.23.1",
+      "v8": "12.4.254.21-node.56",
+      "openssl": "3.5.7"
+    },
+    "execution": {
+      "provider": "local",
+      "runner_environment": null,
+      "workflow": null,
+      "job": null,
+      "repository": null,
+      "ref": null,
+      "github_sha": null,
+      "run_id": null,
+      "run_attempt": null
+    },
+    "conditions": {
+      "background_load": "unknown",
+      "isolation": "uncontrolled-local",
+      "power_thermal": "unknown",
+      "network": "not-used"
+    }
+  },
+  "configuration": {
+    "operation": "sha256",
+    "backend": "node:crypto",
+    "residency": "warm-host-memory",
+    "selectivity": "not-applicable",
+    "result_size_bytes": 32,
+    "concurrency": 1,
+    "operations_per_repetition": 8,
+    "warmup_repetitions": 5,
+    "measured_repetitions": 20,
+    "timeout_ms": 120000,
+    "stage_order": [
+      "parse_plan",
+      "storage_read",
+      "sidecar_decode",
+      "prepare",
+      "transfer_in",
+      "queue_wait",
+      "execute",
+      "transfer_out",
+      "verify",
+      "row_fetch",
+      "projection_sort",
+      "serialization",
+      "materialize",
+      "end_to_end"
+    ],
+    "failure_policy": "retain-and-fail",
+    "fallback_policy": "retain-and-fail",
+    "outlier_policy": "none"
+  },
+  "dataset": {
+    "generator": "helix.lcg32-byte-buffer/1",
+    "seed": 3237998081,
+    "bytes": 1048576,
+    "sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+    "final_state": 3348098561,
+    "provenance": "repository-generated",
+    "license": "MIT"
+  },
+  "observations": [
+    {
+      "kind": "warmup",
+      "index": 1,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4836169
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 20767
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 11683
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4902090
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "warmup",
+      "index": 2,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4833023
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 13271
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 9905
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4866558
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "warmup",
+      "index": 3,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4689636
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 5558
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 6630
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4710371
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "warmup",
+      "index": 4,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4675515
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 4123
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 2732
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4686106
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "warmup",
+      "index": 5,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4753767
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 8458
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 34350
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4805345
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 1,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4640998
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 4023
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 3996
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4651996
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 2,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4714106
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 4513
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 2902
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4724856
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 3,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4628089
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 3726
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1174
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4635339
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 4,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4842266
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 9885
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 16776
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4875613
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 5,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4814938
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 7703
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 4454
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4830226
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 6,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4895982
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 6917
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 4382
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4911142
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 7,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4639041
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 3386
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1645
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4646081
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 8,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4640324
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2406
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 5917
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4650673
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 9,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4628650
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2916
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1323
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4635181
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 10,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4648958
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2120
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1135
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4654190
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 11,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4708947
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2774
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1635
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4717191
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 12,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4668933
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2594
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1356
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4675069
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 13,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4633929
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2858
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1613
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4641236
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 14,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4779079
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 5900
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 3808
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4795050
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 15,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4706446
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2844
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1590
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4714849
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 16,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4649983
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2736
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1544
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4656700
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 17,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4645887
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2682
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1292
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4652031
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 18,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4627384
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2230
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1226
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4632865
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 19,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4665246
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2392
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1265
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4671211
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    },
+    {
+      "kind": "measurement",
+      "index": 20,
+      "status": "pass",
+      "fallback": false,
+      "error": null,
+      "stages": [
+        {
+          "name": "parse_plan",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "storage_read",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "sidecar_decode",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "prepare",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "transfer_in",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "queue_wait",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "execute",
+          "applicable": true,
+          "duration_ns": 4626987
+        },
+        {
+          "name": "transfer_out",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "verify",
+          "applicable": true,
+          "duration_ns": 2258
+        },
+        {
+          "name": "row_fetch",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "projection_sort",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "serialization",
+          "applicable": false,
+          "duration_ns": 0
+        },
+        {
+          "name": "materialize",
+          "applicable": true,
+          "duration_ns": 1229
+        },
+        {
+          "name": "end_to_end",
+          "applicable": true,
+          "duration_ns": 4632371
+        }
+      ],
+      "result": {
+        "input_bytes": 8388608,
+        "operations": 8,
+        "output_bytes": 32,
+        "digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+        "verified": true
+      }
+    }
+  ],
+  "totals": {
+    "warmup_observations": 5,
+    "measured_observations": 20,
+    "passed_observations": 25,
+    "failed_observations": 0,
+    "fallback_observations": 0,
+    "measured_input_bytes": 167772160,
+    "measured_operations": 160
+  },
+  "failures": [],
+  "verdict": "pass"
+}
