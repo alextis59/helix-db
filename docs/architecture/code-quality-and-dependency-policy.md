@@ -3,7 +3,7 @@
 - Status: Accepted and executable bootstrap policy with dependency security reporting
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with security and release review
-- Plan items: `P02-006`, extended by `P02-012`
+- Plan items: `P02-006`, extended by `P02-012` and `P03-008`
 - Governing requirements: `INV-003`, `INV-004`, `INV-006`, `INV-007`, `CORE-001`, `CORE-003`, `SEC-001`, `SEC-002`, `QUAL-001`
 - Governing gate: `G02`
 - Machine dependency policy: [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json)
@@ -38,7 +38,7 @@ RUSTDOCFLAGS="-D warnings" cargo doc --frozen --workspace --no-deps --all-featur
 
 ### Unsafe exception workflow
 
-At this phase all tracked or untracked candidate `.rs` files must contain zero `unsafe` tokens, all compiled crates inherit `unsafe_code = "forbid"`, and build scripts are absent. The machine checker scans candidate sources as well as compiling tracked crates, so an unreferenced Rust file cannot silently bypass the inventory.
+All tracked or untracked first-party candidate `.rs` files must contain zero `unsafe` tokens, all workspace crates inherit `unsafe_code = "forbid"`, and first-party build scripts are absent. The exact external graph records the `blake3` and target-conditioned `libc` build-script presence instead of pretending it is first-party code. The machine checker scans candidate sources as well as compiling tracked crates, so an unreferenced Rust file cannot silently bypass the inventory.
 
 A future need for unsafe code is a reviewed architecture/security change, not a local lint suppression. The change must:
 
@@ -87,9 +87,9 @@ For npm it requires:
 
 The [npm lock documentation](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/) defines the committed exact-tree role. The [npm CI documentation](https://docs.npmjs.com/cli/v11/commands/npm-ci/) defines frozen installs and script controls. `.npmrc` enables strict script review, while `package.json` denies `fsevents`; a newly introduced script fails policy until reviewed.
 
-For Rust it currently requires exactly the eight unpublished MIT workspace paths, no registry/git/external package, no build script, and no unsafe token. The dependency report labels Rust advisory scanning `not-applicable-no-external-packages`; the first external crate remains denied until its focused change also configures a pinned advisory scanner. External dependencies additionally require exact lock changes, license/source review, Wasm/host impact, and a maintenance/security rationale.
+For Rust it requires exactly eight unpublished MIT workspace paths and the 13 exact crates.io packages reached by `blake3 = 1.8.5`, `crc = 3.4.0`, and `lz4_flex = 0.13.1`. Every external version, checksum, license, selected feature, direct purpose, build script, and one of 26 source license files is deny-by-default policy data. Git sources, default-feature drift, extra packages, missing license text, local build scripts, and first-party unsafe tokens fail. Exact `cargo-audit 0.22.2`, built from its verified source archive and repository-owned reviewed lock, scans the workspace and its own tool graph with a fresh non-stale RustSec database and no exceptions.
 
-Downloaded development executables are not smuggled into npm/Cargo dependency graphs. The first such tool, the P02-010 component validator, has a separate machine authority that pins its official release URL, host, archive inventory, byte counts, archive/executable SHA-256 values, license forms/files, and exact version output. It is installed only under ignored `target/toolchain`, reverified with all three license files on every use, disclosed in third-party notices, and incorporated into the P02-012 report with the explicit limitation that no compiled-binary transitive advisory feed exists.
+Downloaded development executables are not smuggled into npm/Cargo product graphs. The P02-010 component validator has a separate machine authority that pins its official release URL, host, archive inventory, byte counts, archive/executable SHA-256 values, license forms/files, and exact version output. The P03-008 RustSec scanner similarly lives only under ignored `target/toolchain`, but is built from verified source using a full reviewed lock whose graph is self-audited on every live observation. Neither enters product artifacts.
 
 ## License boundary
 

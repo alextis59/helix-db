@@ -62,7 +62,13 @@ The initial graph rejects these dependency directions unless an accepted archite
 - `helix-query` to physical storage or execution backends;
 - any cycle among workspace crates.
 
-External dependencies are intentionally absent at this step. The exact compiler, MSRV, components, formatter, linter, and initial Wasm targets are selected by the [Rust toolchain policy](rust-toolchain-policy.md); dependency, strict lint, and broader build policy remain later `P02-*` work and must preserve this graph.
+The original `P02-001` boundary had no external dependencies. `P03-008` later adds only three exact
+portable dependencies to the leaf `helix-doc` crate—BLAKE3, CRC, and bounded raw LZ4—and their ten
+locked registry transitives. They do not add a workspace edge or grant an ambient host capability.
+Their complete checksum/license/feature/build-script allowlist and fail-closed RustSec reporting live
+under the dependency policy. The exact compiler, MSRV, components, formatter, linter, and Wasm
+targets remain selected by the [Rust toolchain policy](rust-toolchain-policy.md); future dependencies
+must preserve this graph unless an accepted architecture change says otherwise.
 
 ## Verification contract
 

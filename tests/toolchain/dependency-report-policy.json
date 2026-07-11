@@ -4,6 +4,7 @@
   "authorities": {
     "dependency_policy": "tests/toolchain/dependency-policy.json",
     "npm_license_inventory": ".github/ci/npm-license-inventory.json",
+    "rust_license_inventory": ".github/ci/rust-license-inventory.json",
     "wasm_tools": ".github/ci/wasm-tools.json"
   },
   "reports": {
@@ -84,8 +85,59 @@
   },
   "rust": {
     "workspace_packages": 8,
-    "external_package_policy": "deny-until-advisory-scanner-is-configured",
-    "advisory_status_when_external_count_is_zero": "not-applicable-no-external-packages"
+    "expected_external_packages": 13,
+    "external_package_policy": "exact-registry-allowlist-with-live-rustsec",
+    "advisory": {
+      "tool": "cargo-audit",
+      "version": "0.22.2",
+      "license": "Apache-2.0 OR MIT",
+      "source_checksum_sha256": "700c2b240f7fd330c24b675fe429f73a5b676531fcc6300400b2b67f155ba12a",
+      "minimum_rust_version": "1.88",
+      "binary": "target/toolchain/cargo-audit/bin/cargo-audit",
+      "install_root": "target/toolchain/cargo-audit",
+      "installer": "tests/toolchain/install-cargo-audit.mjs",
+      "source_directory": "target/toolchain/cargo-audit/source",
+      "source_lock": ".github/ci/cargo-audit-0.22.2.lock",
+      "source_lock_sha256": "a042bb900a58eea76c7d07847ce6a1f62aefdf9a41c0cdce6723c22c2afb414c",
+      "installation_receipt": "target/toolchain/cargo-audit/install-receipt.json",
+      "build_command": [
+        "install",
+        "--path",
+        "target/toolchain/cargo-audit/source",
+        "--locked",
+        "--no-default-features",
+        "--root",
+        "target/toolchain/cargo-audit",
+        "--force"
+      ],
+      "database_url": "https://github.com/RustSec/advisory-db.git",
+      "database_path": "target/toolchain/cargo-audit/advisory-db",
+      "audit_command": [
+        "audit",
+        "--db",
+        "target/toolchain/cargo-audit/advisory-db",
+        "--url",
+        "https://github.com/RustSec/advisory-db.git",
+        "--deny",
+        "warnings",
+        "--json"
+      ],
+      "self_audit_command": [
+        "audit",
+        "--file",
+        "target/toolchain/cargo-audit/source/Cargo.lock",
+        "--db",
+        "target/toolchain/cargo-audit/advisory-db",
+        "--no-fetch",
+        "--deny",
+        "warnings",
+        "--json"
+      ],
+      "self_audit_expected_dependencies": 374,
+      "deny": ["vulnerabilities", "unmaintained", "unsound", "notice", "yanked"],
+      "allow_stale_database": false,
+      "exceptions": []
+    }
   },
   "external_tools": {
     "wasm_tools": {

@@ -3,10 +3,11 @@
 - Status: Accepted foundation reporting policy; not a production SBOM or legal opinion
 - Last updated: 2026-07-11
 - Owner: Release owner with security review
-- Plan item: `P02-012`
+- Plan items: `P02-012`, extended by `P03-008`
 - Governing gate: `G02`
 - Report policy: [`helix.dependency-report-policy/1`](../../tests/toolchain/dependency-report-policy.json)
 - npm license authority: [`helix.npm-license-inventory/1`](../../.github/ci/npm-license-inventory.json)
+- Rust license authority: [`helix.rust-license-inventory/1`](../../.github/ci/rust-license-inventory.json)
 - Lock/source policy: [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json)
 - Report entry point: [`check-dependency-reports.mjs`](../../tests/toolchain/check-dependency-reports.mjs)
 
@@ -19,9 +20,10 @@ Dependency security has two different time models and therefore two different re
    lifecycle scripts, downloaded-tool authority, and Playwright-coupled browser revisions. It can
    run without network access or an installed npm tree.
 2. `helix.dependency-observation-report/1` is dated and network-derived. It records a fresh npm
-   advisory response plus registry-signature and Sigstore/SLSA provenance verification for the
-   installed platform selection. It is valid as a current observation for at most 24 hours and is
-   historical evidence after that point, not a continuing “vulnerability free” claim.
+   advisory response, registry-signature and Sigstore/SLSA provenance verification, and a fresh
+   fail-closed RustSec scan of both the workspace Cargo lock and the scanner's own reviewed lock.
+   It is valid as a current observation for at most 24 hours and is historical evidence after that
+   point, not a continuing “vulnerability free” claim.
 
 This split keeps ordinary clean installs frozen while ensuring that mutable advisory and signing
 state is checked deliberately. npm's [lockfile documentation](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/)
@@ -55,18 +57,19 @@ root license/notice file to match its integrity-verified tarball record. If the 
 in the first CI contract job, lock/authority validation still runs and the report explicitly marks
 the installed tree absent. A partially corrupted or substituted installed license file fails.
 
-Cargo metadata must contain exactly the eight MIT workspace paths and zero registry/git/external
-packages. Because there is no external Rust package to query, the Rust advisory result is explicitly
-`not-applicable-no-external-packages`. The policy is fail-closed: introducing the first external
-crate remains prohibited until that change also configures a version-pinned Rust advisory scanner
-and reporting semantics. “Zero findings” is not synthesized for a graph that was not scanned.
+Cargo metadata must contain exactly the eight MIT workspace paths plus the 13-package registry
+allowlist for `blake3 = 1.8.5`, `crc = 3.4.0`, and `lz4_flex = 0.13.1`. The deterministic checker
+binds every external package's exact version, crates.io checksum, selected feature set, declared
+license, and build-script presence; git sources and additional packages fail. It also hashes all 26
+license files from the fetched sources against `helix.rust-license-inventory/1`. The offline report
+labels this graph `live-observation-required`; it never synthesizes “zero findings.”
 
-`P03-007` has reviewed and approved `lz4_flex = 0.13.1` with only `safe-encode`/`safe-decode` as the
-first planned external crate for HDoc compression, but has deliberately not changed the graph.
-Before `P03-008` adopts it, the reporting surface must add a version-pinned Rust advisory database/
-scanner, deterministic lock/source/license inventory, explicit scanner-outage failure, dated raw
-and compact reports, and durable evidence. The first external dependency and its scanner/reporting
-policy land together; until then, the zero-external-package invariant above remains exact.
+`P03-008` installs exact `cargo-audit 0.22.2` from its checksum-verified official source archive,
+with default features disabled and repository-owned reviewed tool lock
+`.github/ci/cargo-audit-0.22.2.lock`. That lock advances compatible transitive versions past fresh
+advisories in the publisher's older lock without changing the released scanner source. Its identity
+is pinned by SHA-256 and the live scan audits both the 21-package workspace lock and 374-package
+scanner lock with no advisory exceptions.
 
 ## Full npm tarball license refresh
 
@@ -116,11 +119,11 @@ are present. Unattested-but-signed packages are listed rather than treated as at
 platform-optional packages absent on Linux remain protected by lock SRI and the complete tarball
 license refresh; registry-signature verification is repeated when a platform selects them.
 
-The raw `npm-audit.json`, raw `npm-signatures.json`, deterministic inventory, and compact dated
-observation are written under ignored `dist/dependency`. The separately invoked license refresh
-also writes its full result there. The first baseline is retained in task evidence. The Node 22 CI
-lane copies the four routine outputs into its strict semantic-replay bundle, records their byte
-identities, and retains the bundle for 30 days even when
+The raw `npm-audit.json`, raw `npm-signatures.json`, raw workspace `cargo-audit.json`, raw scanner
+`cargo-audit-tool.json`, deterministic inventory, and compact dated observation are written under
+ignored `dist/dependency`. The separately invoked license refresh also writes its full result there.
+The first baseline is retained in task evidence. The Node 22 CI lane copies the six routine outputs
+into its strict semantic-replay bundle, records their byte identities, and retains the bundle for 30 days even when
 the upstream lane fails. A gate or release must still promote the exact report under the
 [durable-retention policy](../quality/artifact-retention.md); the expiring hosted copy is diagnostic.
 
@@ -147,15 +150,18 @@ inventory or SBOM; packaged-release work must resolve that separate boundary und
 ## CI and local commands
 
 Both supported Node lanes run the deterministic report after a lifecycle-suppressed clean install.
-Only Node 22.23.1 runs the live network observation, avoiding duplicate registry traffic while
+An explicit `cargo fetch --locked` prepares each otherwise frozen/offline hosted job. Only Node
+22.23.1 installs the pinned scanner and runs the live network observation, avoiding duplicate registry traffic while
 retaining one required fresh result per CI execution. The full 339 MB license refresh is deliberate
 review/update evidence and is not repeated on every pull request; any lock drift makes the small
 offline authority check fail immediately.
 
 ```bash
 corepack npm ci --ignore-scripts
+cargo fetch --locked
 corepack npm run policy:dependencies
 corepack npm run dependencies:check
+corepack npm run rust:audit:install
 corepack npm run dependencies:report
 corepack npm run dependencies:licenses
 ```
@@ -169,7 +175,7 @@ step is the single auditable boundary.
 
 A report fails for lock/authority drift, mutable/non-registry source, absent integrity, changed
 license text, unknown missing-text family, duplicate/script/license count drift, external Rust
-package without scanner coverage, browser/tool authority drift, any advisory, any missing/invalid
+package outside the exact allowlist, scanner source/tool-lock/self-audit drift, browser/tool authority drift, any advisory or RustSec warning, any missing/invalid
 installed registry signature, missing required direct attestation, stale tool version, malformed
 raw response, or exceeded download/resource limit.
 

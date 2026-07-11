@@ -23,11 +23,11 @@ output or exposing values. A writer never needs compression to represent a valid
 and compression cannot make a document larger, bypass the canonical 16 MiB limit, change typed
 content identity, or introduce dictionaries, network access, or user code during decoding.
 
-`P03-007` defines bytes and executable reference vectors; it does not add an external production
-crate. `P03-008` must first install fail-closed Rust dependency/advisory reporting, then adopt the
-exact reviewed codec package while implementing the writer. `P03-009` owns the production
-validating reader. `P03-016` owns immutable supported fixture files. Until those tasks complete,
-the format is fully specified but not an implementation or support claim.
+`P03-007` defined bytes and executable reference vectors without adding a production crate.
+`P03-008` has now installed fail-closed Rust dependency/advisory reporting and adopted the exact
+reviewed codec package; the same task owns the production writer. `P03-009` owns the production
+validating reader. `P03-016` owns immutable supported fixture files. Until those implementation
+tasks complete, the format is fully specified but not a support claim.
 
 The prose and machine registry are jointly normative. A disagreement is a specification defect
 that blocks `G03`; an implementation must not select whichever form is convenient.
@@ -366,10 +366,10 @@ transitive crate. Version `0.13.1` is outside the affected ranges in RustSec adv
 hashes. The profile additionally requires the safe decoder, fresh zero-initialized exact output,
 no dictionaries, and exact returned-length validation as defense in depth.
 
-This approval does not bypass repository dependency policy. Before the crate enters `Cargo.toml`,
-`P03-008` must add a pinned, fail-closed advisory scanner/report, update license and notice
-artifacts, pin the exact `=0.13.1` package and lock checksum, retain only the reviewed features, and
-carry the native/Wasm/independent-C vectors into durable implementation evidence.
+This approval does not bypass repository dependency policy. `P03-008` activates the crate only
+after adding a pinned fail-closed scanner/report, exact graph and license authorities, updated
+notices, the `=0.13.1` lock checksum, and only the reviewed features. Its durable implementation
+evidence must additionally carry native/Wasm/independent-C vectors and scanner self-audit results.
 
 ## Versioning, migration, and rollback
 

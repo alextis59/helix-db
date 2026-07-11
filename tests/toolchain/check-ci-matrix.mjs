@@ -68,6 +68,7 @@ same(
     'P02-015',
     'P02-016',
     'P02-017',
+    'P03-008',
   ],
   'CI matrix task history',
 );
@@ -269,6 +270,9 @@ same(
     'examples:native': packageJson.scripts['examples:native'],
     'examples:policy': packageJson.scripts['examples:policy'],
     'examples:test': packageJson.scripts['examples:test'],
+    'rust:audit:install': packageJson.scripts['rust:audit:install'],
+    'rust:audit:test': packageJson.scripts['rust:audit:test'],
+    'rust:dependencies:test': packageJson.scripts['rust:dependencies:test'],
     'wasm:install-validator': packageJson.scripts['wasm:install-validator'],
     'wasm:validate': packageJson.scripts['wasm:validate'],
     'wgsl:check': packageJson.scripts['wgsl:check'],
@@ -302,6 +306,9 @@ same(
     'examples:native': 'node tests/toolchain/check-examples.mjs native',
     'examples:policy': 'node tests/toolchain/check-examples.mjs policy',
     'examples:test': 'node tests/toolchain/test-examples-contract.mjs',
+    'rust:audit:install': 'node tests/toolchain/install-cargo-audit.mjs',
+    'rust:audit:test': 'node tests/toolchain/test-cargo-audit-contract.mjs',
+    'rust:dependencies:test': 'node tests/toolchain/test-rust-dependency-contract.mjs',
     'wasm:install-validator': 'node tests/toolchain/install-wasm-tools.mjs',
     'wasm:validate': 'node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
@@ -311,7 +318,7 @@ same(
 );
 assert(
   runNode(['tests/toolchain/check-bootstrap.mjs', 'contract']).includes(
-    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 17 troubleshooting codes, database functionality false',
+    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 19 troubleshooting codes, database functionality false',
   ),
   'clean bootstrap contract did not pass',
 );
@@ -365,7 +372,7 @@ expectFailure(
 );
 assert(
   runNode(['tests/toolchain/check-dependency-reports.mjs', 'offline']).includes(
-    'PASS dependency inventory: 91 npm development packages, 0 external Rust packages, 73 license/notice files, 1 duplicate family',
+    'PASS dependency inventory: 91 npm development packages, 13 external Rust packages, 73 license/notice files, 1 duplicate family',
   ),
   'dependency inventory report did not pass',
 );
@@ -391,7 +398,7 @@ assert(
 );
 assert(
   runNode(['tests/toolchain/test-artifact-retention-contract.mjs']).includes(
-    'PASS artifact retention rejection canaries: 38 policy/profile/producer/reservation/engine/bundle/browser/dependency mutations rejected with exact reasons',
+    'PASS artifact retention rejection canaries: 41 policy/profile/producer/reservation/engine/bundle/browser/dependency mutations rejected with exact reasons',
   ),
   'artifact retention rejection canaries did not pass',
 );
@@ -553,9 +560,13 @@ for (const marker of [
   `cargo clippy --frozen --target ${githubExpression('matrix.target')} --package helix-core -- -D warnings`,
   `node tests/toolchain/check-wasm-artifacts.mjs ${githubExpression('matrix.artifact')}`,
   'corepack npm run dependencies:check',
+  'cargo fetch --locked',
   'node tests/toolchain/check-rust-coverage.mjs run',
   "if: matrix.node == '22.23.1'",
   'corepack npm run dependencies:report',
+  'corepack npm run rust:audit:install',
+  'corepack npm run rust:audit:test',
+  'corepack npm run rust:dependencies:test',
   `playwright install --with-deps ${githubExpression('matrix.engine')}`,
   'corepack npm run wgsl:check',
   "if: matrix.engine == 'chromium'",
@@ -641,7 +652,7 @@ process.stdout.write(
   'PASS examples: native boundary report on 5 native lanes; browser boundary example on 3 engines\n',
 );
 process.stdout.write(
-  'PASS bootstrap: 4 documented profiles, 17 stable troubleshooting codes, and clean-host preflight\n',
+  'PASS bootstrap: 4 documented profiles, 19 stable troubleshooting codes, and clean-host preflight\n',
 );
 process.stdout.write(
   'PASS workflow policy: 22 full-SHA action uses, read-only permissions, fixed runners\n',
@@ -653,7 +664,7 @@ process.stdout.write(
   'PASS WGSL fixtures: 2 accepted pipelines and 2 rejection canaries in Chromium\n',
 );
 process.stdout.write(
-  'PASS dependency reports: lock/license/duplicate inventory plus Node 22 live observation\n',
+  'PASS dependency reports: exact npm/Rust inventories plus Node 22 npm and RustSec live observation\n',
 );
 process.stdout.write(
   'PASS Rust coverage: compiler-matched LLVM report plus semantic/recovery thresholds\n',

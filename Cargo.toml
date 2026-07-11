@@ -9,6 +9,7 @@ members = [
     "crates/helix-server",
     "crates/helix-storage",
 ]
+exclude = ["target/toolchain"]
 resolver = "2"
 
 [workspace.package]
@@ -20,6 +21,8 @@ repository = "https://github.com/alextis59/helix-db"
 publish = false
 
 [workspace.dependencies]
+blake3 = { version = "=1.8.5", default-features = false, features = ["pure"] }
+crc = { version = "=3.4.0", default-features = false }
 helix-columnar = { path = "crates/helix-columnar" }
 helix-core = { path = "crates/helix-core" }
 helix-doc = { path = "crates/helix-doc" }
@@ -27,6 +30,7 @@ helix-gpu = { path = "crates/helix-gpu" }
 helix-host-native = { path = "crates/helix-host-native" }
 helix-query = { path = "crates/helix-query" }
 helix-storage = { path = "crates/helix-storage" }
+lz4_flex = { version = "=0.13.1", default-features = false, features = ["safe-decode", "safe-encode"] }
 
 [workspace.lints.rust]
 warnings = { level = "deny", priority = -3 }

@@ -72,15 +72,25 @@ jobs:
         run: node tests/toolchain/check-ci-runtime.mjs ${{ matrix.id }}
       - name: Install locked JavaScript tools without lifecycle scripts
         run: corepack npm ci --ignore-scripts
+      - name: Fetch the exact locked Rust graph for offline policy checks
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: cargo fetch --locked
       - name: Run JavaScript and dependency policy
         run: |
           corepack npm run policy:javascript
           corepack npm run policy:dependencies
+          corepack npm run rust:dependencies:test
+          corepack npm run rust:audit:test
           corepack npm run dependencies:check
           corepack npm run toolchain:types
       - name: Refresh dependency vulnerability and provenance observation
         if: matrix.node == '22.23.1'
-        run: corepack npm run dependencies:report
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: |
+          corepack npm run rust:audit:install
+          corepack npm run dependencies:report
       - name: Run deterministic fixture checks
         run: |
           corepack npm run fixtures:check
@@ -127,6 +137,10 @@ jobs:
           node tests/toolchain/check-ci-runtime.mjs ${{ matrix.id }}
           rustc --version --verbose
           cargo --version --verbose
+      - name: Fetch the exact locked Rust graph
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: cargo fetch --locked
       - name: Run strict native workspace checks
         run: |
           cargo fmt --all -- --check
@@ -179,6 +193,10 @@ jobs:
           package-manager-cache: false
       - name: Verify runner identity
         run: node tests/toolchain/check-ci-runtime.mjs ${{ matrix.id }}
+      - name: Fetch the exact locked Rust graph
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: cargo fetch --locked
       - name: Compile portable core with strict lints
         run: cargo clippy --frozen --target ${{ matrix.target }} --package helix-core -- -D warnings
       - name: Build and validate portable artifact
@@ -204,6 +222,10 @@ jobs:
           package-manager-cache: false
       - name: Verify runner identity
         run: node tests/toolchain/check-ci-runtime.mjs ${{ matrix.id }}
+      - name: Fetch the exact locked Rust graph
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: cargo fetch --locked
       - name: Compile the fully instrumented ASan target
         run: node tests/toolchain/run-build-profile.mjs sanitizer
 
@@ -229,6 +251,10 @@ jobs:
         run: node tests/toolchain/check-ci-runtime.mjs ${{ matrix.id }}
       - name: Install locked browser harness without lifecycle scripts
         run: corepack npm ci --ignore-scripts
+      - name: Fetch the exact locked Rust graph
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: cargo fetch --locked
       - name: Install the Playwright-coupled browser and operating-system dependencies
         run: corepack npm exec -- playwright install --with-deps ${{ matrix.engine }}
       - name: Parse, validate, and compile trusted WGSL fixtures

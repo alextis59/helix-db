@@ -5,9 +5,12 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { validateRustDependencyGraph } from './rust-dependency-contract.mjs';
+
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const readJson = (file) => JSON.parse(readFileSync(path.join(repository, file), 'utf8'));
 const policy = readJson('tests/toolchain/dependency-policy.json');
+const rustLicenseAuthority = readJson('.github/ci/rust-license-inventory.json');
 const packageJson = readJson('package.json');
 const lock = readJson('package-lock.json');
 const run = (program, args) =>
@@ -169,14 +172,16 @@ for (const duplicate of policy.npm.allowed_duplicate_versions) {
   );
 }
 
+const cargoLockBytes = readFileSync(path.join(repository, 'Cargo.lock'));
 const metadata = JSON.parse(run('cargo', ['metadata', '--frozen', '--format-version', '1']));
 const workspaceMembers = new Set(metadata.workspace_members);
-const external = metadata.packages.filter(({ id }) => !workspaceMembers.has(id));
-assert(
-  policy.rust.allow_external_packages === false && external.length === 0,
-  `external Rust package count: ${external.length}`,
-);
-for (const pkg of metadata.packages) {
+const rustGraph = validateRustDependencyGraph({
+  cargoLockBytes,
+  licenseAuthority: rustLicenseAuthority,
+  metadata,
+  policy: policy.rust,
+});
+for (const pkg of metadata.packages.filter(({ id }) => workspaceMembers.has(id))) {
   assert(pkg.license === policy.rust.workspace_license, `${pkg.name}: Rust license mismatch`);
   assert(pkg.source === null, `${pkg.name}: non-path Rust source present`);
   same(pkg.publish, [], `${pkg.name}: Rust publication policy`);
@@ -225,7 +230,8 @@ const notices = readFileSync(path.join(repository, 'THIRD_PARTY_NOTICES.md'), 'u
 for (const marker of [
   '91 locked npm development packages',
   '| MPL-2.0 | 12 |',
-  'No external Rust crate is locked',
+  '13 exact external Rust crates are locked',
+  'cargo-audit 0.22.2',
   'No npm dependency is a production/runtime dependency',
   '73 root license/notice files across 65 packages',
   'Twenty-six development-only tarballs omit root license text',
@@ -233,7 +239,7 @@ for (const marker of [
   assert(notices.includes(marker), `third-party notice marker absent: ${marker}`);
 
 console.log(
-  `PASS Rust policy: ${metadata.packages.length} MIT workspace packages, 0 external crates, ${rustFiles.length} candidate sources, 0 unsafe tokens/build scripts`,
+  `PASS Rust policy: ${rustGraph.workspacePackages.length} MIT workspace packages, ${rustGraph.externalPackages.length} exact external crates, ${rustGraph.licenseFileCount} verified license files, ${rustFiles.length} candidate sources, 0 local unsafe tokens/build scripts`,
 );
 console.log(
   `PASS npm policy: ${entries.length} dev packages, ${Object.keys(licenseCounts).length} license forms, ${lifecycleScripts.length} reviewed scripts, ${duplicates.length} reviewed duplicate`,

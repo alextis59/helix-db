@@ -31,6 +31,8 @@
       "profile": "minimal",
       "components": ["clippy", "llvm-tools", "rust-docs", "rust-src", "rustfmt"],
       "targets": ["wasm32-unknown-unknown", "wasm32-wasip2", "x86_64-unknown-linux-gnuasan"],
+      "dependency_fetch_command": "cargo fetch --locked",
+      "advisory_install_command": "corepack npm run rust:audit:install",
       "official_install": "https://rust-lang.github.io/rustup/installation/",
       "windows_prerequisites": "https://rust-lang.github.io/rustup/installation/windows-msvc.html"
     },
@@ -58,6 +60,7 @@
       "privilege": "user-after-system-prerequisites",
       "commands": [
         "corepack npm ci --ignore-scripts",
+        "cargo fetch --locked",
         "corepack npm run bootstrap:preflight",
         "corepack npm run policy:javascript",
         "corepack npm run policy:dependencies",
@@ -132,6 +135,16 @@
       "code": "BOOT-RUST-TARGET",
       "condition": "A required Rust component or target is missing",
       "action": "Run rustup component list --installed and rustup target list --installed from the repository root before repairing the pinned toolchain."
+    },
+    {
+      "code": "BOOT-CARGO-FETCH",
+      "condition": "A frozen or offline Cargo command cannot find a locked registry crate",
+      "action": "With network access enabled for this explicit preparation step, run cargo fetch --locked; do not relax --frozen on validation commands."
+    },
+    {
+      "code": "BOOT-RUST-AUDIT",
+      "condition": "The pinned cargo-audit binary, reviewed tool lock, or RustSec database is absent or rejected",
+      "action": "Run corepack npm run rust:audit:install, preserve any checksum or self-audit failure, and rerun the live dependency report with network access."
     },
     {
       "code": "BOOT-LINKER",

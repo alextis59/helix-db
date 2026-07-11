@@ -14,7 +14,15 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { gunzipSync } from 'node:zlib';
 
+import {
+  cargoAuditBinary,
+  cargoAuditVersion,
+  validateCargoAuditAuthority,
+  validateCargoAuditReport,
+  validateCargoAuditSourceArchive,
+} from './cargo-audit-contract.mjs';
 import { validateWasmToolsAuthority } from './install-wasm-tools.mjs';
+import { validateRustDependencyGraph } from './rust-dependency-contract.mjs';
 
 const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 const readBytes = (file) => readFileSync(path.join(repository, file));
@@ -23,9 +31,11 @@ const readJson = (file) => JSON.parse(readText(file));
 const policy = readJson('tests/toolchain/dependency-report-policy.json');
 const dependencyPolicy = readJson(policy.authorities.dependency_policy);
 const packageJson = readJson('package.json');
+const cargoLockBytes = readBytes('Cargo.lock');
 const packageLockBytes = readBytes('package-lock.json');
 const packageLock = JSON.parse(packageLockBytes);
 const licenseAuthority = readJson(policy.authorities.npm_license_inventory);
+const rustLicenseAuthority = readJson(policy.authorities.rust_license_inventory);
 const outputDirectory = path.join(repository, policy.reports.output_directory);
 
 const assert = (condition, message) => {
@@ -87,6 +97,7 @@ const validatePolicy = () => {
     {
       dependency_policy: 'tests/toolchain/dependency-policy.json',
       npm_license_inventory: '.github/ci/npm-license-inventory.json',
+      rust_license_inventory: '.github/ci/rust-license-inventory.json',
       wasm_tools: '.github/ci/wasm-tools.json',
     },
     'dependency report authorities',
@@ -166,15 +177,13 @@ const validatePolicy = () => {
     assert(exception.reason.length >= 100, `${exception.package}: exception reason too short`);
     assert(exception.revalidate_by === 'P16-010', `${exception.package}: deadline mismatch`);
   }
-  same(
-    policy.rust,
-    {
-      advisory_status_when_external_count_is_zero: 'not-applicable-no-external-packages',
-      external_package_policy: 'deny-until-advisory-scanner-is-configured',
-      workspace_packages: 8,
-    },
-    'Rust advisory policy',
+  assert(policy.rust.workspace_packages === 8, 'Rust workspace package count mismatch');
+  assert(policy.rust.expected_external_packages === 13, 'Rust external package count mismatch');
+  assert(
+    policy.rust.external_package_policy === 'exact-registry-allowlist-with-live-rustsec',
+    'Rust external package policy mismatch',
   );
+  validateCargoAuditAuthority(policy.rust.advisory);
   assert(policy.live_report_max_age_hours === 24, 'live report freshness limit mismatch');
   const expectedBrowsers = [
     { browser_version: '149.0.7827.55', name: 'chromium', revision: '1228' },
@@ -434,19 +443,32 @@ const buildOfflineReport = () => {
     }),
   );
   const workspaceMembers = new Set(cargo.workspace_members);
-  const externalRust = cargo.packages.filter(({ id }) => !workspaceMembers.has(id));
   assert(cargo.workspace_members.length === policy.rust.workspace_packages, 'Rust workspace count');
-  assert(externalRust.length === 0, 'external Rust packages require an advisory scanner');
+  const rustGraph = validateRustDependencyGraph({
+    cargoLockBytes,
+    licenseAuthority: rustLicenseAuthority,
+    metadata: cargo,
+    policy: dependencyPolicy.rust,
+  });
+  assert(
+    rustGraph.externalPackages.length === policy.rust.expected_external_packages,
+    'external Rust package report count mismatch',
+  );
+  assert(
+    rustGraph.workspacePackages.length === workspaceMembers.size,
+    'workspace Rust package report count mismatch',
+  );
   const { authority: wasmTools, host: wasmToolsHost } = validateWasmToolsAuthority();
   const report = {
     schema: policy.reports.inventory_schema,
     plan_item: 'P02-012',
     inputs: {
-      cargo_lock_sha256: sha256(readBytes('Cargo.lock')),
+      cargo_lock_sha256: sha256(cargoLockBytes),
       dependency_policy_sha256: sha256(readBytes(policy.authorities.dependency_policy)),
       npm_license_inventory_sha256: sha256(readBytes(policy.authorities.npm_license_inventory)),
       package_lock_sha256: sha256(packageLockBytes),
       report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
+      rust_license_inventory_sha256: sha256(readBytes(policy.authorities.rust_license_inventory)),
       wasm_tools_authority_sha256: sha256(readBytes(policy.authorities.wasm_tools)),
     },
     environment: {
@@ -476,13 +498,10 @@ const buildOfflineReport = () => {
       suppressed_lifecycle_scripts: lifecycleScripts,
     },
     rust: {
-      advisory_status: policy.rust.advisory_status_when_external_count_is_zero,
-      external_packages: [],
-      workspace_packages: cargo.packages.map(({ license, name, version }) => ({
-        license,
-        name,
-        version,
-      })),
+      advisory_status: 'live-observation-required',
+      external_packages: rustGraph.externalPackages,
+      license_files: rustGraph.licenseFileCount,
+      workspace_packages: rustGraph.workspacePackages,
     },
     external_tools: {
       playwright_browsers: {
@@ -503,7 +522,7 @@ const buildOfflineReport = () => {
     verdict: 'pass',
   };
   const artifact = writeJson('inventory-report.json', report);
-  return { artifact, entries, installed, report };
+  return { artifact, entries, installed, report, rustGraph };
 };
 
 const parseTarNumber = (bytes) => {
@@ -676,6 +695,46 @@ const runCorepackJson = (args, label) => {
   return { parsed, result };
 };
 
+const runCargoAuditJson = () => {
+  const advisory = policy.rust.advisory;
+  const scanner = cargoAuditVersion(repository, advisory);
+  validateCargoAuditSourceArchive(advisory);
+  const execute = (args, label, expectedDependencies, options) => {
+    const result = spawnSync(cargoAuditBinary(repository, advisory), args, {
+      cwd: repository,
+      encoding: 'utf8',
+      env: { ...process.env, CARGO_NET_OFFLINE: 'false' },
+      maxBuffer: 16 * 1024 * 1024,
+      timeout: 300_000,
+    });
+    if (result.error) throw result.error;
+    let parsed;
+    try {
+      parsed = JSON.parse(result.stdout);
+    } catch {
+      throw new Error(`${label} did not return JSON (exit ${result.status}): ${result.stderr}`);
+    }
+    const summary = validateCargoAuditReport(parsed, expectedDependencies, options);
+    assert(result.status === 0, `${label} exited ${result.status}`);
+    return { raw: Buffer.from(result.stdout), summary };
+  };
+  const workspace = execute(
+    advisory.audit_command,
+    'Rust workspace advisory audit',
+    policy.rust.workspace_packages + policy.rust.expected_external_packages,
+  );
+  const tool = execute(
+    advisory.self_audit_command,
+    'Rust scanner self-audit',
+    advisory.self_audit_expected_dependencies,
+    { requireDatabaseMetadata: false },
+  );
+  mkdirSync(outputDirectory, { recursive: true });
+  writeFileSync(path.join(outputDirectory, 'cargo-audit.json'), workspace.raw);
+  writeFileSync(path.join(outputDirectory, 'cargo-audit-tool.json'), tool.raw);
+  return { scanner, tool, workspace };
+};
+
 const liveObservation = () => {
   const offline = buildOfflineReport();
   assert(offline.installed.state === 'present', 'live report requires a clean installed npm tree');
@@ -748,6 +807,7 @@ const liveObservation = () => {
   }
   const signaturesRaw = Buffer.from(signatures.result.stdout);
   writeFileSync(path.join(outputDirectory, 'npm-signatures.json'), signaturesRaw);
+  const rustAudit = runCargoAuditJson();
   const observation = {
     schema: policy.reports.observation_schema,
     plan_item: 'P02-012',
@@ -756,6 +816,7 @@ const liveObservation = () => {
     inputs: {
       inventory_report_bytes: offline.artifact.bytes,
       inventory_report_sha256: offline.artifact.sha256,
+      cargo_lock_sha256: sha256(cargoLockBytes),
       package_lock_sha256: sha256(packageLockBytes),
       report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
     },
@@ -781,8 +842,22 @@ const liveObservation = () => {
       },
     },
     rust: {
-      advisory_status: policy.rust.advisory_status_when_external_count_is_zero,
-      external_packages: 0,
+      advisory_status: 'pass',
+      external_packages: offline.rustGraph.externalPackages.length,
+      scanner: rustAudit.scanner,
+      database_revision: rustAudit.workspace.summary.database_revision,
+      database_updated_at: rustAudit.workspace.summary.database_updated_at,
+      advisory_count: rustAudit.workspace.summary.advisory_count,
+      audited_dependencies: rustAudit.workspace.summary.dependency_count,
+      raw_bytes: rustAudit.workspace.raw.length,
+      raw_sha256: sha256(rustAudit.workspace.raw),
+      vulnerabilities: 0,
+      warnings: 0,
+      scanner_audited_dependencies: rustAudit.tool.summary.dependency_count,
+      scanner_raw_bytes: rustAudit.tool.raw.length,
+      scanner_raw_sha256: sha256(rustAudit.tool.raw),
+      scanner_vulnerabilities: 0,
+      scanner_warnings: 0,
     },
     external_tools: {
       playwright_browsers: policy.external_tools.playwright_browsers.coverage,
@@ -792,7 +867,7 @@ const liveObservation = () => {
   };
   const artifact = writeJson('observation-report.json', observation);
   process.stdout.write(
-    `PASS dependency observation: 0 npm vulnerabilities, ${offline.installed.packages.length} verified registry signatures, ${attested.length} verified SLSA attestations\n`,
+    `PASS dependency observation: 0 npm vulnerabilities, 0 Rust advisories/warnings across ${rustAudit.workspace.summary.dependency_count} workspace packages and ${rustAudit.tool.summary.dependency_count} scanner packages at ${rustAudit.workspace.summary.database_revision}, ${offline.installed.packages.length} verified registry signatures, ${attested.length} verified SLSA attestations\n`,
   );
   process.stdout.write(
     `REPORT ${path.relative(repository, path.join(outputDirectory, 'observation-report.json'))} ${artifact.sha256}\n`,

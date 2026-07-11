@@ -364,6 +364,9 @@ try {
         ),
         package_lock_sha256: sha256(readBytes('package-lock.json')),
         report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
+        rust_license_inventory_sha256: sha256(
+          readBytes(reportPolicy.authorities.rust_license_inventory),
+        ),
         wasm_tools_authority_sha256: sha256(readBytes(reportPolicy.authorities.wasm_tools)),
       },
       environment: {
@@ -376,9 +379,39 @@ try {
         license_files: 73,
         locked_development_packages: reportPolicy.npm.expected_locked_packages,
       },
-      rust: { external_packages: [] },
+      rust: {
+        external_packages: Array.from(
+          { length: reportPolicy.rust.expected_external_packages },
+          (_, index) => ({ name: `rust-package-${index}` }),
+        ),
+      },
       verdict: 'pass',
     };
+    const cargoAudit = {
+      database: {
+        'advisory-count': 1000,
+        'last-commit': '1'.repeat(40),
+        'last-updated': '2025-12-31T00:00:00Z',
+      },
+      lockfile: {
+        'dependency-count':
+          reportPolicy.rust.workspace_packages + reportPolicy.rust.expected_external_packages,
+      },
+      settings: {
+        target_arch: [],
+        target_os: [],
+        severity: null,
+        ignore: [],
+        informational_warnings: ['unmaintained', 'unsound', 'notice'],
+      },
+      vulnerabilities: { found: false, count: 0, list: [] },
+      warnings: {},
+    };
+    const cargoAuditTool = structuredClone(cargoAudit);
+    cargoAuditTool.database['last-commit'] = null;
+    cargoAuditTool.database['last-updated'] = null;
+    cargoAuditTool.lockfile['dependency-count'] =
+      reportPolicy.rust.advisory.self_audit_expected_dependencies;
     const dependencies = { dev: 91, optional: 42, peer: 0, peerOptional: 0, prod: 1, total: 91 };
     const audit = {
       auditReportVersion: 2,
@@ -395,6 +428,8 @@ try {
     }));
     const signatures = { invalid: [], missing: [], verified };
     const inventoryBytes = jsonBytes(inventory);
+    const cargoAuditBytes = jsonBytes(cargoAudit);
+    const cargoAuditToolBytes = jsonBytes(cargoAuditTool);
     const auditBytes = jsonBytes(audit);
     const signaturesBytes = jsonBytes(signatures);
     const observation = {
@@ -405,6 +440,7 @@ try {
       inputs: {
         inventory_report_bytes: inventoryBytes.length,
         inventory_report_sha256: sha256(inventoryBytes),
+        cargo_lock_sha256: sha256(readBytes('Cargo.lock')),
         package_lock_sha256: sha256(readBytes('package-lock.json')),
         report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
       },
@@ -425,12 +461,32 @@ try {
           registry_signatures_verified: installed.length,
         },
       },
+      rust: {
+        advisory_status: 'pass',
+        external_packages: reportPolicy.rust.expected_external_packages,
+        scanner: `cargo-audit ${reportPolicy.rust.advisory.version}`,
+        database_revision: cargoAudit.database['last-commit'],
+        database_updated_at: cargoAudit.database['last-updated'],
+        advisory_count: cargoAudit.database['advisory-count'],
+        audited_dependencies: cargoAudit.lockfile['dependency-count'],
+        raw_bytes: cargoAuditBytes.length,
+        raw_sha256: sha256(cargoAuditBytes),
+        vulnerabilities: 0,
+        warnings: 0,
+        scanner_audited_dependencies: cargoAuditTool.lockfile['dependency-count'],
+        scanner_raw_bytes: cargoAuditToolBytes.length,
+        scanner_raw_sha256: sha256(cargoAuditToolBytes),
+        scanner_vulnerabilities: 0,
+        scanner_warnings: 0,
+      },
       verdict: 'pass',
     };
-    return { audit, inventory, observation, signatures };
+    return { audit, cargoAudit, cargoAuditTool, inventory, observation, signatures };
   };
   const writeDependencySet = (documents) => {
     for (const [file, value] of [
+      ['cargo-audit.json', documents.cargoAudit],
+      ['cargo-audit-tool.json', documents.cargoAuditTool],
       ['inventory-report.json', documents.inventory],
       ['npm-audit.json', documents.audit],
       ['npm-signatures.json', documents.signatures],
@@ -457,6 +513,33 @@ try {
       'stale dependency observation',
       'retained dependency observation freshness',
       (value) => (value.observation.recorded_at = '2025-12-01T00:00:00.000Z'),
+    ],
+    [
+      'Rust advisory substitution',
+      'retained Rust advisory linkage',
+      (value) => (value.observation.rust.raw_sha256 = '0'.repeat(64)),
+    ],
+    [
+      'Rust vulnerability report',
+      'Rust vulnerabilities',
+      (value) => {
+        value.cargoAudit.vulnerabilities = {
+          found: true,
+          count: 1,
+          list: [{ advisory: { id: 'TEST' } }],
+        };
+      },
+    ],
+    [
+      'Rust scanner vulnerability report',
+      'Rust vulnerabilities',
+      (value) => {
+        value.cargoAuditTool.vulnerabilities = {
+          found: true,
+          count: 1,
+          list: [{ advisory: { id: 'TEST' } }],
+        };
+      },
     ],
     [
       'missing registry signature',

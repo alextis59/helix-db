@@ -63,6 +63,10 @@ jobs:
           node tests/toolchain/check-ci-runtime.mjs ${{ matrix.id }}
           rustc --version --verbose
           cargo --version --verbose
+      - name: Fetch the exact locked Rust graph
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: cargo fetch --locked
       - name: Run strict native workspace checks
         run: |
           cargo fmt --all -- --check

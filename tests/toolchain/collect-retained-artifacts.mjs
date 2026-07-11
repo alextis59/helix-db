@@ -145,6 +145,8 @@ const collectSemanticReplay = (profile, producer, bundleRoot) => {
     manifest.failures.push(`semantic conformance exited ${result.exitCode}`);
 
   const dependencyFiles = [
+    'cargo-audit.json',
+    'cargo-audit-tool.json',
     'inventory-report.json',
     'npm-audit.json',
     'npm-signatures.json',

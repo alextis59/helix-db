@@ -4,6 +4,8 @@ import { lstatSync, readdirSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { validateCargoAuditReport } from './cargo-audit-contract.mjs';
+
 export const repository = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '../..');
 export const policyPath = 'tests/toolchain/artifact-retention-policy.json';
 
@@ -573,9 +575,13 @@ export const validateDependencyDiagnostics = (bundleRoot, manifest) => {
   const artifactBytes = (file) => readFileSync(path.join(bundleRoot, 'dependency', file));
   const artifactJson = (file) => JSON.parse(artifactBytes(file).toString('utf8'));
   const inventoryBytes = artifactBytes('inventory-report.json');
+  const cargoAuditBytes = artifactBytes('cargo-audit.json');
+  const cargoAuditToolBytes = artifactBytes('cargo-audit-tool.json');
   const auditBytes = artifactBytes('npm-audit.json');
   const signaturesBytes = artifactBytes('npm-signatures.json');
   const inventory = JSON.parse(inventoryBytes.toString('utf8'));
+  const cargoAudit = JSON.parse(cargoAuditBytes.toString('utf8'));
+  const cargoAuditTool = JSON.parse(cargoAuditToolBytes.toString('utf8'));
   const audit = JSON.parse(auditBytes.toString('utf8'));
   const signatures = JSON.parse(signaturesBytes.toString('utf8'));
   const observation = artifactJson('observation-report.json');
@@ -596,6 +602,9 @@ export const validateDependencyDiagnostics = (bundleRoot, manifest) => {
       ),
       package_lock_sha256: sha256(readBytes('package-lock.json')),
       report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
+      rust_license_inventory_sha256: sha256(
+        readBytes(reportPolicy.authorities.rust_license_inventory),
+      ),
       wasm_tools_authority_sha256: sha256(readBytes(reportPolicy.authorities.wasm_tools)),
     },
     'retained dependency inventory inputs',
@@ -612,8 +621,18 @@ export const validateDependencyDiagnostics = (bundleRoot, manifest) => {
   assert(
     inventory.npm.locked_development_packages === reportPolicy.npm.expected_locked_packages &&
       inventory.npm.license_files === 73 &&
-      inventory.rust.external_packages.length === 0,
+      inventory.rust.external_packages.length === reportPolicy.rust.expected_external_packages,
     'retained dependency inventory counts',
+  );
+
+  const rustAudit = validateCargoAuditReport(
+    cargoAudit,
+    reportPolicy.rust.workspace_packages + reportPolicy.rust.expected_external_packages,
+  );
+  const rustToolAudit = validateCargoAuditReport(
+    cargoAuditTool,
+    reportPolicy.rust.advisory.self_audit_expected_dependencies,
+    { requireDatabaseMetadata: false },
   );
 
   assert(audit.auditReportVersion === 2, 'retained npm audit version');
@@ -656,6 +675,7 @@ export const validateDependencyDiagnostics = (bundleRoot, manifest) => {
     {
       inventory_report_bytes: inventoryBytes.length,
       inventory_report_sha256: sha256(inventoryBytes),
+      cargo_lock_sha256: sha256(readBytes('Cargo.lock')),
       package_lock_sha256: sha256(readBytes('package-lock.json')),
       report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
     },
@@ -676,6 +696,25 @@ export const validateDependencyDiagnostics = (bundleRoot, manifest) => {
     observation.npm.audit.raw_bytes === auditBytes.length &&
       observation.npm.audit.raw_sha256 === sha256(auditBytes),
     'retained raw audit linkage',
+  );
+  assert(
+    observation.rust.advisory_status === 'pass' &&
+      observation.rust.external_packages === reportPolicy.rust.expected_external_packages &&
+      observation.rust.scanner === `cargo-audit ${reportPolicy.rust.advisory.version}` &&
+      observation.rust.database_revision === rustAudit.database_revision &&
+      observation.rust.database_updated_at === rustAudit.database_updated_at &&
+      observation.rust.advisory_count === rustAudit.advisory_count &&
+      observation.rust.audited_dependencies === rustAudit.dependency_count &&
+      observation.rust.raw_bytes === cargoAuditBytes.length &&
+      observation.rust.raw_sha256 === sha256(cargoAuditBytes) &&
+      observation.rust.vulnerabilities === 0 &&
+      observation.rust.warnings === 0 &&
+      observation.rust.scanner_audited_dependencies === rustToolAudit.dependency_count &&
+      observation.rust.scanner_raw_bytes === cargoAuditToolBytes.length &&
+      observation.rust.scanner_raw_sha256 === sha256(cargoAuditToolBytes) &&
+      observation.rust.scanner_vulnerabilities === 0 &&
+      observation.rust.scanner_warnings === 0,
+    'retained Rust advisory linkage',
   );
   assert(
     observation.npm.provenance.raw_bytes === signaturesBytes.length &&
@@ -1024,6 +1063,8 @@ export const validateBundleManifest = (manifest, bundleRoot, { requireComplete =
     );
     if (passed && manifest.environment.provider === 'github-actions') {
       for (const dependencyReport of [
+        'cargo-audit.json',
+        'cargo-audit-tool.json',
         'inventory-report.json',
         'npm-audit.json',
         'npm-signatures.json',

@@ -148,6 +148,16 @@ This requires registry access on a cold cache, verifies every locked tarball int
 manifest/lock drift, suppresses lifecycle scripts, and installs only development tooling. The root
 package is private and publishes nothing.
 
+Fetch the exact locked Rust crate graph during the same explicit networked preparation window:
+
+```text
+cargo fetch --locked
+```
+
+All subsequent build, policy, test, and documentation commands keep the repository-wide frozen and
+offline boundary. The fetch does not relax exact versions, checksums, source allowlists, licenses,
+or the live RustSec gate.
+
 ### 4. Run the clean preflight before editing
 
 ```text
@@ -168,6 +178,7 @@ evidence, use a separate clean worktree or clone rather than discarding active w
 Execute in this order so failures stay attributable:
 
 ```text
+cargo fetch --locked
 corepack npm run policy:javascript
 corepack npm run policy:dependencies
 corepack npm run dependencies:check
@@ -252,7 +263,8 @@ local.
 | Check JavaScript formatting/lints | `corepack npm run policy:javascript` | None / user | Read-only |
 | Check dependency policy | `corepack npm run policy:dependencies` | None / user | Read-only |
 | Rebuild offline dependency inventory | `corepack npm run dependencies:check` | None / user | Ignored reports under `dist/validation/` |
-| Refresh live security observation | `corepack npm run dependencies:report` | Required / user | Time-stamped ignored reports; not a reproducible offline fact |
+| Install pinned Rust advisory scanner | `corepack npm run rust:audit:install` | Required on first run / user | Exact official source archive plus reviewed, self-audited tool lock under ignored `target/toolchain/` |
+| Refresh live security observation | `corepack npm run dependencies:report` | Required / user | Time-stamped npm and RustSec reports; audits both workspace and scanner graphs |
 | Check TypeScript | `corepack npm run toolchain:types` | None / user | Compiler build info under ignored output |
 | Verify fixtures | `corepack npm run fixtures:check` | None / user | Rejects generator/source drift |
 | Run stable aggregate | `corepack npm test` | None / user | Suite reports under `dist/validation/` |
@@ -343,6 +355,23 @@ Condition: A required Rust component or target is missing. Action: Run rustup co
 The toolchain file normally provisions the exact inventory. If a partial installation was
 interrupted, rerun `rustup show` with network access. Do not substitute a nightly toolchain or omit
 the failing target from evidence.
+
+### `BOOT-CARGO-FETCH` — locked registry crate absent
+
+Condition: A frozen or offline Cargo command cannot find a locked registry crate. Action: With network access enabled for this explicit preparation step, run cargo fetch --locked; do not relax --frozen on validation commands.
+
+Run the fetch once from the repository root before offline validation. A checksum, source, or lock
+failure is a dependency-policy failure; do not switch registries, remove `--locked`, or enable
+ambient network access for the build itself.
+
+### `BOOT-RUST-AUDIT` — Rust advisory gate unavailable
+
+Condition: The pinned cargo-audit binary, reviewed tool lock, or RustSec database is absent or rejected. Action: Run corepack npm run rust:audit:install, preserve any checksum or self-audit failure, and rerun the live dependency report with network access.
+
+The installer verifies the official `cargo-audit 0.22.2` source archive and builds it from the
+repository-owned patched tool lock. The live report fails on vulnerabilities, unmaintained or
+unsound warnings, notices, yanks, stale database state, ignored advisories, or scanner self-audit
+findings.
 
 ### `BOOT-LINKER` — native compiler/linker unavailable
 
