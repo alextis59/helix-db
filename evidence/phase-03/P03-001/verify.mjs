@@ -57,10 +57,51 @@ same(
   'requirements inventory mismatch',
 );
 same(manifest.accepted_adrs, ['0012'], 'accepted ADR inventory mismatch');
-same(manifest.source_commits, [manifest.commit], 'source commit inventory mismatch');
+same(
+  manifest.hosted_runs,
+  [
+    {
+      run_id: 29145320680,
+      head_sha: '0aa2847813fb9cd959dddd45c523968b13c35737',
+      conclusion: 'failure',
+      jobs: 12,
+      successful_jobs: 10,
+      failed_jobs: ['Node 22.23.1 / Linux x64', 'Node 24.18.0 / Linux x64'],
+      reason: 'fixture-generation report retained the previous compatibility matrix and rendered-document identities',
+    },
+    {
+      run_id: 29145494980,
+      head_sha: '0e40ad87034902fb53bf0aad277a80a79dc3a7a0',
+      conclusion: 'success',
+      jobs: 12,
+      successful_jobs: 12,
+      failed_jobs: [],
+      reason: 'superseding exact-head gating run after deterministic report regeneration',
+    },
+  ],
+  'hosted run observation mismatch',
+);
+same(
+  manifest.source_commits,
+  [
+    'ae7bf86ec117d2d1d550a9cb6d1087b7f402402f',
+    '0e40ad87034902fb53bf0aad277a80a79dc3a7a0',
+  ],
+  'source commit inventory mismatch',
+);
 assert(
-  gitText(['rev-parse', `${commitArgument}^`]).trim() === manifest.base_commit,
-  'source parent mismatch',
+  gitText(['rev-parse', `${manifest.source_commits[0]}^`]).trim() === manifest.base_commit,
+  'decision source parent mismatch',
+);
+assert(
+  gitText(['rev-parse', `${manifest.intervening_evidence_commit}^`]).trim() ===
+    manifest.source_commits[0],
+  'initial evidence parent mismatch',
+);
+assert(
+  gitText(['rev-parse', `${manifest.source_commits[1]}^`]).trim() ===
+    manifest.intervening_evidence_commit,
+  'generator-identity hardening parent mismatch',
 );
 assert(
   gitText(['rev-parse', `${commitArgument}^{tree}`]).trim() === manifest.source_tree,
@@ -74,21 +115,23 @@ assert(
 );
 assert(sha256(verifierBytes) === manifest.verifier.sha256, 'verifier SHA-256 mismatch');
 
-gitText(['diff', '--check', `${commitArgument}^`, commitArgument]);
-const changedRecords = gitText([
-  'diff-tree',
-  '--no-commit-id',
-  '--name-status',
-  '-r',
-  commitArgument,
-])
-  .trim()
-  .split('\n')
-  .filter(Boolean)
-  .map((line) => {
-    const [status, ...names] = line.split('\t');
-    return { status, path: names.at(-1) };
-  });
+const changedRecords = manifest.source_commits.flatMap((sourceCommit) => {
+  gitText(['diff', '--check', `${sourceCommit}^`, sourceCommit]);
+  return gitText([
+    'diff-tree',
+    '--no-commit-id',
+    '--name-status',
+    '-r',
+    sourceCommit,
+  ])
+    .trim()
+    .split('\n')
+    .filter(Boolean)
+    .map((line) => {
+      const [status, ...names] = line.split('\t');
+      return { status, path: names.at(-1) };
+    });
+});
 same(
   sorted(changedRecords.map((record) => JSON.stringify(record))),
   sorted(manifest.source_artifacts.map(({ status, path: artifactPath }) =>
@@ -120,7 +163,8 @@ const snapshot = {
   study: text('Study.md'),
   matrix: text('compatibility/v1/matrix-v1.json'),
   compatibilityDocument: text('docs/compatibility/v1-semantic-compatibility-matrix.md'),
-  plan: showText('ImplementationPlan.md'),
+  generationReport: text('fixtures/generation/report-v1.json'),
+  plan: showText('ImplementationPlan.md', manifest.source_commits[0]),
 };
 
 const expectedHeadings = [
@@ -314,6 +358,32 @@ const validateDecision = (candidate) => {
     ),
     'rendered compatibility specification identity mismatch',
   );
+  const generationReport = JSON.parse(candidate.generationReport);
+  const compatibilityGenerator = generationReport.generators.find(
+    ({ id }) => id === 'compatibility.matrix-v1',
+  );
+  assert(compatibilityGenerator, 'generation report compatibility generator absent');
+  same(
+    compatibilityGenerator.artifacts,
+    [
+      {
+        path: 'compatibility/v1/matrix-v1.json',
+        format: 'json',
+        schema_path: 'compatibility/v1/schema/matrix-v1.schema.json',
+        bytes: Buffer.byteLength(candidate.matrix),
+        sha256: sha256(Buffer.from(candidate.matrix, 'utf8')),
+      },
+      {
+        path: 'docs/compatibility/v1-semantic-compatibility-matrix.md',
+        format: 'markdown',
+        schema_path: null,
+        bytes: Buffer.byteLength(candidate.compatibilityDocument),
+        sha256: sha256(Buffer.from(candidate.compatibilityDocument, 'utf8')),
+      },
+    ],
+    'generation report compatibility identities mismatch',
+  );
+  assert(generationReport.verdict === 'pass', 'generation report verdict mismatch');
 };
 
 validateDecision(snapshot);
@@ -353,6 +423,7 @@ const canaries = [
   ['decision owner', 'owners', '../adr/0012-use-bounded-little-endian-hdoc-v1.md', '../adr/missing.md', 'decision-owner backlink absent'],
   ['specification field width', 'specifications', 'value_offset: u32\nvalue_length: u32', 'value_offset: u64\nvalue_length: u32', 'specification HDoc field widths mismatch'],
   ['matrix input hash', 'matrix', matrixHash(snapshot.matrix), '0'.repeat(64), 'matrix specification identity mismatch'],
+  ['generation report identity', 'generationReport', generationMatrixHash(snapshot.generationReport), '0'.repeat(64), 'generation report compatibility identities mismatch'],
   ['source plan state', 'plan', '- [ ] **P03-001**', '- [x] **P03-001**', 'source plan state/task text mismatch'],
   ['primary source', 'adr', 'https://www.rfc-editor.org/rfc/rfc3385', 'https://example.invalid/rfc3385', 'primary source absent'],
   ['source artifact identity', 'specifications', 'absolute checked `u32` offsets', 'unchecked host pointers', 'matrix specification identity mismatch'],
@@ -360,6 +431,13 @@ const canaries = [
 
 function matrixHash(matrixSource) {
   return JSON.parse(matrixSource).inputs.specifications.sha256;
+}
+
+function generationMatrixHash(reportSource) {
+  return JSON.parse(reportSource).generators
+    .find(({ id }) => id === 'compatibility.matrix-v1')
+    .artifacts.find(({ path: artifactPath }) => artifactPath === 'compatibility/v1/matrix-v1.json')
+    .sha256;
 }
 
 for (const [label, field, from, to, reason] of canaries) {
@@ -452,4 +530,5 @@ console.log('PASS compression/extensions: bounded optional profiles and fail-clo
 console.log(`PASS mutation canaries: ${canaries.length}/${canaries.length} intended rejections`);
 console.log(`PASS documentation: ${markdownFiles.length} Markdown files and ${localLinks} local links`);
 console.log('PASS isolated compatibility-matrix generator replay: 263 rows, 9 hash-bound inputs');
+console.log('PASS deterministic-generation report binds the refreshed matrix and rendered document');
 console.log(`VERIFIER ${sha256(verifierBytes)} ${verifierBytes.length}`);

@@ -5,8 +5,11 @@
 - Requirements supported: `INV-001`, `INV-007`, `DATA-001`, `DATA-002`, `CORE-001`, `SEC-001`,
   `SEC-002`
 - Accepted decision: [ADR 0012](../../../docs/adr/0012-use-bounded-little-endian-hdoc-v1.md)
-- Commit under test: `ae7bf86ec117d2d1d550a9cb6d1087b7f402402f`
-- Recorded at: `2026-07-11T07:48:09.358Z`
+- Source commits:
+  `ae7bf86ec117d2d1d550a9cb6d1087b7f402402f`,
+  `0e40ad87034902fb53bf0aad277a80a79dc3a7a0`
+- Final commit under test: `0e40ad87034902fb53bf0aad277a80a79dc3a7a0`
+- Recorded at: `2026-07-11T08:06:34.348Z`
 - Source worktree: clean
 - Recorder: Codex implementation agent
 - Reviewer: pending independent `G03` format/security review
@@ -37,7 +40,7 @@ storage, transport, backup, or encryption metadata remains later versioned secur
 
 ## Source change and traceability
 
-The exact source commit changes seven paths:
+The two exact source commits change eight paths:
 
 - adds [ADR 0012](../../../docs/adr/0012-use-bounded-little-endian-hdoc-v1.md);
 - indexes the accepted ADR and links it from the decision-owner register;
@@ -45,6 +48,8 @@ The exact source commit changes seven paths:
   `u32/u64` value addressing to the selected `u32` model and links the physical baseline;
 - updates [Study.md](../../../Study.md) after the Phase 1 semantic freeze;
 - regenerates the hash-bound semantic compatibility matrix and its rendered document; and
+- refreshes the deterministic fixture-generation report that binds both regenerated artifacts;
+  and
 - changes no source code, dependency, lockfile, toolchain, package, public API, or persistent byte
   fixture.
 
@@ -64,6 +69,7 @@ The source validation performed before this evidence was recorded:
 - checked terminal newlines, trailing whitespace, and local links in every changed artifact;
 - regenerated the compatibility matrix using its committed generator, then passed its independent
   schema/integrity checker and seven existing matrix mutation canaries;
+- regenerated and checked the higher-level deterministic fixture-generation report;
 - passed `biome check --error-on-warnings .`; and
 - passed the complete aggregate suite: nine Rust boundary tests, four accepted and three rejected
   semantic examples, 17 fixtures/313 oracle steps/382 oracle assertions, 263 compatibility rows,
@@ -75,26 +81,35 @@ committed compatibility matrix stale. The repository generator refreshed its spe
 SHA-256/byte identity and rendered row; the exact generator check and full aggregate replay then
 passed. The guard was preserved rather than bypassed.
 
+The first hosted run, `29145320680` at evidence commit `0aa2847`, then exposed that the higher-level
+fixture-generation report still carried the previous matrix/rendered-document hashes. Both Node
+lanes rejected that stale identity while the other ten gating jobs passed. Source hardening commit
+`0e40ad8` changes only those two generated SHA-256 fields. Local `fixtures:check` and the full suite
+then passed. Superseding hosted run `29145494980` passed all 12 jobs on the exact hardening head,
+including both Node lanes, three native hosts, two Wasm targets, ASan, and three browser engines.
+
 ## Independent evidence verifier
 
 [verify.mjs](verify.mjs) reads every source artifact from the exact immutable source commit rather
 than trusting the current worktree. It verifies:
 
-- the exact parent, source tree, seven changed paths/statuses, byte sizes, and SHA-256 identities;
+- the exact two source commits around the first evidence commit, final source tree, eight changed
+  paths/statuses, byte sizes, and SHA-256 identities;
 - accepted ADR metadata, the exact ordered 29-heading structure, serious alternatives, every
   required physical decision, follow-up ownership, rollback boundary, security limitations, and
   primary-source references;
 - exact specification/study/index/owner backlinks and the selected `u32` field sketch;
-- compatibility-matrix binding to the changed specification and a clean isolated generator replay;
-- all 162 Markdown files and 1,104 repository-local links at the source commit;
+- compatibility-matrix binding to the changed specification, deterministic-generation report
+  binding to both regenerated artifacts, and a clean isolated generator replay;
+- all 163 Markdown files and 1,117 repository-local links at the final source commit;
 - an independent CRC32C implementation/check vector and `u32`/16 MiB arithmetic premise; and
-- 16 isolated mutation canaries, each required to reach its intended rejection reason.
+- 17 isolated mutation canaries, each required to reach its intended rejection reason.
 
 The canaries separately mutate byte order, offset width, size limit, zero padding, checksum vector,
 hash algorithm/mode, object-presentation hash behavior, bounded compression, unknown-version
 handling, ADR index linkage, decision-owner linkage, specification field width, matrix input hash,
-source plan state, primary-source linkage, and source artifact identity. Mutations are in memory or
-temporary extraction only; no workspace source is changed.
+generation-report identity, source plan state, primary-source linkage, and source artifact identity.
+Mutations are in memory or temporary extraction only; no workspace source is changed.
 
 The verifier passed under exact Node.js 22.23.1 and 24.18.0.
 
@@ -103,14 +118,15 @@ The verifier passed under exact Node.js 22.23.1 and 24.18.0.
 ```bash
 node compatibility/v1/generate-matrix.mjs --check
 node compatibility/v1/check-matrix.mjs
+corepack npm run fixtures:check
 corepack npm run policy:javascript
 corepack npm run test:all
 /home/alextis/.nvm/versions/node/v22.23.1/bin/node \
   evidence/phase-03/P03-001/verify.mjs \
-  ae7bf86ec117d2d1d550a9cb6d1087b7f402402f
+  0e40ad87034902fb53bf0aad277a80a79dc3a7a0
 /home/alextis/.nvm/versions/node/v24.18.0/bin/node \
   evidence/phase-03/P03-001/verify.mjs \
-  ae7bf86ec117d2d1d550a9cb6d1087b7f402402f
+  0e40ad87034902fb53bf0aad277a80a79dc3a7a0
 ```
 
 ## Artifacts
@@ -124,15 +140,18 @@ corepack npm run test:all
 | `docs/adr/README.md` | 4,461 | `5bcb1c9824c1ced64f2131601440ef9d1891bac74658f0dc534d0286ce9dfca0` |
 | `docs/compatibility/v1-semantic-compatibility-matrix.md` | 103,065 | `02c5be0de9da44286c5cfea1833d4a0a13059cc82b9c97b4d06bc5b619b4bb97` |
 | `docs/governance/decision-owners.md` | 6,059 | `6d0672d57359dc68f10c61ac7ebae1ea3b98c7defcf161e6396da41f8bda67bb` |
+| `fixtures/generation/report-v1.json` | 2,547 | `46136d9b9fe46ab82141930748e7e3601442607a6460bf0f7d96befb7445f982` |
 
 Machine-readable source identities, command results, counts, environment, and verifier identity are
 in [manifest.json](manifest.json).
 
 ## Failures, skips, and limitations
 
-- No final focused, policy, matrix, aggregate-suite, or evidence-verifier check failed or skipped.
-- The deliberate first stale-matrix failure is described above and was resolved by deterministic
-  artifact regeneration.
+- No final focused, fixture, policy, matrix, aggregate-suite, or evidence-verifier check failed or
+  skipped.
+- The deliberate local stale-matrix failure and the hosted stale-generation-report failure are
+  preserved above. Both were resolved by their registered deterministic generators rather than by
+  weakening a check.
 - This task selects the physical baseline but does not claim an HDoc encoder, decoder, byte fixture,
   field tag, header/footer, compression codec, path dictionary, migration, benchmark, or fuzz
   result. Those claims remain explicitly open in `P03-002`–`P03-021`.
@@ -145,7 +164,7 @@ in [manifest.json](manifest.json).
 
 ## Reproduction
 
-Check out `ae7bf86ec117d2d1d550a9cb6d1087b7f402402f`, run the focused/generator/policy/aggregate commands
+Check out `0e40ad87034902fb53bf0aad277a80a79dc3a7a0`, run the focused/generator/policy/aggregate commands
 above, and then run the committed verifier from this evidence commit with the full source SHA. The
 verifier itself extracts the matrix inputs from the source commit and does not require network
 access.

@@ -4,10 +4,14 @@
   "requirements": ["CORE-001", "DATA-001", "DATA-002", "INV-001", "INV-007", "SEC-001", "SEC-002"],
   "accepted_adrs": ["0012"],
   "base_commit": "58cae3443a832bde20bcfd5051f3ea0de65446c0",
-  "source_commits": ["ae7bf86ec117d2d1d550a9cb6d1087b7f402402f"],
-  "commit": "ae7bf86ec117d2d1d550a9cb6d1087b7f402402f",
-  "source_tree": "606fa3e41dae59758865cb33c8b3244a3fb27f14",
-  "recorded_at": "2026-07-11T07:48:09.358Z",
+  "source_commits": [
+    "ae7bf86ec117d2d1d550a9cb6d1087b7f402402f",
+    "0e40ad87034902fb53bf0aad277a80a79dc3a7a0"
+  ],
+  "intervening_evidence_commit": "0aa2847813fb9cd959dddd45c523968b13c35737",
+  "commit": "0e40ad87034902fb53bf0aad277a80a79dc3a7a0",
+  "source_tree": "db4adb3860a128551adca48e08d014a49228ed4b",
+  "recorded_at": "2026-07-11T08:06:34.348Z",
   "environment": {
     "os": "Linux 6.8.0-124-generic",
     "architecture": "x86_64",
@@ -17,8 +21,28 @@
       "verification_node_lanes": ["22.23.1", "24.18.0"]
     },
     "network_required": false,
-    "hosted_workflow_execution": false
+    "hosted_workflow_execution": true
   },
+  "hosted_runs": [
+    {
+      "run_id": 29145320680,
+      "head_sha": "0aa2847813fb9cd959dddd45c523968b13c35737",
+      "conclusion": "failure",
+      "jobs": 12,
+      "successful_jobs": 10,
+      "failed_jobs": ["Node 22.23.1 / Linux x64", "Node 24.18.0 / Linux x64"],
+      "reason": "fixture-generation report retained the previous compatibility matrix and rendered-document identities"
+    },
+    {
+      "run_id": 29145494980,
+      "head_sha": "0e40ad87034902fb53bf0aad277a80a79dc3a7a0",
+      "conclusion": "success",
+      "jobs": 12,
+      "successful_jobs": 12,
+      "failed_jobs": [],
+      "reason": "superseding exact-head gating run after deterministic report regeneration"
+    }
+  ],
   "diagnostic_attempts": [
     {
       "command": "corepack npm run test:all before regenerating the hash-bound compatibility matrix",
@@ -29,6 +53,16 @@
       "command": "node compatibility/v1/generate-matrix.mjs --write",
       "exit_code": 0,
       "result": "regenerated only the specification input identity in the matrix and rendered compatibility document"
+    },
+    {
+      "command": "GitHub Actions run 29145320680 at 0aa2847813fb9cd959dddd45c523968b13c35737",
+      "exit_code": 1,
+      "result": "both Node lanes rejected stale fixture-generation report identities; the other ten gating jobs passed"
+    },
+    {
+      "command": "corepack npm run fixtures:generate",
+      "exit_code": 0,
+      "result": "updated only the deterministic generation report identities for the matrix and rendered compatibility document"
     }
   ],
   "commands": [
@@ -41,6 +75,10 @@
       "exit_code": 0
     },
     {
+      "command": "corepack npm run fixtures:check",
+      "exit_code": 0
+    },
+    {
       "command": "corepack npm run policy:javascript",
       "exit_code": 0
     },
@@ -49,19 +87,19 @@
       "exit_code": 0
     },
     {
-      "command": "Node 22.23.1 and 24.18.0 evidence verifier replay with 16 isolated mutation canaries",
+      "command": "Node 22.23.1 and 24.18.0 evidence verifier replay with 17 isolated mutation canaries",
       "exit_code": 0
     }
   ],
   "verification": {
-    "source_artifacts": 7,
+    "source_artifacts": 8,
     "adr_lines": 530,
     "adr_headings": 29,
     "focused_markers": 24,
     "primary_source_links": 6,
-    "markdown_files": 162,
-    "local_links": 1104,
-    "mutation_canaries": 16,
+    "markdown_files": 163,
+    "local_links": 1117,
+    "mutation_canaries": 17,
     "node_lanes": 2,
     "native_tests": 9,
     "semantic_fixtures": 17,
@@ -123,13 +161,20 @@
       "media_type": "text/markdown",
       "bytes": 6059,
       "sha256": "6d0672d57359dc68f10c61ac7ebae1ea3b98c7defcf161e6396da41f8bda67bb"
+    },
+    {
+      "status": "M",
+      "path": "fixtures/generation/report-v1.json",
+      "media_type": "application/json",
+      "bytes": 2547,
+      "sha256": "46136d9b9fe46ab82141930748e7e3601442607a6460bf0f7d96befb7445f982"
     }
   ],
   "verifier": {
     "path": "evidence/phase-03/P03-001/verify.mjs",
     "media_type": "text/javascript",
-    "bytes": 20842,
-    "sha256": "e496f469cec169ba1014ae9cc4a8c651e0eb36fb51be4b7b23c98387321d4561"
+    "bytes": 23788,
+    "sha256": "076478c39028dd234b0989a23d6e25a65d77640580d39e15578ec6dec62c1c3b"
   },
   "verdict": "pass"
 }
