@@ -97,6 +97,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | Gate | Accepted foundation | Requirements with accepted evidence | Remaining boundary |
 | --- | --- | --- | --- |
 | [`G01`](../../evidence/phase-01/G01/README.md) | Frozen v1 semantic contracts; 17-fixture/313-step corpus; independent oracle; pinned MongoDB differential; closed-world compatibility matrix | `CACHE-002`, `COMPAT-001`, `CORE-002`, `CORE-003`, `DATA-001`, `DATA-002`, `GPU-002`, `GPU-003`, `GPU-004`, `INV-002`, `INV-007`, `INV-010`, `QUERY-001`, `QUERY-002`, `SEC-001`, `SEC-002`, `STORE-001` | These rows remain `In progress` because their complete requirements include later formats, engines, hosts, GPU paths, security controls, durability histories, or adapters. |
+| [`G02`](../../evidence/phase-02/G02/README.md) | Pinned workspace/toolchains; exact clean bootstrap; 11-lane gating and two-lane nightly hosted proof; durable dependency, coverage, Wasm, browser, and WGSL reports | `COMPAT-001`, `CORE-001`, `CORE-003`, `INV-001`, `INV-003`, `INV-004`, `INV-006`, `INV-007`, `INV-009`, `INV-010`, `PLAT-001`, `PLAT-002`, `PLAT-003`, `QUAL-001`, `QUAL-002`, `SEC-001`, `SEC-002` | These rows retain their existing `Planned`/`In progress` state because G02 proves the foundation skeleton and test infrastructure, not later formats, hosts, storage, GPU execution, security controls, distributed histories, adapters, packages, or release support. |
 
 ## Update procedure
 

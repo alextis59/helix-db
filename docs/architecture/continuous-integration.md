@@ -5,6 +5,7 @@
 - Owner: Runtime architecture owner with quality and release review
 - Plan items: `P02-009`, revised by `P02-010` through `P02-017`
 - Governing gate: `G02`
+- Accepted gate evidence: [`G02` hosted toolchain review](../../evidence/phase-02/G02/README.md)
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
 - Bootstrap authority: [`helix.clean-bootstrap/1`](../development/bootstrap.json)
 - Component validator authority: [`helix.wasm-tools/2`](../../.github/ci/wasm-tools.json)
@@ -124,7 +125,7 @@ corepack npm run artifacts:browser-report -- webkit
 corepack npm run toolchain:types
 ```
 
-Local checks validate exact matrix/workflow/action/validator configuration, lane identities, emitted JSON, registry signatures and provenance observations, lock/tarball license and duplicate reports, compiler-matched coverage reporting and thresholds, strict benchmark schemas/raw linkage, retained-bundle inventories and byte identities, both Wasm forms, WGSL manifest hashes/compiler outcomes, bundle output, and real browser execution on Linux x64. GitHub itself remains the authority for hosted workflow parsing, artifact IDs/URLs/digests, artifact-service behavior, and Windows/macOS/arm64 provisioning. Therefore local evidence does not prove a hosted matrix or upload passed; the first hosted green results and independent review remain required inputs to `G02`.
+Local checks validate exact matrix/workflow/action/validator configuration, lane identities, emitted JSON, registry signatures and provenance observations, lock/tarball license and duplicate reports, compiler-matched coverage reporting and thresholds, strict benchmark schemas/raw linkage, retained-bundle inventories and byte identities, both Wasm forms, WGSL manifest hashes/compiler outcomes, bundle output, and real browser execution on Linux x64. GitHub itself remains the authority for hosted workflow parsing, artifact IDs/URLs/digests, artifact-service behavior, and Windows/macOS/arm64 provisioning. Local evidence alone therefore never proves a hosted matrix or upload passed. The accepted [`G02` evidence](../../evidence/phase-02/G02/README.md) separately binds the first green gating and nightly runs, runner/job conclusions, artifact-service digests, durable report promotion, and independent review to the exact source commit.
 
 ## Change policy
 
