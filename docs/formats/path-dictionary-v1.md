@@ -212,8 +212,8 @@ rollback decision with new fixtures.
 
 The implementation tests deterministic empty/nonempty snapshots, multi-entry versions, borrowed
 access, checksum/hash separation, every validation stage, invalid paths/IDs/version gaps,
-path/snapshot limits, and successor identity/version/prefix/backdating failures. `P03-016` owns
-immutable golden bytes, `P03-017` an independent reader, and `P03-018`–`P03-019` property/fuzz and
+path/snapshot limits, and successor identity/version/prefix/backdating failures. P03-016 now freezes
+immutable HDoc golden bytes, `P03-017` owns an independent reader, and `P03-018`–`P03-019` property/fuzz and
 malformed-corpus expansion.
 
 Lifecycle tests additionally prove request-order/duplicate registration, automatic and explicit

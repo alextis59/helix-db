@@ -10,13 +10,13 @@
 - Development identity: [ADR 0001](../adr/0001-public-product-identity.md)
 
 This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
-unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-feature-negotiation` /
-`database-functionality = true` metadata now that `P03-008`–`P03-015` have implemented
+unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-golden-v1` /
+`database-functionality = true` metadata now that `P03-008`–`P03-016` have implemented
 deterministic encoding, whole-envelope validation, borrowed/owned logical values, exact-name/path
 lookup, canonical lossless tagged JSON rendering with strict detached import, and canonical
 collection path-dictionary snapshots with non-reuse lineage validation plus atomic registration,
-resolution, recovery, immutable version pins, and exact-1.0 closed-world negotiation/no-rewrite
-migration assessment; the other seven
+resolution, recovery, immutable version pins, exact-1.0 closed-world negotiation/no-rewrite
+migration assessment, and immutable HDoc 1.0 golden-vector production/checking; the other seven
 crates remain `boundary-skeleton` components. Public names and package coordinates remain blocked
 by `P16-016`.
 
@@ -24,7 +24,7 @@ by `P16-016`.
 
 | Crate | Responsibility boundary | Allowed direct internal dependencies | Current maturity |
 | --- | --- | --- | --- |
-| `helix-doc` | Logical values, HDoc codec, canonical value semantics | None | Safe deterministic HDoc codec/values/lookup/tagged conversion, collection dictionary format/lifecycle, and closed-world feature/migration assessment |
+| `helix-doc` | Logical values, HDoc codec, canonical value semantics | None | Safe deterministic HDoc codec/values/lookup/tagged conversion, collection dictionary format/lifecycle, closed-world negotiation, and immutable HDoc 1.0 vectors |
 | `helix-query` | Query syntax, normalization, logical plans, CPU reference behavior | `helix-doc` | Boundary skeleton |
 | `helix-storage` | Deterministic WAL/MVCC/manifest/memtable/immutable-file algorithms; no ambient I/O | `helix-doc` | Boundary skeleton |
 | `helix-columnar` | Rebuildable field dictionaries, typed sidecars, and CPU column operators | `helix-doc`, `helix-query` | Boundary skeleton |

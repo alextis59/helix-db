@@ -101,6 +101,22 @@ jobs:
           corepack npm run wgsl:check
       - name: Run aggregate tests
         run: corepack npm test
+      - name: Collect immutable HDoc golden formats
+        if: always() && matrix.node == '22.23.1'
+        run: corepack npm run artifacts:golden-formats
+      - name: Retain immutable HDoc golden formats
+        if: always() && matrix.node == '22.23.1'
+        id: upload-golden-formats
+        uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: golden-formats-hdoc-v1-${{ github.run_id }}-${{ github.run_attempt }}
+          path: dist/retention/golden-formats/hdoc-v1/
+          if-no-files-found: error
+          retention-days: 90
+          compression-level: 9
+          overwrite: false
+          include-hidden-files: false
+          archive: true
       - name: Collect semantic replay and dependency reports
         if: always() && matrix.node == '22.23.1'
         run: corepack npm run artifacts:test-replay

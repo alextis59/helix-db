@@ -9,7 +9,7 @@
     "default_branch": "main",
     "public_name_decision": "P16-016"
   },
-  "claim_boundary": "This contract documents foundation setup and validation; HelixDB now includes safe deterministic HDoc encoding, whole-envelope validation, logical values, raw lookup, lossless tagged conversion, collection path-dictionary format/lifecycle, and exact-1.0 closed-world feature negotiation with no-rewrite migration assessment, while query, storage, durability, GPU execution, network service, public protocol/SDK, external compatibility adapters, security, performance, and release functionality remain unimplemented.",
+  "claim_boundary": "This contract documents foundation setup and validation; HelixDB now includes safe deterministic HDoc encoding, whole-envelope validation, logical values, raw lookup, lossless tagged conversion, collection path-dictionary format/lifecycle, exact-1.0 closed-world negotiation, and immutable HDoc 1.0 golden vectors, while query, storage, durability, GPU execution, network service, public protocol/SDK, external compatibility adapters, security, performance, and release functionality remain unimplemented.",
   "tools": {
     "git": {
       "version_policy": "supported-system-release",

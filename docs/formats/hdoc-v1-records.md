@@ -19,9 +19,8 @@ tree, value placement, section `item_count` meanings, and canonical rejection ru
 
 The [integrity registry](hdoc-v1-integrity.md) assigns typed-content hash profile 1 and CRC
 coverage. The [compression registry](hdoc-v1-compression.md) assigns optional codec/profile `1/1`
-and makes every absolute offset below a canonical-logical HDoc coordinate. The layouts remain
-normative structural vectors rather than immutable supported fixtures; `P03-016` owns that later
-corpus.
+and makes every absolute offset below a canonical-logical HDoc coordinate. These layouts remain
+normative structural vectors; P03-016 now freezes the separate immutable supported corpus.
 
 ## Normative status and notation
 
@@ -622,9 +621,8 @@ These record widths, field offsets, ID meaning, canonical orders, tree numbering
 and section count meanings are stable for the HDoc 1.0 base profile. A minor version cannot change
 them while claiming the same profile.
 
-Before `P03-016`, no valid immutable complete HDoc exists, so a reviewed superseding decision can
-replace this registry without stored-data migration. After immutable fixtures or data exist, any
-incompatible change requires:
+P03-016 now freezes valid and rejected immutable complete HDocs across the record grammar. Any
+incompatible change therefore requires:
 
 - a new explicit format/profile plus historical reader;
 - immutable old/new positive and malformed fixtures;
@@ -648,7 +646,7 @@ Reading never silently renumbers, canonicalizes, repairs, or rewrites an old HDo
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Ordered tagged object/array conversion and exact-size import validation | Base field IDs, presentation semantics, and canonical layout |
 | [`P03-013`–`P03-014`](path-dictionary-v1.md) (complete) | Collection dictionary format/lifecycle; HDoc reference profile remains unsupported | Base document-local field IDs and self-containment |
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Exact-1.0 feature/version negotiation and no-rewrite migration assessment | Existing IDs/flags/record meanings |
-| `P03-016`–`P03-019` | Complete golden/malformed, independent readers, property/fuzz suites | Structural vectors and rejection expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md) complete; `P03-017`–`P03-019` | Complete golden/rejection files frozen; independent readers and broader property/fuzz suites remain | Structural vectors and rejection expectations |
 | `P03-020`–`P03-021` | Lookup/size/alignment/compression experiments | Correctness rules or portable limits |
 
 ## Required later fixtures

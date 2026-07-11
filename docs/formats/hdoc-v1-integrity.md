@@ -22,10 +22,9 @@ It assigns the first valid nonzero footer hash profile, exact recursive framing,
 algorithm/profile vectors, reference uncompressed envelopes, failure order, and corruption versus
 semantic-identity behavior. It does not make either mechanism an authenticator.
 
-The [compression registry](hdoc-v1-compression.md) now fixes optional stored compressed bytes and
-includes a compressed/uncompressed pair with equal typed hash and different CRC. The vectors here
-remain normative integrity references, not the immutable supported fixture files owned by
-`P03-016`.
+The [compression registry](hdoc-v1-compression.md) fixes optional stored compressed bytes and
+includes a compressed/uncompressed pair with equal typed hash and different CRC. P03-016 adds
+separate immutable supported fixture files; these registry vectors remain normative references.
 
 ## Normative status and notation
 
@@ -343,8 +342,7 @@ values are identical, so the content hash stays equal. Their exact complete hex 
 SHA-256 values are in the registry.
 
 These vectors use hash algorithm/profile `1/1` and codec `0/0`. They prove the integrity slots and
-coverage; `P03-016` still owns immutable supported golden fixture files after the now-complete
-format registry is implemented.
+coverage; P03-016 now freezes immutable supported golden fixture files alongside them.
 
 ## Corruption versus semantic-hash behavior
 
@@ -422,9 +420,7 @@ than first persisting corrupt bytes and reporting `DUR_CORRUPTION`.
 Hash algorithm ID `1`, profile ID `1`, domain bytes, frame widths/order, type tags, container bodies,
 and digest byte storage are stable for HDoc 1.0. A minor version cannot reinterpret any of them.
 
-Before `P03-016`, the integrity registry can be superseded through reviewed source rollback because
-no immutable supported HDoc fixture/database exists. After immutable fixtures/data exist, changing
-any profile-1 byte requires:
+P03-016 now freezes immutable supported HDoc fixture bytes. Changing any profile-1 byte requires:
 
 - a new nonzero profile ID or incompatible format version;
 - retained support for historical profile-1 reads;
@@ -446,7 +442,7 @@ and typed hash before deriving a new artifact and retains the source until its r
 | `P03-011` (complete) | Exact-name and dotted-path lookup after whole-document validation | Exact typed payload/container identity and validation order |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Tagged rendering/import after complete logical validation | Exact typed payload/container identity and validation order |
 | [`P03-013`–`P03-014`](path-dictionary-v1.md), [`P03-015`](hdoc-v1-compatibility.md) complete | Dictionary format/lifecycle and closed-world negotiation; references/extensions remain unsupported | Resolved names/content identity or ID reuse |
-| `P03-016` | Immutable complete positive/malformed HDoc files | Existing registry vectors/expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md) complete | Immutable complete positive/rejection HDoc files | Existing registry vectors/expectations |
 | `P03-017`–`P03-019` | Independent codecs, properties, corruption tests, fuzzing | Exact outputs and fail-closed behavior |
 | `P03-020`–`P03-021` | Integrity-inclusive format/compression performance | Correctness, coverage, or authentication boundary |
 

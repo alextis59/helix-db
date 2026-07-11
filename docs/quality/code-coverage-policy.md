@@ -154,12 +154,13 @@ encoder. `P03-009` expanded the same active semantic-critical scope with the who
 validating decoder, `P03-010` added borrowed/owned logical values, `P03-011` added exact-name/path
 lookup, `P03-012` added strict lossless tagged JSON rendering/import, and `P03-013` added canonical
 field-path dictionary snapshots plus successor/non-reuse validation, and `P03-014` added atomic
-registration/resolution/recovery with immutable version pins, and `P03-015` added exact-1.0
-closed-world negotiation/no-rewrite migration assessment. The active workspace
+registration/resolution/recovery with immutable version pins, `P03-015` added exact-1.0
+closed-world negotiation/no-rewrite migration assessment, and `P03-016` froze executable immutable
+golden vectors. The active workspace
 metadata is now:
 
 ```text
-status = "hdoc-feature-negotiation"
+status = "hdoc-golden-v1"
 database-functionality = true
 ```
 
@@ -170,7 +171,7 @@ workspace bootstrap and implementation contract. Maturity metadata cannot hide u
 an active empty scope fails, while a nonempty scope always activates its thresholds.
 
 The current clean report proves measured HDoc encoder/decoder/value-access/raw-lookup,
-tagged-JSON, path-dictionary lifecycle, and feature/migration-negotiation coverage. It records workspace maturity and
+tagged-JSON, path-dictionary lifecycle, feature/migration negotiation, and immutable-fixture checking. It records workspace maturity and
 database-functionality metadata alongside the executed
 test and source identities.
 

@@ -98,6 +98,7 @@ same(
     'semantics.corpus-v1',
     'semantics.oracle-report-v1',
     'compatibility.matrix-v1',
+    'hdoc.golden-v1',
   ],
   'generator inventory',
 );
@@ -251,7 +252,7 @@ const before = Object.fromEntries(
 );
 const generated = run(process.execPath, ['fixtures/generation/generate.mjs', '--check']);
 assert(
-  generated.includes('PASS deterministic generation: 4 generators'),
+  generated.includes('PASS deterministic generation: 5 generators'),
   'generator result mismatch',
 );
 for (const generator of registry.generators.slice(1)) {
@@ -271,11 +272,15 @@ same(after, before, 'check-only artifact stability');
 console.log(
   `PASS fixture registry: ${registry.generators.length} generators, ${artifactPaths.length} authority artifacts, ${seedOwners.size} committed seed`,
 );
-console.log('PASS schemas: registry, vector, report, semantic corpus/oracle, compatibility matrix');
+console.log(
+  'PASS schemas: registry, vector, report, semantic corpus/oracle, compatibility matrix, HDoc golden manifest',
+);
 console.log(
   'PASS independent SplitMix64 reproduction: Python matches 16 JavaScript-generated words',
 );
-console.log('PASS deterministic checks: semantic corpus, oracle report, compatibility matrix');
+console.log(
+  'PASS deterministic checks: semantic corpus, oracle report, compatibility matrix, HDoc golden vectors',
+);
 console.log(
   `PASS generation report: ${report.generators.length} generators, verdict ${report.verdict}`,
 );

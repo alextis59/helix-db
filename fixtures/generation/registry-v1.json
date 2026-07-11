@@ -121,6 +121,31 @@
         }
       ],
       "owner_task": "P01-022"
+    },
+    {
+      "id": "hdoc.golden-v1",
+      "version": "1.0.0",
+      "status": "active",
+      "randomness": "none",
+      "seed": null,
+      "algorithm": null,
+      "check": {
+        "program": "node",
+        "arguments": ["fixtures/hdoc/v1/check.mjs", "--check"]
+      },
+      "write": {
+        "program": "node",
+        "arguments": ["fixtures/hdoc/v1/check.mjs", "--write"]
+      },
+      "artifacts": [
+        {
+          "path": "fixtures/hdoc/v1/manifest.json",
+          "format": "json",
+          "schema_path": "fixtures/hdoc/v1/schema/manifest-v1.schema.json",
+          "role": "authority-manifest"
+        }
+      ],
+      "owner_task": "P03-016"
     }
   ]
 }

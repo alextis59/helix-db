@@ -105,8 +105,8 @@ It must extend this matrix; it cannot change the meaning of the current no-op as
 Tests prove exact capability masks, supported/unsupported feature identities, base and compressed
 negotiated profiles, version rejection, required/optional feature rejection, corruption rejection,
 no profile before full validation, exact-current no-op assessment, unsupported target rejection,
-source error propagation, stable codes/source chaining, and no rewrite claim. P03-016 adds immutable
-version/feature/malformed vectors, and P03-017 adds an independent reader.
+source error propagation, stable codes/source chaining, and no rewrite claim. P03-016 now freezes
+immutable version/feature/malformed vectors, and P03-017 adds an independent reader.
 
 ## References
 

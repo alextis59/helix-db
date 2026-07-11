@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://helix-db.local/schemas/hdoc-golden-manifest-v1.schema.json",
+  "title": "Immutable HDoc 1.0 golden fixture manifest",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema", "format", "producer", "cases"],
+  "properties": {
+    "schema": { "const": "helix.hdoc-golden-manifest/1" },
+    "format": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "major", "minor", "frozen"],
+      "properties": {
+        "name": { "const": "HDoc" },
+        "major": { "const": 1 },
+        "minor": { "const": 0 },
+        "frozen": { "const": true }
+      }
+    },
+    "producer": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "check", "write_policy"],
+      "properties": {
+        "path": { "const": "crates/helix-doc/examples/hdoc_v1_golden.rs" },
+        "check": { "const": "cargo run --frozen -p helix-doc --example hdoc_v1_golden -- --check" },
+        "write_policy": { "const": "create-missing-only-never-overwrite" }
+      }
+    },
+    "cases": {
+      "type": "array",
+      "minItems": 24,
+      "items": { "$ref": "#/$defs/case" }
+    }
+  },
+  "$defs": {
+    "case": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "kind", "bytes", "sha256", "expected", "coverage"],
+      "properties": {
+        "id": { "type": "string", "pattern": "^(positive|invalid)-[a-z0-9-]+$" },
+        "path": { "type": "string", "pattern": "^fixtures/hdoc/v1/cases/(positive|invalid)-[a-z0-9-]+\\.hdoc$" },
+        "kind": { "enum": ["positive", "invalid"] },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+        "expected": { "oneOf": [{ "$ref": "#/$defs/accept" }, { "$ref": "#/$defs/reject" }] },
+        "coverage": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": { "type": "string", "pattern": "^[a-z0-9-]+$" }
+        }
+      }
+    },
+    "accept": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "total_length", "canonical_length", "field_count", "document_flags_hex", "required_features_hex", "content_hash_hex"],
+      "properties": {
+        "result": { "const": "accept" },
+        "total_length": { "type": "integer", "minimum": 256, "maximum": 16777216 },
+        "canonical_length": { "type": "integer", "minimum": 256, "maximum": 16777216 },
+        "field_count": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "document_flags_hex": { "type": "string", "pattern": "^0x[0-9a-f]{8}$" },
+        "required_features_hex": { "type": "string", "pattern": "^0x[0-9a-f]{16}$" },
+        "content_hash_hex": { "type": "string", "pattern": "^[0-9a-f]{64}$" }
+      }
+    },
+    "reject": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["result", "code", "check"],
+      "properties": {
+        "result": { "const": "reject" },
+        "code": { "enum": ["CAP_FORMAT_UNSUPPORTED", "CAP_UNSUPPORTED_VERSION", "DUR_CORRUPTION"] },
+        "check": {
+          "type": ["string", "null"],
+          "enum": [null, "header", "length", "feature", "checksum", "directory", "footer", "field-table", "typed-content-hash", "compression-header", "limit"]
+        }
+      }
+    }
+  }
+}

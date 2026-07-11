@@ -53,22 +53,24 @@ Non-gating does not mean best effort. A schema, dataset, digest, execution, repo
 
 ## Diagnostic artifact retention
 
-The gating workflow collects three active classes after their upstream checks: semantic replay plus
-Node 22 dependency reports, compiler-matched Linux x64 coverage, and one report bundle for each real
-browser engine. Collection and upload use `if: always()`, so a failing upstream check remains red
+The gating workflow collects four active classes after their upstream checks: immutable HDoc 1.0
+golden formats, semantic replay plus Node 22 dependency reports, compiler-matched Linux x64
+coverage, and one report bundle for each real browser engine. Collection and upload use
+`if: always()`, so a failing upstream check remains red
 while its available structured diagnostics and bounded failure attachments are preserved. The
 collector also exits nonzero when a required output is absent or invalid; retention never converts
 a failed lane into a passing one.
 
 Every active bundle has a strict manifest binding the source commit, environment, fixed commands,
 source hashes, complete payload inventory, byte sizes, SHA-256 hashes, failure list, retention rule,
-and non-claim. CI artifacts expire after 30 days. Anything used for a task, gate, product claim, or
-release must be promoted before expiry to committed evidence or an approved immutable store under
+and non-claim. Diagnostic CI artifacts expire after 30 days; golden formats retain their CI copy
+for 90 days. Anything used for a task, gate, product claim, or release must be promoted before
+expiry to committed evidence or an approved immutable store under
 the [artifact-retention and durable-promotion contract](../quality/artifact-retention.md).
 
-Golden-format, crash-matrix, and packaged-release profiles are deliberately reserved until
-`P03-016`, `P05-021`, and `P16-010`. The policy rejects producers for those classes today rather
-than uploading empty placeholders that could be mistaken for proof.
+P03-016 activates the golden-format profile for the 24 immutable supported HDoc 1.0 files and its
+strict manifest. Crash-matrix and packaged-release profiles remain reserved until `P05-021` and
+`P16-010`; the policy rejects producers for those classes rather than uploading placeholders.
 
 ## Workflow security and reproducibility
 
@@ -81,7 +83,7 @@ than uploading empty placeholders that could be mistaken for proof.
 - The validator archive/executable and three license texts are version-, size-, inventory-, and SHA-256-pinned by `helix.wasm-tools/2`. Playwright browser identity remains coupled to the exact locked Playwright package.
 - SwiftShader is enabled only for small, committed, hash-bound repository fixtures. The validator accepts no external WGSL, URL, stdin, or environment-provided source; Chromium's documented lower-security software-renderer path is never exposed as a product interface.
 - Every Node lane verifies the integrity-bound 91-package license/source/duplicate inventory. Node 22.23.1 alone performs the explicit npm advisory query and verifies all installed registry signatures plus available SLSA provenance attestations; missing/invalid signatures, any advisory, or network/malformed-response failure is gating.
-- The Linux x64 native lane resolves `llvm-profdata`/`llvm-cov` from the exact Rust toolchain, separates explicitly marked unit-test code from product source, and enforces the [workspace, semantic-critical, and recovery-critical coverage policy](../quality/code-coverage-policy.md). `P03-008` activated the product denominator, and `P03-009`–`P03-015` expanded it: the HDoc codec/values/lookup/tagged conversion, path-dictionary format/lifecycle, and exact-1.0 feature/migration negotiation must meet 100% semantic-critical line/function and 95% region thresholds; the historical skeleton exception can no longer authorize an active empty scope.
+- The Linux x64 native lane resolves `llvm-profdata`/`llvm-cov` from the exact Rust toolchain, separates explicitly marked unit-test code from product source, and enforces the [workspace, semantic-critical, and recovery-critical coverage policy](../quality/code-coverage-policy.md). `P03-008` activated the product denominator, and `P03-009`–`P03-016` expanded its executable contracts: the HDoc codec/values/lookup/tagged conversion, path-dictionary format/lifecycle, exact-1.0 negotiation, and immutable golden checks must meet the applicable 100% semantic-critical line/function and 95% region thresholds; the historical skeleton exception can no longer authorize an active empty scope.
 - The retention service fails on missing files, never overwrites, excludes hidden files, archives at compression level 9, and retains diagnostic bundles for 30 days. Artifact names include the variant, run ID, and attempt. General CI uploads cover the exact semantic/dependency, coverage, and browser bundle directories; the `P02-014` benchmark workflow separately uploads only its raw-linked two-file result.
 - Active foundation outputs accept only public repository data and sanitized diagnostics. Crash evidence is preclassified for redacted public or access-controlled storage, and release uploads may contain only public release material. Secrets, signing keys, raw customer/tenant data, and unredacted sensitive evidence are never public CI payloads.
 

@@ -30,6 +30,7 @@
   },
   "scripts": {
     "artifacts:browser-report": "node tests/toolchain/collect-retained-artifacts.mjs browser-reports",
+    "artifacts:golden-formats": "node tests/toolchain/collect-retained-artifacts.mjs golden-formats hdoc-v1",
     "artifacts:coverage-replay": "node tests/toolchain/collect-retained-artifacts.mjs test-replays coverage",
     "artifacts:policy": "node tests/toolchain/check-retained-artifacts.mjs policy",
     "artifacts:test": "node tests/toolchain/test-artifact-retention-contract.mjs",

@@ -191,14 +191,14 @@ const expectedProfileIds = [
 
 const expectedProfilePostures = {
   'golden-formats': {
-    state: 'reserved',
-    activation_task: 'P03-016',
+    state: 'active',
+    activation_task: null,
     ci_retention_days: 90,
     durable_retention: 'permanent-by-format-version',
     promotion_required: true,
     sensitivity: 'public-repository-data-only',
     maximum_bundle_bytes: 67108864,
-    variants: [],
+    variants: ['hdoc-v1'],
   },
   'test-replays': {
     state: 'active',
@@ -243,6 +243,25 @@ const expectedProfilePostures = {
 };
 
 const expectedProducers = {
+  'golden-formats/hdoc-v1': {
+    variant: 'hdoc-v1',
+    command: [
+      'node',
+      'tests/toolchain/collect-retained-artifacts.mjs',
+      'golden-formats',
+      'hdoc-v1',
+    ],
+    upstream_command: ['node', 'fixtures/hdoc/v1/check.mjs', '--check'],
+    output: 'dist/retention/golden-formats/hdoc-v1',
+    artifact_name_prefix: 'golden-formats-hdoc-v1',
+    required_sources: [
+      'crates/helix-doc/examples/hdoc_v1_golden.rs',
+      'fixtures/hdoc/v1/check.mjs',
+      'fixtures/hdoc/v1/manifest.json',
+      'fixtures/hdoc/v1/schema/manifest-v1.schema.json',
+    ],
+    required_generated: [],
+  },
   'test-replays/semantic': {
     variant: 'semantic',
     command: ['node', 'tests/toolchain/collect-retained-artifacts.mjs', 'test-replays', 'semantic'],
@@ -426,12 +445,12 @@ export const validatePolicy = (candidate = readJson(policyPath)) => {
   }
   same(
     candidate.profiles.filter(({ state }) => state === 'active').map(({ id }) => id),
-    ['test-replays', 'browser-reports'],
+    ['golden-formats', 'test-replays', 'browser-reports'],
     'active retention profiles',
   );
   same(
     candidate.profiles.filter(({ state }) => state === 'reserved').map(({ id }) => id),
-    ['golden-formats', 'crash-matrices', 'packaged-releases'],
+    ['crash-matrices', 'packaged-releases'],
     'reserved retention profiles',
   );
   same(
@@ -1053,7 +1072,37 @@ export const validateBundleManifest = (manifest, bundleRoot, { requireComplete =
   assert(manifest.status === (passed ? 'complete' : 'failed'), 'bundle status');
   assert(manifest.verdict === (passed ? 'pass' : 'fail'), 'bundle verdict');
 
-  if (manifest.profile === 'test-replays' && manifest.variant === 'semantic') {
+  if (manifest.profile === 'golden-formats') {
+    const goldenManifest = manifest.artifacts.find(
+      ({ path: artifactPath }) => artifactPath === 'hdoc/v1/manifest.json',
+    );
+    const goldenSchema = manifest.artifacts.find(
+      ({ path: artifactPath }) => artifactPath === 'hdoc/v1/manifest-v1.schema.json',
+    );
+    if (passed) {
+      assert(goldenManifest?.role === 'golden-format-manifest', 'golden manifest absent');
+      assert(goldenSchema?.role === 'golden-format-schema', 'golden schema absent');
+      const golden = JSON.parse(readFileSync(path.join(bundleRoot, goldenManifest.path), 'utf8'));
+      assert(golden.schema === 'helix.hdoc-golden-manifest/1', 'retained golden schema');
+      assert(golden.format?.frozen === true && golden.cases?.length === 24, 'retained golden set');
+      for (const fixture of golden.cases) {
+        const retained = manifest.artifacts.find(
+          ({ path: artifactPath }) =>
+            artifactPath === `hdoc/v1/cases/${path.basename(fixture.path)}`,
+        );
+        assert(retained, `${fixture.id}: retained golden absent`);
+        assert(
+          retained.bytes === fixture.bytes && retained.sha256 === fixture.sha256,
+          `${fixture.id}: retained golden identity`,
+        );
+        assert(
+          retained.role ===
+            (fixture.kind === 'positive' ? 'golden-format-positive' : 'golden-format-rejection'),
+          `${fixture.id}: retained golden role`,
+        );
+      }
+    }
+  } else if (manifest.profile === 'test-replays' && manifest.variant === 'semantic') {
     assert(
       manifest.artifacts.some(
         ({ path: artifactPath, role }) =>

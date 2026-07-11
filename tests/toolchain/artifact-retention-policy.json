@@ -24,15 +24,35 @@
   "profiles": [
     {
       "id": "golden-formats",
-      "state": "reserved",
-      "current_scope": "No persistent HelixDB format or golden vector exists.",
-      "activation_task": "P03-016",
+      "state": "active",
+      "current_scope": "Immutable supported HDoc 1.0 positive and rejection vectors.",
+      "activation_task": null,
       "ci_retention_days": 90,
       "durable_retention": "permanent-by-format-version",
       "promotion_required": true,
       "sensitivity": "public-repository-data-only",
       "maximum_bundle_bytes": 67108864,
-      "producers": []
+      "producers": [
+        {
+          "variant": "hdoc-v1",
+          "command": [
+            "node",
+            "tests/toolchain/collect-retained-artifacts.mjs",
+            "golden-formats",
+            "hdoc-v1"
+          ],
+          "upstream_command": ["node", "fixtures/hdoc/v1/check.mjs", "--check"],
+          "output": "dist/retention/golden-formats/hdoc-v1",
+          "artifact_name_prefix": "golden-formats-hdoc-v1",
+          "required_sources": [
+            "crates/helix-doc/examples/hdoc_v1_golden.rs",
+            "fixtures/hdoc/v1/check.mjs",
+            "fixtures/hdoc/v1/manifest.json",
+            "fixtures/hdoc/v1/schema/manifest-v1.schema.json"
+          ],
+          "required_generated": []
+        }
+      ]
     },
     {
       "id": "test-replays",

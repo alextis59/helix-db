@@ -19,6 +19,7 @@ import {
   repository,
   resolveRepositoryPath,
   retentionClaimBoundary,
+  sha256,
   validateBrowserExecutionReport,
   validateBundleManifest,
   validateDependencyDiagnostics,
@@ -28,6 +29,7 @@ import {
 const profileId = process.argv[2];
 const variant = process.argv[3];
 const allowed =
+  (profileId === 'golden-formats' && variant === 'hdoc-v1') ||
   (profileId === 'test-replays' && ['semantic', 'coverage'].includes(variant)) ||
   (profileId === 'browser-reports' && ['chromium', 'firefox', 'webkit'].includes(variant));
 
@@ -180,6 +182,51 @@ const collectSemanticReplay = (profile, producer, bundleRoot) => {
   writeBundle(bundleRoot, manifest, profile);
 };
 
+const collectGoldenFormats = (profile, producer, bundleRoot) => {
+  const manifest = baseManifest(profile, producer, new Date().toISOString());
+  const result = run(producer.upstream_command);
+  if (result.exitCode !== 0) manifest.failures.push(`HDoc golden check exited ${result.exitCode}`);
+  try {
+    const golden = JSON.parse(
+      readFileSync(resolveRepositoryPath('fixtures/hdoc/v1/manifest.json'), 'utf8'),
+    );
+    assert(golden.schema === 'helix.hdoc-golden-manifest/1', 'HDoc golden manifest schema');
+    assert(golden.format?.frozen === true, 'HDoc golden format is not frozen');
+    assert(golden.cases?.length === 24, 'HDoc golden case count');
+    manifest.artifacts.push(
+      copyArtifact(
+        bundleRoot,
+        'fixtures/hdoc/v1/manifest.json',
+        'hdoc/v1/manifest.json',
+        'golden-format-manifest',
+      ),
+      copyArtifact(
+        bundleRoot,
+        'fixtures/hdoc/v1/schema/manifest-v1.schema.json',
+        'hdoc/v1/manifest-v1.schema.json',
+        'golden-format-schema',
+      ),
+    );
+    for (const fixture of golden.cases) {
+      const bytes = readFileSync(resolveRepositoryPath(fixture.path));
+      assert(bytes.length === fixture.bytes, `${fixture.id}: golden byte length`);
+      assert(sha256(bytes) === fixture.sha256, `${fixture.id}: golden SHA-256`);
+      manifest.artifacts.push(
+        copyArtifact(
+          bundleRoot,
+          fixture.path,
+          `hdoc/v1/cases/${path.basename(fixture.path)}`,
+          fixture.kind === 'positive' ? 'golden-format-positive' : 'golden-format-rejection',
+        ),
+      );
+    }
+  } catch (error) {
+    manifest.failures.push(error instanceof Error ? error.message : String(error));
+  }
+  manifest.producer.exit_code = manifest.failures.length === 0 ? 0 : result.exitCode || 1;
+  writeBundle(bundleRoot, manifest, profile);
+};
+
 const collectCoverageReplay = (profile, producer, bundleRoot) => {
   const manifest = baseManifest(profile, producer, new Date().toISOString());
   const sourcePath = producer.required_generated[0];
@@ -268,7 +315,7 @@ const collectBrowserReport = (profile, producer, bundleRoot) => {
 try {
   assert(
     process.argv.length === 4 && allowed,
-    'usage: node tests/toolchain/collect-retained-artifacts.mjs <test-replays semantic|test-replays coverage|browser-reports chromium|browser-reports firefox|browser-reports webkit>',
+    'usage: node tests/toolchain/collect-retained-artifacts.mjs <golden-formats hdoc-v1|test-replays semantic|test-replays coverage|browser-reports chromium|browser-reports firefox|browser-reports webkit>',
   );
   validateSchemas();
   const policy = loadPolicy();
@@ -277,7 +324,9 @@ try {
   const bundleRoot = resolveRepositoryPath(producer.output);
   rmSync(bundleRoot, { recursive: true, force: true });
   mkdirSync(bundleRoot, { recursive: true });
-  if (profileId === 'test-replays' && variant === 'semantic') {
+  if (profileId === 'golden-formats') {
+    collectGoldenFormats(profile, producer, bundleRoot);
+  } else if (profileId === 'test-replays' && variant === 'semantic') {
     collectSemanticReplay(profile, producer, bundleRoot);
   } else if (profileId === 'test-replays') {
     collectCoverageReplay(profile, producer, bundleRoot);

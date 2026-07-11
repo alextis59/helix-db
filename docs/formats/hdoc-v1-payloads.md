@@ -573,8 +573,8 @@ These payload encodings are stable for HDoc major 1. A minor/profile cannot rein
 existing tag's length, endianness, decimal formula, temporal unit, identifier order, binary subtype,
 vector prefix, or validation domain.
 
-Before `P03-016`, no valid HDoc fixture/persisted database exists, so a reviewed superseding change
-can replace this registry without data migration. After immutable fixtures or data exist:
+P03-016 now freezes complete immutable HDoc fixtures that exercise every tag and value-domain
+boundary. Therefore:
 
 - changing an existing encoding requires a new incompatible format/profile and historical reader;
 - binary subtype assignment uses an unassigned registered byte plus required feature and never
@@ -596,7 +596,7 @@ can replace this registry without data migration. After immutable fixtures or da
 | `P03-011` (complete) | Exact-name and dotted-path borrowed lookup | Payload identity and Missing/null distinction |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Exact tagged rendering/import payload conversion | Exact bits, widths, decimal tuples, identifiers, and vector family |
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; no subtype extensions registered | Existing subtype/encoding assignments |
-| `P03-016`–`P03-019` | Complete golden HDocs, independent readers, malformed/property/fuzz suites | Payload vectors and rejection expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md) complete; `P03-017`–`P03-019` | Complete golden HDocs frozen; independent readers and malformed/property/fuzz suites remain | Payload vectors and rejection expectations |
 
 ## Required validation cases
 
@@ -618,9 +618,9 @@ Later complete fixtures/property/fuzz suites must include:
 - alignment/padding/overlap/alias/overflow/limit mutations under P03-005; and
 - identical Rust/TypeScript/native/Wasm/browser values, bytes, typed hashes, errors, and diagnostics.
 
-The payload examples in the machine registry are normative test inputs, not complete HDoc golden
-documents. P03-006 fixes their typed-hash framing and P03-007 completes the surrounding compression
-grammar. `P03-016` must embed them in immutable complete supported documents.
+The payload examples in the machine registry remain normative test inputs. P03-006 fixes their
+typed-hash framing, P03-007 completes the surrounding compression grammar, and P03-016 embeds every
+tag plus domain boundaries in immutable complete supported documents.
 
 ## References
 

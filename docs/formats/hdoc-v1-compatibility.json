@@ -37,6 +37,8 @@
   },
   "future_work": {
     "immutable_fixture_owner": "P03-016",
+    "immutable_fixture_registry": "fixtures/hdoc/v1/manifest.json",
+    "immutable_fixture_status": "complete",
     "independent_reader_owner": "P03-017",
     "migration_implementation_owner": "future-version-specific-plan-and-ADR"
   }

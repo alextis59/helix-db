@@ -320,10 +320,8 @@ reader rejects it before value exposure.
 
 P03-006 supplies complete integrity-reference envelopes for profile-1 hashing and CRC coverage.
 P03-007 adds compressed/uncompressed complete reference envelopes and closes the byte grammar.
-They remain validation references, not the immutable supported golden-fixture corpus that P03-016
-must publish.
-Before P03-016, this registry can be superseded without stored-data migration, but the superseding
-change must preserve the historical decision. After fixtures/data exist:
+P03-016 now embeds all 16 tags in the immutable supported golden-fixture corpus. Before that freeze,
+this registry could be superseded without stored-data migration; after fixtures/data exist:
 
 - correcting an existing tag meaning requires a new incompatible format version, not reassignment;
 - adding a type uses an unassigned registered value and required feature/profile;
@@ -342,7 +340,7 @@ change must preserve the historical decision. After fixtures/data exist:
 | [`P03-006`](hdoc-v1-integrity.md) | Typed-hash framing including tag and payload | Tag identity or unknown-tag rule |
 | `P03-008`–`P03-012` (complete) | Encoder, decoder, owned/borrowed values, raw lookup, and tagged conversion | Closed-world registry semantics |
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; no extension tags registered | Existing assignments or no-reuse rule |
-| `P03-016`–`P03-019` | Golden vectors, independent readers, malformed tests, fuzzing | Historical registry bytes/expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md) complete; `P03-017`–`P03-019` | Immutable vectors complete; independent readers, broader malformed tests, and fuzzing remain | Historical registry bytes/expectations |
 
 ## Required validation cases
 

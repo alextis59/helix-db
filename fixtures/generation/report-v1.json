@@ -2,8 +2,8 @@
   "generation_report_schema": "helix.fixture-generation-report/1",
   "registry": {
     "path": "fixtures/generation/registry-v1.json",
-    "bytes": 3717,
-    "sha256": "4e240f4b142e530dd76a3ed736e453758694af129013154c80a89a74a495e4eb"
+    "bytes": 4392,
+    "sha256": "b807baef1b682f83b2af968d34d9ea8f6b59e3f2d18a90b30b6e8558a9bf5146"
   },
   "generators": [
     {
@@ -66,14 +66,30 @@
           "format": "json",
           "schema_path": "compatibility/v1/schema/matrix-v1.schema.json",
           "bytes": 218324,
-          "sha256": "e94c64f91103d036a17a8c998e3dbd9a930df95bda618738e2c480837e49dd0c"
+          "sha256": "441e88ab016ac9d152e9a8a803f343c5fe3047b534a20b7f2cc8d9f969cdb03d"
         },
         {
           "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
           "format": "markdown",
           "schema_path": null,
           "bytes": 103739,
-          "sha256": "90127aa4d8cc842743a8aa5d111dc9babc1e0dafc36549167bbc0d9b256679c1"
+          "sha256": "e1d1198e8d5b7ef2d8baa2b83526fec2992d0617061bf92f94001504f014805a"
+        }
+      ]
+    },
+    {
+      "id": "hdoc.golden-v1",
+      "version": "1.0.0",
+      "randomness": "none",
+      "seed": null,
+      "algorithm": null,
+      "artifacts": [
+        {
+          "path": "fixtures/hdoc/v1/manifest.json",
+          "format": "json",
+          "schema_path": "fixtures/hdoc/v1/schema/manifest-v1.schema.json",
+          "bytes": 9737,
+          "sha256": "eaaa1b9fad07661b0592fcf76b590251386c1b8981e6869302543b23ec7877ef"
         }
       ]
     }

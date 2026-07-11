@@ -33,8 +33,8 @@ Completion of the grammar alone was not an implementation or release-support cla
 implements the production writer, `P03-009` implements the bounded whole-envelope validating
 reader, `P03-010` implements lifetime-bound borrowed views plus detached owned logical values, and
 `P03-011` implements exact-name and dotted-path lookup over those validated views. `P03-012`
-implements canonical lossless tagged rendering and strict detached import. `P03-016` owns immutable
-supported golden files.
+implements canonical lossless tagged rendering and strict detached import. `P03-016` freezes the
+[immutable supported golden files](../../fixtures/hdoc/v1/README.md).
 Footer `hash_profile_id = 1` is the only assigned base integrity profile; zero remains permanently
 invalid. The exact envelopes in the integrity and compression registries are normative executable
 references until the immutable corpus is published.
@@ -643,8 +643,9 @@ P03-009 added a bounded validating reader, P03-010 added logical views/owned val
 added raw view lookup, and P03-012 added lossless tagged JSON conversion without publishing or
 persisting supported data.
 P03-015 adds closed-world exact-1.0 negotiation and a no-rewrite migration assessment; it does not
-add another readable/writable version or extension. Immutable support fixtures remain P03-016, so the format can still be superseded without
-stored-data migration before that fixture/data boundary.
+add another readable/writable version or extension. P03-016 crosses the immutable support boundary
+by freezing 4 accepted and 20 rejected exact-byte fixtures. HDoc 1.0 can no longer be silently
+superseded or rewritten; an incompatible change now requires the migration obligations below.
 
 Once a nonzero hash profile and immutable HDoc 1.x vectors exist, changing this layout requires:
 
@@ -676,8 +677,9 @@ or an existing ID.
 
 ## Required validation fixtures
 
-P03-002 evidence validates the layout document and machine companion, but these are not golden HDoc
-bytes. P03-016/P03-018 must eventually include at least:
+P03-002 evidence validates the layout document and machine companion. P03-016 now supplies the
+first immutable complete golden HDoc bytes; P03-018 expands malformed/property breadth. Together
+the validation program covers:
 
 - exact header/footer magic and every fixed field boundary;
 - base four-entry directory, optional extension entry, and maximum 32 entries;

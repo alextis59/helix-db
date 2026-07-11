@@ -15,7 +15,7 @@ import {
 } from './artifact-retention-contract.mjs';
 
 const usage =
-  'usage: node tests/toolchain/check-retained-artifacts.mjs <policy|bundle test-replays semantic|bundle test-replays coverage|bundle browser-reports chromium|bundle browser-reports firefox|bundle browser-reports webkit>';
+  'usage: node tests/toolchain/check-retained-artifacts.mjs <policy|bundle golden-formats hdoc-v1|bundle test-replays semantic|bundle test-replays coverage|bundle browser-reports chromium|bundle browser-reports firefox|bundle browser-reports webkit>';
 
 try {
   const mode = process.argv[2];
@@ -24,7 +24,7 @@ try {
     const schemaCount = validateSchemas();
     const policy = loadPolicy();
     process.stdout.write(
-      `PASS artifact retention policy: ${schemaCount} strict schemas, ${policy.profiles.length} profiles, 2 active, 3 reserved\n`,
+      `PASS artifact retention policy: ${schemaCount} strict schemas, ${policy.profiles.length} profiles, 3 active, 2 reserved\n`,
     );
     process.stdout.write(
       'PASS retention boundaries: 30-day CI diagnostics; permanent promotion for gate/release claims\n',

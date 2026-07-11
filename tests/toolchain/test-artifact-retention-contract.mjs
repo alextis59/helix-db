@@ -111,17 +111,17 @@ const cases = [
   ],
   [
     'reserved profile activation',
-    'golden-formats: active profile lacks producers',
+    'crash-matrices: active profile lacks producers',
     (value) => {
-      value.profiles[0].state = 'active';
-      value.profiles[0].activation_task = null;
+      value.profiles[2].state = 'active';
+      value.profiles[2].activation_task = null;
     },
   ],
   [
     'reserved producer injection',
-    'golden-formats reserved producers mismatch',
+    'crash-matrices reserved producers mismatch',
     (value) => {
-      value.profiles[0].producers = [structuredClone(value.profiles[1].producers[0])];
+      value.profiles[2].producers = [structuredClone(value.profiles[1].producers[0])];
     },
   ],
   [
@@ -173,15 +173,18 @@ const cases = [
 
 for (const [label, marker, mutate] of cases) expectRejection(label, marker, mutate);
 
+const goldenProfile = findProfile(policy, 'golden-formats');
+assert(findProducer(goldenProfile, 'hdoc-v1').variant === 'hdoc-v1', 'golden producer inactive');
+
 let reservedRejected = false;
 try {
-  findProfile(policy, 'golden-formats');
+  findProfile(policy, 'crash-matrices');
 } catch (error) {
   const message = error instanceof Error ? error.message : String(error);
-  assert(message.includes('reserved until P03-016'), `reserved profile reason: ${message}`);
+  assert(message.includes('reserved until P05-021'), `reserved profile reason: ${message}`);
   reservedRejected = true;
 }
-assert(reservedRejected, 'reserved golden format profile unexpectedly activated');
+assert(reservedRejected, 'reserved crash matrix profile unexpectedly activated');
 
 let engineRejected = false;
 try {

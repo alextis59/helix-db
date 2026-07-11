@@ -12,7 +12,7 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "hdoc-feature-negotiation"
+status = "hdoc-golden-v1"
 database-functionality = true
 
 [dependencies]

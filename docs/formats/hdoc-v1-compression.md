@@ -27,8 +27,8 @@ content identity, or introduce dictionaries, network access, or user code during
 `P03-008` installed fail-closed Rust dependency/advisory reporting, adopted the exact reviewed
 codec package, and implemented the production writer. `P03-009` now implements the production
 bounded validating reader, including fresh exact-output decompression and exact canonical stream
-comparison. `P03-016` owns immutable supported fixture files. Until that later task completes, the
-codec is implemented but the format is not a release-support claim.
+comparison. `P03-016` now freezes immutable supported base and compression-profile fixture files.
+The independent-reader, fuzz, benchmark, and gate obligations remain open.
 
 The prose and machine registry are jointly normative. A disagreement is a specification defect
 that blocks `G03`; an implementation must not select whichever form is convenient.
@@ -380,9 +380,8 @@ contracts. A newer `lz4_flex` version or alternate byte-producing encoder cannot
 the writer while retaining profile `1/1`; it requires byte-equivalence proof or a newly registered
 profile and compatibility matrix.
 
-Before `P03-016`, no immutable supported HDoc fixture exists, so a reviewed superseding format
-decision can still replace this profile without stored-data migration. After immutable fixtures or
-data exist, an incompatible change requires historical decoding, new codec/profile negotiation,
+P03-016 now freezes immutable base and canonical compression profile `1/1` HDoc fixtures. An
+incompatible change therefore requires historical decoding, new codec/profile negotiation,
 old/new positive and malformed fixtures, atomic validated rewrite/resume/rollback, and updates to
 every WAL/SST/VLOG, replication, backup, SDK, protocol, and adapter container that carries HDoc.
 Reading never silently recompresses, repairs, or rewrites an HDoc.
@@ -397,7 +396,7 @@ Reading never silently recompresses, repairs, or rewrites an HDoc.
 | `P03-011` (complete) | Exact-name lookup and bounded dotted traversal over retained sections | Whole-document validation and logical offsets |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Canonical lossless tagged rendering and strict detached import | Whole-document validation and logical offsets |
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; extension-area compression remains unsupported | Four-base-section profile and existing IDs |
-| `P03-016`–`P03-019` | Immutable fixtures, independent reader, properties, fuzz/sanitizer replay | Registry vectors and rejection expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md) complete; `P03-017`–`P03-019` | Immutable fixtures complete; independent reader, properties, and fuzz/sanitizer replay remain | Registry vectors and rejection expectations |
 | `P03-020`–`P03-021` | Formal format/compression/dictionary benchmarks | Correctness, canonicality, limits, or security rules |
 
 ## References

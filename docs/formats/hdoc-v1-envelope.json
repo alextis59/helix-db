@@ -19,7 +19,9 @@
     "completion_owner": "P03-007",
     "implementation_owners": ["P03-008", "P03-009"],
     "negotiation_owner": "P03-015",
-    "immutable_fixture_owner": "P03-016"
+    "immutable_fixture_owner": "P03-016",
+    "immutable_fixture_registry": "fixtures/hdoc/v1/manifest.json",
+    "immutable_fixture_status": "frozen"
   },
   "magic": {
     "header_hex": "48444f430d0a1a0a",

@@ -76,6 +76,7 @@ same(
     'P03-013',
     'P03-014',
     'P03-015',
+    'P03-016',
   ],
   'CI matrix task history',
 );
@@ -255,6 +256,7 @@ same(
   {
     'artifacts:browser-report': packageJson.scripts['artifacts:browser-report'],
     'artifacts:coverage-replay': packageJson.scripts['artifacts:coverage-replay'],
+    'artifacts:golden-formats': packageJson.scripts['artifacts:golden-formats'],
     'artifacts:policy': packageJson.scripts['artifacts:policy'],
     'artifacts:test': packageJson.scripts['artifacts:test'],
     'artifacts:test-replay': packageJson.scripts['artifacts:test-replay'],
@@ -290,6 +292,8 @@ same(
       'node tests/toolchain/collect-retained-artifacts.mjs browser-reports',
     'artifacts:coverage-replay':
       'node tests/toolchain/collect-retained-artifacts.mjs test-replays coverage',
+    'artifacts:golden-formats':
+      'node tests/toolchain/collect-retained-artifacts.mjs golden-formats hdoc-v1',
     'artifacts:policy': 'node tests/toolchain/check-retained-artifacts.mjs policy',
     'artifacts:test': 'node tests/toolchain/test-artifact-retention-contract.mjs',
     'artifacts:test-replay':
@@ -325,7 +329,7 @@ same(
 );
 assert(
   runNode(['tests/toolchain/check-bootstrap.mjs', 'contract']).includes(
-    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 19 troubleshooting codes, HDoc feature negotiation active',
+    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 19 troubleshooting codes, immutable HDoc golden vectors active',
   ),
   'clean bootstrap contract did not pass',
 );
@@ -399,7 +403,7 @@ assert(
 );
 assert(
   runNode(['tests/toolchain/check-retained-artifacts.mjs', 'policy']).includes(
-    'PASS artifact retention policy: 3 strict schemas, 5 profiles, 2 active, 3 reserved',
+    'PASS artifact retention policy: 3 strict schemas, 5 profiles, 3 active, 2 reserved',
   ),
   'artifact retention policy did not pass',
 );
@@ -533,20 +537,20 @@ for (const workflowPath of workflowPaths) {
   artifactHiddenExclusionCount += [...workflow.matchAll(/include-hidden-files: false/g)].length;
   artifactArchiveCount += [...workflow.matchAll(/archive: true/g)].length;
 }
-assert(actionUses.length === 22, `workflow action-use count mismatch: ${actionUses.length}`);
+assert(actionUses.length === 23, `workflow action-use count mismatch: ${actionUses.length}`);
 assert(checkoutHardeningCount === 9, `checkout hardening count: ${checkoutHardeningCount}`);
 assert(setupHardeningCount === 9, `setup-node hardening count: ${setupHardeningCount}`);
 assert(
-  artifactMissingFailureCount === 4,
+  artifactMissingFailureCount === 5,
   `artifact missing-file hardening: ${artifactMissingFailureCount}`,
 );
 assert(artifactRetentionCount === 4, `artifact retention count: ${artifactRetentionCount}`);
-assert(artifactNoOverwriteCount === 4, `artifact overwrite hardening: ${artifactNoOverwriteCount}`);
+assert(artifactNoOverwriteCount === 5, `artifact overwrite hardening: ${artifactNoOverwriteCount}`);
 assert(
-  artifactHiddenExclusionCount === 4,
+  artifactHiddenExclusionCount === 5,
   `artifact hidden-file hardening: ${artifactHiddenExclusionCount}`,
 );
-assert(artifactArchiveCount === 4, `artifact archive count: ${artifactArchiveCount}`);
+assert(artifactArchiveCount === 5, `artifact archive count: ${artifactArchiveCount}`);
 for (const use of actionUses) {
   const action = Object.values(matrix.actions).find(({ repository: name }) => name === use[1]);
   assert(action && action.sha === use[2], `unapproved action pin: ${use[1]}@${use[2]}`);
@@ -592,6 +596,9 @@ for (const marker of [
   'corepack npm run examples:native',
   "if: always() && matrix.node == '22.23.1'",
   'corepack npm run artifacts:test-replay',
+  'corepack npm run artifacts:golden-formats',
+  `name: golden-formats-hdoc-v1-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,
+  'path: dist/retention/golden-formats/hdoc-v1/',
   `name: test-replays-semantic-node-${githubExpression('matrix.node')}-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,
   'path: dist/retention/test-replays/semantic/',
   "if: always() && matrix.id == 'linux-x64'",
@@ -672,7 +679,7 @@ process.stdout.write(
   'PASS bootstrap: 4 documented profiles, 19 stable troubleshooting codes, and clean-host preflight\n',
 );
 process.stdout.write(
-  'PASS workflow policy: 22 full-SHA action uses, read-only permissions, fixed runners\n',
+  'PASS workflow policy: 23 full-SHA action uses, read-only permissions, fixed runners\n',
 );
 process.stdout.write(
   'PASS portable artifacts: core module plus pinned-validator WASIp2 component\n',
@@ -690,6 +697,6 @@ process.stdout.write(
   'PASS benchmark baseline: scheduled/manual only, integrity-gated raw artifact retention\n',
 );
 process.stdout.write(
-  'PASS artifact retention: semantic/coverage/browser bundles uploaded on all outcomes; 3 future classes reserved\n',
+  'PASS artifact retention: golden/semantic/coverage/browser bundles uploaded on all outcomes; 2 future classes reserved\n',
 );
 process.stdout.write('PASS matrix rejection: unknown emitter/runtime lanes fail\n');

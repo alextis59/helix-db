@@ -39,7 +39,7 @@ silently upload placeholder evidence for unimplemented functionality.
 
 | Profile | State and current scope | CI copy | Durable rule | Activation owner |
 | --- | --- | ---: | --- | --- |
-| `golden-formats` | Reserved; no persistent HelixDB format or golden vector exists | 90 days after activation | Permanent by format version | `P03-016` |
+| `golden-formats` | Active; 24 immutable HDoc 1.0 positive/rejection files plus schema/manifest | 90 days | Permanent by format version | Active at `P03-016` |
 | `test-replays` | Active; semantic conformance/dependency diagnostics and Rust coverage | 30 days | Permanent when used by a gate or release | Active |
 | `crash-matrices` | Reserved; no storage fault point, crash history, or recovery matrix exists | 90 days after activation | Permanent by persistent-format and release line | `P05-021` |
 | `browser-reports` | Active; Chromium, Firefox, and WebKit boundary-example diagnostics | 30 days | Supported platform lifetime when used by a release | Active |
@@ -165,12 +165,14 @@ manifest with missing required output is a hard contract failure.
 ```bash
 corepack npm run artifacts:policy
 corepack npm run artifacts:test
+corepack npm run artifacts:golden-formats
 corepack npm run artifacts:test-replay
 corepack npm run artifacts:coverage-replay
 corepack npm run artifacts:browser-report -- chromium
 corepack npm run artifacts:browser-report -- firefox
 corepack npm run artifacts:browser-report -- webkit
 node tests/toolchain/check-retained-artifacts.mjs bundle test-replays semantic
+node tests/toolchain/check-retained-artifacts.mjs bundle golden-formats hdoc-v1
 node tests/toolchain/check-retained-artifacts.mjs bundle test-replays coverage
 node tests/toolchain/check-retained-artifacts.mjs bundle browser-reports chromium
 ```

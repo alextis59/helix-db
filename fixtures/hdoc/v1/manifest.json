@@ -1,0 +1,67 @@
+{
+  "schema": "helix.hdoc-golden-manifest/1",
+  "format": { "name": "HDoc", "major": 1, "minor": 0, "frozen": true },
+  "producer": {
+    "path": "crates/helix-doc/examples/hdoc_v1_golden.rs",
+    "check": "cargo run --frozen -p helix-doc --example hdoc_v1_golden -- --check",
+    "write_policy": "create-missing-only-never-overwrite"
+  },
+  "cases": [
+    {
+      "id": "positive-minimal",
+      "path": "fixtures/hdoc/v1/cases/positive-minimal.hdoc",
+      "kind": "positive",
+      "bytes": 336,
+      "sha256": "18e0de57b85aba222bea81e5637ea02b2592bc39e46a13554af255fb26c6e57b",
+      "expected": { "result": "accept", "total_length": 336, "canonical_length": 336, "field_count": 1, "document_flags_hex": "0x00000000", "required_features_hex": "0x0000000000000000", "content_hash_hex": "15a50178eb44b0fd0d2973e4772621b62eac795616deca0d442ca5f056aa66c4" },
+      "coverage": ["minimum-valid-root", "int32-id", "base-uncompressed"]
+    },
+    {
+      "id": "positive-all-types-nested",
+      "path": "fixtures/hdoc/v1/cases/positive-all-types-nested.hdoc",
+      "kind": "positive",
+      "bytes": 1304,
+      "sha256": "1c18c8c7f9f21b90bc68852641ef2df884bfebba6083b35a365a8096eec1b5a1",
+      "expected": { "result": "accept", "total_length": 1304, "canonical_length": 1304, "field_count": 18, "document_flags_hex": "0x00000000", "required_features_hex": "0x0000000000000000", "content_hash_hex": "ac843d3152ab9799fdf11640f5412aea82dd7d09ea948ec9e33065a49676a645" },
+      "coverage": ["all-16-type-tags", "object-in-array", "array-in-array", "empty-object", "unicode-not-normalized"]
+    },
+    {
+      "id": "positive-boundary-values",
+      "path": "fixtures/hdoc/v1/cases/positive-boundary-values.hdoc",
+      "kind": "positive",
+      "bytes": 1496,
+      "sha256": "ceb33cf45420aab699038b87d313fc7b3d9699490053dfd2a52f216837ec59a9",
+      "expected": { "result": "accept", "total_length": 1496, "canonical_length": 1496, "field_count": 23, "document_flags_hex": "0x00000000", "required_features_hex": "0x0000000000000000", "content_hash_hex": "618dff903fa380b59d2b2b9231fd9e58d7ae8dd663bc41660604124e31c39977" },
+      "coverage": ["integer-min-max", "float-special-bits", "decimal-domain-edges", "temporal-min-max", "unicode-scalar-edge", "binary-octet-edges", "finite-vector-bit-edges"]
+    },
+    {
+      "id": "positive-compression-profile-1",
+      "path": "fixtures/hdoc/v1/cases/positive-compression-profile-1.hdoc",
+      "kind": "positive",
+      "bytes": 1224,
+      "sha256": "be1cdae4d41fbcf0c2e54d2d438b6c97f56f7a0e1cb15727013553c2118a7a61",
+      "expected": { "result": "accept", "total_length": 1224, "canonical_length": 131456, "field_count": 2, "document_flags_hex": "0x00000001", "required_features_hex": "0x0000000000000001", "content_hash_hex": "a22c5de06f9b88f58238690e22001a22c5e0895c227860e3f484e238676c7ed7" },
+      "coverage": ["canonical-compression-selection", "codec-1-profile-1", "multi-block-expansion-bound"]
+    },
+    { "id": "invalid-magic", "path": "fixtures/hdoc/v1/cases/invalid-magic.hdoc", "kind": "invalid", "bytes": 336, "sha256": "ba4d22884b21c0bd07ecc3d6070ac8af005dde1efb9bcf423c4f48593b52f02f", "expected": { "result": "reject", "code": "CAP_FORMAT_UNSUPPORTED", "check": null }, "coverage": ["header-magic"] },
+    { "id": "invalid-major-version", "path": "fixtures/hdoc/v1/cases/invalid-major-version.hdoc", "kind": "invalid", "bytes": 336, "sha256": "64803447e56ded8e3383723da878cea99b465f19ca0a9f9bb1098384ce220fdd", "expected": { "result": "reject", "code": "CAP_UNSUPPORTED_VERSION", "check": null }, "coverage": ["unsupported-major"] },
+    { "id": "invalid-minor-version", "path": "fixtures/hdoc/v1/cases/invalid-minor-version.hdoc", "kind": "invalid", "bytes": 336, "sha256": "43150d60a31fa39476ef2fdc01231906d4332148aa68e2196ebb90d938431a21", "expected": { "result": "reject", "code": "CAP_UNSUPPORTED_VERSION", "check": null }, "coverage": ["unsupported-minor"] },
+    { "id": "invalid-document-flag", "path": "fixtures/hdoc/v1/cases/invalid-document-flag.hdoc", "kind": "invalid", "bytes": 336, "sha256": "eeaa99c2868a323bbcc73b5e0c58340d019cf9fa7bad6918e5499cd4a75bae99", "expected": { "result": "reject", "code": "CAP_FORMAT_UNSUPPORTED", "check": "feature" }, "coverage": ["unknown-document-flag"] },
+    { "id": "invalid-required-feature", "path": "fixtures/hdoc/v1/cases/invalid-required-feature.hdoc", "kind": "invalid", "bytes": 336, "sha256": "d0bf312b552984d6aa2302b6607b0043888c72ac472680c79d1c110b5faa41cb", "expected": { "result": "reject", "code": "CAP_FORMAT_UNSUPPORTED", "check": "feature" }, "coverage": ["unknown-required-feature"] },
+    { "id": "invalid-optional-feature", "path": "fixtures/hdoc/v1/cases/invalid-optional-feature.hdoc", "kind": "invalid", "bytes": 336, "sha256": "370c108e9cbb791f1d472d28741731b64f0a478aacebef4966ec222358373518", "expected": { "result": "reject", "code": "CAP_FORMAT_UNSUPPORTED", "check": "feature" }, "coverage": ["unsupported-optional-feature"] },
+    { "id": "invalid-truncated-header", "path": "fixtures/hdoc/v1/cases/invalid-truncated-header.hdoc", "kind": "invalid", "bytes": 63, "sha256": "4074c456fba419df468664b0dd7de67fa2b8da4c49e59a6daa3683b689bc27c7", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "header" }, "coverage": ["truncated-header"] },
+    { "id": "invalid-truncated-body", "path": "fixtures/hdoc/v1/cases/invalid-truncated-body.hdoc", "kind": "invalid", "bytes": 335, "sha256": "0b72679f2b51611965d58549afbce67cb4fb2d797eaf597a6e5f8f234ef59cfa", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "length" }, "coverage": ["truncated-footer"] },
+    { "id": "invalid-trailing-byte", "path": "fixtures/hdoc/v1/cases/invalid-trailing-byte.hdoc", "kind": "invalid", "bytes": 337, "sha256": "3867b2731a87ff5504465c82aa1a4c30cbec6d1242f8884e948fb722df40c7ec", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "length" }, "coverage": ["trailing-byte"] },
+    { "id": "invalid-body-checksum", "path": "fixtures/hdoc/v1/cases/invalid-body-checksum.hdoc", "kind": "invalid", "bytes": 336, "sha256": "4ca63fc6e953ae7a324175e9bb82cf71aed0d9070aa18eab4b9eccb9d25114e4", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "checksum" }, "coverage": ["stored-byte-crc"] },
+    { "id": "invalid-directory-overlap", "path": "fixtures/hdoc/v1/cases/invalid-directory-overlap.hdoc", "kind": "invalid", "bytes": 336, "sha256": "cc946ed9ab377604ddf33951f4567d5c39852b01b68a421f0603287e6ebda4bd", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "directory" }, "coverage": ["section-overlap"] },
+    { "id": "invalid-section-version", "path": "fixtures/hdoc/v1/cases/invalid-section-version.hdoc", "kind": "invalid", "bytes": 336, "sha256": "b7d104b3dc28b135b58d742634ee8f78a0ab1d76c7816dbac03b1e7b6eb8f30b", "expected": { "result": "reject", "code": "CAP_FORMAT_UNSUPPORTED", "check": "directory" }, "coverage": ["unknown-section-version"] },
+    { "id": "invalid-type-tag", "path": "fixtures/hdoc/v1/cases/invalid-type-tag.hdoc", "kind": "invalid", "bytes": 1304, "sha256": "cca166e87f4888edc6313b0e459f33c68938a65f7a33c715506ba0a44452c964", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "field-table" }, "coverage": ["unknown-type-tag"] },
+    { "id": "invalid-footer-magic", "path": "fixtures/hdoc/v1/cases/invalid-footer-magic.hdoc", "kind": "invalid", "bytes": 336, "sha256": "5350e9f599242075906431b5855000f950b31fbaa8685f25641bcd71fc3ea19b", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "footer" }, "coverage": ["footer-magic"] },
+    { "id": "invalid-hash-profile", "path": "fixtures/hdoc/v1/cases/invalid-hash-profile.hdoc", "kind": "invalid", "bytes": 336, "sha256": "c60ff4c9492210cadbedcf076700389ee4a28c0b8e2ed9e785fb47a00294a5c3", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "footer" }, "coverage": ["unknown-hash-profile"] },
+    { "id": "invalid-content-hash", "path": "fixtures/hdoc/v1/cases/invalid-content-hash.hdoc", "kind": "invalid", "bytes": 336, "sha256": "69bc1525f93f0dd270ac1e5a1b836129999858fba3b257d03bc1632732d7e828", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "typed-content-hash" }, "coverage": ["typed-content-hash"] },
+    { "id": "invalid-compression-codec", "path": "fixtures/hdoc/v1/cases/invalid-compression-codec.hdoc", "kind": "invalid", "bytes": 1224, "sha256": "3b69f2242f94875e0dd70a893248f420cce23e4c32571507421be1e8cecc6c7a", "expected": { "result": "reject", "code": "CAP_FORMAT_UNSUPPORTED", "check": "compression-header" }, "coverage": ["unknown-compression-codec"] },
+    { "id": "invalid-nonzero-padding", "path": "fixtures/hdoc/v1/cases/invalid-nonzero-padding.hdoc", "kind": "invalid", "bytes": 336, "sha256": "42551f7af08a88d89eb924e731b5abf4aa0a37136b7094f2237e05dd908f9959", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "directory" }, "coverage": ["nonzero-padding", "noncanonical-layout"] },
+    { "id": "invalid-field-count-limit", "path": "fixtures/hdoc/v1/cases/invalid-field-count-limit.hdoc", "kind": "invalid", "bytes": 336, "sha256": "048e164a2a74bd3098a7fba78c1e8ac12098d3382b2e1bacb19a6469ee8ad069", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "limit" }, "coverage": ["field-count-limit"] },
+    { "id": "invalid-compression-expansion-limit", "path": "fixtures/hdoc/v1/cases/invalid-compression-expansion-limit.hdoc", "kind": "invalid", "bytes": 1224, "sha256": "16f177c46121ab86f58b6dacc08c461b30f22904603cb95ae09627d0769f7d22", "expected": { "result": "reject", "code": "DUR_CORRUPTION", "check": "compression-header" }, "coverage": ["compression-expansion-limit", "compression-bomb-claim"] }
+  ]
+}
