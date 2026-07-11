@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "task_id": "P02-010",
+  "requirements": ["PLAT-001", "PLAT-002", "PLAT-003", "INV-003", "INV-004", "INV-007", "CORE-001", "CORE-003", "QUAL-001"],
+  "accepted_adrs": ["0001"],
+  "commit": "4d937801e68c73c0e5b46f209b7a59522c5ea5bf",
+  "recorded_at": "2026-07-10T22:30:00Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+      "cargo": "1.96.1 (356927216 2026-06-26)",
+      "node": "v22.19.0",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "python": "3.10.12",
+      "pyyaml": "6.0",
+      "wasm_tools": "1.253.0 (c799bb87b 2026-07-07)",
+      "playwright": "1.61.1",
+      "vite": "8.1.4"
+    },
+    "javascript_lanes": ["22.23.1", "24.18.0"],
+    "browser_revisions": {
+      "chromium": "Chrome for Testing 149.0.7827.55 / 1228",
+      "firefox": "Firefox 151.0 / 1532",
+      "webkit": "WebKit 26.5 / 2311"
+    },
+    "hosted_workflow_execution": false
+  },
+  "diagnostic_attempts": [
+    {
+      "command": "node tests/toolchain/install-wasm-tools.mjs",
+      "exit_code": 1,
+      "result": "the first verified extraction moved the archive root one level above the declared executable path; the atomic destination now preserves and re-verifies the authority layout"
+    },
+    {
+      "command": "node tests/toolchain/check-wasm-artifacts.mjs all",
+      "exit_code": 1,
+      "result": "the initial metadata assertion expected an older array response; wasm-tools 1.253.0 returns a component-root object with one module child"
+    },
+    {
+      "command": "corepack npm run browser:smoke",
+      "exit_code": 1,
+      "result": "the first real-engine run exposed custom-app root 404 handling; explicit index.html readiness/navigation replaced an invalid SPA-fallback assumption"
+    },
+    {
+      "command": "corepack npm run browser:smoke",
+      "exit_code": 1,
+      "result": "the second run used an input-only matcher for semantic output; visible text is now the cross-engine readiness contract"
+    },
+    {
+      "command": "corepack npm run browser:smoke",
+      "exit_code": 1,
+      "result": "Chromium and Firefox passed while WebKit exposed additional descriptor type metadata; portable name/kind projection preserved all validation and instantiation checks"
+    },
+    {
+      "command": "corepack npm test",
+      "exit_code": 0,
+      "result": "the passing output revealed Vitest inherited the Vite smoke root; a dedicated repository-root unit config now excludes Playwright/browser output and proves the intended zero-file unit inventory"
+    },
+    {
+      "command": "P02-010 clean-room validator-authority digest canary",
+      "exit_code": 1,
+      "result": "the first evidence replay found that a well-formed replacement digest was accepted; the source commit was amended to hard-code every reviewed release/archive/executable identity before evidence acceptance"
+    },
+    {
+      "command": "P02-010 clean-room Vitest-boundary canary",
+      "exit_code": 1,
+      "result": "the first mutation added a browser include but left the explicit browser exclude active; the strengthened canary removes the exclusion and adds the include together"
+    }
+  ],
+  "verification": {
+    "present_artifact_files": 40,
+    "removed_artifact_files": 1,
+    "changed_paths": 41,
+    "wasip2_component_bytes": 13204,
+    "browser_core_bytes": 86,
+    "bundle_artifacts": 4,
+    "bundle_bytes": 5323,
+    "browser_engines": 3,
+    "browser_smoke_tests": 3,
+    "node_lanes": 2,
+    "portable_targets": 2,
+    "validator_archive_bytes": 6007583,
+    "validator_executable_bytes": 19172248,
+    "workflow_jobs": 8,
+    "workflow_steps": 39,
+    "biome_files": 54,
+    "native_tests": 9,
+    "mutation_canaries": 10,
+    "markdown_files": 138,
+    "local_links": 885
+  },
+  "produced_artifacts": [
+    { "path": "target/wasm32-wasip2/wasm/helix_core.wasm", "media_type": "application/wasm", "bytes": 13204, "sha256": "ba534a6433571e8c3da9d284f80e5bb183d3c75d97e5bd6d48aabddaa61e7f5a" },
+    { "path": "target/wasm32-unknown-unknown/browser/helix_core.wasm", "media_type": "application/wasm", "bytes": 86, "sha256": "c3231bfcaaa248bda3c8a762c35f5f778e1e4f319b93eef3882e7a9c6a0fde93" },
+    { "path": "dist/validation/wasm-all-smoke.json", "media_type": "application/json", "bytes": 1058, "sha256": "fa5d57b3331e2f7cabfff333ffdcca6f8443e9feb0bcb1bdb85b4c9438f761d3" },
+    { "path": "dist/validation/browser-bundle-smoke.json", "media_type": "application/json", "bytes": 937, "sha256": "ee9291a79568d50fa5c8247f9be8e59d10929b9eb855493de5329f40388b15f2" }
+  ],
+  "commands": [
+    { "command": "Node 22.23.1 clean install, CI/policy/type/fixture/test/Wasm replay and three-engine browser smoke", "exit_code": 0 },
+    { "command": "Node 24.18.0 clean install, CI/policy/type/fixture/test/Wasm replay and bundle build", "exit_code": 0 },
+    { "command": "official validator install plus exact component/core/report hash checks", "exit_code": 0 },
+    { "command": "native format/check/Clippy/test/docs plus both portable-target Clippy builds", "exit_code": 0 },
+    { "command": "node evidence/phase-02/P02-010/verify.mjs 4d937801e68c73c0e5b46f209b7a59522c5ea5bf", "exit_code": 0 }
+  ],
+  "artifacts": [
+    { "path": ".github/CODEOWNERS", "media_type": "text/plain", "bytes": 775, "sha256": "c24e8dc97fe1dfedd1695f88ef44bcaaab656c8f82e86f58f65a858d09a15ff4" },
+    { "path": ".github/README.md", "media_type": "text/markdown", "bytes": 948, "sha256": "39cdd93434e901fc8f81bcc500c54bf2406fe7639c7d12c21e88347b576dde61" },
+    { "path": ".github/ci/matrix.json", "media_type": "application/json", "bytes": 4591, "sha256": "012de1959fe5d019beba8cf0b3bfd885bd28655efe40dfa66700c886ec606232" },
+    { "path": ".github/ci/wasm-tools.json", "media_type": "application/json", "bytes": 1041, "sha256": "e1d10f3578b5f0be8b80d1c0381f7f4f7f7d314d898c35eddb3a8889f174803c" },
+    { "path": ".github/workflows/ci.yml", "media_type": "application/yaml", "bytes": 6891, "sha256": "001c280dcfd3f2f18ade0f7f35e5ad1ac768776bfd0d47ea7a22238b77d11140" },
+    { "path": "Cargo.toml", "media_type": "application/toml", "bytes": 3649, "sha256": "3386e6e1266a32c68e1b9498d722f1e5e467323cecbf0933c2f48bebd72c01f0" },
+    { "path": "README.md", "media_type": "text/markdown", "bytes": 3436, "sha256": "85fbbc75b59a8502edfffbc7aeb028ec9d2b953746870e0511ed36cea096b167" },
+    { "path": "THIRD_PARTY_NOTICES.md", "media_type": "text/markdown", "bytes": 3877, "sha256": "5bd713d7b820c60bbf3ed7b2ee8a4a7528815ad75ed2a2933b270f4e32a4a02e" },
+    { "path": "biome.json", "media_type": "application/json", "bytes": 1324, "sha256": "35069504233c87bb9f133ff1f2a4ec8df06429606f2eb7f8c9f8e0e567636ef4" },
+    { "path": "crates/helix-core/Cargo.toml", "media_type": "application/toml", "bytes": 557, "sha256": "b7aee932f6080151cba3de85de844743f4dcd59e83a37329825ea83d6399aad8" },
+    { "path": "docs/README.md", "media_type": "text/markdown", "bytes": 7938, "sha256": "6550e43e3e4cf3414efc47aef59f50ff4bc6906544f92dfa5a1730e673d1d2b0" },
+    { "path": "docs/architecture/build-profiles.md", "media_type": "text/markdown", "bytes": 8157, "sha256": "947a7e458ae08b89aa5e7f4228108f3098d76ac3d4972340543007851e199bf3" },
+    { "path": "docs/architecture/code-quality-and-dependency-policy.md", "media_type": "text/markdown", "bytes": 8612, "sha256": "541c57ace97900cecfb71383404b024ada855de28be34cc292fa26a9fd595e51" },
+    { "path": "docs/architecture/continuous-integration.md", "media_type": "text/markdown", "bytes": 7023, "sha256": "d28d3891210e35875e698fc38c002a5ce2cc74a8ff193059ec186b38187b0d0c" },
+    { "path": "docs/architecture/javascript-toolchain-policy.md", "media_type": "text/markdown", "bytes": 11242, "sha256": "e2fbdd61a4c02fe674fa9bf35438d59a97edc7c87e07dbeca3dec23e37469df5" },
+    { "path": "docs/architecture/rust-toolchain-policy.md", "media_type": "text/markdown", "bytes": 10533, "sha256": "ba85d116f07c006835a6327c49a4aa853dd829af50cae11103f3cc8e6959db98" },
+    { "path": "docs/architecture/wasm-browser-smoke-validation.md", "media_type": "text/markdown", "bytes": 7550, "sha256": "a1ad9f79d33b10bb8855356d976ba565c954f5c1dab9edb0cbaabd22bffd3423" },
+    { "path": "docs/quality/test-command-surface.md", "media_type": "text/markdown", "bytes": 6269, "sha256": "7e36d46cd31a5052be0f440d2bb7dd8d62f666e27065cde7357663c693d45b0f" },
+    { "path": "package.json", "media_type": "application/json", "bytes": 2772, "sha256": "d53ab9e5d53dec490c6a254d69be86cce5e65fb498a16d95d366c6c30c949cc0" },
+    { "path": "playwright.config.ts", "media_type": "text/javascript", "bytes": 807, "sha256": "a010467c099a140434e25f6ccdb5050e4844feeba7ab1bd92c4bc4dc25e043bc" },
+    { "path": "tests/browser/README.md", "media_type": "text/markdown", "bytes": 744, "sha256": "37caac4fbfa309b124f95bf51b985f2242441231ca81308b4a5bd2cd3fd7f55a" },
+    { "path": "tests/browser/bundle-smoke.spec.ts", "media_type": "text/javascript", "bytes": 1638, "sha256": "75079a6abab4919e521fde609f4d46ccc6e3cdcf54033e739ada9e822cebeb77" },
+    { "path": "tests/browser/smoke-app/index.html", "media_type": "text/html", "bytes": 404, "sha256": "ebbf2ce9d61a4cee3a048f5620f9e7ca8f2a28c527ad8e9ab8c65498cf91d378" },
+    { "path": "tests/browser/smoke-app/main.ts", "media_type": "text/javascript", "bytes": 1653, "sha256": "9febb75a9946a9a9ba8eca1e6611fb496e92d2529a8f24dd86f65e8cfa1b28bd" },
+    { "path": "tests/browser/smoke-app/report.ts", "media_type": "text/javascript", "bytes": 487, "sha256": "d92de603fd4943c2e01037d35664f04d799d3028f5671c3e4f76f0400e4dcc35" },
+    { "path": "tests/run-suite.mjs", "media_type": "text/javascript", "bytes": 13092, "sha256": "97b5a5cd6bccf0e4dec1908ef8f91ee989dee35dd2174a9f6ca7dca9820758f0" },
+    { "path": "tests/suites.json", "media_type": "application/json", "bytes": 4063, "sha256": "9916e57a7a463db22ac1028cd13b384304edc49796922fdbf98476e9d6778984" },
+    { "path": "tests/toolchain/README.md", "media_type": "text/markdown", "bytes": 1991, "sha256": "02d4f1b7daf39cb697fc65b29c8545a928d6bc53260408fbae5c58227c55b6bb" },
+    { "path": "tests/toolchain/build-browser-smoke.mjs", "media_type": "text/javascript", "bytes": 4174, "sha256": "25eba4e079d618847ad399afa8a06d06658d8ff4e64f68e035a5d4591859ae29" },
+    { "path": "tests/toolchain/check-browser-profile.mjs", "media_type": "text/javascript", "bytes": 1466, "sha256": "b8947f5637ed16b45fafabbfedfa36bcfd39480b37d57a11f70f7216746026d4" },
+    { "path": "tests/toolchain/check-ci-matrix.mjs", "media_type": "text/javascript", "bytes": 12542, "sha256": "9321bad6368344f4e75e032dca94ae57723f7e02388eabc6184a04f281aaf7f3" },
+    { "path": "tests/toolchain/check-test-command-surface.mjs", "media_type": "text/javascript", "bytes": 6488, "sha256": "1c84873087e23d71e21d0ed838722115b72d81e5510e48b4d1d8ae440b6e8385" },
+    { "path": "tests/toolchain/check-wasm-artifacts.mjs", "media_type": "text/javascript", "bytes": 5200, "sha256": "0cfb35cb1c80ba89245ba3fd3f204699ba648d728aa5f6ed9674d3e037e18ace" },
+    { "path": "tests/toolchain/install-wasm-tools.mjs", "media_type": "text/javascript", "bytes": 7355, "sha256": "cbc01f252a08615cc7be4d629421855764847547431e81977f58a9d2f3ee8ef3" },
+    { "path": "tests/toolchain/run-browser-smoke.mjs", "media_type": "text/javascript", "bytes": 1707, "sha256": "695c1fe42715e9e77735e13ce8e43cb69d9f7ce3be58a8eb86b1adc18fde2ca7" },
+    { "path": "tsconfig.browser-smoke.json", "media_type": "application/json", "bytes": 145, "sha256": "4d45c72db85f9345865b2f320dfd6a13f3923e2db84a5eeea51ce788d8f853d9" },
+    { "path": "tsconfig.json", "media_type": "application/json", "bytes": 118, "sha256": "7f805c33e8caa371a6b1bd898f95c186aa77cc03f7f3dd2521c381b39d18b7e9" },
+    { "path": "tsconfig.tools.json", "media_type": "application/json", "bytes": 165, "sha256": "10b604b88c0b4c398a434d2c350dce38fe2df18a73966b78b3d6a85aba332707" },
+    { "path": "vite.config.ts", "media_type": "text/javascript", "bytes": 725, "sha256": "595bd2e7dfeb5e47ac35c0d85d01959f69148b5655c4d1e6f84fe66b07cc5f9b" },
+    { "path": "vitest.config.ts", "media_type": "text/javascript", "bytes": 522, "sha256": "ba67eaf9d1daeacf58df2906eeb614b9abd9e0c0bdfcb4ebb2ec2536d0c88c75" }
+  ],
+  "removed_artifacts": [
+    { "path": "tests/toolchain/check-browser-engine-lane.mjs", "media_type": "text/javascript", "bytes": 1843, "sha256": "07de1ee614266ca1345c68469d4ae7e1fe404ad425278f51c3e64e3deb1f13b3" }
+  ],
+  "verifier": {
+    "path": "evidence/phase-02/P02-010/verify.mjs",
+    "media_type": "text/javascript",
+    "bytes": 23383,
+    "sha256": "fbc2846d6786a1649647ac8e34257109f81cc679283cd557ed013a5c614454ff"
+  },
+  "verdict": "pass"
+}
