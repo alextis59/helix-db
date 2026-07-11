@@ -218,11 +218,13 @@ selects the HDoc v1 physical baseline: little-endian checked `u32` addressing un
 16 MiB limit, deterministic alignment/padding, separate CRC-32C stored-byte integrity and
 BLAKE3-256 canonical typed content identity, bounded optional compression, and fail-closed
 version/extension rules. Exact header, tag, payload, table, hash-framing, and compression-profile
-bytes are dependency-ordered rather than guessed by the first codec implementation. The
+bytes have now been fixed in dependency order rather than guessed by the first codec
+implementation. The
 [HDoc 1.0 envelope format](docs/formats/hdoc-v1.md) now fixes the `P03-002` 64-byte header,
 32-byte section directory, canonical body placement, structural/feature flags, and 64-byte footer.
-It permanently rejects hash profile zero; the subordinate registries below now assign profile 1
-after closing tags, payloads, and records in dependency order.
+It permanently rejects hash profile zero; the subordinate registries below assign integrity
+profile `1/1` and compression profile `1/1`, completing the HDoc 1.0 byte grammar while leaving
+production codec implementation and immutable fixtures to later tasks.
 
 The [HDoc 1.x type-tag registry](docs/formats/hdoc-v1-type-tags.md) now closes `P03-003` with one
 stable byte for each of the 16 stored logical types. It deliberately excludes transient Missing,
@@ -240,8 +242,8 @@ canonically sorted object-field entries plus presentation ordinals, a deduplicat
 dense 12-byte array entries, 32-byte uniquely owned breadth-first container descriptors, and one
 minimal-aligned value-area occurrence per noncontainer reference. Its structural vectors exercise
 empty spans, zero-byte null/string cursors, nested objects/arrays, recursive field counts, and
-absolute references without confusing document-local name IDs with the later collection path
-dictionary.
+canonical-logical absolute references without confusing document-local name IDs with the later
+collection path dictionary.
 
 The [HDoc 1.0 integrity registry](docs/formats/hdoc-v1-integrity.md) now closes `P03-006` with the
 exact reflected CRC-32C parameters/whole-envelope coverage and BLAKE3 algorithm/profile `1/1`.
@@ -249,8 +251,50 @@ Profile 1 hashes a domain-separated, length-delimited typed tree bottom-up: exac
 canonical object names plus child digests, and explicit dense array indices. Presentation order,
 offsets, dictionary IDs, compression, padding, and nonsemantic extensions stay physical and do not
 change logical identity. RFC CRC and official BLAKE3 boundaries plus two complete 408-byte
-presentation variants make CRC-different/hash-equal behavior executable. `P03-007` must still
-close compression before the complete-format gate and immutable `P03-016` fixtures.
+presentation variants make CRC-different/hash-equal behavior executable.
+
+The [HDoc 1.0 compression registry](docs/formats/hdoc-v1-compression.md) now closes `P03-007` with
+one optional profile: raw LZ4 produced by exact `lz4_flex` `0.13.1` safe encoder paths, partitioned
+into independent 32 KiB blocks inside an HDoc-owned header/table/payload stream. Blocks fall back
+to raw bytes unless LZ4 strictly shrinks them; sections are selected only when the complete stream
+shrinks; and the compressed document is selected only when the full envelope is smaller. This
+keeps the uncompressed profile universally valid and makes compression a deterministic physical
+choice rather than a tunable writer preference.
+
+The selection favors a single small, pure-Rust, MIT-licensed, no-dictionary codec over a wider v1
+matrix. LZ4 frame would duplicate HDoc framing, length, checksum, and block metadata. Zstandard
+would add a larger version-sensitive encoder surface without evidence that a second initial
+profile pays for its compatibility cost. Snappy showed no unique requirement benefit. External or
+trained dictionaries would add coordination, provenance, bomb, and identity questions before the
+collection path dictionary itself exists. Those alternatives remain possible only through a new
+registered profile and evidence, not an implementation-local setting.
+
+The 32 KiB boundary limits one decode output to 32 KiB, a maximum section to 512 independently
+checked blocks, and its table to 12 KiB. It also produced identical exact bytes on native x86-64
+and `wasm32-unknown-unknown` for the seven registry boundaries. An official LZ4 v1.10 C encoder
+produced a different valid encoding of the same 32 KiB zero block, confirming that algorithm name
+alone is insufficient for canonical storage; readers must decode safely and then recompress/
+compare the pinned profile.
+
+Compression exposed an addressing ambiguity in the earlier record grammar. The resolution is two
+explicit coordinate spaces: directory/footer offsets address stored CRC-covered bytes, while every
+field/name/value/container absolute offset addresses aligned canonical-logical sections derived
+from directory `logical_length`. Only after validating a logical range does a reader translate it
+to a decoded-section-local index. This preserves one record representation across compressed and
+uncompressed envelopes and keeps the typed hash independent of physical placement.
+
+The complete reference document with a 4,096-byte repeated string shrinks from 4,472 to 448 bytes;
+its CRC changes while its typed hash remains identical. Synthetic block timing was comfortably
+fast on one development machine, but is deliberately non-gating: `P03-020`/`P03-021` still own
+representative compression/size/lookup results. Canonical recompression increases validation CPU
+cost, but it prevents multiple durable byte identities and is bounded per block; later benchmark
+evidence may reject the optional profile, not weaken its canonicality.
+
+The dependency review selected a version outside known `RUSTSEC-2026-0041` affected ranges and
+requires safe decode into fresh zeroed exact-size output with no dictionaries. The crate is not yet
+in the production graph: `P03-008` must add fail-closed Rust advisory reporting, license/notices,
+and exact lock policy before adopting the first external Cargo dependency. `P03-009` owns the
+validating reader, and `P03-016` still owns immutable supported fixtures.
 
 ### 6.3 Field-path dictionaries
 

@@ -13,8 +13,11 @@
     "complete_container_payload_format": true,
     "container_completion_owner": "P03-005",
     "integrity_registry": "docs/formats/hdoc-v1-integrity.json",
+    "compression_registry": "docs/formats/hdoc-v1-compression.json",
     "complete_integrity_format": true,
-    "complete_hdoc_format": false
+    "complete_hdoc_format": true,
+    "completion_owner": "P03-007",
+    "implementation_owners": ["P03-008", "P03-009"]
   },
   "payloads": [
     {
@@ -810,6 +813,7 @@
   ],
   "fixture_boundary": {
     "payload_vectors_are_normative": true,
+    "complete_hdoc_reference_vectors_are_normative": true,
     "complete_hdoc_vectors": false,
     "complete_hdoc_vector_owner": "P03-016"
   }

@@ -1,6 +1,6 @@
 # HDoc 1.0 CRC-32C and Canonical Typed-Content Hashing
 
-- Status: Accepted integrity and typed-content profile; compression grammar remains `P03-007`
+- Status: Accepted integrity profile within complete HDoc 1.0 grammar
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner with Security and Query semantics review
 - Plan item: `P03-006`
@@ -9,6 +9,7 @@
 - Governing decision: [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)
 - Outer envelope: [HDoc 1.0 envelope](hdoc-v1.md)
 - Record grammar: [HDoc 1.0 records](hdoc-v1-records.md)
+- Compression profile: [HDoc 1.0 compression](hdoc-v1-compression.md)
 - Machine-readable companion: [hdoc-v1-integrity.json](hdoc-v1-integrity.json)
 
 This document fixes HDoc 1.0's two deliberately separate integrity mechanisms:
@@ -21,8 +22,10 @@ It assigns the first valid nonzero footer hash profile, exact recursive framing,
 algorithm/profile vectors, reference uncompressed envelopes, failure order, and corruption versus
 semantic-identity behavior. It does not make either mechanism an authenticator.
 
-`P03-007` still owns optional compressed section bytes. The uncompressed vectors here are
-normative integrity references, not the immutable supported fixture files owned by `P03-016`.
+The [compression registry](hdoc-v1-compression.md) now fixes optional stored compressed bytes and
+includes a compressed/uncompressed pair with equal typed hash and different CRC. The vectors here
+remain normative integrity references, not the immutable supported fixture files owned by
+`P03-016`.
 
 ## Normative status and notation
 
@@ -339,8 +342,8 @@ values are identical, so the content hash stays equal. Their exact complete hex 
 SHA-256 values are in the registry.
 
 These vectors use hash algorithm/profile `1/1` and codec `0/0`. They prove the integrity slots and
-coverage; `P03-016` still owns immutable supported golden fixture files after `P03-007` closes all
-remaining format registry work.
+coverage; `P03-016` still owns immutable supported golden fixture files after the now-complete
+format registry is implemented.
 
 ## Corruption versus semantic-hash behavior
 
@@ -365,12 +368,13 @@ A reader preserves this dependency order even if passes are fused:
 
 1. Read only enough fixed header bytes to validate magic/version and exact bounded total length.
 2. Recompute CRC-32C over the exact stored slice with `[32,36)` logically zero; reject mismatch.
-3. Validate directory/footer profile, structural canonicality, records, tags, payloads, names,
-   ownership, counts, limits, and repeated fields.
-4. Under `P03-007`, perform bounded decompression where required before logical section parsing and
-   hashing, while CRC remains over stored bytes.
-5. Reconstruct profile-1 nodes bottom-up and compare the root BLAKE3-256 output with the footer.
-6. Only then expose an owned document, borrowed view, index value, sidecar input, replication
+3. Validate directory/footer fixed structure, feature/codec IDs, stored placement, and repeated
+   fields; derive canonical logical section positions.
+4. Validate compression tables, decode one bounded block at a time, and then validate decoded
+   records, tags, payloads, names, ownership, counts, limits, and internal logical offsets.
+5. Recreate and compare canonical compression bytes/section selection.
+6. Reconstruct profile-1 nodes bottom-up and compare the root BLAKE3-256 output with the footer.
+7. Only then expose an owned document, borrowed view, index value, sidecar input, replication
    record, backup item, or query result.
 
 CRC may be computed before complex parsing only after total-length bounds prevent out-of-range
@@ -435,7 +439,7 @@ and typed hash before deriving a new artifact and retains the source until its r
 
 | Task | Owns next | Cannot change from P03-006 |
 | --- | --- | --- |
-| `P03-007` | Compressed block/codec profiles and stored compressed vectors | CRC coverage or decoded typed hash |
+| [`P03-007`](hdoc-v1-compression.md) | Compressed block/codec profiles, coordinates, and stored vectors | CRC coverage or decoded typed hash |
 | `P03-008`–`P03-009` | Production encoder/decoder integrity implementation | Algorithms, profile, frames, failure order |
 | `P03-013`–`P03-015` | Dictionary/extensions/migration negotiation | Resolved names/content identity or ID reuse |
 | `P03-016` | Immutable complete positive/malformed HDoc files | Existing registry vectors/expectations |
@@ -472,6 +476,7 @@ Complete tests must include:
 - [HDoc 1.x type tags](hdoc-v1-type-tags.md)
 - [HDoc 1.0 noncontainer payloads](hdoc-v1-payloads.md)
 - [HDoc 1.0 records](hdoc-v1-records.md)
+- [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
 - [Object semantics and canonical hashes](../architecture/object-semantics.md)
 - [Array semantics and canonical hashes](../architecture/array-semantics.md)
 - [Versioned error semantics](../architecture/error-semantics.md)

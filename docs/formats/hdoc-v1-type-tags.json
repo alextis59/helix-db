@@ -12,7 +12,10 @@
     "payload_registry": "docs/formats/hdoc-v1-payloads.json",
     "record_registry": "docs/formats/hdoc-v1-records.json",
     "integrity_registry": "docs/formats/hdoc-v1-integrity.json",
-    "complete_integrity_format": true
+    "compression_registry": "docs/formats/hdoc-v1-compression.json",
+    "complete_integrity_format": true,
+    "complete_hdoc_format": true,
+    "completion_owner": "P03-007"
   },
   "tags": [
     {

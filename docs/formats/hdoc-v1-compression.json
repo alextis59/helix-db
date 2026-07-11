@@ -1,0 +1,424 @@
+{
+  "schema": "helix.hdoc-compression-registry/1",
+  "format": {
+    "name": "HDoc",
+    "major_version": 1,
+    "minor_version": 0,
+    "compression_stream_version": 1,
+    "compression_required_feature_bit": 0,
+    "document_compressed_flag_bit": 0,
+    "section_compressed_flag_bit": 0,
+    "complete_compression_format": true,
+    "complete_hdoc_byte_format": true,
+    "completion_owner": "P03-007",
+    "implementation_owners": ["P03-008", "P03-009"],
+    "immutable_fixture_owner": "P03-016"
+  },
+  "coordinate_spaces": {
+    "stored": {
+      "meaning": "exact bytes in the CRC-covered HDoc slice",
+      "directory_field": "section_offset",
+      "footer_field": "footer_offset",
+      "length_field": "total_length"
+    },
+    "canonical_logical": {
+      "meaning": "derived complete uncompressed HDoc coordinates",
+      "section_offset_equation": "align8(previous-logical-end-starting-at-header_bytes)",
+      "footer_offset_equation": "canonical_length - 64",
+      "internal_record_offsets": "all-P03-005-absolute-offsets",
+      "length_field": "canonical_length"
+    },
+    "uncompressed_equivalence": "stored-and-canonical-logical-offsets-are-equal",
+    "compressed_translation": "validate-logical-section-range-then-subtract-derived-logical-section-offset"
+  },
+  "codec_registry": [
+    {
+      "codec_id": 0,
+      "profile_id": 0,
+      "name": "none",
+      "status": "assigned-uncompressed",
+      "section_compressed_flag": false,
+      "stored_length_rule": "equals-logical_length"
+    },
+    {
+      "codec_id": 1,
+      "profile_id": 1,
+      "name": "lz4-flex-safe-independent-32k-v1",
+      "status": "assigned-compressed",
+      "algorithm_format": "LZ4-raw-block",
+      "container_format": "hdoc-compression-stream-v1",
+      "block_bytes": 32768,
+      "dictionary": false,
+      "history_between_blocks": false,
+      "frame_format": false,
+      "content_size_prefix": false,
+      "block_checksum": false,
+      "canonical_encoder": {
+        "package": "lz4_flex",
+        "version": "0.13.1",
+        "crate_archive_sha256": "7ef0d4ed8669f8f8826eb00dc878084aa8f253506c4fd5e8f58f5bce72ddb97e",
+        "repository_commit": "8507d2e68ba2477fd087b7fa55d6806ca63f8138",
+        "api": "lz4_flex::block::compress_into",
+        "default_features": false,
+        "required_features": ["safe-encode", "safe-decode"],
+        "fresh_state_per_block": true,
+        "supported_writer_endianness": "little-endian-platform-matrix",
+        "canonical_output_authority": "registry-vectors-and-pinned-implementation"
+      },
+      "canonical_decoder": {
+        "api": "lz4_flex::block::decompress_into",
+        "fresh_zero_initialized_exact_output_per_block": true,
+        "returned_length_must_equal_descriptor": true,
+        "recompress_and_compare": true
+      }
+    }
+  ],
+  "id_ranges": {
+    "codec_registered_future": [2, 32767],
+    "codec_private_experimental_not_persistable": [32768, 65534],
+    "codec_invalid_sentinel": 65535,
+    "profile_registered_future_per_codec": [2, 32767],
+    "profile_private_experimental_not_persistable": [32768, 65534],
+    "profile_invalid_sentinel": 65535,
+    "unknown_nonzero_behavior": "reject-CAP_FORMAT_UNSUPPORTED-before-allocation-decompression-or-value-exposure"
+  },
+  "external_reference_snapshots": [
+    {
+      "id": "lz4-block-format",
+      "authority": "lz4/lz4",
+      "tag": "v1.10.0",
+      "commit": "ebb370ca83af193212df4dcbadcc5d87bc0de2f0",
+      "path": "doc/lz4_Block_format.md",
+      "bytes": 10683,
+      "sha256": "dce3c34a8738c44ed1dffb48c73e30297fca98ba7881408dc228865912c9a42e",
+      "license": "documentation-in-upstream-repository",
+      "used_for": "raw-block-decoding-and-independent-block-boundaries"
+    },
+    {
+      "id": "lz4-reference-c-source",
+      "authority": "lz4/lz4",
+      "tag": "v1.10.0",
+      "commit": "ebb370ca83af193212df4dcbadcc5d87bc0de2f0",
+      "path": "lib/lz4.c",
+      "bytes": 118145,
+      "sha256": "9396f7de527bc8435de9c7569fb7998e56545a84b4f3c2d808c0235c01774539",
+      "license": "BSD-2-Clause",
+      "used_for": "independent-decode-and-noncanonical-valid-encoding-canary"
+    },
+    {
+      "id": "lz4-flex-package-manifest",
+      "authority": "PSeitz/lz4_flex",
+      "tag": "0.13.1",
+      "commit": "8507d2e68ba2477fd087b7fa55d6806ca63f8138",
+      "path": "Cargo.toml",
+      "bytes": 2021,
+      "sha256": "c19e9d884b006f43666f113a62fa5fac3adfbffec6fcbcbc5860198042d0a199",
+      "license": "MIT",
+      "used_for": "version-features-rust-version-and-package-metadata"
+    },
+    {
+      "id": "lz4-flex-crate-archive",
+      "authority": "crates.io",
+      "package": "lz4_flex",
+      "version": "0.13.1",
+      "bytes": 46506,
+      "sha256": "7ef0d4ed8669f8f8826eb00dc878084aa8f253506c4fd5e8f58f5bce72ddb97e",
+      "license": "MIT",
+      "used_for": "future-exact-Cargo-lock-source"
+    },
+    {
+      "id": "lz4-flex-license",
+      "authority": "PSeitz/lz4_flex",
+      "tag": "0.13.1",
+      "commit": "8507d2e68ba2477fd087b7fa55d6806ca63f8138",
+      "path": "LICENSE",
+      "bytes": 1079,
+      "sha256": "0982c33390159842ecce8e9d6ce2e5e39961fe0e0ffbb2eec39c9ba46db6db10",
+      "license": "MIT",
+      "used_for": "license-review"
+    },
+    {
+      "id": "lz4-flex-safe-compressor-source",
+      "authority": "PSeitz/lz4_flex",
+      "tag": "0.13.1",
+      "commit": "8507d2e68ba2477fd087b7fa55d6806ca63f8138",
+      "path": "src/block/compress.rs",
+      "bytes": 38032,
+      "sha256": "9b86e03b6138bbbee6b5bb5d9cf1429dc02026adf6d192b1d212e56e92c2acb3",
+      "license": "MIT",
+      "used_for": "canonical-encoder-output"
+    },
+    {
+      "id": "lz4-flex-safe-decompressor-source",
+      "authority": "PSeitz/lz4_flex",
+      "tag": "0.13.1",
+      "commit": "8507d2e68ba2477fd087b7fa55d6806ca63f8138",
+      "path": "src/block/decompress_safe.rs",
+      "bytes": 18174,
+      "sha256": "8dc61276d02d62203408937f61833876843edba8e37872d9c9ceab774fa72401",
+      "license": "MIT",
+      "used_for": "bounded-safe-decode-review"
+    },
+    {
+      "id": "rustsec-2026-0041",
+      "authority": "RustSec/advisory-db",
+      "commit": "f8f8d392a4e6adf54c1ba1e7449bbeba00703cdc",
+      "path": "crates/lz4_flex/RUSTSEC-2026-0041.md",
+      "bytes": 2190,
+      "sha256": "81e37d0936c81d447d02a7dfb8f7fb8af7466f09b8adb0ee008e747a7f08bbb2",
+      "license": "CC0-1.0",
+      "affected": ["<=0.11.5", "=0.12.0"],
+      "patched": [">=0.11.6,<0.12.0", ">=0.12.1"],
+      "selected_version_affected": false,
+      "defense_in_depth": "safe-decode-plus-fresh-zeroed-output-no-dictionaries"
+    }
+  ],
+  "stream_header": {
+    "bytes": 32,
+    "magic_hex": "48434d500d0a1a0a",
+    "magic_ascii_escaped": "HCMP\\r\\n\\x1a\\n",
+    "fields": [
+      {"name": "magic", "offset": 0, "bytes": 8, "encoding": "octets", "constant_hex": "48434d500d0a1a0a"},
+      {"name": "stream_version", "offset": 8, "bytes": 2, "encoding": "u16-le", "constant": 1},
+      {"name": "header_bytes", "offset": 10, "bytes": 2, "encoding": "u16-le", "constant": 32},
+      {"name": "block_entry_bytes", "offset": 12, "bytes": 2, "encoding": "u16-le", "constant": 24},
+      {"name": "block_size_log2", "offset": 14, "bytes": 1, "encoding": "u8", "constant": 15},
+      {"name": "stream_flags", "offset": 15, "bytes": 1, "encoding": "u8", "constant": 0},
+      {"name": "block_count", "offset": 16, "bytes": 4, "encoding": "u32-le", "derived": "ceil(logical_length/32768)"},
+      {"name": "logical_length", "offset": 20, "bytes": 4, "encoding": "u32-le", "equals": "directory.logical_length"},
+      {"name": "payload_offset", "offset": 24, "bytes": 4, "encoding": "u32-le", "derived": "32 + block_count * 24"},
+      {"name": "reserved_0", "offset": 28, "bytes": 4, "encoding": "u32-le", "constant": 0}
+    ]
+  },
+  "block_entry": {
+    "bytes": 24,
+    "fields": [
+      {"name": "logical_offset", "offset": 0, "bytes": 4, "encoding": "u32-le", "derived": "block_index * 32768"},
+      {"name": "logical_length", "offset": 4, "bytes": 4, "encoding": "u32-le", "derived": "32768-except-exact-positive-final-remainder"},
+      {"name": "stored_offset", "offset": 8, "bytes": 4, "encoding": "u32-le", "base": "compression-stream-start"},
+      {"name": "stored_length", "offset": 12, "bytes": 4, "encoding": "u32-le", "minimum": 1, "maximum": 32768},
+      {"name": "block_flags", "offset": 16, "bytes": 2, "encoding": "u16-le"},
+      {"name": "reserved_0", "offset": 18, "bytes": 2, "encoding": "u16-le", "constant": 0},
+      {"name": "reserved_1", "offset": 20, "bytes": 4, "encoding": "u32-le", "constant": 0}
+    ],
+    "flags": [
+      {"bit": 0, "mask_hex": "0x0001", "name": "raw", "rule": "stored-bytes-equal-logical-block-and-stored_length-equals-logical_length"}
+    ],
+    "reserved_flag_bits": [1, 15],
+    "compressed_when_raw_clear": "stored-bytes-are-exact-canonical-LZ4-block-and-stored_length-is-less-than-logical_length"
+  },
+  "canonical_block_partition": {
+    "block_bytes": 32768,
+    "empty_logical_section_compressible": false,
+    "block_count_minimum": 1,
+    "block_count_maximum_under_portable_document_limit": 512,
+    "all_nonfinal_blocks_exact_bytes": 32768,
+    "final_block_minimum_bytes": 1,
+    "final_block_maximum_bytes": 32768,
+    "blocks_independent": true,
+    "external_dictionary": false,
+    "cross_block_history": false
+  },
+  "canonical_selection": {
+    "base_uncompressed_profile_always_valid": true,
+    "compressed_profile_algorithm": [
+      "partition-each-base-section-logical-bytes-at-exact-32768-byte-boundaries",
+      "compress-each-block-with-fresh-profile-1-canonical-encoder",
+      "store-lz4-only-when-compressed_length-is-strictly-less-than-logical_length-else-store-raw",
+      "build-exact-stream-header-table-and-gapless-payload",
+      "select-section-compression-only-when-complete-stream-length-is-strictly-less-than-section-logical_length",
+      "in-compressed-document-profile-compress-every-and-only-base-section-that-passes-section-selection",
+      "emit-compressed-document-profile-only-when-at-least-one-section-is-compressed-and-total_length-is-strictly-less-than-canonical_length",
+      "otherwise-emit-the-uncompressed-base-profile"
+    ],
+    "canonical_reader_check": "decode-then-recreate-all-four-section-candidates-and-compare-selection-metadata-and-stored-bytes",
+    "compressible_section_kinds": [1, 2, 3, 4],
+    "extension_area_compression": "forbidden-until-P03-015-registers-compatible-ownership",
+    "stream_must_contain_compressed_block": true,
+    "stream_must_be_smaller_than_logical_section": true,
+    "no_gaps_padding_or_trailing_bytes_inside_stream": true
+  },
+  "directory_and_feature_rules": {
+    "uncompressed_section": {
+      "compressed_flag": false,
+      "codec_id": 0,
+      "profile_id": 0,
+      "stored_length": "equals-logical_length"
+    },
+    "compressed_section": {
+      "compressed_flag": true,
+      "codec_id": 1,
+      "profile_id": 1,
+      "stored_length": "exact-compression-stream-bytes",
+      "logical_length": "exact-decoded-P03-003-through-P03-005-section-bytes"
+    },
+    "document_has_compressed_sections": "set-if-and-only-if-at-least-one-section-is-compressed",
+    "required_section_compression_feature": "set-if-and-only-if-at-least-one-section-is-compressed",
+    "item_count": "retains-section-logical-record-meaning",
+    "canonical_length": "derived-uncompressed-envelope-length-with-compression-flags-features-and-codec-pairs-cleared",
+    "total_length": "exact-stored-compressed-envelope-length",
+    "crc32c": "over-exact-stored-envelope",
+    "typed_content_hash": "over-validated-decoded-logical-tree"
+  },
+  "resource_limits": {
+    "canonical_document_bytes": 16777216,
+    "compressed_block_output_bytes": 32768,
+    "maximum_blocks_per_section": 512,
+    "maximum_block_table_bytes": 12288,
+    "allocation_order": [
+      "validate-HDoc-total-and-canonical-length-bounds",
+      "validate-directory-codec-profile-and-stream-fixed-header-without-output-allocation",
+      "validate-block-count-table-products-offsets-lengths-flags-and-exact-stored-coverage",
+      "allocate-one-fresh-zero-initialized-at-most-32768-byte-block-output",
+      "decode-exact-block-and-validate-returned-length",
+      "validate-section-grammar-and-global-canonical-length-before-owned-document-exposure"
+    ],
+    "network_or_user_code_during_decode": false,
+    "dictionary_bytes": 0
+  },
+  "input_generators": [
+    {"id": "empty", "rule": "zero-bytes"},
+    {"id": "repeated-byte", "rule": "repeat-byte-parameter-for-exact-length"},
+    {"id": "index-mod251", "rule": "byte_at_index_i = i mod 251"},
+    {"id": "splitmix64-bytes", "rule": "little-endian-SplitMix64-output-truncated-to-length", "seed_hex": "0x48444f43434d5031", "gamma_hex": "0x9e3779b97f4a7c15"},
+    {"id": "large-string-HDoc", "rule": "root-fields-canonical-_id-uuid-nil-and-pad-string-of-4096-ASCII-A-bytes"}
+  ],
+  "block_vectors": [
+    {"id": "empty", "generator": "empty", "input_length": 0, "input_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855", "compressed_length": 1, "compressed_sha256": "6e340b9cffb37a989ca544e6bb780a2c78901d3fb33738768511a30617afa01d", "compressed_hex": "00", "canonical_block_storage": "not-storable-empty-section"},
+    {"id": "zero-13", "generator": "repeated-byte", "byte_hex": "00", "input_length": 13, "input_sha256": "dd46c3eebb1884ff3b5258c0a2fc9398e560a29e0780d4b53869b6254aa46a96", "compressed_length": 11, "compressed_sha256": "9c6f22b125fcc2dbc79076354348b9a09aefec34c555ad67fba8791d24eac0f0", "compressed_hex": "1200010060000000000000", "canonical_block_storage": "lz4"},
+    {"id": "ascii-a-64", "generator": "repeated-byte", "byte_hex": "41", "input_length": 64, "input_sha256": "d53eda7a637c99cc7fb566d96e9fa109bf15c478410a3f5eb4d4c4e26cd081f6", "compressed_length": 12, "compressed_sha256": "bf149e8d86368543e3bf3045e6538d7f09073f95bdc5920c54979e5aa4e6a7a2", "compressed_hex": "1f4101002660414141414141", "canonical_block_storage": "lz4"},
+    {"id": "zero-32768", "generator": "repeated-byte", "byte_hex": "00", "input_length": 32768, "input_sha256": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479", "compressed_length": 140, "compressed_sha256": "1562cd4c8a4871dc49028e5c76a0ae79b0d737e24e56b4e2071fd4680854c30d", "compressed_hex": "1f000100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6660000000000000", "canonical_block_storage": "lz4"},
+    {"id": "index-mod251-32768", "generator": "index-mod251", "input_length": 32768, "input_sha256": "09fed9cbfb98b6ab0f3e8ff63b7b1f9b0e07d58b225295c78fdc023cc4985a72", "compressed_length": 390, "compressed_sha256": "74d3c9865fae7ff030137e690c5f744d96fca3dbc02ad2e8e7e33ba62b319d36", "compressed_hex": "ffec000102030405060708090a0b0c0d0e0f101112131415161718191a1b1c1d1e1f202122232425262728292a2b2c2d2e2f303132333435363738393a3b3c3d3e3f404142434445464748494a4b4c4d4e4f505152535455565758595a5b5c5d5e5f606162636465666768696a6b6c6d6e6f707172737475767778797a7b7c7d7e7f808182838485868788898a8b8c8d8e8f909192939495969798999a9b9c9d9e9fa0a1a2a3a4a5a6a7a8a9aaabacadaeafb0b1b2b3b4b5b6b7b8b9babbbcbdbebfc0c1c2c3c4c5c6c7c8c9cacbcccdcecfd0d1d2d3d4d5d6d7d8d9dadbdcdddedfe0e1e2e3e4e5e6e7e8e9eaebecedeeeff0f1f2f3f4f5f6f7f8f9fafb00ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6b60848586878889", "canonical_block_storage": "lz4"},
+    {"id": "splitmix64-32768", "generator": "splitmix64-bytes", "input_length": 32768, "input_sha256": "b97e1b1e9a276b1f8d2fbff449cf250969f2c7412e1348c24e43204b1b5b6cb5", "compressed_length": 32898, "compressed_sha256": "4a352197c8440a4b1169ead15f64e95dcb8952367221fcbc6daf7c33ff3eddfe", "compressed_hex": null, "canonical_block_storage": "raw"},
+    {"id": "splitmix64-257", "generator": "splitmix64-bytes", "input_length": 257, "input_sha256": "3100429f53b5f5f2f55e06d372375f4661a096067a466e1a4d749598b460d413", "compressed_length": 259, "compressed_sha256": "8c52cbcd9063e21e125dafee6928795612d541f4c2a10ebc6f1f776efde2e48e", "compressed_hex": null, "canonical_block_storage": "raw"}
+  ],
+  "section_vectors": [
+    {"id": "zero-13", "logical_generator": "repeated-byte-00", "logical_length": 13, "logical_sha256": "dd46c3eebb1884ff3b5258c0a2fc9398e560a29e0780d4b53869b6254aa46a96", "stream_length": 67, "stream_sha256": "b6859a3eedbe007fd31e69b2935590b24a2f9a2f32071a6363936a163a9be9cf", "selected_as_compressed_section": false, "block_representations": ["lz4"], "stream_hex": "48434d500d0a1a0a0100200018000f00010000000d0000003800000000000000000000000d000000380000000b00000000000000000000001200010060000000000000"},
+    {"id": "zero-32768", "logical_generator": "repeated-byte-00", "logical_length": 32768, "logical_sha256": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479", "stream_length": 196, "stream_sha256": "0ab55c0c1b8d769bfc4e1758f76aa60ee1b43069c700d608ae3f84f357db375f", "selected_as_compressed_section": true, "block_representations": ["lz4"], "stream_hex": "48434d500d0a1a0a0100200018000f00010000000080000038000000000000000000000000800000380000008c00000000000000000000001f000100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6660000000000000"},
+    {"id": "zero-65536", "logical_generator": "repeated-byte-00", "logical_length": 65536, "logical_sha256": "de2f256064a0af797747c2b97505dc0b9f3df0de4f489eac731c23ae9ca9cc31", "stream_length": 360, "stream_sha256": "10a197038064db41210a9f22b4a657f0ed0474dc5b9305500bf998c5c1fc1d68", "selected_as_compressed_section": true, "block_representations": ["lz4", "lz4"], "stream_hex": "48434d500d0a1a0a0100200018000f00020000000000010050000000000000000000000000800000500000008c00000000000000000000000080000000800000dc0000008c00000000000000000000001f000100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff66600000000000001f000100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff6660000000000000"},
+    {"id": "zero-32768-splitmix64-257", "logical_generator": "concat-repeated-zero-32768-and-splitmix64-257", "logical_length": 33025, "logical_sha256": "bf60375fa590e33e903452c5411c84b9def2ac915e4106973c72cddb0abad823", "stream_length": 477, "stream_sha256": "f34ddf0e4a727d97ecf89385074df8b03a3e8382d2cd58af0937dcd9586700d9", "selected_as_compressed_section": true, "block_representations": ["lz4", "raw"], "stream_hex": "48434d500d0a1a0a0100200018000f00020000000181000050000000000000000000000000800000500000008c00000000000000000000000080000001010000dc0000000101000001000000000000001f000100ffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffffff666000000000000039a8ac55e795faae67d5566e4e3661cc41ae7dc1a457e132b9729c639e43bb18820a09190416406526e4b7739e66702c3cdff53d4789a588483be67dee27e92076e80db22f43ef8885df81440d00c9d57303dc0a473eba172d87c69ffba40c67aca56e17951ba0a3d3eb4c1dd8ff93e43b06fc2d9eb8d56df513e9262ec4d434254c1784882d5dda1191fae6db53b1a6db52b0efa7e53c039e44a39abb228c52e50152c836f5fbf61b0389456737aaf752614f90f1bbb58f0a653cacad90fd9a0e0b23c0499df23f097cc276379e3c27b1841c01f6dc68db8fd7c58f5b114619a8be33028e120e263483ae13e25149a054795b3edc98a07cf827ba9d71ed5ddade"},
+    {"id": "splitmix64-32768", "logical_generator": "splitmix64-bytes", "logical_length": 32768, "logical_sha256": "b97e1b1e9a276b1f8d2fbff449cf250969f2c7412e1348c24e43204b1b5b6cb5", "stream_length": 32824, "stream_sha256": "409f8de876528ecf7067aa362fb64c296bdfdf281e42dff30150e00edb41546f", "selected_as_compressed_section": false, "block_representations": ["raw"], "stream_hex": null}
+  ],
+  "complete_hdoc_vectors": [
+    {
+      "id": "large-string-uncompressed",
+      "generator": "large-string-HDoc",
+      "presentation": "{_id:uuid-nil,pad:string-A-repeat-4096}",
+      "total_length": 4472,
+      "canonical_length": 4472,
+      "crc32c_value_hex": "0x7f92af2c",
+      "crc32c_stored_le_hex": "2caf927f",
+      "content_hash_hex": "40bd20b8d0574192538a202d78c7b5f3cde3fd937bd93df6cac244fbb6de062e",
+      "artifact_sha256": "1bc04f3da8cfcd9ebfd8273b0dcab9c7d1431d5e68fe9814383715e5112ddb06",
+      "hdoc_hex": null
+    },
+    {
+      "id": "large-string-value-area-lz4",
+      "generator": "large-string-HDoc",
+      "presentation": "{_id:uuid-nil,pad:string-A-repeat-4096}",
+      "compressed_section": "value_area",
+      "logical_section_offset": 264,
+      "stored_section_offset": 264,
+      "value_stream_length": 87,
+      "logical_container_tables_offset": 4376,
+      "stored_container_tables_offset": 352,
+      "logical_footer_offset": 4408,
+      "stored_footer_offset": 384,
+      "total_length": 448,
+      "canonical_length": 4472,
+      "crc32c_value_hex": "0x67374852",
+      "crc32c_stored_le_hex": "52483767",
+      "content_hash_hex": "40bd20b8d0574192538a202d78c7b5f3cde3fd937bd93df6cac244fbb6de062e",
+      "artifact_sha256": "7450b49ff2bfa50cb19bf4d8888e371c8c9fb549222493a1972fc0f3cdf0646b",
+      "hdoc_hex": "48444f430d0a1a0a01000000c000200001000000c00100007811000002000000524837670400000040000000800100000100000000000000000000000000000001000600c000000030000000300000000200000000000000010000000000000002000600f000000016000000160000000200000000000000010000000000000003000700080100005700000010100000020000000100010001000000000000000400060060010000200000002000000001000000000000000100000000000000000000000001000003000d00080100001000000000000000010000000301000003000700180100000010000001000000000100000300030003010000030003005f6964706164000048434d500d0a1a0a0100200018000f00010000001010000038000000000000000000000010100000380000001f00000000000000000000001b0001001f410100fffffffffffffffffffffffffffffff560414141414141000000000009000100c00000000200000002000000ffffffffffffffff0000000048444f43454e440a400001000100010020000000c0010000781100000200000040bd20b8d0574192538a202d78c7b5f3cde3fd937bd93df6cac244fbb6de062e"
+    }
+  ],
+  "canonicality_alternate": {
+    "id": "official-C-v1.10.0-zero-32768",
+    "input_length": 32768,
+    "decoded_sha256": "c35020473aed1b4642cd726cad727b63fff2824ad68cedd7ffb73c7cbd890479",
+    "stored_length": 139,
+    "stored_sha256": "28068a32d124e0db50723982a8d1bbe8c447d9f2d1e3daff32489229db549037",
+    "canonical_lz4_flex_length": 140,
+    "canonical_lz4_flex_sha256": "1562cd4c8a4871dc49028e5c76a0ae79b0d737e24e56b4e2071fd4680854c30d",
+    "both_decode_to_same_bytes": true,
+    "expected_hdoc_result": "reject-DUR_CORRUPTION-decompression-canonicality"
+  },
+  "validation_order": [
+    "validate-minimal-HDoc-header-total-and-canonical-length-bounds",
+    "validate-stored-envelope-CRC32C",
+    "reject-unknown-required-feature-codec-or-profile-before-decompression",
+    "derive-canonical-logical-section-offsets-and-validate-canonical_length",
+    "validate-stream-header-block-table-products-offsets-lengths-flags-and-gapless-stored-coverage",
+    "decode-one-bounded-fresh-zeroed-block-at-a-time-with-exact-output-length",
+    "validate-decoded-section-grammar-record-offsets-counts-and-logical-coverage",
+    "recreate-canonical-block-and-section-selection-and-compare-stored-compressed-profile-bytes",
+    "validate-complete-typed-content-hash",
+    "expose-values-only-after-all-prior-stages-pass"
+  ],
+  "negative_cases": [
+    {"id": "unknown-codec", "expected": "CAP_FORMAT_UNSUPPORTED-before-allocation"},
+    {"id": "unknown-profile", "expected": "CAP_FORMAT_UNSUPPORTED-before-allocation"},
+    {"id": "feature-flag-mismatch", "expected": "DUR_CORRUPTION-structural-canonicality"},
+    {"id": "stream-magic-version-stride-log2-flags-reserved", "expected": "DUR_CORRUPTION-decompression-header"},
+    {"id": "zero-or-wrong-block-count", "expected": "DUR_CORRUPTION-decompression-table"},
+    {"id": "block-table-product-overflow-or-truncation", "expected": "DUR_CORRUPTION-decompression-table"},
+    {"id": "logical-gap-overlap-or-wrong-final-size", "expected": "DUR_CORRUPTION-decompression-table"},
+    {"id": "stored-gap-overlap-alias-or-trailing-bytes", "expected": "DUR_CORRUPTION-decompression-table"},
+    {"id": "raw-length-mismatch", "expected": "DUR_CORRUPTION-decompression-block"},
+    {"id": "lz4-zero-offset-truncation-overrun-or-wrong-output", "expected": "DUR_CORRUPTION-decompression-block"},
+    {"id": "nonshrinking-lz4-block", "expected": "DUR_CORRUPTION-decompression-canonicality"},
+    {"id": "valid-but-noncanonical-lz4-encoding", "expected": "DUR_CORRUPTION-decompression-canonicality"},
+    {"id": "wrong-raw-versus-lz4-choice", "expected": "DUR_CORRUPTION-decompression-canonicality"},
+    {"id": "compressed-stream-not-smaller-than-logical-section", "expected": "DUR_CORRUPTION-decompression-canonicality"},
+    {"id": "compressed-profile-omits-or-adds-section", "expected": "DUR_CORRUPTION-decompression-canonicality"},
+    {"id": "total-not-smaller-than-canonical", "expected": "DUR_CORRUPTION-decompression-canonicality"},
+    {"id": "decoded-section-invalid", "expected": "DUR_CORRUPTION-structural-canonicality"},
+    {"id": "decoded-tree-hash-mismatch", "expected": "DUR_CORRUPTION-typed-content-hash"}
+  ],
+  "selection_review": {
+    "selected": "LZ4 raw blocks through lz4_flex 0.13.1 safe paths",
+    "reasons": [
+      "pure-Rust-native-and-Wasm-compatible",
+      "no-std-capable-block-module",
+      "MIT-license-and-no-runtime-transitive-dependency-with-selected-features",
+      "bounded-independent-blocks-fit-HDoc-random-access",
+      "native64-and-wasm32-golden-output-agreement",
+      "patched-version-outside-known-RUSTSEC-2026-0041-ranges"
+    ],
+    "not_selected_v1": [
+      {"candidate": "LZ4-frame", "reason": "duplicates-HDoc-framing-content-size-checksum-and-block-table"},
+      {"candidate": "Zstandard", "reason": "larger-codec-and-versioned-encoder-surface-without-P03-007-evidence-justifying-a-second-v1-profile"},
+      {"candidate": "Snappy", "reason": "no-demonstrated-v1-benefit-over-the-selected-single-portable-fast-profile"},
+      {"candidate": "external-or-trained-dictionaries", "reason": "coordination-security-and-canonical-identity-complexity-not-justified-for-v1"}
+    ],
+    "timing_smoke_non_gating": {
+      "environment": "Linux-x86_64-Intel-i5-11300H-rustc-1.96.1-release",
+      "block_bytes": 32768,
+      "iterations": 4000,
+      "results": [
+        {"input": "zero", "compressed_bytes": 140, "ratio": 0.004, "encode_mib_s": 14923.5, "decode_mib_s": 82865.3},
+        {"input": "index-mod251", "compressed_bytes": 390, "ratio": 0.012, "encode_mib_s": 16358.4, "decode_mib_s": 34825.8},
+        {"input": "splitmix64", "compressed_bytes": 32898, "ratio": 1.004, "encode_mib_s": 9751.1, "decode_mib_s": 39435.0}
+      ],
+      "claim_boundary": "smoke-only-selection-sanity-P03-020-P03-021-own-formal-performance"
+    }
+  },
+  "dependency_adoption_gate": {
+    "dependency_committed_by_P03_007": false,
+    "P03-008_requirements": [
+      "pin-exact-=0.13.1-crates.io-package-and-lock-checksum",
+      "enable-only-safe-encode-and-safe-decode-with-default-features-false",
+      "add-Rust-advisory-scanner-and-fail-closed-reporting-before-first-external-crate",
+      "update-license-notices-dependency-policy-and-release-SBOM-boundaries",
+      "retain-native-Wasm-browser-and-independent-C-differential-vectors"
+    ]
+  },
+  "deferrals": [
+    {"owner": "P03-008", "scope": "production-canonical-compressor-and-dependency-adoption"},
+    {"owner": "P03-009", "scope": "production-bounded-validating-decompressor-and-diagnostics"},
+    {"owner": "P03-016", "scope": "immutable-complete-positive-and-malformed-HDoc-fixture-files"},
+    {"owner": "P03-017-P03-019", "scope": "independent-cross-language-property-fuzz-sanitizer-and-corruption-replay"},
+    {"owner": "P03-020-P03-021", "scope": "formal-representative-format-compression-and-dictionary-benchmarks"}
+  ]
+}

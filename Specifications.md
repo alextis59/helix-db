@@ -503,6 +503,22 @@ frames profile ID, type tag, `u64` body length, and an exact noncontainer or can
 body. Object presentation and permitted physical encodings do not affect this typed hash; names,
 tags, exact payloads, object mappings, and dense array positions do.
 
+Optional stored compression is fixed by
+[HDoc 1.0 Bounded Section Compression](docs/formats/hdoc-v1-compression.md) and its
+[machine-readable registry](docs/formats/hdoc-v1-compression.json). Codec/profile `1/1` is raw LZ4
+from exact `lz4_flex` `0.13.1`, partitioned into independent 32 KiB blocks in a fixed header/table/
+payload stream. Each block is stored as canonical LZ4 only when it shrinks, otherwise raw; each base
+section is selected only when its full stream shrinks; and the compressed document is emitted only
+when its complete stored envelope is smaller. No dictionaries, cross-block history, frame wrapper,
+network, or user code participate. Readers reject unknown codec/profile IDs before decompression
+allocation, validate at most one 32 KiB output block at a time, and recompress/compare exact bytes.
+
+Compression also fixes two address spaces. Directory section offsets and `total_length` address
+stored CRC-covered bytes. Every record/payload absolute offset addresses the derived canonical
+uncompressed HDoc obtained by aligned placement over directory `logical_length`; it is translated
+to a decoded-section-local index only after range validation. CRC changes with physical
+compression, while the BLAKE3 typed-content hash remains over the validated decoded tree.
+
 Design requirements:
 
 - Stable binary representation for hashing and replication.
@@ -514,21 +530,22 @@ Design requirements:
 - Compatibility mode may preserve duplicate keys only for import tools, not normal writes.
 
 The accepted physical baseline is [ADR 0012](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md):
-little-endian metadata and numeric payloads, absolute checked `u32` offsets, at most 8-byte
-alignment with zero padding, the exact portable 16 MiB uncompressed limit, CRC-32C stored-byte
-integrity, BLAKE3-256 canonical typed content identity, bounded optional compression, and
-fail-closed version/extension handling. The subordinate `P03-002`–`P03-007` format documents must
-assign exact fields, tags, payloads, tables, hash framing, and compression profiles before the
-first writer or immutable fixture.
+little-endian metadata and numeric payloads, absolute checked canonical-logical `u32` offsets, at
+most 8-byte alignment with zero padding, the exact portable 16 MiB uncompressed limit, CRC-32C
+stored-byte integrity, BLAKE3-256 canonical typed content identity, bounded optional compression,
+and fail-closed version/extension handling. The subordinate `P03-002`–`P03-007` format documents
+now assign every exact field, tag, payload, table, hash frame, compression profile, and coordinate
+rule before the first writer or immutable fixture.
 
 The exact HDoc 1.0 outer byte layout is defined by the [HDoc 1.0 Envelope, Section Directory, and
 Footer Format](docs/formats/hdoc-v1.md) and its
 [machine-readable companion](docs/formats/hdoc-v1-envelope.json). It fixes the 64-byte header,
 32-byte directory entries, body section registry/order, structural/feature flags, length/count/CRC
-slots, and 64-byte footer while deliberately keeping the complete byte format invalid until
-`P03-007` closes the compression registry. `P03-003`–`P03-006` now fix all base tags, payloads,
-records, names, value placement, containers, CRC coverage, and typed-hash profile. Integrity
-reference envelopes are not yet the immutable supported fixtures owned by `P03-016`.
+slots, and 64-byte footer. `P03-003`–`P03-007` fix all base tags, payloads, records, names, value
+placement, containers, CRC coverage, typed-hash profile, compression bytes, logical coordinates,
+and canonical profile selection, completing the HDoc 1.0 byte grammar. `P03-008`/`P03-009` still
+own the production writer/reader, and the normative reference envelopes are not yet the immutable
+supported fixtures owned by `P03-016`.
 
 ### 7.4 Field path dictionary
 
@@ -2423,7 +2440,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) (baseline accepted; exact subordinate encodings remain `P03-002`–`P03-007`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); implementation remains `P03-008` onward) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

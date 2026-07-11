@@ -10,8 +10,11 @@
     "footer_hash_profile_id": 1,
     "footer_hash_bytes": 32,
     "complete_integrity_format": true,
-    "complete_hdoc_format": false,
-    "remaining_completion_owners": ["P03-007"]
+    "compression_registry": "docs/formats/hdoc-v1-compression.json",
+    "complete_hdoc_format": true,
+    "completion_owner": "P03-007",
+    "implementation_owners": ["P03-008", "P03-009"],
+    "immutable_fixture_owner": "P03-016"
   },
   "crc32c": {
     "name": "CRC-32C",
@@ -461,8 +464,11 @@
   "validation_order": [
     "validate-minimal-header-length-version-and-total-length-bounds-without-trusting-offsets",
     "recompute-crc32c-over-exact-stored-slice-with-checksum-field-zero-and-compare",
-    "validate-directory-footer-profile-structure-canonicality-payloads-and-limits",
-    "perform-P03-007-bounded-decompression-where-required-before-logical-hashing",
+    "validate-directory-footer-profile-structure-and-stored-placement",
+    "derive-canonical-logical-section-offsets-and-validate-canonical_length",
+    "validate-compression-table-and-perform-bounded-decompression-before-decoded-section-parsing",
+    "validate-decoded-section-structure-canonicality-payloads-and-limits",
+    "recreate-and-compare-canonical-compression-bytes-and-selection",
     "reconstruct-canonical-typed-tree-bottom-up-and-compare-root-BLAKE3-256",
     "expose-owned-or-borrowed-values-only-after-all-prior-stages-pass"
   ],
@@ -504,10 +510,6 @@
     }
   ],
   "deferrals": [
-    {
-      "owner": "P03-007",
-      "scope": "compressed-section-codecs-blocks-and-stored-byte-vectors"
-    },
     {
       "owner": "P03-008-P03-009",
       "scope": "production-encoder-decoder-and-integrity-implementation"

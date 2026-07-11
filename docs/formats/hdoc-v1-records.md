@@ -1,6 +1,6 @@
 # HDoc 1.0 Field, Name, Value-Reference, and Container Records
 
-- Status: Accepted table/container layout; integrity fixed; complete HDoc still blocked by `P03-007`
+- Status: Accepted table/container layout within complete HDoc 1.0 grammar
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner
 - Plan item: `P03-005`
@@ -9,6 +9,7 @@
 - Outer envelope: [HDoc 1.0 envelope](hdoc-v1.md)
 - Type identities: [HDoc 1.x type tags](hdoc-v1-type-tags.md)
 - Noncontainer bytes: [HDoc 1.0 payloads](hdoc-v1-payloads.md)
+- Compression and coordinates: [HDoc 1.0 compression](hdoc-v1-compression.md)
 - Machine-readable companion: [hdoc-v1-records.json](hdoc-v1-records.json)
 
 This document fixes every HDoc 1.0 base-profile record inside `field_table`, `name_pool`,
@@ -16,10 +17,11 @@ This document fixes every HDoc 1.0 base-profile record inside `field_table`, `na
 IDs, name deduplication, object presentation metadata, dense arrays, the uniquely owned container
 tree, value placement, section `item_count` meanings, and canonical rejection rules.
 
-The [integrity registry](hdoc-v1-integrity.md) now assigns typed-content hash profile 1 and CRC
-coverage. This document does **not** assign compression. The layouts below remain section-local
-structural vectors rather than immutable persisted fixtures; `P03-007` and `P03-016` own those
-later steps.
+The [integrity registry](hdoc-v1-integrity.md) assigns typed-content hash profile 1 and CRC
+coverage. The [compression registry](hdoc-v1-compression.md) assigns optional codec/profile `1/1`
+and makes every absolute offset below a canonical-logical HDoc coordinate. The layouts remain
+normative structural vectors rather than immutable supported fixtures; `P03-016` owns that later
+corpus.
 
 ## Normative status and notation
 
@@ -30,7 +32,8 @@ silently. All integer fields are unsigned little-endian unless explicitly stated
 Notation:
 
 - `u8`, `u16`, and `u32` are exact-width unsigned integers.
-- `abs(x)` means an absolute byte offset from HDoc byte zero.
+- `abs(x)` means an absolute canonical-logical byte offset from HDoc byte zero. It equals the stored
+  byte offset only where the compression profile has not shortened a preceding section.
 - `alignN(x) = (x + N - 1) & ~(N - 1)` after checked wide arithmetic.
 - `[a,b)` is a half-open byte range.
 - `F` is total recursive object-field count.
@@ -42,6 +45,20 @@ Notation:
 
 `Missing` is not a value, has no tag, and creates no field or array entry. A present null creates a
 normal tagged value reference with tag `0x01`, length zero, and a canonical cursor offset.
+
+## Canonical-logical offset space
+
+Directory `section_offset` addresses exact stored bytes. Every `field_name_offset`, `name_offset`,
+`value_offset`, and `item_offset` in this registry instead addresses the derived uncompressed HDoc:
+start at `header_bytes`, place each section with `align8` over its directory `logical_length`, and
+place the logical footer after the final section. The derived footer plus 64 must equal
+`canonical_length`.
+
+For an uncompressed HDoc, stored and logical coordinates coincide. For a compressed HDoc, a reader
+first validates an internal range against its owning derived logical section, then subtracts that
+section's logical start to index the fully bounded decoded section. Treating an internal logical
+offset as a stored compressed-body pointer is corruption. The exact translation and trust order are
+defined by the [compression registry](hdoc-v1-compression.md#two-coordinate-spaces).
 
 ## Base-profile overview
 
@@ -398,16 +415,17 @@ A writer follows these dependency-ordered steps:
 7. Scan containers/children in the same canonical order and pack every noncontainer payload with
    only required zero padding.
 8. Emit descriptors by ID, followed by array spans by array-container ID and element index.
-9. Compute every section count/length/absolute offset using the outer canonical placement equation,
-   then resolve all cross-references.
+9. Compute every section count/length and canonical-logical absolute offset using `logical_length`
+   placement, then resolve all cross-references.
 10. Revalidate the staged result independently: exact coverage, counts, names, tags, tree,
     offsets, payloads, limits, and root `_id`.
-11. The integrity profile computes CRC/content hash and `P03-007` may produce a smaller registered
-    compressed stored form; no caller sees a value/view until the complete validating-reader
-    pipeline passes.
+11. Compute the typed-content hash, evaluate the exact registered compression profile for all four
+    sections, emit the smaller canonical stored form when selected, and finally compute stored-byte
+    CRC; no caller sees a value/view until the complete validating-reader pipeline passes.
 
-Host hash-map order, pointer identity, allocation address, locale, normalization, thread completion
-order, and compressor behavior never participate in these steps.
+Host hash-map order, pointer identity, allocation address, locale, normalization, and thread
+completion order never participate in these steps. Compression bytes are governed only by the
+pinned profile, never by a host-default compressor choice.
 
 ## Root object and `_id`
 
@@ -522,7 +540,9 @@ The empty object's zero field span and the later nested object's nonempty span b
 
 ## Validation order and fail-closed behavior
 
-After the outer bounded checks and CRC stage defined by the envelope, the base table validator:
+After outer bounds, CRC, feature/codec checks, logical-position derivation, bounded decompression,
+and exact decoded-length checks defined by the envelope/compression registries, the base table
+validator:
 
 1. proves all four section equations and `item_count` cross-equalities with checked arithmetic;
 2. splits the container descriptor prefix from its array-entry suffix using `C * 32`;
@@ -536,8 +556,8 @@ After the outer bounded checks and CRC stage defined by the envelope, the base t
 8. replays canonical value occurrence order, alignment, padding, exact payload validators, and
    value-area count/coverage;
 9. validates root `_id` and remaining semantic limits; and
-10. continues to bounded decompression under `P03-007` and profile-1 typed-content hash validation
-    under the integrity registry before exposing any owned or borrowed value.
+10. returns to the surrounding validator for canonical recompression/section-selection comparison
+    and profile-1 typed-content hash validation before exposing any owned or borrowed value.
 
 An implementation may fuse passes while preserving these dependencies and error priorities. It
 must use iterative/bounded worklists rather than trusting descriptor depth as permission for host
@@ -614,7 +634,7 @@ Reading never silently renumbers, canonicalizes, repairs, or rewrites an old HDo
 | Task | Owns next | Cannot change from P03-005 |
 | --- | --- | --- |
 | [`P03-006`](hdoc-v1-integrity.md) | CRC replay; BLAKE3 typed-content domain/framing and vectors | Table bytes, presentation/container/value ordering |
-| `P03-007` | Registered deterministic compression block grammar | Expanded canonical section bytes and item meanings |
+| [`P03-007`](hdoc-v1-compression.md) | Registered deterministic compression and logical coordinates | Expanded section bytes and item meanings |
 | `P03-008`–`P03-011` | Safe writer/reader, owned/borrowed values, raw lookup | Accepted structure or fail-closed validation |
 | `P03-013` | Feature-gated collection path dictionary/profile | Base document-local field IDs and self-containment |
 | `P03-015` | Feature/version reader-writer migration matrix | Existing IDs/flags/record meanings |
@@ -652,6 +672,7 @@ Complete fixture/property/fuzz work must include:
 - [HDoc 1.x type tags](hdoc-v1-type-tags.md)
 - [HDoc 1.0 noncontainer payloads](hdoc-v1-payloads.md)
 - [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
+- [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
 - [Logical value model](../architecture/value-model.md)
 - [Object semantics](../architecture/object-semantics.md)
 - [Array semantics](../architecture/array-semantics.md)

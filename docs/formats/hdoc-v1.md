@@ -1,6 +1,6 @@
 # HDoc 1.0 Envelope, Section Directory, and Footer Format
 
-- Status: Accepted envelope/integrity layout; compression keeps complete format open
+- Status: Accepted complete HDoc 1.0 byte format
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner
 - Format identity: HDoc major `1`, minor `0`
@@ -8,6 +8,7 @@
 - Governing gate: `G03`
 - Governing decision: [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)
 - Machine-readable companion: [hdoc-v1-envelope.json](hdoc-v1-envelope.json)
+- Compression profile: [hdoc-v1-compression.md](hdoc-v1-compression.md)
 - Supersedes: None
 - Superseded by: None
 
@@ -19,20 +20,20 @@ directory, canonical top-level body order, footer placement, repeated footer fie
 slot. Every integer in this document is unsigned little-endian unless explicitly described as raw
 octets.
 
-This is not yet permission to emit a valid persistent HDoc. The stable logical tags/extension
-ranges and exact noncontainer bytes are now fixed by the
+The stable logical tags/extension ranges and exact noncontainer bytes are fixed by the
 [HDoc 1.x type-tag registry](hdoc-v1-type-tags.md),
 [HDoc 1.0 payload registry](hdoc-v1-payloads.md), and
 [HDoc 1.0 record registry](hdoc-v1-records.md). CRC coverage and typed-content hash algorithm/
-profile `1/1` are fixed by the [HDoc 1.0 integrity registry](hdoc-v1-integrity.md). The following
-byte contract remains open before the complete format gate:
+profile `1/1` are fixed by the [HDoc 1.0 integrity registry](hdoc-v1-integrity.md). Optional codec/
+profile `1/1`, its independently bounded block stream, canonical selection, and stored/logical
+coordinate model are fixed by the [compression registry](hdoc-v1-compression.md). Together these
+documents complete the HDoc 1.0 byte grammar.
 
-- compression codecs, block tables, settings, and rejection fixtures (`P03-007`).
-
-The machine-readable companion therefore still sets `complete_byte_format` to `false`, but footer
-`hash_profile_id = 1` is now the only assigned base profile. Profile zero remains permanently
-invalid. P03-006 integrity envelopes are normative references, not immutable P03-016 golden files
-or a complete-format support claim.
+Completion of the grammar is not an implementation or release-support claim. `P03-008` and
+`P03-009` own the production writer/reader, and `P03-016` owns immutable supported golden files.
+Footer `hash_profile_id = 1` is the only assigned base integrity profile; zero remains permanently
+invalid. The exact envelopes in the integrity and compression registries are normative executable
+references until the immutable corpus is published.
 
 ## Normative notation
 
@@ -40,7 +41,8 @@ or a complete-format support claim.
 | --- | --- |
 | `u16`, `u32`, `u64` | Unsigned integer with the named bit width, encoded little-endian |
 | `[n]byte` | Exactly `n` uninterpreted octets |
-| `offset` | Absolute byte index from the first header magic byte at document byte zero |
+| stored `offset` | Absolute byte index into the exact stored envelope from document byte zero |
+| logical `offset` | Absolute byte index into the derived canonical uncompressed envelope |
 | `[a,b)` | Half-open byte range beginning at `a` and ending before `b` |
 | `align8(x)` | The smallest integer greater than or equal to `x` and divisible by 8 |
 | `MUST`, `MUST NOT` | Required or forbidden for HDoc 1.0 conformance |
@@ -84,7 +86,7 @@ The base uncompressed profile has four directory entries, so its `header_bytes` 
 The structural lower bound before any body bytes is 256 bytes: 192 header/directory bytes plus the
 64-byte footer. The record grammar requires at least one 32-byte root descriptor, so the unique
 empty-root structure is 288 bytes. It is still not an accepted document: normal rows require root
-`_id`, profile zero is invalid, and the complete-format gate remains `P03-007`.
+`_id`, and integrity profile zero remains invalid.
 
 ## Header magic
 
@@ -158,11 +160,15 @@ to the stored document. For the base profile:
 canonical_length = total_length
 ```
 
-When P03-007 enables compression, the canonical uncompressed length is derived by replacing every
-compressed section with its exact `logical_length`, clearing compression flags/codec IDs, placing
-sections again by the canonical alignment equation, and accounting for the resulting header,
-directory, zero padding, footer, and checksum/hash fields. Thus a reader can reject a claimed
-expanded document beyond the limit before allocating or decompressing it.
+For every profile, the canonical uncompressed length is derived by replacing each stored section
+with its exact `logical_length`, placing sections in canonical directory order with `align8`, and
+accounting for the unchanged header/directory and 64-byte footer. Compression flags and codec IDs
+do not add logical bytes. The derived logical footer plus 64 MUST equal `canonical_length`. Thus a
+reader rejects a claimed expanded document beyond the limit before allocating or decompressing.
+
+The [compression registry](hdoc-v1-compression.md#two-coordinate-spaces) makes this derivation a
+coordinate system: all internal absolute offsets belong to this canonical logical envelope, while
+directory section offsets and the header/footer `footer_offset` address stored bytes.
 
 ADR 0012 requires compression to make the complete stored envelope smaller, so every accepted
 HDoc satisfies:
@@ -206,7 +212,7 @@ feature negotiation. Bits 5 through 31 are reserved and MUST be zero in HDoc 1.0
 
 | Bit | Mask | Name | Meaning/owner |
 | ---: | --- | --- | --- |
-| 0 | `0x00000001` | `HAS_COMPRESSED_SECTIONS` | At least one section entry is compressed; `P03-007` |
+| 0 | `0x00000001` | `HAS_COMPRESSED_SECTIONS` | At least one section entry uses registered compression |
 | 1 | `0x00000002` | `HAS_EXTENSION_AREA` | Exactly one `extension_area` section exists; `P03-015` |
 | 2 | `0x00000004` | `USES_PATH_DICTIONARY_REFERENCES` | Body depends on a pinned path dictionary; `P03-013` |
 | 3 | `0x00000008` | `HAS_SEMANTIC_EXTENSIONS` | Extension content contributes to meaning/hash; `P03-015` |
@@ -223,7 +229,7 @@ agree; either one without the other is corruption/noncanonical input.
 
 | Bit | Mask | Name | Required behavior |
 | ---: | --- | --- | --- |
-| 0 | `0x0000000000000001` | `SECTION_COMPRESSION` | Reader understands every nonzero codec/profile and bounded block grammar (`P03-007`) |
+| 0 | `0x0000000000000001` | `SECTION_COMPRESSION` | Reader understands every present registered codec/profile; v1 assigns `1/1` |
 | 1 | `0x0000000000000002` | `PATH_DICTIONARY_REFERENCES` | Reader can resolve the exact pinned dictionary version (`P03-013`–`P03-015`) |
 | 2 | `0x0000000000000004` | `SEMANTIC_EXTENSIONS` | Reader understands every semantic extension and typed-hash contribution (`P03-015`) |
 
@@ -284,7 +290,7 @@ or previous section.
 
 | Bit | Mask | Name | Rule |
 | ---: | --- | --- | --- |
-| 0 | `0x0001` | `COMPRESSED` | Stored bytes use explicit nonzero codec/profile; `P03-007` |
+| 0 | `0x0001` | `COMPRESSED` | Stored bytes use an explicit registered nonzero codec/profile |
 | 1 | `0x0002` | `CRITICAL` | Reader must understand this section before exposing values |
 | 2 | `0x0004` | `SEMANTIC` | Section contributes to decoded typed content/hash |
 | 3 | `0x0008` | `OPAQUE_PRESERVE` | Unknown optional bytes must survive re-encoding exactly or cause rejection |
@@ -304,9 +310,10 @@ codec_profile_id = 0
 stored_length = logical_length
 ```
 
-For a compressed section, all four conditions invert as defined by P03-007: `COMPRESSED` is set,
-the codec/profile pair is registered and nonzero, and the logical length describes the exact
-bounded decoded bytes. The complete compressed document must be smaller than its canonical
+For a compressed base section, `COMPRESSED` is set, flags are `0x0007`, codec/profile is exactly
+`1/1`, `stored_length` covers the complete bounded compression stream, and `logical_length`
+describes the exact decoded section bytes. The [compression registry](hdoc-v1-compression.md)
+defines the stream and requires the complete compressed document to be smaller than its canonical
 uncompressed form. Unknown codec/profile pairs are rejected before allocating or decompressing.
 
 ### `item_count`
@@ -371,8 +378,11 @@ section_offset + stored_length <= footer_offset
 ```
 
 Nonempty section ranges cannot overlap or alias. A section cannot point into the fixed header,
-directory, footer, another section, or padding. Internal offsets defined by P03-004/P03-005 remain
-absolute document offsets under ADR 0012.
+directory, footer, another section, or padding. Internal offsets defined by P03-004/P03-005 are
+absolute **canonical logical** document offsets. They equal stored offsets in the base profile.
+With compression, a reader derives logical section starts from `logical_length`, validates each
+internal range there, and then translates it to a decoded-section-local index. It never stores or
+follows an internal address into compressed bytes.
 
 ## Worked structural placement example
 
@@ -453,7 +463,7 @@ total_length = canonical_length
 
 Compression, extension area, semantic extension, nonsemantic extension, and path-dictionary
 references are opt-in feature profiles. The base profile remains mandatory for every conforming
-reader and writer once the subordinate byte contracts are complete.
+reader and writer; optional profile support never replaces it.
 
 ## Validation order and atomic exposure
 
@@ -472,12 +482,15 @@ document/view until every required stage succeeds:
    canonical placement, zero padding, and no nonempty overlap.
 7. Validate footer position/magic/size/version/algorithm/hash length, header copies, and a nonzero
    supported hash profile.
-8. Validate each known section's internal grammar, type tags, payloads, names, container ranges,
-   offsets, counts, canonicality, and all semantic limits under P03-003–P03-005.
-9. Perform bounded decompression where enabled and prove exact logical lengths under P03-007.
-10. Reconstruct and compare the canonical typed content hash under the
+8. Derive canonical logical section positions and require exact `canonical_length` agreement.
+9. Validate each compression header/table without output allocation, decode one bounded block at a
+   time, and prove exact logical lengths under the [compression registry](hdoc-v1-compression.md).
+10. Validate each decoded section's internal grammar, type tags, payloads, names, container ranges,
+    canonical-logical offsets, counts, canonicality, and semantic limits under P03-003–P03-005;
+    recreate and compare the canonical compression selection/bytes.
+11. Reconstruct and compare the canonical typed content hash under the
     [integrity registry](hdoc-v1-integrity.md).
-11. Only then construct an owned value or validated borrowed view for caller access.
+12. Only then construct an owned value or validated borrowed view for caller access.
 
 Checking CRC before complex body parsing is an optimization and corruption classification aid; it
 does not authorize trusting header offsets or allocating claimed lengths. The minimal header fields
@@ -523,9 +536,10 @@ change. Unassigned reserved bits/IDs are not free for local experimentation in c
 ## Migration and rollback
 
 No valid HDoc fixture or persisted HDoc row existed at P03-002; its then-unassigned profile zero
-ensured that partial format could not accidentally become one. P03-006 now assigns profile 1
-reference envelopes, while immutable support fixtures remain P03-016. This envelope can still be
-superseded without stored-data migration before that fixture/data boundary.
+ensured that partial format could not accidentally become one. P03-006 assigned integrity profile
+1, and P03-007 completed compression and the full byte grammar. Immutable support fixtures remain
+P03-016, so the format can still be superseded without stored-data migration before that
+fixture/data boundary.
 
 Once a nonzero hash profile and immutable HDoc 1.x vectors exist, changing this layout requires:
 
@@ -548,7 +562,7 @@ fields based on its own format version.
 | [`P03-004`](hdoc-v1-payloads.md) | Canonical noncontainer bytes inside `value_area` | Envelope endianness, lengths, placement, or footer |
 | [`P03-005`](hdoc-v1-records.md) | Field/name/container entries and `item_count` meanings | Absolute offset base, directory stride, top-level order |
 | [`P03-006`](hdoc-v1-integrity.md) | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
-| `P03-007` | Nonzero codec/profile IDs and internal bounded block grammar | Directory stride, logical/stored length fields, canonical limit |
+| [`P03-007`](hdoc-v1-compression.md) | Nonzero codec/profile IDs, bounded block grammar, and logical-coordinate derivation | Directory stride, logical/stored length fields, canonical limit |
 | `P03-013`–`P03-015` | Path dictionary and extension record grammars/negotiation | Existing flag/feature bit meanings or ID reuse |
 
 Later tasks may fill their reserved registries but cannot silently reinterpret zero, a reserved bit,
@@ -583,6 +597,7 @@ bytes. P03-016/P03-018 must eventually include at least:
 - [HDoc 1.0 canonical noncontainer payloads](hdoc-v1-payloads.md)
 - [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
 - [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
+- [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
 - [Logical value model](../architecture/value-model.md)
 - [Object semantics and typed content hashes](../architecture/object-semantics.md)
 - [Portable v1 limits](../architecture/limits-v1.md)

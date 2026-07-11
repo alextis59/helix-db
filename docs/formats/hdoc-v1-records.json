@@ -6,13 +6,16 @@
     "minor_version": 0,
     "profile": "base-self-contained",
     "byte_order": "little-endian",
-    "offset_base": "document-start",
+    "offset_base": "canonical-logical-document-start",
     "offset_width_bits": 32,
     "complete_table_and_container_format": true,
     "integrity_registry": "docs/formats/hdoc-v1-integrity.json",
+    "compression_registry": "docs/formats/hdoc-v1-compression.json",
     "complete_integrity_format": true,
-    "complete_hdoc_format": false,
-    "remaining_completion_owners": ["P03-007"]
+    "complete_hdoc_format": true,
+    "completion_owner": "P03-007",
+    "implementation_owners": ["P03-008", "P03-009"],
+    "immutable_fixture_owner": "P03-016"
   },
   "constants": {
     "field_entry_bytes": 24,
@@ -25,6 +28,13 @@
     "array_type_tag": 10,
     "base_reference_flags": 0,
     "base_container_flags": 0
+  },
+  "coordinate_model": {
+    "internal_absolute_offsets": "canonical-logical-document-start",
+    "logical_section_starts": "derive-by-align8-over-directory-logical_length-in-canonical-order",
+    "stored_section_offsets": "directory-section_offset-only",
+    "uncompressed_equivalence": "stored-and-logical-coordinates-coincide",
+    "compressed_translation": "validate-logical-owning-section-range-then-subtract-logical-section-start"
   },
   "sections": [
     {
@@ -490,8 +500,8 @@
   ],
   "deferrals": [
     {
-      "owner": "P03-007",
-      "scope": "compressed-section-block-grammar-codecs-and-profiles"
+      "owner": "P03-008-P03-009",
+      "scope": "production-encoder-and-bounded-validating-decoder"
     },
     {
       "owner": "P03-013",

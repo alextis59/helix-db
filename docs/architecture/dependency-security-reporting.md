@@ -61,6 +61,13 @@ packages. Because there is no external Rust package to query, the Rust advisory 
 crate remains prohibited until that change also configures a version-pinned Rust advisory scanner
 and reporting semantics. “Zero findings” is not synthesized for a graph that was not scanned.
 
+`P03-007` has reviewed and approved `lz4_flex = 0.13.1` with only `safe-encode`/`safe-decode` as the
+first planned external crate for HDoc compression, but has deliberately not changed the graph.
+Before `P03-008` adopts it, the reporting surface must add a version-pinned Rust advisory database/
+scanner, deterministic lock/source/license inventory, explicit scanner-outage failure, dated raw
+and compact reports, and durable evidence. The first external dependency and its scanner/reporting
+policy land together; until then, the zero-external-package invariant above remains exact.
+
 ## Full npm tarball license refresh
 
 `npm run dependencies:licenses` is the deliberate, networked refresh command. It downloads the

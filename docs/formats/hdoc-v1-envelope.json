@@ -5,7 +5,7 @@
     "major_version": 1,
     "minor_version": 0,
     "byte_order": "little-endian",
-    "offset_base": "document-start",
+    "offset_base": "stored-document-start-for-envelope-fields; canonical-logical-document-start-for-record-internals",
     "offset_width_bits": 32,
     "section_alignment_bytes": 8,
     "maximum_canonical_bytes": 16777216,
@@ -13,8 +13,11 @@
     "minimum_base_structural_root_bytes_before_hash_profile": 288,
     "record_registry": "docs/formats/hdoc-v1-records.json",
     "integrity_registry": "docs/formats/hdoc-v1-integrity.json",
-    "complete_byte_format": false,
-    "completion_gate": "P03-007"
+    "compression_registry": "docs/formats/hdoc-v1-compression.json",
+    "complete_byte_format": true,
+    "completion_owner": "P03-007",
+    "implementation_owners": ["P03-008", "P03-009"],
+    "immutable_fixture_owner": "P03-016"
   },
   "magic": {
     "header_hex": "48444f430d0a1a0a",
@@ -73,13 +76,15 @@
         "name": "total_length",
         "offset": 20,
         "bytes": 4,
-        "encoding": "u32-le"
+        "encoding": "u32-le",
+        "coordinate_space": "stored"
       },
       {
         "name": "canonical_length",
         "offset": 24,
         "bytes": 4,
-        "encoding": "u32-le"
+        "encoding": "u32-le",
+        "coordinate_space": "canonical-logical"
       },
       {
         "name": "field_count",
@@ -119,7 +124,8 @@
         "name": "footer_offset",
         "offset": 44,
         "bytes": 4,
-        "encoding": "u32-le"
+        "encoding": "u32-le",
+        "coordinate_space": "stored"
       },
       {
         "name": "required_features",
@@ -216,7 +222,8 @@
         "name": "section_offset",
         "offset": 4,
         "bytes": 4,
-        "encoding": "u32-le"
+        "encoding": "u32-le",
+        "coordinate_space": "stored"
       },
       {
         "name": "stored_length",
@@ -351,6 +358,14 @@
       "profile_id": 0,
       "name": "none",
       "valid_when": "compressed flag is clear and stored_length equals logical_length"
+    },
+    {
+      "id": 1,
+      "profile_id": 1,
+      "name": "lz4-flex-safe-independent-32k-v1",
+      "valid_when": "compressed flag is set and bytes satisfy docs/formats/hdoc-v1-compression.json",
+      "stream_version": 1,
+      "block_bytes": 32768
     }
   ],
   "footer": {
@@ -459,7 +474,11 @@
     },
     {
       "id": "section-placement",
-      "expression": "section_offset[i] = align8(previous_section_end), first previous end = header_bytes"
+      "expression": "stored section_offset[i] = align8(previous stored section end), first previous end = header_bytes"
+    },
+    {
+      "id": "logical-section-placement",
+      "expression": "logical_section_offset[i] = align8(previous logical section end using logical_length), first previous end = header_bytes"
     },
     {
       "id": "footer-position",
@@ -476,6 +495,18 @@
     {
       "id": "uncompressed-length",
       "expression": "without compressed sections, total_length = canonical_length"
+    },
+    {
+      "id": "canonical-logical-length",
+      "expression": "canonical_length = align8(last logical section end) + 64"
+    },
+    {
+      "id": "internal-offset-space",
+      "expression": "all P03-004/P03-005 absolute offsets address canonical logical coordinates; stored and logical coordinates coincide only when no prior stored section shrank"
+    },
+    {
+      "id": "compressed-document-selection",
+      "expression": "profile 1/1 compresses every and only beneficial base section and is emitted only when total_length < canonical_length"
     },
     {
       "id": "footer-copies",

@@ -24,8 +24,10 @@ prefix, noncanonical rejection, and payload-level reference vectors.
 The [HDoc 1.0 record registry](hdoc-v1-records.md) now fixes the field/array record carrying each
 tag, offset, and length, plus value-area ordering, zero padding, container references, and exact
 zero-length cursors. The [integrity registry](hdoc-v1-integrity.md) now fixes CRC coverage and
-typed-hash framing; compression remains `P03-007`. Therefore the parent envelope is still an
-incomplete byte format, and no payload example here alone is a complete HDoc document.
+typed-hash framing. The [compression registry](hdoc-v1-compression.md) fixes optional stored bytes
+without changing any decoded payload byte or canonical-logical offset. The parent HDoc byte grammar
+is complete, though no payload example here alone is a complete HDoc document or immutable
+supported fixture.
 
 ## Normative notation
 
@@ -588,7 +590,7 @@ can replace this registry without data migration. After immutable fixtures or da
 | --- | --- | --- |
 | [`P03-005`](hdoc-v1-records.md) | Containing records, value-area order, offsets, external padding, object/array tables | Payload bytes, lengths, or alignments listed here |
 | [`P03-006`](hdoc-v1-integrity.md) | CRC replay and typed-hash domain/length/tree framing | Canonical logical payload identity |
-| `P03-007` | Deterministic bounded compression blocks/codecs | Expanded canonical payload bytes |
+| [`P03-007`](hdoc-v1-compression.md) | Deterministic bounded compression blocks/codecs | Expanded canonical payload bytes |
 | `P03-008`–`P03-010` | Safe encoder, validating decoder, owned/borrowed values | Host-independent encoding and fail-closed rules |
 | `P03-015` | Required-feature negotiation and registered subtype extensions | Existing subtype/encoding assignments |
 | `P03-016`–`P03-019` | Complete golden HDocs, independent readers, malformed/property/fuzz suites | Payload vectors and rejection expectations |
@@ -614,8 +616,8 @@ Later complete fixtures/property/fuzz suites must include:
 - identical Rust/TypeScript/native/Wasm/browser values, bytes, typed hashes, errors, and diagnostics.
 
 The payload examples in the machine registry are normative test inputs, not complete HDoc golden
-documents. P03-006 fixes their typed-hash framing. `P03-016` must embed them in immutable complete
-documents only after `P03-007` closes the remaining compression grammar.
+documents. P03-006 fixes their typed-hash framing and P03-007 completes the surrounding compression
+grammar. `P03-016` must embed them in immutable complete supported documents.
 
 ## References
 
@@ -634,6 +636,7 @@ documents only after `P03-007` closes the remaining compression grammar.
 - [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)
 - [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
 - [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
+- [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
 - [IEEE 754-2019 standard landing page](https://standards.ieee.org/ieee/754/6210/)
 - [MongoDB Decimal128 specification](https://specifications.readthedocs.io/en/latest/bson-decimal128/decimal128/)
 - [RFC 9562 UUID format](https://www.rfc-editor.org/rfc/rfc9562)

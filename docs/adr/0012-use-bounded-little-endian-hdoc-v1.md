@@ -28,9 +28,9 @@ bound makes 32-bit offsets sufficient and lets the format favor a small portable
 speculative large-document addressing.
 
 This decision implements `P03-001` and contributes to `INV-001`, `INV-007`, `DATA-001`,
-`DATA-002`, `CORE-001`, `SEC-001`, and `SEC-002`. Tasks `P03-002` through `P03-007` must turn
-these invariants into exact field layouts, registries, byte encodings, hash framing, and
-compression profiles before a writer is accepted.
+`DATA-002`, `CORE-001`, `SEC-001`, and `SEC-002`. Tasks `P03-002` through `P03-007` have now turned
+these invariants into exact field layouts, registries, byte encodings, hash framing, coordinate
+spaces, and compression profiles before a writer is accepted.
 
 ## Decision drivers
 
@@ -228,8 +228,8 @@ allocate the claimed expanded size first.
 
 A compressed representation MUST be smaller than its canonical uncompressed representation,
 including compression metadata and padding. Therefore v1 does not use compression as permission
-for a stored envelope larger than the canonical limit. P03-007 may set a smaller block or stored-
-envelope limit but cannot raise `limits-v1`.
+for a stored envelope larger than the canonical limit. P03-007 fixes a 32 KiB block and the same
+stored/canonical envelope limit; it does not raise `limits-v1`.
 
 ### Canonical physical encoding
 
@@ -312,8 +312,10 @@ Every conforming HDoc implementation must read and write the uncompressed base p
 Compression is an optional required feature of a stored encoding profile, never an implicit
 heuristic that changes reader behavior.
 
-P03-007 selects codec IDs, exact library/version/settings, independent block boundaries, and
-golden compressed bytes. Every accepted compression profile must satisfy these invariants:
+The [P03-007 compression registry](../formats/hdoc-v1-compression.md) assigns codec/profile `1/1`
+to exact `lz4_flex` `0.13.1` raw LZ4 bytes in independently encoded 32 KiB blocks. Its fixed HDoc
+compression stream carries checked logical/stored lengths and selects every and only beneficial
+base section. Every accepted compression profile satisfies these invariants:
 
 - codec and profile IDs are explicit and covered by version/feature negotiation;
 - the same canonical input and profile produce the same stored bytes;
@@ -327,8 +329,10 @@ golden compressed bytes. Every accepted compression profile must satisfy these i
 - compression is emitted only when the complete stored result is smaller; and
 - decoders do not execute user-provided dictionaries/code or fetch codec material from a network.
 
-No compression algorithm is selected by this ADR. Until P03-007 is accepted, v1 writers emit only
-the uncompressed base profile and readers reject compression-required features.
+The uncompressed base remains mandatory. Profile `1/1` is the only assigned compressed v1 profile;
+unknown pairs fail before allocation/decompression, and the complete compressed envelope must be
+smaller than the canonical-logical envelope. Production adoption remains gated on `P03-008`
+dependency/advisory policy and writer implementation.
 
 ### Version and extension strategy
 
@@ -416,7 +420,7 @@ partially decoded value, repair bytes silently, or trust a derived index/sidecar
 - P03-004 fixes every noncontainer logical payload encoding and base binary subtype.
 - P03-005 fixes field/nested tables, section order, and overlap rules.
 - P03-006 fixes the BLAKE3 domain/framing and exact checksum/hash fields/vectors.
-- P03-007 selects compression codecs and deterministic profiles.
+- P03-007 fixes codec/profile `1/1`, deterministic block bytes, coordinate spaces, and selection.
 - P03-013 through P03-015 define path-dictionary bytes, negotiation, and migrations.
 - Performance remains an experiment: alignment or compression profiles are retained only if
   `EXP-001`/`EXP-002` evidence justifies them without weakening correctness.
@@ -473,7 +477,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] Freeze table/offset/section/padding rules under `P03-005`.
 - [x] Reproduce RFC CRC-32C and official BLAKE3 vectors; freeze domain/framing and corruption
   diagnostics under `P03-006`.
-- [ ] Select and validate deterministic bounded compression profiles under `P03-007`.
+- [x] Select and validate deterministic bounded compression profile `1/1` under `P03-007`.
 - [ ] Implement the bounded encoder/validating decoder and independent owned/borrowed paths under
   `P03-008`–`P03-012`.
 - [ ] Commit immutable positive, boundary, noncanonical, unknown-feature/version, checksum, hash,
@@ -506,7 +510,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   payload bytes.
 - [x] `P03-005`: publish the complete offset/section/alignment/overlap grammar.
 - [x] `P03-006`: publish exact CRC coverage and BLAKE3 domain/framing vectors.
-- [ ] `P03-007`: select compression algorithms/settings after dependency and benchmark review.
+- [x] `P03-007`: select and validate exact compression algorithms/settings, bounded blocks,
+  coordinates, and canonical selection after dependency/security/portability review.
 - [ ] `P03-015`: publish the HDoc reader/writer/feature migration matrix.
 - [ ] `P03-016`–`P03-021`: freeze independent fixtures, fuzz/corruption evidence, and experiment
   conclusions before `G03`.
@@ -529,6 +534,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [HDoc 1.0 canonical noncontainer payloads](../formats/hdoc-v1-payloads.md)
 - [HDoc 1.0 field/name/value-reference/container records](../formats/hdoc-v1-records.md)
 - [HDoc 1.0 CRC-32C and canonical typed-content hashing](../formats/hdoc-v1-integrity.md)
+- [HDoc 1.0 bounded section compression](../formats/hdoc-v1-compression.md)
 - [RFC 3385: Internet Checksum Considered Harmful?](https://www.rfc-editor.org/rfc/rfc3385)
 - [RFC 3720: iSCSI CRC-32C parameters and examples](https://www.rfc-editor.org/rfc/rfc3720)
 - [BLAKE3 official implementation and test vectors](https://github.com/BLAKE3-team/BLAKE3)

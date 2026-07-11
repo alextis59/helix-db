@@ -100,6 +100,21 @@ Release validation compares packaged notices with the locked dependency graph an
 
 The release owner owns the aggregate notice/SBOM result. Domain owners remain responsible for declaring external material introduced in their areas.
 
+### Approved pending HDoc codec dependency
+
+`P03-007` approves `lz4_flex` exactly `0.13.1` for future HDoc codec/profile `1/1` use. The reviewed
+crate is MIT-licensed; its crates.io archive has SHA-256
+`7ef0d4ed8669f8f8826eb00dc878084aa8f253506c4fd5e8f58f5bce72ddb97e`, and the selected
+`default-features = false`, `safe-encode`, `safe-decode` configuration has no runtime transitive
+crate. The [compression registry](../formats/hdoc-v1-compression.md) records upstream commit,
+source/license hashes, native/Wasm vectors, advisory review, and exact use boundary.
+
+This is a reviewed pending dependency, not part of the current Cargo graph or shipped inventory.
+`P03-008` must install a pinned fail-closed Rust advisory scanner/report before adding the first
+external crate, pin `=0.13.1` and its lock checksum, update `THIRD_PARTY_NOTICES.md` and dependency
+policy, and preserve the MIT license text/provenance in every shipped crate, binary, Wasm, npm, and
+SBOM boundary. A different version or feature set requires a new focused review.
+
 ## Current third-party inventory
 
 The exact current npm development-tool inventory and license counts are maintained in [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md), enforced by [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json), and expanded by the [dependency reporting contract](../architecture/dependency-security-reporting.md). All locked npm entries are development-only; the twelve MPL-2.0 `lightningcss` entries are a bounded build-tool exception and cannot enter shipped artifacts without revalidation. Cargo currently contains only the eight unpublished MIT workspace packages and no external crate. No vendored code, third-party shader, generated SDK, benchmark dataset, or browser binary is committed.
