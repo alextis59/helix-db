@@ -32,13 +32,13 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 
-Implementation has entered the HDoc raw-lookup phase. `helix-doc` now provides safe deterministic
-HDoc encoding, whole-envelope validation, allocation-free borrowed logical views, recursively
-detached owned values, exact-name binary search, and bounded dotted-path traversal while preserving
-every type, payload bit, dense array position, object presentation ordinal, Missing/null boundary,
-and array provenance. Uncompressed views borrow the validated input; compressed views reuse the
-decoder's bounded logical-section allocations. The other unpublished `0.0.0` crates remain boundary
-skeletons. The reference oracle and MongoDB differential harness remain test authorities, and the
-two executable examples still prove only native linking and browser Wasm bundling/instantiation.
-There is not yet canonical rendering/import, a query engine, storage engine, adapter, network
-service, or production database release.
+Implementation has entered the HDoc tagged-conversion phase. `helix-doc` now provides safe
+deterministic HDoc encoding, whole-envelope validation, allocation-free borrowed logical views,
+recursively detached owned values, exact-name/path lookup, canonical lossless tagged JSON
+rendering, and strict detached import while preserving every type, payload bit, dense array
+position, object presentation ordinal, Missing/null boundary, and array provenance. Import enforces
+the same root, type, name, depth, count, and exact canonical-byte limits as HDoc before returning.
+The other unpublished `0.0.0` crates remain boundary skeletons. The reference oracle and MongoDB
+differential harness remain test authorities, and the two executable examples still prove only
+native linking and browser Wasm bundling/instantiation. There is not yet a query engine, storage
+engine, adapter, network service, public protocol/SDK contract, or production database release.

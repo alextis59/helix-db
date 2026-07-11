@@ -16,11 +16,17 @@ use std::iter::FusedIterator;
 use blake3::Hasher;
 use crc::{CRC_32_ISCSI, Crc};
 
+mod tagged_json;
+
+pub use tagged_json::{
+    HDOC_TAGGED_JSON_PROFILE, JsonImportError, JsonImportLimitId, import_tagged_json,
+};
+
 /// Stable development name used by workspace-boundary checks.
 pub const COMPONENT_NAME: &str = "helix-doc";
 
 /// Current implementation maturity.
-pub const MATURITY: &str = "hdoc-path-lookup";
+pub const MATURITY: &str = "hdoc-tagged-json";
 
 /// Internal `HelixDB` crates this portable leaf is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
@@ -781,7 +787,7 @@ fn classify_array_index_segment(segment: &str) -> ArrayIndexSegment {
 }
 
 /// An owned root document detached from its encoded `HDoc` backing.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OwnedDocument {
     fields: Vec<OwnedField>,
 }
@@ -801,7 +807,7 @@ impl OwnedDocument {
 }
 
 /// One owned object field with an exact UTF-8 name and typed value.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OwnedField {
     name: String,
     value: OwnedValue,
@@ -828,7 +834,7 @@ impl OwnedField {
 }
 
 /// An owned nested object retaining its observable field-presentation order.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub struct OwnedObject {
     fields: Vec<OwnedField>,
 }
@@ -848,7 +854,7 @@ impl OwnedObject {
 }
 
 /// Exact detached logical value produced from a completely validated `HDoc`.
-#[derive(Clone, Debug)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 pub enum OwnedValue {
     /// Null.
     Null,
@@ -7552,7 +7558,7 @@ mod tests {
     #[test]
     fn metadata_error_codes_and_internal_guards_are_stable() -> Result<(), EncodeError> {
         assert_eq!(COMPONENT_NAME, "helix-doc");
-        assert_eq!(MATURITY, "hdoc-path-lookup");
+        assert_eq!(MATURITY, "hdoc-tagged-json");
         assert!(INTERNAL_DEPENDENCIES.is_empty());
         assert_eq!(CompressionMode::default(), CompressionMode::Canonical);
         assert_eq!(

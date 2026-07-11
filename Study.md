@@ -328,8 +328,28 @@ trading one bounded replay for a fail-before-publication API and deterministic e
 
 This closes correctness and allocation behavior, not the performance hypothesis: `P03-020` still
 owns representative lookup latency/throughput measurements and may motivate internal tuning
-without changing the path result contract. `P03-012` still owns canonical rendering/import, and
-`P03-016` still owns immutable supported fixtures.
+without changing the path result contract.
+
+`P03-012` then connects validated HDoc values to the already proven language-neutral semantic
+model through [`helix.hdoc-tagged-json/1`](docs/formats/hdoc-v1-tagged-json.md). The renderer works
+equally over borrowed decoded views and detached owned values, so it does not introduce another
+logical representation. It emits compact JCS-key-ordered wrapper metadata while retaining logical
+object presentation order and exact typed payloads. This deliberately chooses verbose explicit
+tags over inferred JSON because inference would erase integer width, float/NaN bits, decimal
+cohorts, binary/identifier/vector identity, and Missing/null distinctions.
+
+The importer is a bounded grammar-specific parser rather than a generic JSON AST followed by a
+second validation pass. That choice limits amplification, detects duplicate metadata before a map
+can erase it, and permits depth/field/array/vector quotas during construction. A final detached-tree
+validation reuses every HDoc document rule and independently measures the exact canonical layout,
+including alignment and table/name/container overhead. Thus conversion cannot become a weaker
+route around the encoder even though it does not yet persist or encode the returned document.
+
+The tradeoff is intentional scope: tagged JSON is an internal debug/future SDK-boundary profile,
+not the public command/protocol syntax and not MongoDB Extended JSON. Future wire and SDK work may
+negotiate or adapt it, but cannot silently call ordinary JSON lossless. `P03-016` still owns
+immutable supported fixtures and `P03-017`–`P03-019` still own independent-reader/property/fuzz
+evidence.
 
 ### 6.3 Field-path dictionaries
 

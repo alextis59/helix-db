@@ -109,6 +109,6 @@ const runPreflight = () => {
 };
 
 process.stdout.write(
-  `PASS clean bootstrap contract: ${contract.profiles.length} profiles, ${supportedPlatforms.length} native hosts, ${contract.troubleshooting.length} troubleshooting codes, HDoc path lookup active\n`,
+  `PASS clean bootstrap contract: ${contract.profiles.length} profiles, ${supportedPlatforms.length} native hosts, ${contract.troubleshooting.length} troubleshooting codes, HDoc tagged JSON active\n`,
 );
 if (mode === 'preflight') runPreflight();

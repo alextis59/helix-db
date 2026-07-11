@@ -585,9 +585,28 @@ Syntax/grammar failures use the same code; path byte/segment/field and one-milli
 use `QUOTA_LIMIT_EXCEEDED` with stable `limits-v1` IDs. Candidate count and contextual numeric
 validity are audited over the complete immutable view before iteration, so a caller never receives
 a truncated or partially successful sequence. Lookup allocates no heap storage after decode and
-cannot outlive the validated wrapper or borrowed path text. Canonical rendering/import remains
-`P03-012`; the normative reference envelopes are not yet the immutable supported fixtures owned by
-`P03-016`, and formal lookup measurements remain `P03-020`.
+cannot outlive the validated wrapper or borrowed path text.
+
+`P03-012` implements the versioned
+[`helix.hdoc-tagged-json/1`](docs/formats/hdoc-v1-tagged-json.md) lossless conversion profile for
+debugging and future SDK boundaries. Canonical compact output reuses the language-neutral semantic
+fixture tagged values, orders wrapper metadata keys by RFC 8785/JCS, preserves logical object field
+presentation, renders exact integer/temporal decimal strings and float/vector bits, and retains
+decimal classes, binary subtype, identifiers, and every stored type. Missing is excluded because
+HDoc represents it as field absence.
+
+Strict import accepts JSON whitespace and wrapper-property reordering but rejects a BOM, trailing
+bytes, malformed escapes/surrogates, duplicate or unknown metadata, wrong wrapper shapes,
+noncanonical numeric/hex/identifier payloads, and Missing. It parses the registered typed grammar
+directly rather than materializing an unrestricted generic JSON tree, enforces expanded input,
+depth, object/total-field, array, and vector limits during parsing, and returns only a detached
+`OwnedDocument`. Before return it revalidates root `_id`, protected fields, exact sibling-name
+uniqueness, scalar domains, and the exact aligned canonical HDoc byte size including all tables,
+names, payloads, containers, array references, and footer.
+
+This profile is not the public command or wire grammar and does not pre-decide language-specific
+SDK APIs; those remain `P07-*` and `P12-*`. The normative reference envelopes are not yet immutable
+supported HDoc fixtures owned by `P03-016`, and formal lookup measurements remain `P03-020`.
 
 ### 7.4 Field path dictionary
 
@@ -2482,7 +2501,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, borrowed/owned values, and raw lookup implemented by `P03-008`–`P03-011`; rendering/fixtures continue at `P03-012` onward) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, and [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md) implemented by `P03-008`–`P03-012`; immutable fixtures continue at `P03-016`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

@@ -340,7 +340,7 @@ change must preserve the historical decision. After fixtures/data exist:
 | [`P03-004`](hdoc-v1-payloads.md) | Canonical noncontainer payload bytes and validation | Tag values or logical meanings |
 | [`P03-005`](hdoc-v1-records.md) | Field/array/container record positions for the one-byte tag | Tag width/assignments |
 | [`P03-006`](hdoc-v1-integrity.md) | Typed-hash framing including tag and payload | Tag identity or unknown-tag rule |
-| `P03-008`–`P03-011` (complete) | Encoder, decoder, owned/borrowed values, and raw lookup implementation | Closed-world registry semantics |
+| `P03-008`–`P03-012` (complete) | Encoder, decoder, owned/borrowed values, raw lookup, and tagged conversion | Closed-world registry semantics |
 | `P03-015` | Feature negotiation and registered extension governance | Existing assignments or no-reuse rule |
 | `P03-016`–`P03-019` | Golden vectors, independent readers, malformed tests, fuzzing | Historical registry bytes/expectations |
 
@@ -380,4 +380,5 @@ Later golden/property/fuzz suites must include:
 - [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
 - [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
 - [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
+- [HDoc lossless tagged JSON profile 1](hdoc-v1-tagged-json.md)
 - [ADR 0012](../adr/0012-use-bounded-little-endian-hdoc-v1.md)

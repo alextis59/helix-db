@@ -594,6 +594,7 @@ can replace this registry without data migration. After immutable fixtures or da
 | `P03-008`–`P03-009` (complete) | Safe encoder and validating decoder | Host-independent encoding and fail-closed rules |
 | `P03-010` (complete) | Owned values and borrowed views | Validated logical value exposure without reinterpretation |
 | `P03-011` (complete) | Exact-name and dotted-path borrowed lookup | Payload identity and Missing/null distinction |
+| [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Exact tagged rendering/import payload conversion | Exact bits, widths, decimal tuples, identifiers, and vector family |
 | `P03-015` | Required-feature negotiation and registered subtype extensions | Existing subtype/encoding assignments |
 | `P03-016`–`P03-019` | Complete golden HDocs, independent readers, malformed/property/fuzz suites | Payload vectors and rejection expectations |
 
@@ -639,6 +640,7 @@ grammar. `P03-016` must embed them in immutable complete supported documents.
 - [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
 - [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
 - [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
+- [HDoc lossless tagged JSON profile 1](hdoc-v1-tagged-json.md)
 - [IEEE 754-2019 standard landing page](https://standards.ieee.org/ieee/754/6210/)
 - [MongoDB Decimal128 specification](https://specifications.readthedocs.io/en/latest/bson-decimal128/decimal128/)
 - [RFC 9562 UUID format](https://www.rfc-editor.org/rfc/rfc9562)

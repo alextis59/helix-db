@@ -610,6 +610,8 @@ These are representation capabilities, not permission to expose a partially vali
 `P03-010` implements safe owned values plus presentation/index views. `P03-011` now binary-searches
 the raw name table and object spans, then performs fixed-storage dotted traversal with exact array
 indices, immediate-object fan-out, ordered array provenance, and complete error/candidate preflight.
+`P03-012` renders those same validated spans into ordered tagged field arrays and validates an
+imported detached tree against this exact canonical table/name/value/container layout before return.
 Formal latency/throughput measurements remain `P03-020`.
 
 ## Version, migration, and rollback
@@ -641,6 +643,7 @@ Reading never silently renumbers, canonicalizes, repairs, or rewrites an old HDo
 | `P03-008`–`P03-009` (complete) | Safe writer and bounded validating reader | Accepted structure or fail-closed validation |
 | `P03-010` (complete) | Owned values and allocation-free borrowed presentation/index views | Complete validation before exposure |
 | `P03-011` (complete) | Exact-name and nested-path raw lookup | Base field IDs, presentation semantics, complete validation before exposure |
+| [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Ordered tagged object/array conversion and exact-size import validation | Base field IDs, presentation semantics, and canonical layout |
 | `P03-013` | Feature-gated collection path dictionary/profile | Base document-local field IDs and self-containment |
 | `P03-015` | Feature/version reader-writer migration matrix | Existing IDs/flags/record meanings |
 | `P03-016`–`P03-019` | Complete golden/malformed, independent readers, property/fuzz suites | Structural vectors and rejection expectations |
@@ -678,6 +681,7 @@ Complete fixture/property/fuzz work must include:
 - [HDoc 1.0 noncontainer payloads](hdoc-v1-payloads.md)
 - [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
 - [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
+- [HDoc lossless tagged JSON profile 1](hdoc-v1-tagged-json.md)
 - [Logical value model](../architecture/value-model.md)
 - [Object semantics](../architecture/object-semantics.md)
 - [Array semantics](../architecture/array-semantics.md)

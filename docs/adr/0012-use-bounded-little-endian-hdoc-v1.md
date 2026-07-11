@@ -487,7 +487,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   type/payload/presentation semantics and complete-validation-before-exposure.
 - [x] Implement allocation-free exact-name and bounded dotted-path lookup under `P03-011`,
   including Missing/null, array fan-out/provenance, and fail-before-publication limits.
-- [ ] Implement canonical rendering/import under `P03-012`.
+- [x] Implement canonical lossless tagged rendering and strict detached import under `P03-012`,
+  reusing the semantic-fixture value model while keeping public protocol/SDK grammar out of scope.
 - [ ] Commit immutable positive, boundary, noncanonical, unknown-feature/version, checksum, hash,
   overlap, truncation, padding, compression-bomb, and limit golden vectors under `P03-016`.
 - [ ] Prove Rust and TypeScript readers produce identical logical values and hashes under
@@ -528,6 +529,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   owned logical values, all-type/presentation/compression replay, and active coverage.
 - [x] `P03-011`: implement raw exact-name binary search, fixed-storage dotted traversal, ordered
   array provenance, contextual path errors, candidate preflight, native/Wasm replay, and coverage.
+- [x] `P03-012`: implement canonical lossless tagged rendering and strict detached import with
+  duplicate/Unicode/type/limit rejection, exact HDoc-size validation, and active coverage.
 - [ ] `P03-015`: publish the HDoc reader/writer/feature migration matrix.
 - [ ] `P03-016`–`P03-021`: freeze independent fixtures, fuzz/corruption evidence, and experiment
   conclusions before `G03`.

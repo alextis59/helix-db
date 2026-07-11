@@ -151,11 +151,12 @@ database-functionality = false
 
 That exception was revalidated and expired when `P03-008` introduced the safe deterministic HDoc
 encoder. `P03-009` expanded the same active semantic-critical scope with the whole-envelope
-validating decoder, `P03-010` added borrowed/owned logical values, and `P03-011` added exact-name
-binary search plus bounded dotted traversal. The active workspace metadata is now:
+validating decoder, `P03-010` added borrowed/owned logical values, `P03-011` added exact-name/path
+lookup, and `P03-012` added strict lossless tagged JSON rendering/import. The active workspace
+metadata is now:
 
 ```text
-status = "hdoc-path-lookup"
+status = "hdoc-tagged-json"
 database-functionality = true
 ```
 
@@ -165,9 +166,9 @@ can explain its posture, but changing the current metadata back to the skeleton 
 workspace bootstrap and implementation contract. Maturity metadata cannot hide uncovered code:
 an active empty scope fails, while a nonempty scope always activates its thresholds.
 
-The current clean report proves measured HDoc encoder/decoder/value-access/raw-lookup coverage. It
-records workspace maturity and database-functionality metadata alongside the executed test and
-source identities.
+The current clean report proves measured HDoc encoder/decoder/value-access/raw-lookup/tagged-JSON
+coverage. It records workspace maturity and database-functionality metadata alongside the executed
+test and source identities.
 
 ## Report contract
 

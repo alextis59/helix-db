@@ -444,6 +444,7 @@ and typed hash before deriving a new artifact and retains the source until its r
 | `P03-008`–`P03-009` (complete) | Production encoder/decoder integrity implementation | Algorithms, profile, frames, failure order |
 | `P03-010` (complete) | Borrowed and owned logical-value exposure after typed-hash validation | Exact typed payload/container identity |
 | `P03-011` (complete) | Exact-name and dotted-path lookup after whole-document validation | Exact typed payload/container identity and validation order |
+| [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Tagged rendering/import after complete logical validation | Exact typed payload/container identity and validation order |
 | `P03-013`–`P03-015` | Dictionary/extensions/migration negotiation | Resolved names/content identity or ID reuse |
 | `P03-016` | Immutable complete positive/malformed HDoc files | Existing registry vectors/expectations |
 | `P03-017`–`P03-019` | Independent codecs, properties, corruption tests, fuzzing | Exact outputs and fail-closed behavior |
@@ -480,6 +481,7 @@ Complete tests must include:
 - [HDoc 1.0 noncontainer payloads](hdoc-v1-payloads.md)
 - [HDoc 1.0 records](hdoc-v1-records.md)
 - [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
+- [HDoc lossless tagged JSON profile 1](hdoc-v1-tagged-json.md)
 - [Object semantics and canonical hashes](../architecture/object-semantics.md)
 - [Array semantics and canonical hashes](../architecture/array-semantics.md)
 - [Versioned error semantics](../architecture/error-semantics.md)

@@ -32,8 +32,9 @@ documents complete the HDoc 1.0 byte grammar.
 Completion of the grammar alone was not an implementation or release-support claim. `P03-008`
 implements the production writer, `P03-009` implements the bounded whole-envelope validating
 reader, `P03-010` implements lifetime-bound borrowed views plus detached owned logical values, and
-`P03-011` implements exact-name and dotted-path lookup over those validated views. `P03-016` owns
-immutable supported golden files.
+`P03-011` implements exact-name and dotted-path lookup over those validated views. `P03-012`
+implements canonical lossless tagged rendering and strict detached import. `P03-016` owns immutable
+supported golden files.
 Footer `hash_profile_id = 1` is the only assigned base integrity profile; zero remains permanently
 invalid. The exact envelopes in the integrity and compression registries are normative executable
 references until the immutable corpus is published.
@@ -130,7 +131,8 @@ Construction audits the entire traversal first. Contextual numeric errors and th
 partial/truncated iterator. Syntax and contextual-index diagnostics are redacted
 `VAL_INVALID_PATH`; byte/segment/field/candidate limit failures are redacted
 `QUOTA_LIMIT_EXCEEDED` with stable limit IDs. Lookup borrows the validated logical sections and path
-text and cannot outlive either. `P03-012` owns canonical rendering/import, and `P03-020` owns formal
+text and cannot outlive either. Canonical lossless rendering and strict detached import use the
+implemented [`helix.hdoc-tagged-json/1`](hdoc-v1-tagged-json.md) profile. `P03-020` owns formal
 lookup measurements.
 
 ## Normative notation
@@ -636,8 +638,9 @@ change. Unassigned reserved bits/IDs are not free for local experimentation in c
 No valid HDoc fixture or persisted HDoc row existed at P03-002; its then-unassigned profile zero
 ensured that partial format could not accidentally become one. P03-006 assigned integrity profile
 1, P03-007 completed compression and the full byte grammar, P03-008 added a production encoder,
-P03-009 added a bounded validating reader, P03-010 added logical views/owned values, and P03-011
-added raw view lookup without publishing or persisting supported data.
+P03-009 added a bounded validating reader, P03-010 added logical views/owned values, P03-011
+added raw view lookup, and P03-012 added lossless tagged JSON conversion without publishing or
+persisting supported data.
 Immutable support fixtures remain P03-016, so the format can still be superseded without
 stored-data migration before that fixture/data boundary.
 
@@ -663,6 +666,7 @@ fields based on its own format version.
 | [`P03-005`](hdoc-v1-records.md) | Field/name/container entries and `item_count` meanings | Absolute offset base, directory stride, top-level order |
 | [`P03-006`](hdoc-v1-integrity.md) | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
 | [`P03-007`](hdoc-v1-compression.md) | Nonzero codec/profile IDs, bounded block grammar, and logical-coordinate derivation | Directory stride, logical/stored length fields, canonical limit |
+| [`P03-012`](hdoc-v1-tagged-json.md) | Lossless debug/SDK-boundary rendering and strict detached import | HDoc bytes, stored tags, validation order, or public wire grammar |
 | `P03-013`–`P03-015` | Path dictionary and extension record grammars/negotiation | Existing flag/feature bit meanings or ID reuse |
 
 Later tasks may fill their reserved registries but cannot silently reinterpret zero, a reserved bit,
@@ -698,6 +702,7 @@ bytes. P03-016/P03-018 must eventually include at least:
 - [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
 - [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
 - [HDoc 1.0 bounded section compression](hdoc-v1-compression.md)
+- [HDoc lossless tagged JSON profile 1](hdoc-v1-tagged-json.md)
 - [Logical value model](../architecture/value-model.md)
 - [Object semantics and typed content hashes](../architecture/object-semantics.md)
 - [Portable v1 limits](../architecture/limits-v1.md)

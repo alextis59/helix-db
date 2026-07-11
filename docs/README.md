@@ -21,6 +21,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [HDoc 1.0 field/name/container records](formats/hdoc-v1-records.md) | Exact object fields, name pool, dense array entries, value references, container tree, and packing |
 | [HDoc 1.0 integrity and typed hashing](formats/hdoc-v1-integrity.md) | Exact CRC-32C coverage, BLAKE3 profile-1 tree frames, vectors, and corruption classification |
 | [HDoc 1.0 bounded section compression](formats/hdoc-v1-compression.md) | Exact LZ4 profile, 32 KiB block stream, logical coordinates, canonical selection, and rejection |
+| [HDoc lossless tagged JSON profile 1](formats/hdoc-v1-tagged-json.md) | Canonical debug/SDK-boundary rendering, strict import, exact wrappers, limits, and stable errors |
 | [Reference semantic oracle](../reference/semantic-oracle/README.md) | Independent executable semantic baseline and report commands |
 | [Initial MongoDB differential result](compatibility/mongodb-initial-differential.md) | Experimental `P01-021` overlap/difference evidence; not a public compatibility claim |
 | [V1 semantic and compatibility matrix](compatibility/v1-semantic-compatibility-matrix.md) | Versioned closed-world `P01-022` publication of semantic maturity and unsupported behavior |

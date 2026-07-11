@@ -1,6 +1,6 @@
 # Rust Workspace and Initial Crate Boundaries
 
-- Status: Active boundaries; `helix-doc` codec, value access, and raw lookup implemented
+- Status: Active boundaries; `helix-doc` codec, lookup, and tagged conversion implemented
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner
 - Plan item: `P02-001`
@@ -10,17 +10,18 @@
 - Development identity: [ADR 0001](../adr/0001-public-product-identity.md)
 
 This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
-unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-path-lookup` /
-`database-functionality = true` metadata now that `P03-008`–`P03-011` have implemented
-deterministic encoding, whole-envelope validation, borrowed/owned logical values, exact-name binary
-search, and bounded allocation-free dotted traversal; the other seven crates remain
-`boundary-skeleton` components. Public names and package coordinates remain blocked by `P16-016`.
+unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-tagged-json` /
+`database-functionality = true` metadata now that `P03-008`–`P03-012` have implemented
+deterministic encoding, whole-envelope validation, borrowed/owned logical values, exact-name/path
+lookup, and canonical lossless tagged JSON rendering with strict detached import; the other seven
+crates remain `boundary-skeleton` components. Public names and package coordinates remain blocked
+by `P16-016`.
 
 ## Boundary inventory
 
 | Crate | Responsibility boundary | Allowed direct internal dependencies | Current maturity |
 | --- | --- | --- | --- |
-| `helix-doc` | Logical values, HDoc codec, canonical value semantics | None | Safe deterministic HDoc encoder, validating decoder, borrowed/owned logical values, exact-name lookup, and bounded dotted traversal |
+| `helix-doc` | Logical values, HDoc codec, canonical value semantics | None | Safe deterministic HDoc encoder/decoder, borrowed/owned values, exact-name/path lookup, and lossless tagged JSON conversion |
 | `helix-query` | Query syntax, normalization, logical plans, CPU reference behavior | `helix-doc` | Boundary skeleton |
 | `helix-storage` | Deterministic WAL/MVCC/manifest/memtable/immutable-file algorithms; no ambient I/O | `helix-doc` | Boundary skeleton |
 | `helix-columnar` | Rebuildable field dictionaries, typed sidecars, and CPU column operators | `helix-doc`, `helix-query` | Boundary skeleton |
