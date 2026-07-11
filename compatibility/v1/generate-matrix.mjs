@@ -9,7 +9,12 @@ import { parseStrictJson } from '../../reference/semantic-oracle/raw-json.mjs';
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repository = path.resolve(here, '..', '..');
 const matrixPath = path.join(here, 'matrix-v1.json');
-const documentPath = path.join(repository, 'docs', 'compatibility', 'v1-semantic-compatibility-matrix.md');
+const documentPath = path.join(
+  repository,
+  'docs',
+  'compatibility',
+  'v1-semantic-compatibility-matrix.md',
+);
 const mode = process.argv[2] ?? '--check';
 if (!['--check', '--write'].includes(mode) || process.argv.length > 3) {
   throw new Error('usage: generate-matrix.mjs [--check|--write]');
@@ -27,12 +32,13 @@ const identity = (relative) => {
   return { path: relative, bytes: bytes.length, sha256: sha256Hex(bytes) };
 };
 const sortedUnique = (values) => [...new Set(values)].sort();
-const slug = (value) => value
-  .replaceAll('$', '')
-  .replaceAll(/([a-z0-9])([A-Z])/g, '$1-$2')
-  .replaceAll(/[^A-Za-z0-9]+/g, '-')
-  .replaceAll(/^-|-$/g, '')
-  .toLowerCase();
+const slug = (value) =>
+  value
+    .replaceAll('$', '')
+    .replaceAll(/([a-z0-9])([A-Z])/g, '$1-$2')
+    .replaceAll(/[^A-Za-z0-9]+/g, '-')
+    .replaceAll(/^-|-$/g, '')
+    .toLowerCase();
 
 const coverage = readJson('fixtures/semantic/coverage-v1.json');
 const operations = readJson('fixtures/semantic/operations-v1.json');
@@ -64,7 +70,17 @@ const addNative = ({
     note,
   });
 };
-const addGroup = ({ domain, prefix, features, semanticStatus, release, implementationStatus, requirements, evidence, note }) => {
+const addGroup = ({
+  domain,
+  prefix,
+  features,
+  semanticStatus,
+  release,
+  implementationStatus,
+  requirements,
+  evidence,
+  note,
+}) => {
   for (const entry of features) {
     const [id, feature, featureNote] = typeof entry === 'string' ? [slug(entry), entry] : entry;
     addNative({
@@ -97,13 +113,18 @@ addGroup({
 });
 for (const row of nativeRows.filter((entry) => entry.id === 'value.missing')) {
   row.requirements = sortedUnique([...row.requirements, 'DATA-002']);
-  row.note = 'Missing is an observable path state, never a storable value; the oracle preserves it separately from null.';
+  row.note =
+    'Missing is an observable path state, never a storable value; the oracle preserves it separately from null.';
 }
 
 addGroup({
   domain: 'primitive',
   prefix: 'primitive',
-  features: operations.operations.map((operation) => [operation.id, operation.id, operation.description]),
+  features: operations.operations.map((operation) => [
+    operation.id,
+    operation.id,
+    operation.description,
+  ]),
   semanticStatus: 'oracle_executable',
   implementationStatus: 'reference_only',
   requirements: ['INV-002', 'QUERY-001'],
@@ -116,15 +137,32 @@ addGroup({
 });
 
 const queryOperators = [
-  ['$eq', 'oracle_command'], ['$ne', 'oracle_command'], ['$gt', 'oracle_command'],
-  ['$gte', 'oracle_command'], ['$lt', 'oracle_command'], ['$lte', 'oracle_command'],
-  ['$in', 'contract_only'], ['$nin', 'contract_only'], ['$and', 'contract_only'],
-  ['$or', 'contract_only'], ['$not', 'contract_only'], ['$nor', 'contract_only'],
-  ['$exists', 'oracle_command'], ['$type', 'contract_only'], ['$all', 'oracle_command'],
-  ['$size', 'oracle_command'], ['$elemMatch', 'oracle_command'], ['$prefix', 'contract_only'],
-  ['$contains', 'oracle_primitive'], ['$regex', 'contract_only'], ['$jsonSchema', 'contract_only'],
-  ['$ttl', 'contract_only'], ['$expiresBefore', 'contract_only'], ['$expiresAfter', 'contract_only'],
-  ['$vectorNear', 'contract_only'], ['$vectorTopK', 'oracle_command'],
+  ['$eq', 'oracle_command'],
+  ['$ne', 'oracle_command'],
+  ['$gt', 'oracle_command'],
+  ['$gte', 'oracle_command'],
+  ['$lt', 'oracle_command'],
+  ['$lte', 'oracle_command'],
+  ['$in', 'contract_only'],
+  ['$nin', 'contract_only'],
+  ['$and', 'contract_only'],
+  ['$or', 'contract_only'],
+  ['$not', 'contract_only'],
+  ['$nor', 'contract_only'],
+  ['$exists', 'oracle_command'],
+  ['$type', 'contract_only'],
+  ['$all', 'oracle_command'],
+  ['$size', 'oracle_command'],
+  ['$elemMatch', 'oracle_command'],
+  ['$prefix', 'contract_only'],
+  ['$contains', 'oracle_primitive'],
+  ['$regex', 'contract_only'],
+  ['$jsonSchema', 'contract_only'],
+  ['$ttl', 'contract_only'],
+  ['$expiresBefore', 'contract_only'],
+  ['$expiresAfter', 'contract_only'],
+  ['$vectorNear', 'contract_only'],
+  ['$vectorTopK', 'oracle_command'],
 ];
 for (const [operator, status] of queryOperators) {
   const executable = status.startsWith('oracle_');
@@ -139,11 +177,12 @@ for (const [operator, status] of queryOperators) {
       'docs/architecture/operator-semantics.md',
       ...(executable ? ['fixtures/semantic/oracle-report-v1.json'] : []),
     ]),
-    note: status === 'oracle_command'
-      ? 'The normalized operator executes through the reference find command for its registered v1 shape.'
-      : status === 'oracle_primitive'
-        ? 'The underlying semantic primitive is executable, but the normalized find-operator path is not yet implemented.'
-        : 'The v1 truth table is specified; successful command execution remains assigned to the query-engine phase.',
+    note:
+      status === 'oracle_command'
+        ? 'The normalized operator executes through the reference find command for its registered v1 shape.'
+        : status === 'oracle_primitive'
+          ? 'The underlying semantic primitive is executable, but the normalized find-operator path is not yet implemented.'
+          : 'The v1 truth table is specified; successful command execution remains assigned to the query-engine phase.',
   });
 }
 
@@ -171,8 +210,18 @@ addGroup({
   domain: 'command',
   prefix: 'command',
   features: [
-    'insertOne', 'insertMany', 'replaceOne', 'updateOne', 'updateMany',
-    'deleteOne', 'deleteMany', 'upsert', 'count', 'cursor', 'aggregate', 'explain',
+    'insertOne',
+    'insertMany',
+    'replaceOne',
+    'updateOne',
+    'updateMany',
+    'deleteOne',
+    'deleteMany',
+    'upsert',
+    'count',
+    'cursor',
+    'aggregate',
+    'explain',
   ],
   semanticStatus: 'contract_only',
   implementationStatus: 'not_implemented',
@@ -206,9 +255,15 @@ addGroup({
   domain: 'aggregation_expression',
   prefix: 'aggregation.expression',
   features: [
-    ['typed-literal', 'typed literal'], ['field-path', 'field path'], ['root', '$$ROOT'],
-    ['literal', '$literal'], ['if-null', '$ifNull'], ['type', '$type'], ['size', '$size'],
-    ['constructed-object', 'constructed object'], ['constructed-array', 'constructed array'],
+    ['typed-literal', 'typed literal'],
+    ['field-path', 'field path'],
+    ['root', '$$ROOT'],
+    ['literal', '$literal'],
+    ['if-null', '$ifNull'],
+    ['type', '$type'],
+    ['size', '$size'],
+    ['constructed-object', 'constructed object'],
+    ['constructed-array', 'constructed array'],
   ],
   semanticStatus: 'contract_only',
   implementationStatus: 'not_implemented',
@@ -248,10 +303,7 @@ addGroup({
   semanticStatus: 'oracle_boundary',
   implementationStatus: 'reference_only',
   requirements: ['QUERY-002', 'SEC-002'],
-  evidence: [
-    'docs/architecture/limits-v1.md',
-    'fixtures/semantic/oracle-report-v1.json',
-  ],
+  evidence: ['docs/architecture/limits-v1.md', 'fixtures/semantic/oracle-report-v1.json'],
   note: 'Below/at/above boundaries execute through compact oracle actions; full-size allocation and subsystem enforcement remain later proof duties.',
 });
 
@@ -276,8 +328,17 @@ addGroup({
   domain: 'native_exclusion',
   prefix: 'unsupported.update',
   features: [
-    '$rename', '$mul', '$min', '$max', '$currentDate', 'positional $', 'all positional $[]',
-    'filtered positional $[id]', 'arrayFilters', 'pipeline updates', 'unsupported $push options',
+    '$rename',
+    '$mul',
+    '$min',
+    '$max',
+    '$currentDate',
+    'positional $',
+    'all positional $[]',
+    'filtered positional $[id]',
+    'arrayFilters',
+    'pipeline updates',
+    'unsupported $push options',
   ],
   semanticStatus: 'explicitly_unsupported_v1',
   release: 'v1_excluded',
@@ -300,7 +361,15 @@ addGroup({
 addGroup({
   domain: 'native_exclusion',
   prefix: 'unsupported.aggregation-expression',
-  features: ['arithmetic expressions', 'date transforms', 'string transforms', 'general conditionals', 'functions', 'scripts', 'user code'],
+  features: [
+    'arithmetic expressions',
+    'date transforms',
+    'string transforms',
+    'general conditionals',
+    'functions',
+    'scripts',
+    'user code',
+  ],
   semanticStatus: 'explicitly_unsupported_v1',
   release: 'v1_excluded',
   implementationStatus: 'not_applicable',
@@ -311,7 +380,16 @@ addGroup({
 addGroup({
   domain: 'native_exclusion',
   prefix: 'unsupported.aggregation-accumulator',
-  features: ['$first', '$last', '$push', '$addToSet', 'custom accumulator', 'JavaScript accumulator', 'percentile', 'variance'],
+  features: [
+    '$first',
+    '$last',
+    '$push',
+    '$addToSet',
+    'custom accumulator',
+    'JavaScript accumulator',
+    'percentile',
+    'variance',
+  ],
   semanticStatus: 'explicitly_unsupported_v1',
   release: 'v1_excluded',
   implementationStatus: 'not_applicable',
@@ -323,9 +401,15 @@ addGroup({
   domain: 'native_exclusion',
   prefix: 'unsupported.query',
   features: [
-    'locale collation', 'implicit Unicode normalization', 'text search', 'geospatial query',
-    'ordinary-array vector inference', 'client-provided WGSL', 'CRUD projection array fan-out',
-    'CRUD projection numeric array index', 'unordered result streams',
+    'locale collation',
+    'implicit Unicode normalization',
+    'text search',
+    'geospatial query',
+    'ordinary-array vector inference',
+    'client-provided WGSL',
+    'CRUD projection array fan-out',
+    'CRUD projection numeric array index',
+    'unordered result streams',
   ],
   semanticStatus: 'explicitly_unsupported_v1',
   release: 'v1_excluded',
@@ -341,7 +425,12 @@ addGroup({
 addGroup({
   domain: 'native_exclusion',
   prefix: 'unsupported.command',
-  features: ['partial-success multi-write', 'ordered/unordered bulk mode', 'find-and-delete', 'resume expired cursor at current snapshot'],
+  features: [
+    'partial-success multi-write',
+    'ordered/unordered bulk mode',
+    'find-and-delete',
+    'resume expired cursor at current snapshot',
+  ],
   semanticStatus: 'explicitly_unsupported_v1',
   release: 'v1_excluded',
   implementationStatus: 'not_applicable',
@@ -352,7 +441,14 @@ addGroup({
 addGroup({
   domain: 'native_exclusion',
   prefix: 'deferred.distributed',
-  features: ['replication', 'consensus', 'sharding', 'range movement', 'multi-region operation', 'distributed transactions'],
+  features: [
+    'replication',
+    'consensus',
+    'sharding',
+    'range movement',
+    'multi-region operation',
+    'distributed transactions',
+  ],
   semanticStatus: 'deferred_post_v1',
   release: 'v2',
   implementationStatus: 'not_applicable',
@@ -361,7 +457,7 @@ addGroup({
   note: 'This distributed capability is excluded from v1 and remains assigned to v2 gates.',
 });
 
-nativeRows.sort((left, right) => left.id < right.id ? -1 : left.id > right.id ? 1 : 0);
+nativeRows.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
 if (new Set(nativeRows.map((row) => row.id)).size !== nativeRows.length) {
   throw new Error('native matrix contains duplicate IDs');
 }
@@ -390,7 +486,7 @@ const mongodbCases = differentialCases.cases.map((definition) => {
     note: definition.reason,
   };
 });
-mongodbCases.sort((left, right) => left.id < right.id ? -1 : left.id > right.id ? 1 : 0);
+mongodbCases.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
 
 const unsupportedFeatures = [
   ['adapter-endpoint', 'MongoDB adapter endpoint', 'CAP_UNSUPPORTED_FEATURE'],
@@ -424,7 +520,11 @@ const unsupportedFeatures = [
   ['command-bulk-write', 'bulkWrite command', 'VAL_UNKNOWN_COMMAND'],
   ['command-administration', 'MongoDB administrative commands', 'VAL_UNKNOWN_COMMAND'],
   ['indexes-management', 'create/drop/list index commands', 'VAL_UNKNOWN_COMMAND'],
-  ['indexes-query-semantics', 'MongoDB index selection and multikey semantics', 'CAP_UNSUPPORTED_FEATURE'],
+  [
+    'indexes-query-semantics',
+    'MongoDB index selection and multikey semantics',
+    'CAP_UNSUPPORTED_FEATURE',
+  ],
   ['indexes-ttl', 'MongoDB TTL indexes', 'CAP_UNSUPPORTED_FEATURE'],
   ['collation', 'MongoDB collation', 'CAP_UNSUPPORTED_FEATURE'],
   ['regex', 'MongoDB regular-expression semantics/options', 'CAP_UNSUPPORTED_FEATURE'],
@@ -439,16 +539,32 @@ const unsupportedFeatures = [
   ['map-reduce', 'mapReduce', 'VAL_UNKNOWN_COMMAND'],
   ['server-javascript', 'server-side JavaScript', 'CAP_UNSUPPORTED_FEATURE'],
   ['atlas-search', 'Atlas Search', 'CAP_UNSUPPORTED_FEATURE'],
-  ['vector-search', 'MongoDB/Atlas vector search syntax and index behavior', 'CAP_UNSUPPORTED_FEATURE'],
+  [
+    'vector-search',
+    'MongoDB/Atlas vector search syntax and index behavior',
+    'CAP_UNSUPPORTED_FEATURE',
+  ],
   ['queryable-encryption', 'Queryable Encryption', 'CAP_UNSUPPORTED_FEATURE'],
-  ['client-side-encryption', 'MongoDB client-side field-level encryption integration', 'CAP_UNSUPPORTED_FEATURE'],
+  [
+    'client-side-encryption',
+    'MongoDB client-side field-level encryption integration',
+    'CAP_UNSUPPORTED_FEATURE',
+  ],
   ['monitoring-commands', 'MongoDB monitoring commands and events', 'VAL_UNKNOWN_COMMAND'],
-  ['diagnostic-commands', 'MongoDB diagnostic/explain/profiler compatibility', 'VAL_UNKNOWN_COMMAND'],
+  [
+    'diagnostic-commands',
+    'MongoDB diagnostic/explain/profiler compatibility',
+    'VAL_UNKNOWN_COMMAND',
+  ],
   ['driver-compatibility', 'MongoDB driver compatibility', 'CAP_UNSUPPORTED_FEATURE'],
   ['shell-compatibility', 'mongosh application compatibility', 'CAP_UNSUPPORTED_FEATURE'],
   ['migration-tooling', 'MongoDB migration/import/rollback tooling', 'CAP_UNSUPPORTED_FEATURE'],
   ['error-code-compatibility', 'MongoDB error codes and labels', 'CAP_UNSUPPORTED_FEATURE'],
-  ['limit-compatibility', 'MongoDB resource and document limit equivalence', 'CAP_UNSUPPORTED_FEATURE'],
+  [
+    'limit-compatibility',
+    'MongoDB resource and document limit equivalence',
+    'CAP_UNSUPPORTED_FEATURE',
+  ],
 ];
 const mongodbUnsupported = unsupportedFeatures.map(([id, feature, futureError]) => ({
   id: `mongodb.unsupported.${id}`,
@@ -460,7 +576,7 @@ const mongodbUnsupported = unsupportedFeatures.map(([id, feature, futureError]) 
   evidence: ['docs/governance/scope.md', 'docs/templates/compatibility-claim.md'],
   note: 'No MongoDB adapter endpoint exists. If a future adapter does not implement this row, it must reject it explicitly with the mapped native error rather than approximate behavior.',
 }));
-mongodbUnsupported.sort((left, right) => left.id < right.id ? -1 : left.id > right.id ? 1 : 0);
+mongodbUnsupported.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
 
 const redisUnsupportedFeatures = [
   ['adapter-endpoint', 'Redis adapter endpoint', 'CAP_UNSUPPORTED_FEATURE'],
@@ -494,8 +610,16 @@ const redisUnsupportedFeatures = [
   ['keyspace-notifications', 'Redis keyspace notifications', 'CAP_UNSUPPORTED_FEATURE'],
   ['client-compatibility', 'Redis client-library compatibility', 'CAP_UNSUPPORTED_FEATURE'],
   ['error-compatibility', 'Redis error strings and RESP error classes', 'CAP_UNSUPPORTED_FEATURE'],
-  ['limit-compatibility', 'Redis limits and eviction-policy compatibility', 'CAP_UNSUPPORTED_FEATURE'],
-  ['migration-tooling', 'Redis import/export/migration/rollback tooling', 'CAP_UNSUPPORTED_FEATURE'],
+  [
+    'limit-compatibility',
+    'Redis limits and eviction-policy compatibility',
+    'CAP_UNSUPPORTED_FEATURE',
+  ],
+  [
+    'migration-tooling',
+    'Redis import/export/migration/rollback tooling',
+    'CAP_UNSUPPORTED_FEATURE',
+  ],
 ];
 const redisUnsupported = redisUnsupportedFeatures.map(([id, feature, futureError]) => ({
   id: `redis.unsupported.${id}`,
@@ -507,13 +631,14 @@ const redisUnsupported = redisUnsupportedFeatures.map(([id, feature, futureError
   evidence: ['docs/governance/scope.md', 'docs/templates/compatibility-claim.md'],
   note: 'No Redis adapter endpoint exists. If a future adapter does not implement this row, it must reject it explicitly rather than approximate Redis behavior.',
 }));
-redisUnsupported.sort((left, right) => left.id < right.id ? -1 : left.id > right.id ? 1 : 0);
+redisUnsupported.sort((left, right) => (left.id < right.id ? -1 : left.id > right.id ? 1 : 0));
 
-const countBy = (rows, field) => Object.fromEntries(
-  [...new Set(rows.map((row) => row[field]))]
-    .sort()
-    .map((value) => [value, rows.filter((row) => row[field] === value).length]),
-);
+const countBy = (rows, field) =>
+  Object.fromEntries(
+    [...new Set(rows.map((row) => row[field]))]
+      .sort()
+      .map((value) => [value, rows.filter((row) => row[field] === value).length]),
+  );
 
 const matrix = {
   matrix_schema: 'helix.semantic-compatibility-matrix/1',
@@ -573,17 +698,22 @@ const matrix = {
     unlisted_redis_behavior: 'unsupported',
   },
   classification_definitions: {
-    oracle_executable: 'Executed by the independent oracle through a registered action or value path.',
+    oracle_executable:
+      'Executed by the independent oracle through a registered action or value path.',
     oracle_command: 'Executed by the independent oracle through the normalized find command.',
     oracle_primitive: 'Primitive is executable, but its complete command/operator path is not.',
-    oracle_boundary: 'Compact below/at/above limit boundary is executable; material subsystem enforcement is not implied.',
-    oracle_registry: 'Canonical error metadata is executable synthetically; future subsystem fault injection is not implied.',
+    oracle_boundary:
+      'Compact below/at/above limit boundary is executable; material subsystem enforcement is not implied.',
+    oracle_registry:
+      'Canonical error metadata is executable synthetically; future subsystem fault injection is not implied.',
     contract_only: 'Normative semantics are accepted, but successful execution is not implemented.',
     explicitly_unsupported_v1: 'Native v1 rejects this behavior and must not reinterpret it.',
     deferred_post_v1: 'Outside v1 and unavailable until a later versioned contract and gate.',
     differential_exact: 'The one committed fixture produced equal normalized results.',
-    differential_different: 'The one committed fixture produced an expected, documented difference.',
-    adapter_rewrite: 'A proposed rewrite produced equal fixture results; no adapter or general applicability claim exists.',
+    differential_different:
+      'The one committed fixture produced an expected, documented difference.',
+    adapter_rewrite:
+      'A proposed rewrite produced equal fixture results; no adapter or general applicability claim exists.',
   },
   native_rows: nativeRows,
   mongodb_experimental_cases: mongodbCases,
@@ -631,8 +761,10 @@ const renderDocument = () => {
     '',
     '| Input | Path | SHA-256 | Bytes |',
     '| --- | --- | --- | ---: |',
-    ...Object.entries(matrix.inputs).map(([name, input]) =>
-      `| \`${name}\` | ${evidenceLink(input.path)} | \`${input.sha256}\` | ${input.bytes} |`),
+    ...Object.entries(matrix.inputs).map(
+      ([name, input]) =>
+        `| \`${name}\` | ${evidenceLink(input.path)} | \`${input.sha256}\` | ${input.bytes} |`,
+    ),
     '',
     '## Summary',
     '',
@@ -648,7 +780,10 @@ const renderDocument = () => {
     '',
     '| ID | Domain | Feature | Semantic status | Product status | Release | Evidence | Note |',
     '| --- | --- | --- | --- | --- | --- | --- | --- |',
-    ...matrix.native_rows.map((row) => `| \`${row.id}\` | ${escapeCell(row.domain)} | \`${escapeCell(row.feature)}\` | \`${row.semantic_status}\` | \`${row.implementation_status}\` | \`${row.release}\` | ${evidenceLink(row.evidence[0])} | ${escapeCell(row.note)} |`),
+    ...matrix.native_rows.map(
+      (row) =>
+        `| \`${row.id}\` | ${escapeCell(row.domain)} | \`${escapeCell(row.feature)}\` | \`${row.semantic_status}\` | \`${row.implementation_status}\` | \`${row.release}\` | ${evidenceLink(row.evidence[0])} | ${escapeCell(row.note)} |`,
+    ),
     '',
     '## Experimental MongoDB 6.0.5 differential rows',
     '',
@@ -656,7 +791,10 @@ const renderDocument = () => {
     '',
     '| Case | Family | Relation | Translation | Native rows | MongoDB rows | Adapter status | Note |',
     '| --- | --- | --- | --- | ---: | ---: | --- | --- |',
-    ...matrix.mongodb_experimental_cases.map((row) => `| \`${row.case_id}\` | ${row.family} | \`${row.relation}\` | \`${row.translation}\` | ${row.native_rows} | ${row.mongodb_rows} | \`${row.adapter_status}\` | ${escapeCell(row.note)} |`),
+    ...matrix.mongodb_experimental_cases.map(
+      (row) =>
+        `| \`${row.case_id}\` | ${row.family} | \`${row.relation}\` | \`${row.translation}\` | ${row.native_rows} | ${row.mongodb_rows} | \`${row.adapter_status}\` | ${escapeCell(row.note)} |`,
+    ),
     '',
     '## Explicitly unsupported MongoDB categories',
     '',
@@ -664,7 +802,10 @@ const renderDocument = () => {
     '',
     '| ID | Feature | Current behavior | Required future rejection |',
     '| --- | --- | --- | --- |',
-    ...matrix.mongodb_unsupported.map((row) => `| \`${row.id}\` | ${escapeCell(row.feature)} | \`${row.current_behavior}\` | \`${row.future_rejection_code}\` |`),
+    ...matrix.mongodb_unsupported.map(
+      (row) =>
+        `| \`${row.id}\` | ${escapeCell(row.feature)} | \`${row.current_behavior}\` | \`${row.future_rejection_code}\` |`,
+    ),
     '',
     '## Explicitly unsupported Redis categories',
     '',
@@ -672,7 +813,10 @@ const renderDocument = () => {
     '',
     '| ID | Feature | Current behavior | Required future rejection |',
     '| --- | --- | --- | --- |',
-    ...matrix.redis_unsupported.map((row) => `| \`${row.id}\` | ${escapeCell(row.feature)} | \`${row.current_behavior}\` | \`${row.future_rejection_code}\` |`),
+    ...matrix.redis_unsupported.map(
+      (row) =>
+        `| \`${row.id}\` | ${escapeCell(row.feature)} | \`${row.current_behavior}\` | \`${row.future_rejection_code}\` |`,
+    ),
     '',
     '## Closed-world publication rule',
     '',
@@ -702,10 +846,16 @@ if (mode === '--write') {
   writeFileSync(matrixPath, matrixText);
   writeFileSync(documentPath, documentText);
 } else {
-  for (const [file, expected] of [[matrixPath, matrixText], [documentPath, documentText]]) {
-    if (!existsSync(file)) throw new Error(`generated artifact is absent: ${path.relative(repository, file)}`);
+  for (const [file, expected] of [
+    [matrixPath, matrixText],
+    [documentPath, documentText],
+  ]) {
+    if (!existsSync(file))
+      throw new Error(`generated artifact is absent: ${path.relative(repository, file)}`);
     if (readFileSync(file, 'utf8') !== expected) {
-      throw new Error(`generated artifact differs byte-for-byte: ${path.relative(repository, file)}`);
+      throw new Error(
+        `generated artifact differs byte-for-byte: ${path.relative(repository, file)}`,
+      );
     }
   }
 }
@@ -717,4 +867,6 @@ console.log(
     `${matrix.counts.redis_unsupported_rows} Redis unsupported`,
 );
 console.log(`PASS matrix inputs: ${Object.keys(matrix.inputs).length} hash-bound artifacts`);
-console.log(`PASS matrix verdict: ${matrix.verdict}, ${matrix.counts.failed} failed, ${matrix.counts.skipped} skipped`);
+console.log(
+  `PASS matrix verdict: ${matrix.verdict}, ${matrix.counts.failed} failed, ${matrix.counts.skipped} skipped`,
+);

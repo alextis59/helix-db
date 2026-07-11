@@ -1,21 +1,22 @@
 import { execFileSync } from 'node:child_process';
-import { lstatSync, readFileSync, readdirSync } from 'node:fs';
+import { lstatSync, readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { isDeepStrictEqual } from 'node:util';
 import { canonicalize, sha256Hex } from './canonical.mjs';
+import { parseStrictJson } from './raw-json.mjs';
 import {
   ERROR_CODES,
+  errorMetadata,
+  fixtureFailure,
   LIMITS,
   OPERATION_ARITY,
   REQUIRED_PROFILES,
-  errorMetadata,
-  fixtureFailure,
 } from './registry.mjs';
-import { parseStrictJson } from './raw-json.mjs';
 import { compareValues, objectField, validateValue } from './value.mjs';
 
 const STABLE_ID = /^[a-z0-9](?:[a-z0-9._-]{0,126}[a-z0-9])?$/;
-const REQUIREMENT_ID = /^(?:INV|PLAT|CORE|DATA|QUERY|STORE|GPU|DIST|CACHE|SYNC|SEC|OPS|QUAL|COMPAT)-[0-9]{3}$/;
+const REQUIREMENT_ID =
+  /^(?:INV|PLAT|CORE|DATA|QUERY|STORE|GPU|DIST|CACHE|SYNC|SEC|OPS|QUAL|COMPAT)-[0-9]{3}$/;
 const PLAN_ID = /^(?:P[0-9]{2}-[0-9]{3}|G[0-9]{2})$/;
 const acceptedIdTags = new Set(['int32', 'int64', 'string', 'binary', 'uuid', 'objectId']);
 const isRecord = (value) => value && typeof value === 'object' && !Array.isArray(value);
@@ -27,10 +28,14 @@ const same = (left, right, code, at) => {
 };
 
 const canonicalList = (values, at, pattern = STABLE_ID) => {
-  if (!Array.isArray(values) || values.some((value) => typeof value !== 'string' || !pattern.test(value))) {
+  if (
+    !Array.isArray(values) ||
+    values.some((value) => typeof value !== 'string' || !pattern.test(value))
+  ) {
     fixtureFailure('fixture.meta.value', at, 'list contains invalid identifier');
   }
-  if (new Set(values).size !== values.length) fixtureFailure('fixture.meta.duplicate', at, 'duplicate list item');
+  if (new Set(values).size !== values.length)
+    fixtureFailure('fixture.meta.duplicate', at, 'duplicate list item');
   same(values, [...values].sort(), 'fixture.meta.order', at);
 };
 
@@ -42,29 +47,41 @@ const validateCommandNode = (node, at) => {
     return;
   }
   if (typeof node === 'number') {
-    if (!Number.isSafeInteger(node)) fixtureFailure('fixture.command.number', at, 'unsafe structural number');
+    if (!Number.isSafeInteger(node))
+      fixtureFailure('fixture.command.number', at, 'unsafe structural number');
     return;
   }
   if (Array.isArray(node)) {
-    node.forEach((value, index) => validateCommandNode(value, `${at}[${index}]`));
+    node.forEach((value, index) => {
+      validateCommandNode(value, `${at}[${index}]`);
+    });
     return;
   }
   if (!isRecord(node)) fixtureFailure('fixture.command.shape', at, 'invalid command node');
   if (Object.hasOwn(node, '$value')) {
     if (Object.keys(node).length !== 1) {
-      fixtureFailure('fixture.command.literal_shape', at, '$value wrapper must be the only property');
+      fixtureFailure(
+        'fixture.command.literal_shape',
+        at,
+        '$value wrapper must be the only property',
+      );
     }
     validateValue(node.$value, `${at}.$value`);
     return;
   }
   for (const [key, value] of Object.entries(node)) {
-    if (!key.isWellFormed()) fixtureFailure('fixture.command.unicode', `${at}.${key}`, 'invalid key');
+    if (!key.isWellFormed())
+      fixtureFailure('fixture.command.unicode', `${at}.${key}`, 'invalid key');
     validateCommandNode(value, `${at}.${key}`);
   }
 };
 
 const validateCollection = (collection, at) => {
-  if (typeof collection.name !== 'string' || collection.name.length === 0 || !collection.name.isWellFormed()) {
+  if (
+    typeof collection.name !== 'string' ||
+    collection.name.length === 0 ||
+    !collection.name.isWellFormed()
+  ) {
     fixtureFailure('fixture.state.collection_name', `${at}.name`, 'invalid collection name');
   }
   if (collection.document_order !== 'default_order_v1') {
@@ -74,20 +91,31 @@ const validateCollection = (collection, at) => {
   for (const [index, document] of collection.documents.entries()) {
     const documentAt = `${at}.documents[${index}]`;
     validateValue(document, documentAt, { allowMissing: false, rootDocument: true });
-    if (document.t !== 'object') fixtureFailure('fixture.state.document_root', documentAt, 'document is not object');
+    if (document.t !== 'object')
+      fixtureFailure('fixture.state.document_root', documentAt, 'document is not object');
     const id = objectField(document, '_id');
     if (!id) fixtureFailure('fixture.state.missing_id', documentAt, 'document has no _id');
-    if (!acceptedIdTags.has(id.t)) fixtureFailure('fixture.state.invalid_id', documentAt, 'unsupported _id type');
-    const idPayloadBytes = id.t === 'string'
-      ? Buffer.byteLength(id.value, 'utf8')
-      : id.t === 'binary'
-        ? id.hex.length / 2
-        : 0;
+    if (!acceptedIdTags.has(id.t))
+      fixtureFailure('fixture.state.invalid_id', documentAt, 'unsupported _id type');
+    const idPayloadBytes =
+      id.t === 'string'
+        ? Buffer.byteLength(id.value, 'utf8')
+        : id.t === 'binary'
+          ? id.hex.length / 2
+          : 0;
     if (idPayloadBytes > 1024) {
-      fixtureFailure('fixture.state.id_payload', `${documentAt}._id`, 'ID payload exceeds limits-v1');
+      fixtureFailure(
+        'fixture.state.id_payload',
+        `${documentAt}._id`,
+        'ID payload exceeds limits-v1',
+      );
     }
     if (priorId !== undefined && compareValues(priorId, id) >= 0) {
-      fixtureFailure('fixture.state.document_order', documentAt, 'documents are duplicate/not ordered');
+      fixtureFailure(
+        'fixture.state.document_order',
+        documentAt,
+        'documents are duplicate/not ordered',
+      );
     }
     priorId = id;
   }
@@ -98,13 +126,15 @@ const validateCollection = (collection, at) => {
 };
 
 const validateCollections = (collections, at) => {
-  if (!Array.isArray(collections)) fixtureFailure('fixture.state.collections', at, 'collections is not array');
+  if (!Array.isArray(collections))
+    fixtureFailure('fixture.state.collections', at, 'collections is not array');
   const names = [];
   for (const [index, collection] of collections.entries()) {
     validateCollection(collection, `${at}[${index}]`);
     names.push(collection.name);
   }
-  if (new Set(names).size !== names.length) fixtureFailure('fixture.state.duplicate_collection', at, 'duplicate collection');
+  if (new Set(names).size !== names.length)
+    fixtureFailure('fixture.state.duplicate_collection', at, 'duplicate collection');
   same(names, [...names].sort(), 'fixture.state.collection_order', at);
 };
 
@@ -113,19 +143,28 @@ const validateCapabilities = (capabilities, at) => {
   for (const field of ['wall_time_reads', 'expiry_time_reads']) {
     for (const [index, value] of (capabilities[field] ?? []).entries()) {
       validateValue(value, `${at}.${field}[${index}]`, { allowMissing: false });
-      if (value.t !== 'timestamp') fixtureFailure('fixture.capability.type', `${at}.${field}[${index}]`, 'not timestamp');
+      if (value.t !== 'timestamp')
+        fixtureFailure('fixture.capability.type', `${at}.${field}[${index}]`, 'not timestamp');
     }
   }
   for (const field of ['monotonic_ticks', 'transaction_sequence']) {
     for (const [index, value] of (capabilities[field] ?? []).entries()) {
       if (typeof value !== 'string' || !/^(?:0|[1-9][0-9]*)$/.test(value)) {
-        fixtureFailure('fixture.capability.integer', `${at}.${field}[${index}]`, 'not canonical nonnegative integer');
+        fixtureFailure(
+          'fixture.capability.integer',
+          `${at}.${field}[${index}]`,
+          'not canonical nonnegative integer',
+        );
       }
     }
   }
   for (const [index, value] of (capabilities.random_hex ?? []).entries()) {
     if (typeof value !== 'string' || !/^(?:[0-9a-f]{2})*$/.test(value)) {
-      fixtureFailure('fixture.capability.random', `${at}.random_hex[${index}]`, 'not whole lowercase bytes');
+      fixtureFailure(
+        'fixture.capability.random',
+        `${at}.random_hex[${index}]`,
+        'not whole lowercase bytes',
+      );
     }
   }
   for (const [name, enabled] of Object.entries(capabilities.features ?? {})) {
@@ -142,7 +181,9 @@ const validateCapabilities = (capabilities, at) => {
 
 const walkTypedValues = (node, at = '$') => {
   if (Array.isArray(node)) {
-    node.forEach((value, index) => walkTypedValues(value, `${at}[${index}]`));
+    node.forEach((value, index) => {
+      walkTypedValues(value, `${at}[${index}]`);
+    });
     return;
   }
   if (!isRecord(node)) return;
@@ -190,13 +231,21 @@ const validateError = (expectation, at) => {
       fixtureFailure('fixture.error.retry_scope', `${at}.retry`, 'retry is broader than registry');
     }
     if (expectation.retry.token !== registered.retry.token) {
-      fixtureFailure('fixture.error.retry_token', `${at}.retry.token`, 'token presence differs from registry');
+      fixtureFailure(
+        'fixture.error.retry_token',
+        `${at}.retry.token`,
+        'token presence differs from registry',
+      );
     }
   } else if (expectation.retry.scope !== 'never') {
     fixtureFailure('fixture.error.retry_scope', `${at}.retry`, 'nonretryable requires never');
   }
   if (expectation.outcome === 'not_committed' && expectation.state.mode !== 'unchanged') {
-    fixtureFailure('fixture.error.state_outcome', `${at}.state`, 'not_committed requires unchanged');
+    fixtureFailure(
+      'fixture.error.state_outcome',
+      `${at}.state`,
+      'not_committed requires unchanged',
+    );
   }
   if (expectation.outcome === 'committed' && expectation.state.mode !== 'exact') {
     fixtureFailure('fixture.error.state_outcome', `${at}.state`, 'committed requires exact state');
@@ -215,11 +264,18 @@ const validateError = (expectation, at) => {
 const validateAction = (action, at) => {
   if (action.kind === 'value_operation') {
     const arity = OPERATION_ARITY[action.operation];
-    if (!arity) fixtureFailure('fixture.action.unknown_operation', `${at}.operation`, 'unregistered operation');
+    if (!arity)
+      fixtureFailure(
+        'fixture.action.unknown_operation',
+        `${at}.operation`,
+        'unregistered operation',
+      );
     if (action.arguments.length < arity[0] || action.arguments.length > arity[1]) {
       fixtureFailure('fixture.action.arity', `${at}.arguments`, 'operation arity mismatch');
     }
-    action.arguments.forEach((value, index) => validateValue(value, `${at}.arguments[${index}]`));
+    action.arguments.forEach((value, index) => {
+      validateValue(value, `${at}.arguments[${index}]`);
+    });
     if (action.options !== undefined) validateCommandNode(action.options, `${at}.options`);
     return;
   }
@@ -229,7 +285,11 @@ const validateAction = (action, at) => {
   }
   if (action.kind === 'raw_input') {
     if (typeof action.bytes_hex !== 'string' || !/^(?:[0-9a-f]{2})*$/.test(action.bytes_hex)) {
-      fixtureFailure('fixture.action.raw_hex', `${at}.bytes_hex`, 'raw bytes are not whole lowercase hex');
+      fixtureFailure(
+        'fixture.action.raw_hex',
+        `${at}.bytes_hex`,
+        'raw bytes are not whole lowercase hex',
+      );
     }
     return;
   }
@@ -240,7 +300,8 @@ export const validateFixture = (fixture, at = '$') => {
   if (fixture.fixture_schema !== 'helix.semantic-fixture/1') {
     fixtureFailure('fixture.meta.schema', `${at}.fixture_schema`, 'unsupported fixture schema');
   }
-  if (!STABLE_ID.test(fixture.id)) fixtureFailure('fixture.meta.id', `${at}.id`, 'invalid fixture ID');
+  if (!STABLE_ID.test(fixture.id))
+    fixtureFailure('fixture.meta.id', `${at}.id`, 'invalid fixture ID');
   canonicalList(fixture.requirements, `${at}.requirements`, REQUIREMENT_ID);
   canonicalList(fixture.plan_items, `${at}.plan_items`, PLAN_ID);
   canonicalList(fixture.tags, `${at}.tags`);
@@ -253,7 +314,8 @@ export const validateFixture = (fixture, at = '$') => {
   const stepIds = new Set();
   for (const [index, step] of fixture.steps.entries()) {
     const stepAt = `${at}.steps[${index}]`;
-    if (stepIds.has(step.id)) fixtureFailure('fixture.step.duplicate_id', `${stepAt}.id`, 'duplicate step');
+    if (stepIds.has(step.id))
+      fixtureFailure('fixture.step.duplicate_id', `${stepAt}.id`, 'duplicate step');
     stepIds.add(step.id);
     validateAction(step.action, `${stepAt}.action`);
     validateOrder(step.expect.order, `${stepAt}.expect.order`);
@@ -267,6 +329,7 @@ export const validateFixture = (fixture, at = '$') => {
 };
 
 export const runDraft202012Validation = (repository) => {
+  // biome-ignore lint/complexity/noUselessStringRaw: Embedded Python must preserve literal backslashes as the snippet evolves.
   const program = String.raw`
 import glob,json,sys
 from jsonschema import Draft202012Validator
@@ -300,7 +363,8 @@ export const validateOracleReport = (report) => {
   }
   const ids = report.fixtures.map((entry) => entry.id);
   same(ids, [...ids].sort(), 'oracle.report.fixture_order', '$.fixtures');
-  if (new Set(ids).size !== ids.length) fixtureFailure('oracle.report.fixture_id', '$.fixtures', 'duplicate');
+  if (new Set(ids).size !== ids.length)
+    fixtureFailure('oracle.report.fixture_id', '$.fixtures', 'duplicate');
   const fixtureTotals = report.fixtures.reduce(
     (totals, entry) => ({
       steps: totals.steps + entry.steps,
@@ -310,18 +374,28 @@ export const validateOracleReport = (report) => {
     }),
     { steps: 0, passed: 0, failed: 0, skipped: 0 },
   );
-  same(fixtureTotals, { steps: counts.steps, passed: counts.passed, failed: counts.failed, skipped: counts.skipped }, 'oracle.report.fixture_totals', '$.fixtures');
+  same(
+    fixtureTotals,
+    { steps: counts.steps, passed: counts.passed, failed: counts.failed, skipped: counts.skipped },
+    'oracle.report.fixture_totals',
+    '$.fixtures',
+  );
   const actionTotal = Object.values(report.action_counts).reduce((sum, count) => sum + count, 0);
-  const operationTotal = Object.values(report.operation_counts).reduce((sum, count) => sum + count, 0);
+  const operationTotal = Object.values(report.operation_counts).reduce(
+    (sum, count) => sum + count,
+    0,
+  );
   if (actionTotal !== counts.steps || operationTotal !== counts.steps) {
     fixtureFailure('oracle.report.action_totals', '$', 'action/operation totals do not reconcile');
   }
   const verdict = counts.failed === 0 && counts.skipped === 0 ? 'pass' : 'fail';
-  if (report.verdict !== verdict) fixtureFailure('oracle.report.verdict', '$.verdict', 'does not match outcomes');
+  if (report.verdict !== verdict)
+    fixtureFailure('oracle.report.verdict', '$.verdict', 'does not match outcomes');
   return report;
 };
 
 export const runReportDraft202012Validation = (repository, report) => {
+  // biome-ignore lint/complexity/noUselessStringRaw: Embedded Python must preserve literal backslashes as the snippet evolves.
   const program = String.raw`
 import json,sys
 from jsonschema import Draft202012Validator
@@ -347,14 +421,20 @@ const readStrict = (file) => {
   } catch {
     fixtureFailure('fixture.source.utf8', file, 'source is not UTF-8');
   }
-  if (!source.isWellFormed()) fixtureFailure('fixture.source.unicode', file, 'source has unpaired surrogate');
+  if (!source.isWellFormed())
+    fixtureFailure('fixture.source.unicode', file, 'source has unpaired surrogate');
   return { bytes, value: parseStrictJson(source) };
 };
 
 const validateRegistries = (semanticRoot) => {
   const operations = readStrict(path.join(semanticRoot, 'operations-v1.json')).value;
   const operationIds = operations.operations.map((entry) => entry.id);
-  same(operationIds, Object.keys(OPERATION_ARITY).sort(), 'fixture.registry.operations', '$.operations');
+  same(
+    operationIds,
+    Object.keys(OPERATION_ARITY).sort(),
+    'fixture.registry.operations',
+    '$.operations',
+  );
   for (const entry of operations.operations) {
     same(
       [entry.arity.min, entry.arity.max],
@@ -370,17 +450,30 @@ const validateRegistries = (semanticRoot) => {
     const expected = errorMetadata(entry.code);
     for (const field of ['category', 'phase', 'outcome']) {
       if (entry[field] !== expected[field]) {
-        fixtureFailure('fixture.registry.error_metadata', `$.error_cases.${entry.code}.${field}`, 'mismatch');
+        fixtureFailure(
+          'fixture.registry.error_metadata',
+          `$.error_cases.${entry.code}.${field}`,
+          'mismatch',
+        );
       }
     }
     for (const field of ['retryable', 'scope', 'token']) {
       if (entry[field] !== expected.retry[field]) {
-        fixtureFailure('fixture.registry.error_retry', `$.error_cases.${entry.code}.${field}`, 'mismatch');
+        fixtureFailure(
+          'fixture.registry.error_retry',
+          `$.error_cases.${entry.code}.${field}`,
+          'mismatch',
+        );
       }
     }
   }
   const coverage = readStrict(path.join(semanticRoot, 'coverage-v1.json')).value;
-  same(coverage.required_operations, Object.keys(OPERATION_ARITY).sort(), 'fixture.coverage.operations', '$');
+  same(
+    coverage.required_operations,
+    Object.keys(OPERATION_ARITY).sort(),
+    'fixture.coverage.operations',
+    '$',
+  );
   same(coverage.required_limit_ids, Object.keys(LIMITS).sort(), 'fixture.coverage.limits', '$');
   same(coverage.required_error_codes, ERROR_CODES, 'fixture.coverage.errors', '$');
   return coverage;
@@ -389,20 +482,28 @@ const validateRegistries = (semanticRoot) => {
 export const validateCorpus = (repository, { draft = true } = {}) => {
   const semanticRoot = path.join(repository, 'fixtures', 'semantic');
   const draftOutput = draft ? runDraft202012Validation(repository) : undefined;
-  const { bytes: manifestBytes, value: manifest } = readStrict(path.join(semanticRoot, 'manifest.json'));
+  const { bytes: manifestBytes, value: manifest } = readStrict(
+    path.join(semanticRoot, 'manifest.json'),
+  );
   if (
     manifest.manifest_schema !== 'helix.semantic-corpus/1' ||
     manifest.fixture_schema !== 'helix.semantic-fixture/1' ||
     manifest.semantic_profile !== 'helix-native-v1' ||
     manifest.hash_profile !== 'sha256+jcs-rfc8785'
-  ) fixtureFailure('fixture.manifest.profile', '$', 'unsupported manifest profile');
+  )
+    fixtureFailure('fixture.manifest.profile', '$', 'unsupported manifest profile');
 
   const coverageContract = validateRegistries(semanticRoot);
   const diskPaths = readdirSync(path.join(semanticRoot, 'cases'), { recursive: true })
     .filter((name) => name.endsWith('.json'))
     .map((name) => `fixtures/semantic/cases/${name.replaceAll('\\', '/')}`)
     .sort();
-  same(manifest.fixtures.map((entry) => entry.path), diskPaths, 'fixture.manifest.paths', '$.fixtures');
+  same(
+    manifest.fixtures.map((entry) => entry.path),
+    diskPaths,
+    'fixture.manifest.paths',
+    '$.fixtures',
+  );
   same(
     manifest.fixtures.map((entry) => entry.id),
     [...manifest.fixtures.map((entry) => entry.id)].sort(),
@@ -418,23 +519,43 @@ export const validateCorpus = (repository, { draft = true } = {}) => {
   for (const [index, entry] of manifest.fixtures.entries()) {
     const absolute = path.resolve(repository, entry.path);
     const casesRoot = path.resolve(semanticRoot, 'cases') + path.sep;
-    if (!absolute.startsWith(casesRoot)) fixtureFailure('fixture.manifest.path_escape', `$.fixtures[${index}]`, 'escape');
+    if (!absolute.startsWith(casesRoot))
+      fixtureFailure('fixture.manifest.path_escape', `$.fixtures[${index}]`, 'escape');
     const metadata = lstatSync(absolute);
     if (!metadata.isFile() || metadata.isSymbolicLink()) {
-      fixtureFailure('fixture.manifest.file_type', `$.fixtures[${index}]`, 'case must be a regular file');
+      fixtureFailure(
+        'fixture.manifest.file_type',
+        `$.fixtures[${index}]`,
+        'case must be a regular file',
+      );
     }
     const { bytes, value } = readStrict(absolute);
     if (bytes.length !== entry.bytes || sha256Hex(bytes) !== entry.source_sha256) {
-      fixtureFailure('fixture.manifest.source_hash', `$.fixtures[${index}]`, 'source hash/size mismatch');
+      fixtureFailure(
+        'fixture.manifest.source_hash',
+        `$.fixtures[${index}]`,
+        'source hash/size mismatch',
+      );
     }
     if (sha256Hex(canonicalize(value)) !== entry.canonical_sha256) {
-      fixtureFailure('fixture.manifest.canonical_hash', `$.fixtures[${index}]`, 'canonical hash mismatch');
+      fixtureFailure(
+        'fixture.manifest.canonical_hash',
+        `$.fixtures[${index}]`,
+        'canonical hash mismatch',
+      );
     }
     validateFixture(value, `$[${index}]`);
-    if (value.id !== entry.id) fixtureFailure('fixture.manifest.root_id', `$.fixtures[${index}]`, 'ID mismatch');
-    same(value.requirements, entry.requirements, 'fixture.manifest.requirements', `$.fixtures[${index}]`);
+    if (value.id !== entry.id)
+      fixtureFailure('fixture.manifest.root_id', `$.fixtures[${index}]`, 'ID mismatch');
+    same(
+      value.requirements,
+      entry.requirements,
+      'fixture.manifest.requirements',
+      `$.fixtures[${index}]`,
+    );
     same(value.tags, entry.tags, 'fixture.manifest.tags', `$.fixtures[${index}]`);
-    if (value.steps.length !== entry.steps) fixtureFailure('fixture.manifest.steps', `$.fixtures[${index}]`, 'count');
+    if (value.steps.length !== entry.steps)
+      fixtureFailure('fixture.manifest.steps', `$.fixtures[${index}]`, 'count');
     for (const requirement of value.requirements) {
       if (!coverage.has(requirement)) coverage.set(requirement, []);
       coverage.get(requirement).push(value.id);
@@ -447,7 +568,9 @@ export const validateCorpus = (repository, { draft = true } = {}) => {
   const counts = { fixtures: fixtures.length, steps, successes, errors };
   same(manifest.counts, counts, 'fixture.manifest.counts', '$.counts');
   same(coverageContract.expected_counts, counts, 'fixture.coverage.counts', '$.expected_counts');
-  const actualCoverage = Object.fromEntries([...coverage.entries()].sort(([left], [right]) => left < right ? -1 : left > right ? 1 : 0));
+  const actualCoverage = Object.fromEntries(
+    [...coverage.entries()].sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0)),
+  );
   same(manifest.coverage, actualCoverage, 'fixture.manifest.coverage', '$.coverage');
   return { manifest, manifestBytes, fixtures, counts, draftOutput };
 };

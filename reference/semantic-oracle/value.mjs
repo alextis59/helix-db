@@ -1,4 +1,4 @@
-import { OracleExecutionError, fixtureFailure } from './registry.mjs';
+import { fixtureFailure, OracleExecutionError } from './registry.mjs';
 
 const INT32_MIN = -(2n ** 31n);
 const INT32_MAX = 2n ** 31n - 1n;
@@ -65,6 +65,13 @@ const requireCanonicalInteger = (text, min, max, at, code = 'fixture.value.integ
 };
 
 const scalarCount = (text) => [...text].length;
+const containsControlCharacter = (text) => {
+  for (const character of text) {
+    const codePoint = character.codePointAt(0);
+    if (codePoint <= 0x1f || codePoint === 0x7f) return true;
+  }
+  return false;
+};
 const validateString = (text, at) => {
   if (typeof text !== 'string' || !text.isWellFormed()) {
     fixtureFailure('fixture.value.unicode', at, 'string is not a Unicode scalar sequence');
@@ -76,7 +83,7 @@ export const float64Parts = (bitsText) => {
     fixtureFailure('fixture.value.float_bits', '$', 'float64 bits must be 16 lowercase hex digits');
   }
   const bits = BigInt(`0x${bitsText}`);
-  const sign = (bits >> 63n) === 0n ? 1n : -1n;
+  const sign = bits >> 63n === 0n ? 1n : -1n;
   const exponentBits = Number((bits >> 52n) & 0x7ffn);
   const fraction = bits & ((1n << 52n) - 1n);
   if (exponentBits === 0x7ff) {
@@ -137,7 +144,10 @@ const validateDecimal = (value, at) => {
     fixtureFailure('fixture.value.decimal_sign', at, 'invalid decimal sign');
   }
   if (value.class === 'infinity') return;
-  if (typeof value.coefficient !== 'string' || !/^(?:0|[1-9][0-9]{0,33})$/.test(value.coefficient)) {
+  if (
+    typeof value.coefficient !== 'string' ||
+    !/^(?:0|[1-9][0-9]{0,33})$/.test(value.coefficient)
+  ) {
     fixtureFailure('fixture.value.decimal_coefficient', at, 'invalid decimal coefficient');
   }
   requireCanonicalInteger(value.exponent, -100_000n, 100_000n, `${at}.exponent`);
@@ -165,7 +175,11 @@ const validateVector = (value, at) => {
     fixtureFailure('fixture.vector.dimension', at, 'vector dimension is outside limits-v1');
   }
   if (!Array.isArray(value.bits) || value.dimension !== value.bits.length) {
-    fixtureFailure('fixture.vector.dimension_mismatch', at, 'dimension differs from component count');
+    fixtureFailure(
+      'fixture.vector.dimension_mismatch',
+      at,
+      'dimension differs from component count',
+    );
   }
   const pattern = value.element === 'f16' ? /^[0-9a-f]{4}$/ : /^[0-9a-f]{8}$/;
   for (const [index, text] of value.bits.entries()) {
@@ -174,11 +188,13 @@ const validateVector = (value, at) => {
     }
     const bits = Number.parseInt(text, 16);
     const nonfinite =
-      value.element === 'f16'
-        ? (bits & 0x7c00) === 0x7c00
-        : (bits & 0x7f800000) === 0x7f800000;
+      value.element === 'f16' ? (bits & 0x7c00) === 0x7c00 : (bits & 0x7f800000) === 0x7f800000;
     if (nonfinite) {
-      fixtureFailure('fixture.vector.nonfinite', `${at}.bits[${index}]`, 'non-finite vector component');
+      fixtureFailure(
+        'fixture.vector.nonfinite',
+        `${at}.bits[${index}]`,
+        'non-finite vector component',
+      );
     }
   }
 };
@@ -195,14 +211,16 @@ export const validateValue = (
   switch (value.t) {
     case 'missing':
       requireKeys(value, ['t'], at);
-      if (!allowMissing) fixtureFailure('fixture.value.missing_stored', at, 'Missing is not storable');
+      if (!allowMissing)
+        fixtureFailure('fixture.value.missing_stored', at, 'Missing is not storable');
       break;
     case 'null':
       requireKeys(value, ['t'], at);
       break;
     case 'bool':
       requireKeys(value, ['t', 'value'], at);
-      if (typeof value.value !== 'boolean') fixtureFailure('fixture.value.bool', at, 'invalid bool');
+      if (typeof value.value !== 'boolean')
+        fixtureFailure('fixture.value.bool', at, 'invalid bool');
       break;
     case 'int32':
       requireKeys(value, ['t', 'value'], at);
@@ -258,16 +276,36 @@ export const validateValue = (
         validateString(field.name, `${fieldAt}.name`);
         const fieldBytes = Buffer.byteLength(field.name, 'utf8');
         if (fieldBytes < 1 || fieldBytes > 1024 || scalarCount(field.name) > 256) {
-          fixtureFailure('fixture.object.field_name_limit', `${fieldAt}.name`, 'field name exceeds limits-v1');
+          fixtureFailure(
+            'fixture.object.field_name_limit',
+            `${fieldAt}.name`,
+            'field name exceeds limits-v1',
+          );
         }
-        if (/[\u0000-\u001f\u007f]/u.test(field.name) || field.name.includes('.') || field.name.startsWith('$')) {
-          fixtureFailure('fixture.object.field_name_grammar', `${fieldAt}.name`, 'field name violates limits-v1');
+        if (
+          containsControlCharacter(field.name) ||
+          field.name.includes('.') ||
+          field.name.startsWith('$')
+        ) {
+          fixtureFailure(
+            'fixture.object.field_name_grammar',
+            `${fieldAt}.name`,
+            'field name violates limits-v1',
+          );
         }
         if (rootDocument && ['_v', '_ts'].includes(field.name)) {
-          fixtureFailure('fixture.object.reserved_root_field', `${fieldAt}.name`, 'reserved root metadata name');
+          fixtureFailure(
+            'fixture.object.reserved_root_field',
+            `${fieldAt}.name`,
+            'reserved root metadata name',
+          );
         }
         if (names.has(field.name)) {
-          fixtureFailure('fixture.object.duplicate_field', fieldAt, `duplicate ${JSON.stringify(field.name)}`);
+          fixtureFailure(
+            'fixture.object.duplicate_field',
+            fieldAt,
+            `duplicate ${JSON.stringify(field.name)}`,
+          );
         }
         names.add(field.name);
         validateValue(field.value, `${fieldAt}.value`, {
@@ -305,7 +343,13 @@ export const validateValue = (
       break;
     case 'date':
       requireKeys(value, ['t', 'days'], at);
-      requireCanonicalInteger(value.days, DATE_MIN, DATE_MAX, `${at}.days`, 'fixture.value.date_range');
+      requireCanonicalInteger(
+        value.days,
+        DATE_MIN,
+        DATE_MAX,
+        `${at}.days`,
+        'fixture.value.date_range',
+      );
       break;
     case 'uuid':
       requireKeys(value, ['t', 'value'], at);
@@ -324,7 +368,11 @@ export const validateValue = (
       validateVector(value, at);
       break;
     default:
-      fixtureFailure('fixture.value.unknown_type', at, `unknown typed value ${JSON.stringify(value.t)}`);
+      fixtureFailure(
+        'fixture.value.unknown_type',
+        at,
+        `unknown typed value ${JSON.stringify(value.t)}`,
+      );
   }
   return value;
 };
@@ -356,7 +404,8 @@ const numericClass = (value) => {
   if (value.t === 'float64') {
     const parts = float64Parts(value.bits);
     if (parts.kind === 'nan') return 'nan';
-    if (parts.kind === 'infinity') return parts.sign < 0n ? 'negative_infinity' : 'positive_infinity';
+    if (parts.kind === 'infinity')
+      return parts.sign < 0n ? 'negative_infinity' : 'positive_infinity';
     return 'finite';
   }
   if (value.t === 'decimal128') {
@@ -465,7 +514,10 @@ export const compareValues = (left, right) => {
       const dimension = compareScalar(left.dimension, right.dimension);
       if (dimension !== 0) return dimension;
       for (let index = 0; index < left.dimension; index += 1) {
-        const component = compareScalar(vectorComponent(left, index), vectorComponent(right, index));
+        const component = compareScalar(
+          vectorComponent(left, index),
+          vectorComponent(right, index),
+        );
         if (component !== 0) return component;
       }
       return 0;
@@ -491,7 +543,8 @@ export const equalValues = (left, right) => {
       if (left.fields.length !== right.fields.length) return false;
       const rightByName = new Map(right.fields.map((field) => [field.name, field.value]));
       return left.fields.every(
-        (field) => rightByName.has(field.name) && equalValues(field.value, rightByName.get(field.name)),
+        (field) =>
+          rightByName.has(field.name) && equalValues(field.value, rightByName.get(field.name)),
       );
     }
     case 'array':
@@ -510,9 +563,10 @@ export const equalValues = (left, right) => {
       return (
         left.element === right.element &&
         left.dimension === right.dimension &&
-        left.bits.every((_, index) =>
-          Object.is(vectorComponent(left, index), vectorComponent(right, index)) ||
-          vectorComponent(left, index) === vectorComponent(right, index),
+        left.bits.every(
+          (_, index) =>
+            Object.is(vectorComponent(left, index), vectorComponent(right, index)) ||
+            vectorComponent(left, index) === vectorComponent(right, index),
         )
       );
     default:
@@ -587,7 +641,7 @@ const roundDecimal = (signedCoefficient, exponent) => {
   }
   const negative = signedCoefficient < 0n;
   let coefficient = negative ? -signedCoefficient : signedCoefficient;
-  let coefficientText = coefficient.toString();
+  const coefficientText = coefficient.toString();
   if (coefficientText.length > 34) {
     const discarded = coefficientText.length - 34;
     const divisor = 10n ** BigInt(discarded);
@@ -671,15 +725,18 @@ const exactIntegerAsFloat = (value) => {
 export const addNumeric = (left, right) => {
   if (!numericType(left) || !numericType(right)) throw new OracleExecutionError('TYPE_MISMATCH');
   if (left.t === 'decimal128' || right.t === 'decimal128') {
-    if (left.t === 'float64' || right.t === 'float64') throw new OracleExecutionError('TYPE_MISMATCH');
+    if (left.t === 'float64' || right.t === 'float64')
+      throw new OracleExecutionError('TYPE_MISMATCH');
     return addDecimal(
       left.t === 'decimal128' ? left : decimalFromInteger(left),
       right.t === 'decimal128' ? right : decimalFromInteger(right),
     );
   }
   if (left.t === 'float64' || right.t === 'float64') {
-    const leftNumber = left.t === 'float64' ? float64FromBits(left.bits) : exactIntegerAsFloat(left);
-    const rightNumber = right.t === 'float64' ? float64FromBits(right.bits) : exactIntegerAsFloat(right);
+    const leftNumber =
+      left.t === 'float64' ? float64FromBits(left.bits) : exactIntegerAsFloat(left);
+    const rightNumber =
+      right.t === 'float64' ? float64FromBits(right.bits) : exactIntegerAsFloat(right);
     const result = leftNumber + rightNumber;
     return V.f64(Number.isNaN(result) ? '7ff8000000000000' : float64ToBits(result));
   }
@@ -717,7 +774,8 @@ export const negateNumeric = (value) => {
 const getObjectField = (object, name) => object.fields.find((field) => field.name === name)?.value;
 export const objectField = getObjectField;
 
-const indexSegment = (segment) => /^(?:0|[1-9][0-9]*)$/.test(segment) ? Number(segment) : undefined;
+const indexSegment = (segment) =>
+  /^(?:0|[1-9][0-9]*)$/.test(segment) ? Number(segment) : undefined;
 const resolveCandidates = (value, segments, budget) => {
   if (segments.length === 0) {
     budget.count += 1;
@@ -741,7 +799,9 @@ const resolveCandidates = (value, segments, budget) => {
   if (value.t === 'array') {
     const index = indexSegment(head);
     if (index !== undefined) {
-      return index < value.values.length ? resolveCandidates(value.values[index], tail, budget) : [];
+      return index < value.values.length
+        ? resolveCandidates(value.values[index], tail, budget)
+        : [];
     }
     return value.values.flatMap((child) => resolveCandidates(child, segments, budget));
   }
@@ -749,8 +809,14 @@ const resolveCandidates = (value, segments, budget) => {
 };
 
 export const pathCandidates = (root, pathText) => {
-  if (root.t !== 'object' || typeof pathText !== 'string') throw new OracleExecutionError('TYPE_MISMATCH');
-  if (pathText.length === 0 || pathText.startsWith('.') || pathText.endsWith('.') || pathText.includes('..')) {
+  if (root.t !== 'object' || typeof pathText !== 'string')
+    throw new OracleExecutionError('TYPE_MISMATCH');
+  if (
+    pathText.length === 0 ||
+    pathText.startsWith('.') ||
+    pathText.endsWith('.') ||
+    pathText.includes('..')
+  ) {
     throw new OracleExecutionError('VAL_INVALID_PATH');
   }
   if (Buffer.byteLength(pathText, 'utf8') > 4096 || pathText.split('.').length > 100) {
@@ -760,7 +826,8 @@ export const pathCandidates = (root, pathText) => {
 };
 
 export const resolvePath = (root, pathValue, mode = 'single') => {
-  if (root.t !== 'object' || pathValue.t !== 'string') throw new OracleExecutionError('TYPE_MISMATCH');
+  if (root.t !== 'object' || pathValue.t !== 'string')
+    throw new OracleExecutionError('TYPE_MISMATCH');
   const candidates = pathCandidates(root, pathValue.value);
   if (mode === 'fanout') return V.array(candidates.map(clone));
   if (mode !== 'single') throw new OracleExecutionError('VAL_INVALID_LITERAL');
@@ -775,8 +842,11 @@ export const pathExists = (root, pathValue) => {
 };
 
 export const arrayAll = (source, requested) => {
-  if (source.t !== 'array' || requested.t !== 'array') throw new OracleExecutionError('TYPE_MISMATCH');
-  return V.bool(requested.values.every((needle) => source.values.some((value) => equalValues(value, needle))));
+  if (source.t !== 'array' || requested.t !== 'array')
+    throw new OracleExecutionError('TYPE_MISMATCH');
+  return V.bool(
+    requested.values.every((needle) => source.values.some((value) => equalValues(value, needle))),
+  );
 };
 
 export const arrayElemMatch = (source, needle) => {
@@ -798,9 +868,13 @@ const isLeap = (year) => year % 4 === 0 && (year % 100 !== 0 || year % 400 === 0
 
 export const parseTimestamp = (input) => {
   if (input.t !== 'string') throw new OracleExecutionError('TYPE_MISMATCH');
-  const match = /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(Z|[+-]\d{2}:\d{2})$/.exec(input.value);
+  const match =
+    /^(\d{4})-(\d{2})-(\d{2})T(\d{2}):(\d{2}):(\d{2})(?:\.(\d{1,6}))?(Z|[+-]\d{2}:\d{2})$/.exec(
+      input.value,
+    );
   if (!match) throw new OracleExecutionError('TYPE_TEMPORAL_RANGE');
-  const [, yearText, monthText, dayText, hourText, minuteText, secondText, fraction = '', zone] = match;
+  const [, yearText, monthText, dayText, hourText, minuteText, secondText, fraction = '', zone] =
+    match;
   const year = Number(yearText);
   const month = Number(monthText);
   const day = Number(dayText);
@@ -809,9 +883,16 @@ export const parseTimestamp = (input) => {
   const second = Number(secondText);
   const monthDays = [31, isLeap(year) ? 29 : 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31];
   if (
-    year < 1 || month < 1 || month > 12 || day < 1 || day > monthDays[month - 1] ||
-    hour > 23 || minute > 59 || second > 59
-  ) throw new OracleExecutionError('TYPE_TEMPORAL_RANGE');
+    year < 1 ||
+    month < 1 ||
+    month > 12 ||
+    day < 1 ||
+    day > monthDays[month - 1] ||
+    hour > 23 ||
+    minute > 59 ||
+    second > 59
+  )
+    throw new OracleExecutionError('TYPE_TEMPORAL_RANGE');
   let offsetMinutes = 0;
   if (zone !== 'Z') {
     const sign = zone[0] === '-' ? -1 : 1;
@@ -822,12 +903,14 @@ export const parseTimestamp = (input) => {
       zoneMinute > 59 ||
       (zoneHour === 14 && zoneMinute !== 0) ||
       zone === '-00:00'
-    ) throw new OracleExecutionError('TYPE_TEMPORAL_RANGE');
+    )
+      throw new OracleExecutionError('TYPE_TEMPORAL_RANGE');
     offsetMinutes = sign * (zoneHour * 60 + zoneMinute);
   }
   const days = BigInt(daysFromCivil(year, month, day));
   const localSeconds = days * 86_400n + BigInt(hour * 3600 + minute * 60 + second);
-  const micros = (localSeconds - BigInt(offsetMinutes * 60)) * 1_000_000n + BigInt(fraction.padEnd(6, '0'));
+  const micros =
+    (localSeconds - BigInt(offsetMinutes * 60)) * 1_000_000n + BigInt(fraction.padEnd(6, '0'));
   if (micros < TIMESTAMP_MIN || micros > TIMESTAMP_MAX) {
     throw new OracleExecutionError('TYPE_TEMPORAL_RANGE');
   }
@@ -839,7 +922,8 @@ export const vectorDistance = (left, right, metric) => {
   if (left.element !== right.element || left.dimension !== right.dimension) {
     throw new OracleExecutionError('TYPE_VECTOR_DIMENSION');
   }
-  if (!['l2', 'dot', 'cosine'].includes(metric)) throw new OracleExecutionError('VAL_INVALID_LITERAL');
+  if (!['l2', 'dot', 'cosine'].includes(metric))
+    throw new OracleExecutionError('VAL_INVALID_LITERAL');
   let dot = 0;
   let normLeft = 0;
   let normRight = 0;

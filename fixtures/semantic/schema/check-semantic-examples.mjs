@@ -52,9 +52,7 @@ const validateVectorBits = (value, at) => {
   for (const [index, text] of value.bits.entries()) {
     const bits = Number.parseInt(text, 16);
     const nonfinite =
-      value.element === 'f16'
-        ? (bits & 0x7c00) === 0x7c00
-        : (bits & 0x7f800000) === 0x7f800000;
+      value.element === 'f16' ? (bits & 0x7c00) === 0x7c00 : (bits & 0x7f800000) === 0x7f800000;
     if (nonfinite) {
       fail('fixture.vector.nonfinite', `${at}.bits[${index}]`, 'vector bits encode NaN/infinity');
     }
@@ -105,12 +103,7 @@ const validateValue = (value, at, allowMissing = true) => {
       }
       return;
     case 'timestamp':
-      validateInteger(
-        value.microseconds,
-        -62135596800000000n,
-        253402300799999999n,
-        at,
-      );
+      validateInteger(value.microseconds, -62135596800000000n, 253402300799999999n, at);
       return;
     case 'date': {
       const days = BigInt(value.days);
@@ -139,7 +132,11 @@ const validateValue = (value, at, allowMissing = true) => {
         }
         names.add(field.name);
         if (!field.name.isWellFormed()) {
-          fail('fixture.value.unicode', `${at}.fields[${index}].name`, 'invalid Unicode field name');
+          fail(
+            'fixture.value.unicode',
+            `${at}.fields[${index}].name`,
+            'invalid Unicode field name',
+          );
         }
         validateValue(field.value, `${at}.fields[${index}].value`, false);
       }
@@ -152,7 +149,9 @@ const validateValue = (value, at, allowMissing = true) => {
 
 const walkTypedValues = (node, at = '$') => {
   if (Array.isArray(node)) {
-    node.forEach((value, index) => walkTypedValues(value, `${at}[${index}]`));
+    node.forEach((value, index) => {
+      walkTypedValues(value, `${at}[${index}]`);
+    });
     return;
   }
   if (!node || typeof node !== 'object') return;
@@ -239,7 +238,10 @@ export const validateFixture = (fixture) => {
     stepIds.add(step.id);
 
     if (step.expect.state.mode === 'exact') {
-      validateCollections(step.expect.state.collections, `$.steps[${index}].expect.state.collections`);
+      validateCollections(
+        step.expect.state.collections,
+        `$.steps[${index}].expect.state.collections`,
+      );
     }
     if (
       step.expect.order.mode === 'exact' &&
@@ -251,10 +253,7 @@ export const validateFixture = (fixture) => {
         'exact order row_count must equal key count',
       );
     }
-    if (
-      step.expect.order.mode === 'not_applicable' &&
-      step.expect.order.row_count !== 0
-    ) {
+    if (step.expect.order.mode === 'not_applicable' && step.expect.order.row_count !== 0) {
       fail(
         'fixture.order.cardinality',
         `$.steps[${index}].expect.order`,
@@ -311,10 +310,7 @@ export const validateFixture = (fixture) => {
           'nonretryable expectation must use never scope',
         );
       }
-      if (
-        step.expect.outcome === 'committed' &&
-        step.expect.state.mode !== 'exact'
-      ) {
+      if (step.expect.outcome === 'committed' && step.expect.state.mode !== 'exact') {
         fail(
           'fixture.error.state_outcome',
           `$.steps[${index}].expect.state`,
@@ -330,43 +326,41 @@ const isMain =
   process.argv[1] !== undefined && path.resolve(process.argv[1]) === fileURLToPath(import.meta.url);
 
 if (isMain) {
-const validFiles = readdirSync(path.join(examples, 'valid'))
-  .filter((name) => name.endsWith('.json'))
-  .sort();
-const invalidFiles = readdirSync(path.join(examples, 'invalid-semantic'))
-  .filter((name) => name.endsWith('.json'))
-  .sort();
+  const validFiles = readdirSync(path.join(examples, 'valid'))
+    .filter((name) => name.endsWith('.json'))
+    .sort();
+  const invalidFiles = readdirSync(path.join(examples, 'invalid-semantic'))
+    .filter((name) => name.endsWith('.json'))
+    .sort();
 
-for (const name of validFiles) {
-  const fixture = JSON.parse(readFileSync(path.join(examples, 'valid', name), 'utf8'));
-  validateFixture(fixture);
-  console.log(`PASS semantic accept ${name}`);
-}
-
-for (const name of invalidFiles) {
-  const fixture = JSON.parse(
-    readFileSync(path.join(examples, 'invalid-semantic', name), 'utf8'),
-  );
-  const expected = expectedSemanticFailures.get(name);
-  if (!expected) throw new Error(`no expected semantic failure registered for ${name}`);
-
-  let actual;
-  try {
+  for (const name of validFiles) {
+    const fixture = JSON.parse(readFileSync(path.join(examples, 'valid', name), 'utf8'));
     validateFixture(fixture);
-  } catch (error) {
-    actual = error.code;
+    console.log(`PASS semantic accept ${name}`);
   }
-  if (actual !== expected) {
-    throw new Error(`${name}: expected ${expected}, received ${actual ?? 'success'}`);
+
+  for (const name of invalidFiles) {
+    const fixture = JSON.parse(readFileSync(path.join(examples, 'invalid-semantic', name), 'utf8'));
+    const expected = expectedSemanticFailures.get(name);
+    if (!expected) throw new Error(`no expected semantic failure registered for ${name}`);
+
+    let actual;
+    try {
+      validateFixture(fixture);
+    } catch (error) {
+      actual = error.code;
+    }
+    if (actual !== expected) {
+      throw new Error(`${name}: expected ${expected}, received ${actual ?? 'success'}`);
+    }
+    console.log(`PASS semantic reject ${name} ${actual}`);
   }
-  console.log(`PASS semantic reject ${name} ${actual}`);
-}
 
-if (invalidFiles.length !== expectedSemanticFailures.size) {
-  throw new Error('semantic-negative registry/file count mismatch');
-}
+  if (invalidFiles.length !== expectedSemanticFailures.size) {
+    throw new Error('semantic-negative registry/file count mismatch');
+  }
 
-console.log(
-  `PASS semantic examples: ${validFiles.length} accepted; ${invalidFiles.length} rejected with exact rules`,
-);
+  console.log(
+    `PASS semantic examples: ${validFiles.length} accepted; ${invalidFiles.length} rejected with exact rules`,
+  );
 }

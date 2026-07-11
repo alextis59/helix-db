@@ -1,5 +1,5 @@
 import { gunzipSync } from 'node:zlib';
-import { OracleExecutionError, FixtureDiagnostic } from './registry.mjs';
+import { FixtureDiagnostic, OracleExecutionError } from './registry.mjs';
 import { validateValue } from './value.mjs';
 
 class StrictJsonError extends Error {
@@ -93,7 +93,8 @@ class StrictJsonParser {
       if (this.peek() === undefined) this.error('truncated JSON object', { truncated: true });
       if (this.peek() !== '"') this.error('JSON object key must be a string');
       const name = this.parseString();
-      if (names.has(name)) this.error(`duplicate JSON property ${JSON.stringify(name)}`, { duplicate: true });
+      if (names.has(name))
+        this.error(`duplicate JSON property ${JSON.stringify(name)}`, { duplicate: true });
       names.add(name);
       this.skipWhitespace();
       if (this.peek() === undefined) this.error('truncated JSON object', { truncated: true });
@@ -145,14 +146,24 @@ class StrictJsonParser {
       if (character === undefined) this.error('truncated JSON string', { truncated: true });
       this.offset += 1;
       if (character === '"') {
-        if (!value.isWellFormed()) this.error('JSON string contains unpaired surrogate', { invalidUnicode: true });
+        if (!value.isWellFormed())
+          this.error('JSON string contains unpaired surrogate', { invalidUnicode: true });
         return value;
       }
       if (character === '\\') {
         const escaped = this.peek();
         if (escaped === undefined) this.error('truncated JSON escape', { truncated: true });
         this.offset += 1;
-        const simple = { '"': '"', '\\': '\\', '/': '/', b: '\b', f: '\f', n: '\n', r: '\r', t: '\t' };
+        const simple = {
+          '"': '"',
+          '\\': '\\',
+          '/': '/',
+          b: '\b',
+          f: '\f',
+          n: '\n',
+          r: '\r',
+          t: '\t',
+        };
         if (Object.hasOwn(simple, escaped)) {
           value += simple[escaped];
           continue;
@@ -176,7 +187,8 @@ class StrictJsonParser {
     if (!match) this.error('invalid JSON number');
     const token = match[0];
     const next = remainder[token.length];
-    if (next !== undefined && !' \t\r\n,]}'.includes(next)) this.error('invalid JSON number suffix');
+    if (next !== undefined && !' \t\r\n,]}'.includes(next))
+      this.error('invalid JSON number suffix');
     this.offset += token.length;
     const value = Number(token);
     if (!Number.isFinite(value)) this.error('JSON number is not finite binary64');
@@ -188,7 +200,9 @@ export const parseStrictJson = (source, options) => new StrictJsonParser(source,
 
 const validateTypedWrappers = (node, at = '$') => {
   if (Array.isArray(node)) {
-    node.forEach((value, index) => validateTypedWrappers(value, `${at}[${index}]`));
+    node.forEach((value, index) => {
+      validateTypedWrappers(value, `${at}[${index}]`);
+    });
     return;
   }
   if (!node || typeof node !== 'object') return;
@@ -257,7 +271,8 @@ export const decodeRawInput = (action) => {
     command = parseStrictJson(source, { maxDepth: 64, maxNodes: 4_096 });
   } catch (error) {
     if (!(error instanceof StrictJsonError)) throw error;
-    if (error.duplicate) throw new OracleExecutionError('VAL_DUPLICATE_FIELD', { phase: 'validate' });
+    if (error.duplicate)
+      throw new OracleExecutionError('VAL_DUPLICATE_FIELD', { phase: 'validate' });
     if (error.invalidUnicode) throw new OracleExecutionError('PAR_INVALID_UTF8');
     if (error.limit) {
       throw new OracleExecutionError('QUOTA_LIMIT_EXCEEDED', {

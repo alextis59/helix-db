@@ -22,6 +22,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [JavaScript/TypeScript toolchain policy](architecture/javascript-toolchain-policy.md) | Node/npm support window, lockfile, compiler, bundler, test runner, and browser harness |
 | [Repository layout](architecture/repository-layout.md) | Tracked source, conformance, benchmark, test, example, and release-evidence boundaries |
 | [Build profiles](architecture/build-profiles.md) | Native, Wasm, browser, sanitizer, coverage, and benchmark build contracts |
+| [Code quality and dependency policy](architecture/code-quality-and-dependency-policy.md) | Formatting, lints, warnings, unsafe review, dependency sources, licenses, and lifecycle scripts |
 
 When documents conflict, follow the authority order defined by change control rather than treating the newest file as automatically correct.
 

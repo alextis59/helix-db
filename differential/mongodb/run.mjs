@@ -3,8 +3,8 @@
 import { execFileSync } from 'node:child_process';
 import { existsSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
-import { isDeepStrictEqual } from 'node:util';
 import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
 import { canonicalize, sha256Hex } from '../../reference/semantic-oracle/canonical.mjs';
 import { executeCommand } from '../../reference/semantic-oracle/command.mjs';
 import { parseStrictJson } from '../../reference/semantic-oracle/raw-json.mjs';
@@ -51,10 +51,12 @@ const readStrictJson = (file) => {
 const canonicalList = (values, label) => {
   if (new Set(values).size !== values.length) throw new Error(`${label}: duplicate values`);
   const sorted = [...values].sort();
-  if (values.some((value, index) => value !== sorted[index])) throw new Error(`${label}: noncanonical order`);
+  if (values.some((value, index) => value !== sorted[index]))
+    throw new Error(`${label}: noncanonical order`);
 };
 const validateWithSchema = (schemaPath, value) => {
   if (!draftValidation) return;
+  // biome-ignore lint/complexity/noUselessStringRaw: Embedded Python must preserve literal backslashes as the snippet evolves.
   const program = String.raw`
 import json,sys
 from jsonschema import Draft202012Validator
@@ -72,12 +74,23 @@ if errors: raise SystemExit(f'{sys.argv[1]}: {errors[0].message}')
 
 const { bytes: casesBytes, value: specification } = readStrictJson(casesPath);
 validateWithSchema(casesSchemaPath, specification);
-if (specification.cases_schema !== 'helix.mongodb-differential-cases/1') throw new Error('case schema');
+if (specification.cases_schema !== 'helix.mongodb-differential-cases/1')
+  throw new Error('case schema');
 canonicalList(specification.sources, 'sources');
-canonicalList(specification.datasets.map((dataset) => dataset.id), 'dataset IDs');
-canonicalList(specification.cases.map((entry) => entry.id), 'case IDs');
-for (const entry of specification.cases) canonicalList(entry.requirements, `${entry.id} requirements`);
-if (new Set(specification.datasets.map((dataset) => dataset.collection)).size !== specification.datasets.length) {
+canonicalList(
+  specification.datasets.map((dataset) => dataset.id),
+  'dataset IDs',
+);
+canonicalList(
+  specification.cases.map((entry) => entry.id),
+  'case IDs',
+);
+for (const entry of specification.cases)
+  canonicalList(entry.requirements, `${entry.id} requirements`);
+if (
+  new Set(specification.datasets.map((dataset) => dataset.collection)).size !==
+  specification.datasets.length
+) {
   throw new Error('dataset collection names must be unique');
 }
 const datasetById = new Map(specification.datasets.map((dataset) => [dataset.id, dataset]));
@@ -96,7 +109,11 @@ if (sha256Hex(oracleReportBytes) !== specification.semantic_inputs.oracle_report
   throw new Error('semantic oracle report hash drift');
 }
 const oracleReport = JSON.parse(oracleReportBytes.toString('utf8'));
-if (oracleReport.verdict !== 'pass' || oracleReport.counts.failed !== 0 || oracleReport.counts.skipped !== 0) {
+if (
+  oracleReport.verdict !== 'pass' ||
+  oracleReport.counts.failed !== 0 ||
+  oracleReport.counts.skipped !== 0
+) {
   throw new Error('semantic oracle report is not a complete pass');
 }
 
@@ -149,7 +166,7 @@ for (const entry of specification.cases) {
   };
   const execution = executeCommand(command, state);
   const rows = objectField(execution.value, 'rows');
-  if (!rows || rows.t !== 'array') throw new Error(`${entry.id}: native result has no rows`);
+  if (rows?.t !== 'array') throw new Error(`${entry.id}: native result has no rows`);
   nativeRows.set(entry.id, rows.values);
 }
 
@@ -165,35 +182,60 @@ const mongoshVersion = execFileSync('mongosh', ['--version'], {
   timeout: 5000,
 }).trim();
 if (mongoshVersion !== specification.client.version) {
-  throw new Error(`mongosh version mismatch: expected ${specification.client.version}, got ${mongoshVersion}`);
+  throw new Error(
+    `mongosh version mismatch: expected ${specification.client.version}, got ${mongoshVersion}`,
+  );
 }
 const image = JSON.parse(docker(['image', 'inspect', specification.upstream.image]))[0];
-if (image.Id !== specification.upstream.image_id || !image.RepoDigests.includes(specification.upstream.image)) {
+if (
+  image.Id !== specification.upstream.image_id ||
+  !image.RepoDigests.includes(specification.upstream.image)
+) {
   throw new Error('pinned MongoDB image identity mismatch');
 }
 
 const containerName = `helix-p01-021-${process.pid}`;
 const databaseName = `helix_p01_021_${process.pid}`;
-if (docker(['container', 'ls', '-a', '--filter', `name=^/${containerName}$`, '--format', '{{.ID}}'])) {
+if (
+  docker(['container', 'ls', '-a', '--filter', `name=^/${containerName}$`, '--format', '{{.ID}}'])
+) {
   throw new Error(`refusing existing container ${containerName}`);
 }
 let containerStarted = false;
 let rawObservation;
 try {
   docker([
-    'run', '-d', '--pull=never', '--name', containerName,
-    '--read-only', '--user', '999:999',
-    '--tmpfs', '/data/db:rw,noexec,nosuid,size=512m,uid=999,gid=999,mode=0700',
-    '--tmpfs', '/tmp:rw,noexec,nosuid,size=64m,uid=999,gid=999,mode=0700',
-    '--memory=1g', '--cpus=2', '--cap-drop=ALL',
-    '-p', '127.0.0.1::27017', specification.upstream.image,
-    'mongod', '--bind_ip_all', '--quiet',
-    '--nojournal', '--wiredTigerCacheSizeGB', '0.25',
-    '--setParameter', 'diagnosticDataCollectionEnabled=false',
+    'run',
+    '-d',
+    '--pull=never',
+    '--name',
+    containerName,
+    '--read-only',
+    '--user',
+    '999:999',
+    '--tmpfs',
+    '/data/db:rw,noexec,nosuid,size=512m,uid=999,gid=999,mode=0700',
+    '--tmpfs',
+    '/tmp:rw,noexec,nosuid,size=64m,uid=999,gid=999,mode=0700',
+    '--memory=1g',
+    '--cpus=2',
+    '--cap-drop=ALL',
+    '-p',
+    '127.0.0.1::27017',
+    specification.upstream.image,
+    'mongod',
+    '--bind_ip_all',
+    '--quiet',
+    '--nojournal',
+    '--wiredTigerCacheSizeGB',
+    '0.25',
+    '--setParameter',
+    'diagnosticDataCollectionEnabled=false',
   ]);
   containerStarted = true;
   const containerImage = docker(['inspect', containerName, '--format', '{{.Image}}']);
-  if (containerImage !== specification.upstream.image_id) throw new Error('running image ID mismatch');
+  if (containerImage !== specification.upstream.image_id)
+    throw new Error('running image ID mismatch');
   const portOutput = docker(['port', containerName, '27017/tcp']);
   const portMatch = /^127\.0\.0\.1:([0-9]+)$/m.exec(portOutput);
   if (!portMatch) throw new Error(`unexpected Docker port mapping ${portOutput}`);
@@ -204,7 +246,13 @@ try {
     try {
       execFileSync(
         'mongosh',
-        [`${baseUri}/admin?directConnection=true&serverSelectionTimeoutMS=500`, '--quiet', '--norc', '--eval', 'quit(db.runCommand({ping:1}).ok===1?0:1)'],
+        [
+          `${baseUri}/admin?directConnection=true&serverSelectionTimeoutMS=500`,
+          '--quiet',
+          '--norc',
+          '--eval',
+          'quit(db.runCommand({ping:1}).ok===1?0:1)',
+        ],
         { stdio: 'ignore', timeout: 3000 },
       );
       consecutivePings += 1;
@@ -223,16 +271,12 @@ try {
     throw new Error('pinned MongoDB container stopped after readiness checks');
   }
   const uri = `${baseUri}/${databaseName}?directConnection=true&serverSelectionTimeoutMS=2000`;
-  const stdout = execFileSync(
-    'mongosh',
-    [uri, '--quiet', '--norc', '--file', shellRunnerPath],
-    {
-      encoding: 'utf8',
-      maxBuffer: 16 * 1024 * 1024,
-      timeout: 30_000,
-      env: { ...process.env, HELIX_MONGODB_CASES: casesPath },
-    },
-  );
+  const stdout = execFileSync('mongosh', [uri, '--quiet', '--norc', '--file', shellRunnerPath], {
+    encoding: 'utf8',
+    maxBuffer: 16 * 1024 * 1024,
+    timeout: 30_000,
+    env: { ...process.env, HELIX_MONGODB_CASES: casesPath },
+  });
   const marker = stdout.split(/\r?\n/).find((line) => line.startsWith('HELIX_MONGODB_RESULT:'));
   if (!marker) throw new Error(`mongosh result marker missing: ${stdout.slice(0, 1000)}`);
   rawObservation = JSON.parse(
@@ -281,7 +325,13 @@ const upstream = {
   image: specification.upstream.image,
   image_id: specification.upstream.image_id,
 };
-for (const field of ['product', 'version', 'git_version', 'feature_compatibility_version', 'max_wire_version']) {
+for (const field of [
+  'product',
+  'version',
+  'git_version',
+  'feature_compatibility_version',
+  'max_wire_version',
+]) {
   if (upstream[field] !== specification.upstream[field]) {
     throw new Error(`upstream ${field} mismatch: ${upstream[field]}`);
   }
@@ -291,8 +341,16 @@ if (!Array.isArray(upstream.modules) || upstream.modules.length !== 0) {
 }
 const observedCases = rawObservation.cases;
 if (!Array.isArray(observedCases)) throw new Error('upstream cases missing');
-canonicalList(observedCases.map((entry) => entry.id), 'upstream case IDs');
-if (!isDeepStrictEqual(observedCases.map((entry) => entry.id), specification.cases.map((entry) => entry.id))) {
+canonicalList(
+  observedCases.map((entry) => entry.id),
+  'upstream case IDs',
+);
+if (
+  !isDeepStrictEqual(
+    observedCases.map((entry) => entry.id),
+    specification.cases.map((entry) => entry.id),
+  )
+) {
   throw new Error('upstream case inventory/order mismatch');
 }
 
@@ -308,12 +366,13 @@ validateWithSchema(observationsSchemaPath, observations);
 const observationsText = `${JSON.stringify(observations, null, 2)}\n`;
 const observationsBytes = Buffer.from(observationsText);
 
-const idsOf = (rows) => rows.map((row) => {
-  if (row.t !== 'object') throw new Error('row is not a typed object');
-  const id = objectField(row, '_id');
-  if (!id) throw new Error('row has no _id');
-  return id;
-});
+const idsOf = (rows) =>
+  rows.map((row) => {
+    if (row.t !== 'object') throw new Error('row is not a typed object');
+    const id = objectField(row, '_id');
+    if (!id) throw new Error('row has no _id');
+    return id;
+  });
 const idLabel = (id) => {
   if (['int32', 'int64'].includes(id.t)) return `${id.t}:${id.value}`;
   if (id.t === 'string') return `string:${id.value}`;
@@ -364,9 +423,11 @@ const report = {
   counts: {
     cases: reportCases.length,
     expected_exact: reportCases.filter((entry) => entry.expected_relation === 'exact').length,
-    expected_different: reportCases.filter((entry) => entry.expected_relation === 'different').length,
+    expected_different: reportCases.filter((entry) => entry.expected_relation === 'different')
+      .length,
     observed_exact: reportCases.filter((entry) => entry.observed_relation === 'exact').length,
-    observed_different: reportCases.filter((entry) => entry.observed_relation === 'different').length,
+    observed_different: reportCases.filter((entry) => entry.observed_relation === 'different')
+      .length,
     direct: reportCases.filter((entry) => entry.translation === 'direct').length,
     adapter_rewrite: reportCases.filter((entry) => entry.translation === 'adapter_rewrite').length,
     passed,
@@ -393,7 +454,8 @@ if (mutationCanary) {
   process.stdout.write(reportText);
 } else {
   for (const file of [observationsPath, reportPath]) {
-    if (!existsSync(file)) throw new Error(`generated artifact is absent: ${path.relative(repository, file)}`);
+    if (!existsSync(file))
+      throw new Error(`generated artifact is absent: ${path.relative(repository, file)}`);
   }
   if (readFileSync(observationsPath, 'utf8') !== observationsText) {
     throw new Error('upstream observation artifact differs byte-for-byte');
@@ -427,6 +489,8 @@ if (mutationCanary) {
   console.log(
     `PASS upstream: MongoDB ${upstream.version} git=${upstream.git_version} wire=${upstream.max_wire_version}`,
   );
-  console.log(`PASS observations: ${report.observations.sha256} ${report.observations.bytes} bytes`);
+  console.log(
+    `PASS observations: ${report.observations.sha256} ${report.observations.bytes} bytes`,
+  );
   console.log(`PASS report: ${sha256Hex(canonicalize(report))}`);
 }

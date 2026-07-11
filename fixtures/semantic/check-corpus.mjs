@@ -3,8 +3,8 @@
 import { readdirSync, readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
-import { canonicalizeFixture, sha256Hex } from './schema/fixture-jcs.mjs';
 import { validateFixture } from './schema/check-semantic-examples.mjs';
+import { canonicalizeFixture, sha256Hex } from './schema/fixture-jcs.mjs';
 
 const here = path.dirname(fileURLToPath(import.meta.url));
 const repository = path.resolve(here, '..', '..');
@@ -95,7 +95,9 @@ for (const entry of manifest.fixtures) {
     if (!actualCoverage.has(requirement)) actualCoverage.set(requirement, []);
     actualCoverage.get(requirement).push(fixture.id);
   }
-  fixture.tags.forEach((tag) => actualTags.add(tag));
+  fixture.tags.forEach((tag) => {
+    actualTags.add(tag);
+  });
   scanValues(fixture);
 
   for (const step of fixture.steps) {
@@ -146,9 +148,7 @@ for (const [limitId, relations] of boundaryRelations) {
   same(relations.sort(), ['above', 'at', 'below'], `${limitId}: relations`);
 }
 
-const registryFixture = readJson(
-  path.join(here, 'cases', 'errors', 'registry.json'),
-);
+const registryFixture = readJson(path.join(here, 'cases', 'errors', 'registry.json'));
 const fixtureErrorByCode = new Map(
   registryFixture.steps.map((step) => [step.expect.code, step.expect]),
 );
@@ -175,9 +175,9 @@ const errorDocument = readFileSync(
   path.join(repository, 'docs', 'architecture', 'error-semantics.md'),
   'utf8',
 );
-const documentedErrorCodes = [
-  ...errorDocument.matchAll(/^\| `([A-Z][A-Z0-9_]+)` \|/gm),
-].map((match) => match[1]);
+const documentedErrorCodes = [...errorDocument.matchAll(/^\| `([A-Z][A-Z0-9_]+)` \|/gm)].map(
+  (match) => match[1],
+);
 same([...documentedErrorCodes].sort(), requiredErrorCodes, 'documented error registry');
 
 const limitDocument = readFileSync(

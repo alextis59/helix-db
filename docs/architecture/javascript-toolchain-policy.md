@@ -42,7 +42,7 @@ Lock rules:
 - Use `npm install --save-exact` only in a focused dependency-update change, then inspect package/lock diffs and rerun clean installs.
 - Do not commit `npm-shrinkwrap.json`, `yarn.lock`, `pnpm-lock.yaml`, Bun locks, or nested package locks.
 - Keep lifecycle-script policy explicit per dependency. A clean install cannot silently download Playwright browsers; browser binaries are installed by a named later command and cached/retained as CI artifacts.
-- The initial lock contains two optional `fsevents` install-script entries (one direct in the shared graph and one below Vite). Selection evidence suppresses both scripts and uses non-watch commands; `P02-006`/`P02-012` must explicitly review or allow them before any release workflow enables lifecycle scripts.
+- The lock contains two optional `fsevents` install-script entries (one direct in the shared graph and one below Vite). Selection evidence suppresses both scripts and uses non-watch commands; `P02-006` inventories and explicitly denies them, and `P02-012` must revalidate them before any workflow enables lifecycle scripts.
 - Registry audit is disabled during ordinary deterministic install to avoid network/time-dependent results. `P02-012` owns an explicit, retained vulnerability/provenance report; disabling implicit audit does not waive that gate.
 
 The workspace glob is `packages/*`. `P02-004` creates the package directories and `P02-016` adds the first non-functional browser example.
@@ -121,3 +121,5 @@ One focused toolchain update must:
 8. preserve prior lock/evidence commits for release reproduction.
 
 No dependency update may silently widen package publication, Node/browser support, network access, or lifecycle scripts.
+
+Formatting, lint rules, lifecycle-script denial, locked registry/integrity/license screening, and reviewed dependency exceptions are defined separately in the [code quality and dependency policy](code-quality-and-dependency-policy.md).

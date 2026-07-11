@@ -3,16 +3,15 @@ import { canonicalize, sha256Hex } from './canonical.mjs';
 import { executeCommand } from './command.mjs';
 import { decodeRawInput } from './raw-json.mjs';
 import {
+  errorMetadata,
+  fixtureFailure,
   LIMITS,
   ORACLE_PROFILE,
   ORACLE_VERSION,
   OracleExecutionError,
-  errorMetadata,
-  fixtureFailure,
 } from './registry.mjs';
 import { validateCorpus, validateFixture } from './validate.mjs';
 import {
-  V,
   addNumeric,
   arrayAll,
   arrayElemMatch,
@@ -24,6 +23,7 @@ import {
   parseTimestamp,
   pathExists,
   resolvePath,
+  V,
   vectorDistance,
 } from './value.mjs';
 
@@ -55,10 +55,15 @@ const syntheticEchoOrder = (rows, basis) => {
       case 'input_order':
         return [indexKey(index)];
       case 'singleton':
-        if (rows.length !== 1) fixtureFailure('oracle.operation.echo_order', '$', 'singleton has multiple rows');
+        if (rows.length !== 1)
+          fixtureFailure('oracle.operation.echo_order', '$', 'singleton has multiple rows');
         return [{ kind: 'singleton', value: 'fixture-result' }];
       default:
-        fixtureFailure('oracle.operation.echo_order', '$', `unsupported echo basis ${basis}`);
+        return fixtureFailure(
+          'oracle.operation.echo_order',
+          '$',
+          `unsupported echo basis ${basis}`,
+        );
     }
   });
   return {
@@ -70,7 +75,8 @@ const syntheticEchoOrder = (rows, basis) => {
 };
 
 const requireTag = (value, tag, at) => {
-  if (value.t !== tag) fixtureFailure('oracle.operation.argument', at, `expected ${tag}, received ${value.t}`);
+  if (value.t !== tag)
+    fixtureFailure('oracle.operation.argument', at, `expected ${tag}, received ${value.t}`);
   return value;
 };
 
@@ -83,16 +89,22 @@ const optionKeysByOperation = Object.freeze({
 
 const validateOperationOptions = (action) => {
   const expected = optionKeysByOperation[action.operation] ?? [];
-  const actual = action.options === undefined
-    ? []
-    : isRecord(action.options)
-      ? Object.keys(action.options).sort()
-      : undefined;
+  const actual =
+    action.options === undefined
+      ? []
+      : isRecord(action.options)
+        ? Object.keys(action.options).sort()
+        : undefined;
   if (
     actual === undefined ||
     actual.length !== expected.length ||
     actual.some((key, index) => key !== [...expected].sort()[index])
-  ) fixtureFailure('oracle.operation.options', '$.options', `invalid options for ${action.operation}`);
+  )
+    fixtureFailure(
+      'oracle.operation.options',
+      '$.options',
+      `invalid options for ${action.operation}`,
+    );
 };
 
 const executeBoundary = (action) => {
@@ -106,7 +118,8 @@ const executeBoundary = (action) => {
   const relation = relationValue.value;
   const maximum = BigInt(maximumValue.value);
   const observed = BigInt(observedValue.value);
-  if (maximum !== definition.maximum) fixtureFailure('oracle.operation.limit_maximum', '$.arguments[2]', 'drift');
+  if (maximum !== definition.maximum)
+    fixtureFailure('oracle.operation.limit_maximum', '$.arguments[2]', 'drift');
   const expectedObserved = {
     below: maximum - 1n,
     at: maximum,
@@ -115,10 +128,8 @@ const executeBoundary = (action) => {
   if (expectedObserved === undefined || observed !== expectedObserved) {
     fixtureFailure('oracle.operation.limit_relation', '$.arguments', 'invalid boundary relation');
   }
-  if (
-    action.options?.unit !== definition.unit ||
-    action.options?.mutation !== definition.mutation
-  ) fixtureFailure('oracle.operation.limit_options', '$.options', 'limit metadata drift');
+  if (action.options?.unit !== definition.unit || action.options?.mutation !== definition.mutation)
+    fixtureFailure('oracle.operation.limit_options', '$.options', 'limit metadata drift');
   if (observed > maximum) {
     throw new OracleExecutionError('QUOTA_LIMIT_EXCEEDED', {
       outcome: definition.mutation ? 'not_committed' : 'not_applicable',
@@ -238,7 +249,9 @@ const executeAction = (action, sandbox) => {
 const subset = (actual, expected) => {
   if (!isRecord(actual) || !isRecord(expected)) return isDeepStrictEqual(actual, expected);
   return Object.entries(expected).every(
-    ([key, value]) => Object.hasOwn(actual, key) && (isRecord(value) ? subset(actual[key], value) : isDeepStrictEqual(actual[key], value)),
+    ([key, value]) =>
+      Object.hasOwn(actual, key) &&
+      (isRecord(value) ? subset(actual[key], value) : isDeepStrictEqual(actual[key], value)),
   );
 };
 const isRecord = (value) => value && typeof value === 'object' && !Array.isArray(value);
@@ -250,7 +263,8 @@ const comparisonFailure = (code, expected, actual) => ({
 });
 
 export const compareExpectation = (expected, actual, preState, postState) => {
-  if (expected.kind !== actual.kind) return comparisonFailure('oracle.expectation.kind', expected, actual);
+  if (expected.kind !== actual.kind)
+    return comparisonFailure('oracle.expectation.kind', expected, actual);
   if (expected.kind === 'success') {
     if (!isDeepStrictEqual(expected.value, actual.value)) {
       return comparisonFailure('oracle.expectation.value', expected.value, actual.value);
@@ -258,7 +272,11 @@ export const compareExpectation = (expected, actual, preState, postState) => {
   } else {
     for (const field of ['category', 'code', 'phase', 'outcome']) {
       if (expected[field] !== actual[field]) {
-        return comparisonFailure(`oracle.expectation.error_${field}`, expected[field], actual[field]);
+        return comparisonFailure(
+          `oracle.expectation.error_${field}`,
+          expected[field],
+          actual[field],
+        );
       }
     }
     if (!isDeepStrictEqual(expected.retry, actual.retry)) {
@@ -267,12 +285,18 @@ export const compareExpectation = (expected, actual, preState, postState) => {
     if (expected.details_match === 'absent' && actual.details !== undefined) {
       return comparisonFailure('oracle.expectation.error_details', null, actual.details);
     }
-    if (
-      expected.details_match === 'exact' &&
-      !isDeepStrictEqual(expected.details, actual.details)
-    ) return comparisonFailure('oracle.expectation.error_details', expected.details, actual.details);
+    if (expected.details_match === 'exact' && !isDeepStrictEqual(expected.details, actual.details))
+      return comparisonFailure(
+        'oracle.expectation.error_details',
+        expected.details,
+        actual.details,
+      );
     if (expected.details_match === 'subset' && !subset(actual.details, expected.details)) {
-      return comparisonFailure('oracle.expectation.error_details', expected.details, actual.details);
+      return comparisonFailure(
+        'oracle.expectation.error_details',
+        expected.details,
+        actual.details,
+      );
     }
   }
   if (!isDeepStrictEqual(expected.order, actual.order)) {
@@ -290,10 +314,16 @@ export const compareExpectation = (expected, actual, preState, postState) => {
       expected.state.scope === 'all'
         ? postState.collections
         : postState.collections.filter((collection) =>
-            expectedCollections.some((expectedCollection) => expectedCollection.name === collection.name),
+            expectedCollections.some(
+              (expectedCollection) => expectedCollection.name === collection.name,
+            ),
           );
     if (!isDeepStrictEqual(expectedCollections, actualCollections)) {
-      return comparisonFailure('oracle.expectation.state_value', expectedCollections, actualCollections);
+      return comparisonFailure(
+        'oracle.expectation.state_value',
+        expectedCollections,
+        actualCollections,
+      );
     }
   }
   return undefined;
@@ -351,7 +381,15 @@ export const runFixture = (fixture, { validate = true } = {}) => {
   assertCapabilitiesConsumed(sandbox.capabilities, fixture.id);
   const passed = results.filter((result) => result.status === 'pass').length;
   const failed = results.length - passed;
-  return { fixture: fixture.id, passed, failed, skipped: 0, operationCounts, actionCounts, results };
+  return {
+    fixture: fixture.id,
+    passed,
+    failed,
+    skipped: 0,
+    operationCounts,
+    actionCounts,
+    results,
+  };
 };
 
 const mergeCounts = (target, source) => {

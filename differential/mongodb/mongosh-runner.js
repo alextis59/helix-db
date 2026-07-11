@@ -1,4 +1,4 @@
-const fs = require('fs');
+const fs = require('node:fs');
 
 const casesPath = process.env.HELIX_MONGODB_CASES;
 if (!casesPath) throw new Error('HELIX_MONGODB_CASES is required');
@@ -47,10 +47,7 @@ try {
     const dataset = datasets.get(differentialCase.dataset);
     if (!dataset) throw new Error(`unknown dataset ${differentialCase.dataset}`);
     const collection = db.getCollection(dataset.collection);
-    let cursor = collection.find(
-      differentialCase.mongo.filter,
-      differentialCase.mongo.projection,
-    );
+    let cursor = collection.find(differentialCase.mongo.filter, differentialCase.mongo.projection);
     cursor = cursor.maxTimeMS(5000);
     cursor = cursor.sort(differentialCase.mongo.sort);
     const rows = cursor.toArray();
@@ -66,5 +63,7 @@ const payload = {
   upstream,
   cases: observations,
 };
-const encoded = Buffer.from(EJSON.stringify(payload, { relaxed: false }), 'utf8').toString('base64');
+const encoded = Buffer.from(EJSON.stringify(payload, { relaxed: false }), 'utf8').toString(
+  'base64',
+);
 print(`HELIX_MONGODB_RESULT:${encoded}`);

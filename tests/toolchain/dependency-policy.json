@@ -1,0 +1,63 @@
+{
+  "schema": "helix.dependency-policy/1",
+  "rust": {
+    "workspace_license": "MIT",
+    "allow_external_packages": false,
+    "allow_git_sources": false,
+    "allowed_build_scripts": [],
+    "unsafe_exceptions": []
+  },
+  "npm": {
+    "registry_prefix": "https://registry.npmjs.org/",
+    "allowed_licenses": [
+      "0BSD",
+      "Apache-2.0",
+      "BSD-3-Clause",
+      "ISC",
+      "MIT",
+      "MIT OR Apache-2.0"
+    ],
+    "direct_dev_dependencies": {
+      "@biomejs/biome": "2.5.3",
+      "@playwright/test": "1.61.1",
+      "@types/node": "22.20.1",
+      "typescript": "6.0.3",
+      "vite": "8.1.4",
+      "vitest": "4.1.10"
+    },
+    "build_only_license_exceptions": [
+      {
+        "package_prefix": "lightningcss",
+        "version": "1.32.0",
+        "license": "MPL-2.0",
+        "expected_packages": 12,
+        "scope": "Vite development/build tooling only; not a runtime or shipped package dependency",
+        "review_owner": "Release owner",
+        "revalidate_by": "P02-012"
+      }
+    ],
+    "reviewed_denied_lifecycle_scripts": [
+      {
+        "path": "node_modules/fsevents",
+        "version": "2.3.2",
+        "optional": true,
+        "policy": "suppressed in deterministic installs; Darwin-only optional watcher"
+      },
+      {
+        "path": "node_modules/vite/node_modules/fsevents",
+        "version": "2.3.3",
+        "optional": true,
+        "policy": "suppressed in deterministic installs; Darwin-only optional watcher"
+      }
+    ],
+    "allowed_duplicate_versions": [
+      {
+        "name": "fsevents",
+        "versions": ["2.3.2", "2.3.3"],
+        "reason": "Vitest and Vite resolve distinct optional Darwin watcher versions",
+        "review_owner": "Release owner",
+        "revalidate_by": "P02-012"
+      }
+    ]
+  }
+}

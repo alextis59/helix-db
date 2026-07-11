@@ -28,6 +28,27 @@ helix-host-native = { path = "crates/helix-host-native" }
 helix-query = { path = "crates/helix-query" }
 helix-storage = { path = "crates/helix-storage" }
 
+[workspace.lints.rust]
+warnings = { level = "deny", priority = -3 }
+future_incompatible = { level = "deny", priority = -2 }
+rust_2024_compatibility = { level = "deny", priority = -2 }
+unsafe_code = "forbid"
+missing_docs = "deny"
+unreachable_pub = "deny"
+
+[workspace.lints.clippy]
+all = { level = "deny", priority = -3 }
+pedantic = { level = "deny", priority = -2 }
+allow_attributes_without_reason = "deny"
+dbg_macro = "deny"
+expect_used = "deny"
+panic = "deny"
+print_stderr = "deny"
+print_stdout = "deny"
+todo = "deny"
+unimplemented = "deny"
+unwrap_used = "deny"
+
 [workspace.metadata.helix]
 plan-item = "P02-001"
 status = "boundary-skeleton"

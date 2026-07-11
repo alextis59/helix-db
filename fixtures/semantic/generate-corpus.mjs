@@ -1,19 +1,12 @@
 #!/usr/bin/env node
 
-import {
-  existsSync,
-  mkdirSync,
-  readFileSync,
-  readdirSync,
-  writeFileSync,
-} from 'node:fs';
+import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { canonicalizeFixture, sha256Hex } from './schema/fixture-jcs.mjs';
 
 const root = path.dirname(fileURLToPath(import.meta.url));
 const casesRoot = path.join(root, 'cases');
-const manifestPath = path.join(root, 'manifest.json');
 const mode = process.argv[2] ?? '--check';
 
 if (!['--check', '--write'].includes(mode)) {
@@ -276,11 +269,7 @@ const errorGroups = [
       'QUOTA_RESULT',
     ],
   ],
-  [
-    'deadline',
-    'execute',
-    ['DEADLINE_EXCEEDED', 'DEADLINE_CANCELLED', 'DEADLINE_CURSOR_EXPIRED'],
-  ],
+  ['deadline', 'execute', ['DEADLINE_EXCEEDED', 'DEADLINE_CANCELLED', 'DEADLINE_CURSOR_EXPIRED']],
   [
     'durability',
     'commit',
@@ -430,182 +419,183 @@ const requiredTags = [
 ].sort();
 
 const finalize = () => {
-const casePath = (id) => {
-  const [family, ...rest] = id.split('.');
-  return `fixtures/semantic/cases/${family}/${rest.join('-')}.json`;
-};
-const pretty = (value) => Buffer.from(`${JSON.stringify(value, null, 2)}\n`, 'utf8');
-const sortedCases = [...cases].sort((left, right) => compareText(left.id, right.id));
-if (JSON.stringify(sortedCases.map((entry) => entry.id)) !== JSON.stringify(expectedCaseIds)) {
-  throw new Error(`case inventory drift: ${sortedCases.map((entry) => entry.id).join(',')}`);
-}
-
-const usedOperations = new Set();
-const observedTags = new Set();
-const fixtureIds = new Set();
-let stepCount = 0;
-let successCount = 0;
-let errorCount = 0;
-for (const entry of sortedCases) {
-  if (fixtureIds.has(entry.id)) throw new Error(`duplicate fixture ID ${entry.id}`);
-  fixtureIds.add(entry.id);
-  const stepIds = new Set();
-  for (const tag of entry.tags) observedTags.add(tag);
-  for (const step of entry.steps) {
-    if (stepIds.has(step.id)) throw new Error(`${entry.id}: duplicate step ${step.id}`);
-    stepIds.add(step.id);
-    if (step.action.kind === 'value_operation') usedOperations.add(step.action.operation);
-    stepCount += 1;
-    if (step.expect.kind === 'success') successCount += 1;
-    else errorCount += 1;
+  const casePath = (id) => {
+    const [family, ...rest] = id.split('.');
+    return `fixtures/semantic/cases/${family}/${rest.join('-')}.json`;
+  };
+  const pretty = (value) => Buffer.from(`${JSON.stringify(value, null, 2)}\n`, 'utf8');
+  const sortedCases = [...cases].sort((left, right) => compareText(left.id, right.id));
+  if (JSON.stringify(sortedCases.map((entry) => entry.id)) !== JSON.stringify(expectedCaseIds)) {
+    throw new Error(`case inventory drift: ${sortedCases.map((entry) => entry.id).join(',')}`);
   }
-}
-for (const tag of requiredTags) if (!observedTags.has(tag)) throw new Error(`missing tag ${tag}`);
-const registeredOperations = new Set(operationDefinitions.map((entry) => entry.id));
-for (const operation of usedOperations) {
-  if (!registeredOperations.has(operation)) throw new Error(`unregistered operation ${operation}`);
-}
-for (const operation of registeredOperations) {
-  if (!usedOperations.has(operation)) throw new Error(`unused registered operation ${operation}`);
-}
 
-const outputs = new Map();
-const manifestEntries = [];
-const requirementCoverage = new Map();
-for (const entry of sortedCases) {
-  const repositoryPath = casePath(entry.id);
-  const source = pretty(entry);
-  const canonical = canonicalizeFixture(entry);
-  outputs.set(repositoryPath, source);
-  manifestEntries.push({
-    id: entry.id,
-    path: repositoryPath,
-    bytes: source.length,
-    source_sha256: sha256Hex(source),
-    canonical_sha256: sha256Hex(canonical),
-    requirements: entry.requirements,
-    tags: entry.tags,
-    steps: entry.steps.length,
-  });
-  for (const requirement of entry.requirements) {
-    if (!requirementCoverage.has(requirement)) requirementCoverage.set(requirement, []);
-    requirementCoverage.get(requirement).push(entry.id);
+  const usedOperations = new Set();
+  const observedTags = new Set();
+  const fixtureIds = new Set();
+  let stepCount = 0;
+  let successCount = 0;
+  let errorCount = 0;
+  for (const entry of sortedCases) {
+    if (fixtureIds.has(entry.id)) throw new Error(`duplicate fixture ID ${entry.id}`);
+    fixtureIds.add(entry.id);
+    const stepIds = new Set();
+    for (const tag of entry.tags) observedTags.add(tag);
+    for (const step of entry.steps) {
+      if (stepIds.has(step.id)) throw new Error(`${entry.id}: duplicate step ${step.id}`);
+      stepIds.add(step.id);
+      if (step.action.kind === 'value_operation') usedOperations.add(step.action.operation);
+      stepCount += 1;
+      if (step.expect.kind === 'success') successCount += 1;
+      else errorCount += 1;
+    }
   }
-}
-const coverage = Object.fromEntries(
-  [...requirementCoverage.entries()]
-    .sort(([left], [right]) => compareText(left, right))
-    .map(([requirement, ids]) => [requirement, ids.sort()]),
-);
-const manifest = {
-  manifest_schema: 'helix.semantic-corpus/1',
-  fixture_schema: 'helix.semantic-fixture/1',
-  semantic_profile: 'helix-native-v1',
-  hash_profile: 'sha256+jcs-rfc8785',
-  generated_by: { tool: 'generate-semantic-corpus', version: '1.0.0' },
-  counts: {
-    fixtures: sortedCases.length,
-    steps: stepCount,
-    successes: successCount,
-    errors: errorCount,
-  },
-  coverage,
-  fixtures: manifestEntries,
-};
-outputs.set('fixtures/semantic/manifest.json', pretty(manifest));
-outputs.set('fixtures/semantic/operations-v1.json', pretty(operationRegistry));
+  for (const tag of requiredTags) if (!observedTags.has(tag)) throw new Error(`missing tag ${tag}`);
+  const registeredOperations = new Set(operationDefinitions.map((entry) => entry.id));
+  for (const operation of usedOperations) {
+    if (!registeredOperations.has(operation))
+      throw new Error(`unregistered operation ${operation}`);
+  }
+  for (const operation of registeredOperations) {
+    if (!usedOperations.has(operation)) throw new Error(`unused registered operation ${operation}`);
+  }
 
-const coverageContract = {
-  coverage_schema: 'helix.semantic-coverage/1',
-  fixture_schema: 'helix.semantic-fixture/1',
-  semantic_profile: 'helix-native-v1',
-  expected_counts: manifest.counts,
-  required_case_ids: expectedCaseIds,
-  required_operations: [...registeredOperations].sort(),
-  required_limit_ids: [...documentLimits, ...commandLimits].map(([id]) => id).sort(),
-  required_error_codes: errorCases.map((entry) => entry.code).sort(),
-  required_value_tags: [
-    'array',
-    'binary',
-    'bool',
-    'date',
-    'decimal128',
-    'float64',
-    'int32',
-    'int64',
-    'missing',
-    'null',
-    'object',
-    'objectId',
-    'string',
-    'timestamp',
-    'uuid',
-    'vector',
-  ],
-  required_action_kinds: ['command', 'raw_input', 'value_operation'],
-  required_order_bases: [
-    'default_order_v1',
-    'explicit_sort',
-    'input_order',
-    'not_applicable',
-    'pipeline_ordinal',
-    'set_semantics',
-    'singleton',
-    'vector_rank',
-  ],
-  required_tags: requiredTags,
-};
-outputs.set('fixtures/semantic/coverage-v1.json', pretty(coverageContract));
-outputs.set(
-  'fixtures/semantic/error-cases-v1.json',
-  pretty({
-    registry_schema: 'helix.semantic-error-cases/1',
-    error_registry: 'errors-v1',
+  const outputs = new Map();
+  const manifestEntries = [];
+  const requirementCoverage = new Map();
+  for (const entry of sortedCases) {
+    const repositoryPath = casePath(entry.id);
+    const source = pretty(entry);
+    const canonical = canonicalizeFixture(entry);
+    outputs.set(repositoryPath, source);
+    manifestEntries.push({
+      id: entry.id,
+      path: repositoryPath,
+      bytes: source.length,
+      source_sha256: sha256Hex(source),
+      canonical_sha256: sha256Hex(canonical),
+      requirements: entry.requirements,
+      tags: entry.tags,
+      steps: entry.steps.length,
+    });
+    for (const requirement of entry.requirements) {
+      if (!requirementCoverage.has(requirement)) requirementCoverage.set(requirement, []);
+      requirementCoverage.get(requirement).push(entry.id);
+    }
+  }
+  const coverage = Object.fromEntries(
+    [...requirementCoverage.entries()]
+      .sort(([left], [right]) => compareText(left, right))
+      .map(([requirement, ids]) => [requirement, ids.sort()]),
+  );
+  const manifest = {
+    manifest_schema: 'helix.semantic-corpus/1',
+    fixture_schema: 'helix.semantic-fixture/1',
     semantic_profile: 'helix-native-v1',
-    cases: errorCases.map(({ state: _state, ...entry }) => entry),
-  }),
-);
+    hash_profile: 'sha256+jcs-rfc8785',
+    generated_by: { tool: 'generate-semantic-corpus', version: '1.0.0' },
+    counts: {
+      fixtures: sortedCases.length,
+      steps: stepCount,
+      successes: successCount,
+      errors: errorCount,
+    },
+    coverage,
+    fixtures: manifestEntries,
+  };
+  outputs.set('fixtures/semantic/manifest.json', pretty(manifest));
+  outputs.set('fixtures/semantic/operations-v1.json', pretty(operationRegistry));
 
-const existingCasePaths = existsSync(casesRoot)
-  ? readdirSync(casesRoot, { recursive: true })
-      .filter((name) => name.endsWith('.json'))
-      .map((name) => `fixtures/semantic/cases/${name.replaceAll('\\', '/')}`)
-      .sort()
-  : [];
-const expectedCasePaths = [...outputs.keys()]
-  .filter((name) => name.startsWith('fixtures/semantic/cases/'))
-  .sort();
-const extraCases = existingCasePaths.filter((name) => !expectedCasePaths.includes(name));
-if (extraCases.length) throw new Error(`stale corpus cases: ${extraCases.join(', ')}`);
+  const coverageContract = {
+    coverage_schema: 'helix.semantic-coverage/1',
+    fixture_schema: 'helix.semantic-fixture/1',
+    semantic_profile: 'helix-native-v1',
+    expected_counts: manifest.counts,
+    required_case_ids: expectedCaseIds,
+    required_operations: [...registeredOperations].sort(),
+    required_limit_ids: [...documentLimits, ...commandLimits].map(([id]) => id).sort(),
+    required_error_codes: errorCases.map((entry) => entry.code).sort(),
+    required_value_tags: [
+      'array',
+      'binary',
+      'bool',
+      'date',
+      'decimal128',
+      'float64',
+      'int32',
+      'int64',
+      'missing',
+      'null',
+      'object',
+      'objectId',
+      'string',
+      'timestamp',
+      'uuid',
+      'vector',
+    ],
+    required_action_kinds: ['command', 'raw_input', 'value_operation'],
+    required_order_bases: [
+      'default_order_v1',
+      'explicit_sort',
+      'input_order',
+      'not_applicable',
+      'pipeline_ordinal',
+      'set_semantics',
+      'singleton',
+      'vector_rank',
+    ],
+    required_tags: requiredTags,
+  };
+  outputs.set('fixtures/semantic/coverage-v1.json', pretty(coverageContract));
+  outputs.set(
+    'fixtures/semantic/error-cases-v1.json',
+    pretty({
+      registry_schema: 'helix.semantic-error-cases/1',
+      error_registry: 'errors-v1',
+      semantic_profile: 'helix-native-v1',
+      cases: errorCases.map(({ state: _state, ...entry }) => entry),
+    }),
+  );
 
-let mismatches = 0;
-for (const [repositoryPath, expected] of outputs) {
-  const localPath = path.join(root, repositoryPath.slice('fixtures/semantic/'.length));
-  if (mode === '--write') {
-    mkdirSync(path.dirname(localPath), { recursive: true });
-    writeFileSync(localPath, expected);
-    console.log(`WRITE ${repositoryPath}`);
-    continue;
-  }
-  if (!existsSync(localPath)) {
-    console.error(`MISSING ${repositoryPath}`);
-    mismatches += 1;
-    continue;
-  }
-  const actual = readFileSync(localPath);
-  if (!actual.equals(expected)) {
-    console.error(`DRIFT ${repositoryPath}`);
-    mismatches += 1;
-  }
-}
-if (mismatches) throw new Error(`${mismatches} generated corpus artifact(s) differ`);
+  const existingCasePaths = existsSync(casesRoot)
+    ? readdirSync(casesRoot, { recursive: true })
+        .filter((name) => name.endsWith('.json'))
+        .map((name) => `fixtures/semantic/cases/${name.replaceAll('\\', '/')}`)
+        .sort()
+    : [];
+  const expectedCasePaths = [...outputs.keys()]
+    .filter((name) => name.startsWith('fixtures/semantic/cases/'))
+    .sort();
+  const extraCases = existingCasePaths.filter((name) => !expectedCasePaths.includes(name));
+  if (extraCases.length) throw new Error(`stale corpus cases: ${extraCases.join(', ')}`);
 
-console.log(
-  `PASS corpus generation: ${manifest.counts.fixtures} fixtures, ${manifest.counts.steps} steps, ${manifest.counts.successes} successes, ${manifest.counts.errors} errors`,
-);
-console.log(
-  `PASS coverage: ${coverageContract.required_operations.length} operations, ${coverageContract.required_limit_ids.length} limits, ${coverageContract.required_error_codes.length} error codes, ${coverageContract.required_tags.length} required tags`,
-);
+  let mismatches = 0;
+  for (const [repositoryPath, expected] of outputs) {
+    const localPath = path.join(root, repositoryPath.slice('fixtures/semantic/'.length));
+    if (mode === '--write') {
+      mkdirSync(path.dirname(localPath), { recursive: true });
+      writeFileSync(localPath, expected);
+      console.log(`WRITE ${repositoryPath}`);
+      continue;
+    }
+    if (!existsSync(localPath)) {
+      console.error(`MISSING ${repositoryPath}`);
+      mismatches += 1;
+      continue;
+    }
+    const actual = readFileSync(localPath);
+    if (!actual.equals(expected)) {
+      console.error(`DRIFT ${repositoryPath}`);
+      mismatches += 1;
+    }
+  }
+  if (mismatches) throw new Error(`${mismatches} generated corpus artifact(s) differ`);
+
+  console.log(
+    `PASS corpus generation: ${manifest.counts.fixtures} fixtures, ${manifest.counts.steps} steps, ${manifest.counts.successes} successes, ${manifest.counts.errors} errors`,
+  );
+  console.log(
+    `PASS coverage: ${coverageContract.required_operations.length} operations, ${coverageContract.required_limit_ids.length} limits, ${coverageContract.required_error_codes.length} error codes, ${coverageContract.required_tags.length} required tags`,
+  );
 };
 
 const decomposedEAcute = V.string('é');
@@ -643,8 +633,18 @@ cases.push(
         [decomposedEAcute, composedEAcute],
         V.i32(-1),
       ),
-      valueStep('contains-scalar-sequence', 'string.contains', [V.string('a😀b'), V.string('😀')], trueValue),
-      valueStep('binary-prefix-order', 'value.compare', [V.binary('00'), V.binary('0000')], V.i32(-1)),
+      valueStep(
+        'contains-scalar-sequence',
+        'string.contains',
+        [V.string('a😀b'), V.string('😀')],
+        trueValue,
+      ),
+      valueStep(
+        'binary-prefix-order',
+        'value.compare',
+        [V.binary('00'), V.binary('0000')],
+        V.i32(-1),
+      ),
       valueStep(
         'string-not-binary',
         'value.equal',
@@ -680,12 +680,7 @@ cases.push(
         ['objectid-min', V.objectId('000000000000000000000000')],
         ['objectid-max', V.objectId('ffffffffffffffffffffffff')],
       ]),
-      valueStep(
-        'date-not-timestamp',
-        'value.equal',
-        [V.date(0), V.timestamp(0)],
-        falseValue,
-      ),
+      valueStep('date-not-timestamp', 'value.equal', [V.date(0), V.timestamp(0)], falseValue),
       valueStep(
         'parse-offset-to-epoch',
         'time.parse-timestamp',
@@ -800,11 +795,31 @@ cases.push(
         ['mixed', V.array([V.i32(1), V.string('1'), V.null()])],
         ['nested', V.array([V.array([V.i32(1)]), V.array([V.i32(2)])])],
       ]),
-      valueStep('object-order-independent-equality', 'value.equal', [objectAB, objectBA], trueValue),
-      valueStep('object-presentation-not-identical', 'value.identical', [objectAB, objectBA], falseValue),
+      valueStep(
+        'object-order-independent-equality',
+        'value.equal',
+        [objectAB, objectBA],
+        trueValue,
+      ),
+      valueStep(
+        'object-presentation-not-identical',
+        'value.identical',
+        [objectAB, objectBA],
+        falseValue,
+      ),
       valueStep('object-canonical-compare-equal', 'value.compare', [objectAB, objectBA], V.i32(0)),
-      valueStep('array-equality', 'value.equal', [array12, V.array([V.i32(1), V.i32(2)])], trueValue),
-      valueStep('array-order-matters', 'value.equal', [array12, V.array([V.i32(2), V.i32(1)])], falseValue),
+      valueStep(
+        'array-equality',
+        'value.equal',
+        [array12, V.array([V.i32(1), V.i32(2)])],
+        trueValue,
+      ),
+      valueStep(
+        'array-order-matters',
+        'value.equal',
+        [array12, V.array([V.i32(2), V.i32(1)])],
+        falseValue,
+      ),
       valueStep('array-prefix-order', 'value.compare', [array12, array123], V.i32(-1)),
       valueStep('array-size', 'array.size', [array123], V.i64(3)),
       valueStep(
@@ -1152,21 +1167,16 @@ cases.push(
     },
     steps: [
       findStep('find-all', { find: 'docs', filter: {} }, queryDocuments),
-      findStep(
-        'native-null-only',
-        { find: 'docs', filter: { x: { $eq: literal(V.null()) } } },
-        [queryDocuments[1]],
-      ),
-      findStep(
-        'missing-exists-false',
-        { find: 'docs', filter: { x: { $exists: false } } },
-        [queryDocuments[0]],
-      ),
-      findStep(
-        'array-size-two',
-        { find: 'docs', filter: { a: { $size: literal(V.i32(2)) } } },
-        [queryDocuments[0], queryDocuments[1]],
-      ),
+      findStep('native-null-only', { find: 'docs', filter: { x: { $eq: literal(V.null()) } } }, [
+        queryDocuments[1],
+      ]),
+      findStep('missing-exists-false', { find: 'docs', filter: { x: { $exists: false } } }, [
+        queryDocuments[0],
+      ]),
+      findStep('array-size-two', { find: 'docs', filter: { a: { $size: literal(V.i32(2)) } } }, [
+        queryDocuments[0],
+        queryDocuments[1],
+      ]),
       findStep(
         'array-all-two',
         {
@@ -1198,11 +1208,7 @@ cases.push(
           filter: {},
           projection: { _id: 0, x: 1 },
         },
-        [
-          V.object([]),
-          V.object([['x', V.null()]]),
-          V.object([['x', V.i32(1)]]),
-        ],
+        [V.object([]), V.object([['x', V.null()]]), V.object([['x', V.i32(1)]])],
         queryDocuments,
       ),
     ],
@@ -1332,7 +1338,11 @@ cases.push(
       errorStep(
         'duplicate-json-field',
         rawInput('json', utf8Hex('{"find":"docs","filter":{"x":1,"x":2}}')),
-        errorExpectation({ category: 'validation', code: 'VAL_DUPLICATE_FIELD', phase: 'validate' }),
+        errorExpectation({
+          category: 'validation',
+          code: 'VAL_DUPLICATE_FIELD',
+          phase: 'validate',
+        }),
       ),
       errorStep(
         'invalid-typed-integer',
@@ -1461,7 +1471,8 @@ const boundarySummary = (limitId, relation, maximum, observed) =>
 const boundarySteps = (limits) =>
   limits.flatMap(([limitId, maximum, unit, mutation]) =>
     ['below', 'at', 'above'].map((relation) => {
-      const observed = relation === 'below' ? maximum - 1 : relation === 'at' ? maximum : maximum + 1;
+      const observed =
+        relation === 'below' ? maximum - 1 : relation === 'at' ? maximum : maximum + 1;
       const id = `${limitId.replaceAll('.', '-')}-${relation}`;
       const action = valueAction(
         'fixture.generate-boundary',
@@ -1469,7 +1480,11 @@ const boundarySteps = (limits) =>
         { unit, mutation },
       );
       if (relation !== 'above') {
-        return { id, action, expect: success(boundarySummary(limitId, relation, maximum, observed)) };
+        return {
+          id,
+          action,
+          expect: success(boundarySummary(limitId, relation, maximum, observed)),
+        };
       }
       return errorStep(
         id,
@@ -1552,9 +1567,7 @@ cases.push(
           basis: 'singleton',
         }),
         expect: success(V.array([V.string('only')]), {
-          order: orderExact('singleton', [
-            [{ kind: 'singleton', value: 'fixture-result' }],
-          ]),
+          order: orderExact('singleton', [[{ kind: 'singleton', value: 'fixture-result' }]]),
         }),
       },
       {

@@ -5,23 +5,18 @@ import { readFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { canonicalize, sha256Hex } from './canonical.mjs';
-import { decodeRawInput, parseStrictJson } from './raw-json.mjs';
-import {
-  ERROR_CODES,
-  LIMITS,
-  FixtureDiagnostic,
-  OracleExecutionError,
-} from './registry.mjs';
 import { runCorpus, runFixture } from './oracle.mjs';
+import { decodeRawInput, parseStrictJson } from './raw-json.mjs';
+import { ERROR_CODES, FixtureDiagnostic, LIMITS, OracleExecutionError } from './registry.mjs';
 import { validateFixture } from './validate.mjs';
 import {
-  V,
   addNumeric,
   compareValues,
   equalValues,
   identicalValues,
   parseTimestamp,
   resolvePath,
+  V,
   validateValue,
   vectorDistance,
 } from './value.mjs';
@@ -58,12 +53,29 @@ equal(
   '{"\\r":"Carriage Return","1":"One","":"Control","ö":"Latin Small Letter O With Diaeresis","€":"Euro Sign","😀":"Emoji: Grinning Face","דּ":"Hebrew Letter Dalet With Dagesh"}',
   'RFC 8785 property order',
 );
-equal(sha256Hex(Buffer.from('abc')), 'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad', 'SHA-256');
+equal(
+  sha256Hex(Buffer.from('abc')),
+  'ba7816bf8f01cfea414140de5dae2223b00361a396177a9cb410ff61f20015ad',
+  'SHA-256',
+);
 
-validateValue({ t: 'decimal128', class: 'finite', sign: 'positive', coefficient: '1', exponent: '-6176' });
+validateValue({
+  t: 'decimal128',
+  class: 'finite',
+  sign: 'positive',
+  coefficient: '1',
+  exponent: '-6176',
+});
 assertions += 1;
 throwsCode(
-  () => validateValue({ t: 'decimal128', class: 'finite', sign: 'positive', coefficient: '1', exponent: '-6177' }),
+  () =>
+    validateValue({
+      t: 'decimal128',
+      class: 'finite',
+      sign: 'positive',
+      coefficient: '1',
+      exponent: '-6177',
+    }),
   FixtureDiagnostic,
   'fixture.value.decimal_range',
 );
@@ -89,8 +101,14 @@ check(
   ),
   'decimal tenth differs from binary64 tenth',
 );
-const objectAB = V.object([['a', V.i32(1)], ['b', V.i32(2)]]);
-const objectBA = V.object([['b', V.i32(2)], ['a', V.i32(1)]]);
+const objectAB = V.object([
+  ['a', V.i32(1)],
+  ['b', V.i32(2)],
+]);
+const objectBA = V.object([
+  ['b', V.i32(2)],
+  ['a', V.i32(1)],
+]);
 check(equalValues(objectAB, objectBA), 'object equality ignores presentation order');
 check(!identicalValues(objectAB, objectBA), 'object identity retains presentation order');
 
@@ -105,9 +123,25 @@ throwsCode(
   OracleExecutionError,
   'TYPE_COERCION_LOSS',
 );
-const decimalEven = { t: 'decimal128', class: 'finite', sign: 'positive', coefficient: '1234567890123456789012345678901234', exponent: '0' };
-const decimalHalf = { t: 'decimal128', class: 'finite', sign: 'positive', coefficient: '5', exponent: '-1' };
-equal(addNumeric(decimalEven, decimalHalf), decimalEven, 'decimal ties-to-even retains even coefficient');
+const decimalEven = {
+  t: 'decimal128',
+  class: 'finite',
+  sign: 'positive',
+  coefficient: '1234567890123456789012345678901234',
+  exponent: '0',
+};
+const decimalHalf = {
+  t: 'decimal128',
+  class: 'finite',
+  sign: 'positive',
+  coefficient: '5',
+  exponent: '-1',
+};
+equal(
+  addNumeric(decimalEven, decimalHalf),
+  decimalEven,
+  'decimal ties-to-even retains even coefficient',
+);
 equal(
   addNumeric(decimalEven, { ...decimalHalf, coefficient: '6' }),
   { ...decimalEven, coefficient: '1234567890123456789012345678901235' },
@@ -120,68 +154,129 @@ const decimalNegativeZero = {
   coefficient: '0',
   exponent: '0',
 };
-equal(addNumeric(decimalNegativeZero, decimalNegativeZero), decimalNegativeZero, 'decimal negative-zero addition');
+equal(
+  addNumeric(decimalNegativeZero, decimalNegativeZero),
+  decimalNegativeZero,
+  'decimal negative-zero addition',
+);
 
-equal(parseTimestamp(V.string('1970-01-01T01:00:00+01:00')), { t: 'timestamp', microseconds: '0' }, 'offset');
-equal(parseTimestamp(V.string('1970-01-01T00:00:00.000001Z')), { t: 'timestamp', microseconds: '1' }, 'microsecond');
-throwsCode(() => parseTimestamp(V.string('2016-12-31T23:59:60Z')), OracleExecutionError, 'TYPE_TEMPORAL_RANGE');
-throwsCode(() => parseTimestamp(V.string('1970-01-01T00:00:00-00:00')), OracleExecutionError, 'TYPE_TEMPORAL_RANGE');
-throwsCode(() => parseTimestamp(V.string('1970-01-01T00:00:00+14:01')), OracleExecutionError, 'TYPE_TEMPORAL_RANGE');
+equal(
+  parseTimestamp(V.string('1970-01-01T01:00:00+01:00')),
+  { t: 'timestamp', microseconds: '0' },
+  'offset',
+);
+equal(
+  parseTimestamp(V.string('1970-01-01T00:00:00.000001Z')),
+  { t: 'timestamp', microseconds: '1' },
+  'microsecond',
+);
+throwsCode(
+  () => parseTimestamp(V.string('2016-12-31T23:59:60Z')),
+  OracleExecutionError,
+  'TYPE_TEMPORAL_RANGE',
+);
+throwsCode(
+  () => parseTimestamp(V.string('1970-01-01T00:00:00-00:00')),
+  OracleExecutionError,
+  'TYPE_TEMPORAL_RANGE',
+);
+throwsCode(
+  () => parseTimestamp(V.string('1970-01-01T00:00:00+14:01')),
+  OracleExecutionError,
+  'TYPE_TEMPORAL_RANGE',
+);
 
 const nested = V.object([
-  ['items', V.array([V.object([['x', V.i32(1)]]), V.object([['x', V.i32(2)]]), V.object([['y', V.i32(3)]])])],
+  [
+    'items',
+    V.array([
+      V.object([['x', V.i32(1)]]),
+      V.object([['x', V.i32(2)]]),
+      V.object([['y', V.i32(3)]]),
+    ]),
+  ],
 ]);
-equal(resolvePath(nested, V.string('items.x'), 'fanout'), V.array([V.i32(1), V.i32(2)]), 'array fan-out');
+equal(
+  resolvePath(nested, V.string('items.x'), 'fanout'),
+  V.array([V.i32(1), V.i32(2)]),
+  'array fan-out',
+);
 equal(resolvePath(nested, V.string('absent'), 'single'), V.missing(), 'Missing path');
 
 equal(parseStrictJson('{"a":[true,null,-1]}'), { a: [true, null, -1] }, 'strict parser');
 const prototypeKey = parseStrictJson('{"__proto__":{"polluted":true}}');
 check(Object.hasOwn(prototypeKey, '__proto__'), 'strict parser preserves __proto__ as data');
-check(Object.getPrototypeOf(prototypeKey) === Object.prototype, 'strict parser does not replace prototype');
+check(
+  Object.getPrototypeOf(prototypeKey) === Object.prototype,
+  'strict parser does not replace prototype',
+);
 check({}.polluted === undefined, 'strict parser does not pollute global object prototype');
 throwsCode(
-  () => decodeRawInput({ target: 'command', encoding: 'json', compression: 'identity', bytes_hex: Buffer.from('{"x":1,"x":2}').toString('hex') }),
+  () =>
+    decodeRawInput({
+      target: 'command',
+      encoding: 'json',
+      compression: 'identity',
+      bytes_hex: Buffer.from('{"x":1,"x":2}').toString('hex'),
+    }),
   OracleExecutionError,
   'VAL_DUPLICATE_FIELD',
 );
 throwsCode(
-  () => decodeRawInput({ target: 'command', encoding: 'json', compression: 'identity', bytes_hex: '7b' }),
+  () =>
+    decodeRawInput({
+      target: 'command',
+      encoding: 'json',
+      compression: 'identity',
+      bytes_hex: '7b',
+    }),
   OracleExecutionError,
   'PAR_TRUNCATED_INPUT',
 );
 throwsCode(
-  () => decodeRawInput({ target: 'command', encoding: 'json', compression: 'identity', bytes_hex: 'ff' }),
+  () =>
+    decodeRawInput({
+      target: 'command',
+      encoding: 'json',
+      compression: 'identity',
+      bytes_hex: 'ff',
+    }),
   OracleExecutionError,
   'PAR_INVALID_UTF8',
 );
 throwsCode(
-  () => decodeRawInput({
-    target: 'command',
-    encoding: 'json',
-    compression: 'identity',
-    bytes_hex: Buffer.from('{"\\ud800":1}').toString('hex'),
-  }),
+  () =>
+    decodeRawInput({
+      target: 'command',
+      encoding: 'json',
+      compression: 'identity',
+      bytes_hex: Buffer.from('{"\\ud800":1}').toString('hex'),
+    }),
   OracleExecutionError,
   'PAR_INVALID_UTF8',
 );
 throwsCode(
-  () => decodeRawInput({
-    target: 'command',
-    encoding: 'json',
-    compression: 'identity',
-    bytes_hex: Buffer.from('{"find":"docs","filter":{"x":{"$eq":{"$value":{"t":"null","extra":true}}}}}').toString('hex'),
-  }),
+  () =>
+    decodeRawInput({
+      target: 'command',
+      encoding: 'json',
+      compression: 'identity',
+      bytes_hex: Buffer.from(
+        '{"find":"docs","filter":{"x":{"$eq":{"$value":{"t":"null","extra":true}}}}}',
+      ).toString('hex'),
+    }),
   OracleExecutionError,
   'PAR_INVALID_TYPED_VALUE',
 );
 const tooDeepJson = `${'['.repeat(64)}0${']'.repeat(64)}`;
 throwsCode(
-  () => decodeRawInput({
-    target: 'command',
-    encoding: 'json',
-    compression: 'identity',
-    bytes_hex: Buffer.from(tooDeepJson).toString('hex'),
-  }),
+  () =>
+    decodeRawInput({
+      target: 'command',
+      encoding: 'json',
+      compression: 'identity',
+      bytes_hex: Buffer.from(tooDeepJson).toString('hex'),
+    }),
   OracleExecutionError,
   'QUOTA_LIMIT_EXCEEDED',
 );
@@ -196,19 +291,26 @@ equal(
   'vector L2',
 );
 throwsCode(
-  () => vectorDistance(
-    { t: 'vector', element: 'f32', dimension: 1, bits: ['00000000'] },
-    { t: 'vector', element: 'f32', dimension: 1, bits: ['00000000'] },
-    'cosine',
-  ),
+  () =>
+    vectorDistance(
+      { t: 'vector', element: 'f32', dimension: 1, bits: ['00000000'] },
+      { t: 'vector', element: 'f32', dimension: 1, bits: ['00000000'] },
+      'cosine',
+    ),
   OracleExecutionError,
   'TYPE_VECTOR_ZERO_NORM',
 );
 
 const comparisonSamples = [
-  V.missing(), V.null(), V.bool(false), V.bool(true), V.i32(-1),
+  V.missing(),
+  V.null(),
+  V.bool(false),
+  V.bool(true),
+  V.i32(-1),
   { t: 'decimal128', class: 'finite', sign: 'positive', coefficient: '1', exponent: '-1' },
-  V.i64(1), V.string('a'), { t: 'binary', subtype: 0, hex: '00' },
+  V.i64(1),
+  V.string('a'),
+  { t: 'binary', subtype: 0, hex: '00' },
 ];
 for (const left of comparisonSamples) {
   for (const right of comparisonSamples) {
@@ -271,15 +373,25 @@ changedProfile.profiles.semantics = 'latest';
 throwsCode(() => validateFixture(changedProfile), FixtureDiagnostic, 'fixture.meta.profiles');
 const changedOperation = clone(nullBool);
 changedOperation.steps[0].action.operation = 'value.unknown';
-throwsCode(() => validateFixture(changedOperation), FixtureDiagnostic, 'fixture.action.unknown_operation');
+throwsCode(
+  () => validateFixture(changedOperation),
+  FixtureDiagnostic,
+  'fixture.action.unknown_operation',
+);
 const unusedCapability = clone(nullBool);
-unusedCapability.initial_state.capabilities = { wall_time_reads: [{ t: 'timestamp', microseconds: '0' }] };
+unusedCapability.initial_state.capabilities = {
+  wall_time_reads: [{ t: 'timestamp', microseconds: '0' }],
+};
 throwsCode(() => runFixture(unusedCapability), FixtureDiagnostic, 'oracle.capability.unused');
 
 equal(ERROR_CODES.length, 74, 'independent error registry size');
 equal(Object.keys(LIMITS).length, 23, 'independent limit registry size');
 const corpus = runCorpus(repository, { draft: false });
-equal(corpus.report.counts, { fixtures: 17, steps: 313, passed: 313, failed: 0, skipped: 0 }, 'full corpus');
+equal(
+  corpus.report.counts,
+  { fixtures: 17, steps: 313, passed: 313, failed: 0, skipped: 0 },
+  'full corpus',
+);
 equal(corpus.report.verdict, 'pass', 'corpus verdict');
 
 console.log(`PASS oracle unit/property/negative tests: ${assertions} assertions`);

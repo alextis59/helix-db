@@ -3,8 +3,8 @@
 import { execFileSync } from 'node:child_process';
 import { readFileSync } from 'node:fs';
 import path from 'node:path';
-import { isDeepStrictEqual } from 'node:util';
 import { fileURLToPath } from 'node:url';
+import { isDeepStrictEqual } from 'node:util';
 import { canonicalize, sha256Hex } from '../../reference/semantic-oracle/canonical.mjs';
 import { executeCommand } from '../../reference/semantic-oracle/command.mjs';
 import { parseStrictJson } from '../../reference/semantic-oracle/raw-json.mjs';
@@ -33,6 +33,7 @@ const same = (actual, expected, label) => {
 };
 const validateWithSchema = (name, value) => {
   const schema = path.join(here, 'schema', `${name}.schema.json`);
+  // biome-ignore lint/complexity/noUselessStringRaw: Embedded Python must preserve literal backslashes as the snippet evolves.
   const program = String.raw`
 import json,sys
 from jsonschema import Draft202012Validator
@@ -56,12 +57,13 @@ const nativeNode = (node) => {
   }
   return Object.fromEntries(Object.entries(node).map(([name, child]) => [name, nativeNode(child)]));
 };
-const idsOf = (rows) => rows.map((row) => {
-  if (row.t !== 'object') throw new Error('row is not a typed object');
-  const id = objectField(row, '_id');
-  if (!id) throw new Error('row has no _id');
-  return id;
-});
+const idsOf = (rows) =>
+  rows.map((row) => {
+    if (row.t !== 'object') throw new Error('row is not a typed object');
+    const id = objectField(row, '_id');
+    if (!id) throw new Error('row has no _id');
+    return id;
+  });
 const idLabel = (id) => {
   if (['int32', 'int64'].includes(id.t)) return `${id.t}:${id.value}`;
   if (id.t === 'string') return `string:${id.value}`;
@@ -71,46 +73,67 @@ const idLabel = (id) => {
 };
 const nativeRowsFor = (definition, dataset) => {
   const state = {
-    collections: [{
-      name: dataset.collection,
-      document_order: 'default_order_v1',
-      documents: dataset.documents.map(logicalFromEjson),
-    }],
+    collections: [
+      {
+        name: dataset.collection,
+        document_order: 'default_order_v1',
+        documents: dataset.documents.map(logicalFromEjson),
+      },
+    ],
   };
-  const execution = executeCommand({
-    find: dataset.collection,
-    filter: nativeNode(definition.native.filter),
-    ...(definition.native.projection === undefined
-      ? {}
-      : { projection: definition.native.projection }),
-    sort: definition.native.sort,
-  }, state);
+  const execution = executeCommand(
+    {
+      find: dataset.collection,
+      filter: nativeNode(definition.native.filter),
+      ...(definition.native.projection === undefined
+        ? {}
+        : { projection: definition.native.projection }),
+      sort: definition.native.sort,
+    },
+    state,
+  );
   const rows = objectField(execution.value, 'rows');
-  if (!rows || rows.t !== 'array') throw new Error(`${definition.id}: native result has no rows`);
+  if (rows?.t !== 'array') throw new Error(`${definition.id}: native result has no rows`);
   return rows.values;
 };
 
-const verifyArtifacts = ({ specification, casesBytes, observations, observationsBytes, report }) => {
+const verifyArtifacts = ({
+  specification,
+  casesBytes,
+  observations,
+  observationsBytes,
+  report,
+}) => {
   const casesHash = sha256Hex(casesBytes);
   const observationsHash = sha256Hex(observationsBytes);
-  const manifestHash = sha256Hex(readFileSync(path.join(repository, 'fixtures', 'semantic', 'manifest.json')));
+  const manifestHash = sha256Hex(
+    readFileSync(path.join(repository, 'fixtures', 'semantic', 'manifest.json')),
+  );
   const oracleHash = sha256Hex(
     readFileSync(path.join(repository, 'fixtures', 'semantic', 'oracle-report-v1.json')),
   );
   same(observations.cases_source_sha256, casesHash, 'observation case source hash');
-  same(report.inputs, {
-    cases_path: 'differential/mongodb/cases-v1.json',
-    cases_sha256: casesHash,
-    corpus_manifest_sha256: manifestHash,
-    oracle_report_sha256: oracleHash,
-  }, 'report inputs');
+  same(
+    report.inputs,
+    {
+      cases_path: 'differential/mongodb/cases-v1.json',
+      cases_sha256: casesHash,
+      corpus_manifest_sha256: manifestHash,
+      oracle_report_sha256: oracleHash,
+    },
+    'report inputs',
+  );
   same(specification.semantic_inputs.corpus_manifest_sha256, manifestHash, 'declared corpus hash');
   same(specification.semantic_inputs.oracle_report_sha256, oracleHash, 'declared oracle hash');
-  same(report.observations, {
-    path: 'differential/mongodb/upstream-observations-v1.json',
-    bytes: observationsBytes.length,
-    sha256: observationsHash,
-  }, 'report observation identity');
+  same(
+    report.observations,
+    {
+      path: 'differential/mongodb/upstream-observations-v1.json',
+      bytes: observationsBytes.length,
+      sha256: observationsHash,
+    },
+    'report observation identity',
+  );
   same(observations.client, specification.client, 'observation client identity');
   same(report.client, specification.client, 'report client identity');
   same(observations.upstream, report.upstream, 'upstream identity in report');
@@ -122,8 +145,16 @@ const verifyArtifacts = ({ specification, casesBytes, observations, observations
   same(observations.upstream.modules, [], 'upstream modules');
 
   const caseIds = specification.cases.map((entry) => entry.id);
-  same(observations.cases.map((entry) => entry.id), caseIds, 'observation inventory');
-  same(report.cases.map((entry) => entry.id), caseIds, 'report inventory');
+  same(
+    observations.cases.map((entry) => entry.id),
+    caseIds,
+    'observation inventory',
+  );
+  same(
+    report.cases.map((entry) => entry.id),
+    caseIds,
+    'report inventory',
+  );
   const datasets = new Map(specification.datasets.map((dataset) => [dataset.id, dataset]));
   const expectedReportCases = specification.cases.map((definition, index) => {
     const dataset = datasets.get(definition.dataset);
@@ -132,7 +163,9 @@ const verifyArtifacts = ({ specification, casesBytes, observations, observations
     const mongo = observations.cases[index].rows.map(logicalFromEjson);
     const nativeCompared = definition.comparison === 'ordered_ids' ? idsOf(native) : native;
     const mongoCompared = definition.comparison === 'ordered_ids' ? idsOf(mongo) : mongo;
-    const observedRelation = isDeepStrictEqual(nativeCompared, mongoCompared) ? 'exact' : 'different';
+    const observedRelation = isDeepStrictEqual(nativeCompared, mongoCompared)
+      ? 'exact'
+      : 'different';
     return {
       id: definition.id,
       family: definition.family,
@@ -153,18 +186,30 @@ const verifyArtifacts = ({ specification, casesBytes, observations, observations
 
   const passed = expectedReportCases.filter((entry) => entry.status === 'pass').length;
   const failed = expectedReportCases.length - passed;
-  same(report.counts, {
-    cases: expectedReportCases.length,
-    expected_exact: expectedReportCases.filter((entry) => entry.expected_relation === 'exact').length,
-    expected_different: expectedReportCases.filter((entry) => entry.expected_relation === 'different').length,
-    observed_exact: expectedReportCases.filter((entry) => entry.observed_relation === 'exact').length,
-    observed_different: expectedReportCases.filter((entry) => entry.observed_relation === 'different').length,
-    direct: expectedReportCases.filter((entry) => entry.translation === 'direct').length,
-    adapter_rewrite: expectedReportCases.filter((entry) => entry.translation === 'adapter_rewrite').length,
-    passed,
-    failed,
-    skipped: 0,
-  }, 'recomputed counts');
+  same(
+    report.counts,
+    {
+      cases: expectedReportCases.length,
+      expected_exact: expectedReportCases.filter((entry) => entry.expected_relation === 'exact')
+        .length,
+      expected_different: expectedReportCases.filter(
+        (entry) => entry.expected_relation === 'different',
+      ).length,
+      observed_exact: expectedReportCases.filter((entry) => entry.observed_relation === 'exact')
+        .length,
+      observed_different: expectedReportCases.filter(
+        (entry) => entry.observed_relation === 'different',
+      ).length,
+      direct: expectedReportCases.filter((entry) => entry.translation === 'direct').length,
+      adapter_rewrite: expectedReportCases.filter(
+        (entry) => entry.translation === 'adapter_rewrite',
+      ).length,
+      passed,
+      failed,
+      skipped: 0,
+    },
+    'recomputed counts',
+  );
   same(report.verdict, failed === 0 ? 'pass' : 'fail', 'recomputed verdict');
 };
 
@@ -231,4 +276,6 @@ expectMutationFailure(
 );
 
 console.log('PASS MongoDB differential artifacts: 3 schemas, 16 cases, 0 failed, 0 skipped');
-console.log('PASS artifact mutation canaries: expected relation, count, observation bytes, case order');
+console.log(
+  'PASS artifact mutation canaries: expected relation, count, observation bytes, case order',
+);

@@ -1,6 +1,5 @@
 import { OracleExecutionError } from './registry.mjs';
 import {
-  V,
   arrayAll,
   arrayElemMatch,
   cloneValue,
@@ -8,6 +7,7 @@ import {
   equalValues,
   objectField,
   pathCandidates,
+  V,
   validateValue,
 } from './value.mjs';
 
@@ -88,7 +88,8 @@ const evaluateFieldPredicate = (document, path, predicate) => {
           throw new OracleExecutionError('VAL_INVALID_LITERAL');
         }
         matches = candidates.some(
-          (candidate) => candidate.t === 'array' && BigInt(candidate.values.length) === BigInt(operand.value),
+          (candidate) =>
+            candidate.t === 'array' && BigInt(candidate.values.length) === BigInt(operand.value),
         );
         break;
       }
@@ -177,7 +178,11 @@ const projectDocument = (document, projection) => {
   };
 };
 
-const orderKey = (value, direction = 'asc') => ({ kind: 'value', direction, value: cloneValue(value) });
+const orderKey = (value, direction = 'asc') => ({
+  kind: 'value',
+  direction,
+  value: cloneValue(value),
+});
 const exactOrder = (basis, keys) => ({
   mode: 'exact',
   basis,
@@ -200,7 +205,8 @@ const executeFind = (command, state) => {
     for (const direction of Object.values(command.sort)) {
       if (![1, -1].includes(direction)) throw new OracleExecutionError('VAL_INVALID_LITERAL');
     }
-    if (Object.keys(command.sort).length > 64) throw new OracleExecutionError('QUOTA_LIMIT_EXCEEDED');
+    if (Object.keys(command.sort).length > 64)
+      throw new OracleExecutionError('QUOTA_LIMIT_EXCEEDED');
   }
   if (command.projection !== undefined && Object.keys(command.projection).length > 10_000) {
     throw new OracleExecutionError('QUOTA_LIMIT_EXCEEDED');
@@ -209,10 +215,12 @@ const executeFind = (command, state) => {
     if (
       command[option] !== undefined &&
       (!Number.isSafeInteger(command[option]) || command[option] < 0)
-    ) throw new OracleExecutionError('VAL_INVALID_LITERAL');
+    )
+      throw new OracleExecutionError('VAL_INVALID_LITERAL');
   }
   const hasVector = JSON.stringify(command.filter).includes('"$vectorTopK"');
-  if (hasVector && command.sort !== undefined) throw new OracleExecutionError('VAL_UNSUPPORTED_COMBINATION');
+  if (hasVector && command.sort !== undefined)
+    throw new OracleExecutionError('VAL_UNSUPPORTED_COMBINATION');
   // Validate the entire filter before resource lookup to preserve errors-v1 precedence.
   evaluateFilter({ t: 'object', fields: [] }, command.filter);
   const collection = findCollection(state, command.find);
@@ -233,7 +241,10 @@ const executeFind = (command, state) => {
       { value: row.id, direction: 1 },
     ];
     selected.sort((left, right) => {
-      for (const component of components(left).map((value, index) => [value, components(right)[index]])) {
+      for (const component of components(left).map((value, index) => [
+        value,
+        components(right)[index],
+      ])) {
         const [{ value: a, direction }, { value: b }] = component;
         const order = compareValues(a, b) * direction;
         if (order !== 0) return order;
@@ -241,7 +252,9 @@ const executeFind = (command, state) => {
       return 0;
     });
     keyRows = selected.map((row) =>
-      components(row).map(({ value, direction }) => orderKey(value, direction === 1 ? 'asc' : 'desc')),
+      components(row).map(({ value, direction }) =>
+        orderKey(value, direction === 1 ? 'asc' : 'desc'),
+      ),
     );
   } else {
     selected.sort((left, right) => compareValues(left.id, right.id));
@@ -253,7 +266,9 @@ const executeFind = (command, state) => {
   selected = selected.slice(skip, skip + limit);
   keyRows = keyRows.slice(skip, skip + limit);
   const rows = selected.map(({ document }) =>
-    command.projection === undefined ? cloneValue(document) : projectDocument(document, command.projection),
+    command.projection === undefined
+      ? cloneValue(document)
+      : projectDocument(document, command.projection),
   );
   return {
     value: V.object([['rows', V.array(rows)]]),
@@ -270,7 +285,8 @@ const updatePaths = (update) => {
     if (!['$set', '$unset', '$inc'].includes(operator)) {
       throw new OracleExecutionError('VAL_UNKNOWN_OPERATOR', { outcome: 'not_committed' });
     }
-    if (!isRecord(operands)) throw new OracleExecutionError('VAL_INVALID_SHAPE', { outcome: 'not_committed' });
+    if (!isRecord(operands))
+      throw new OracleExecutionError('VAL_INVALID_SHAPE', { outcome: 'not_committed' });
     for (const [path, operand] of Object.entries(operands)) {
       if (path === '_id' || path.startsWith('_id.')) {
         throw new OracleExecutionError('VAL_PROTECTED_FIELD', { outcome: 'not_committed' });
@@ -285,7 +301,8 @@ const updatePaths = (update) => {
         paths[left] === paths[right] ||
         paths[left].startsWith(`${paths[right]}.`) ||
         paths[right].startsWith(`${paths[left]}.`)
-      ) throw new OracleExecutionError('VAL_CONFLICTING_PATHS', { outcome: 'not_committed' });
+      )
+        throw new OracleExecutionError('VAL_CONFLICTING_PATHS', { outcome: 'not_committed' });
     }
   }
   return paths;

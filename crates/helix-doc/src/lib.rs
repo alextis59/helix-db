@@ -8,7 +8,7 @@ pub const COMPONENT_NAME: &str = "helix-doc";
 /// Current implementation maturity; this crate is not a database feature.
 pub const MATURITY: &str = "boundary-skeleton";
 
-/// Internal HelixDB crates this boundary is allowed to depend on.
+/// Internal `HelixDB` crates this boundary is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
 
 #[cfg(test)]

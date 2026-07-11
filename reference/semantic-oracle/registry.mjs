@@ -100,11 +100,7 @@ const CODES_BY_CATEGORY = Object.freeze({
     'CON_STALE_EPOCH',
     'CON_RETRY_EXHAUSTED',
   ],
-  uniqueness: [
-    'UNQ_PRIMARY_DUPLICATE',
-    'UNQ_SECONDARY_DUPLICATE',
-    'UNQ_GENERATED_ID_EXHAUSTED',
-  ],
+  uniqueness: ['UNQ_PRIMARY_DUPLICATE', 'UNQ_SECONDARY_DUPLICATE', 'UNQ_GENERATED_ID_EXHAUSTED'],
   authorization: [
     'AUTH_UNAUTHENTICATED',
     'AUTH_CREDENTIAL_EXPIRED',
@@ -178,12 +174,7 @@ const RETRY_SCOPES = Object.freeze({
     'CAP_GPU_UNAVAILABLE',
     'CAP_GPU_DEVICE_LOST',
   ]),
-  after_delay: new Set([
-    'QUOTA_RATE_LIMITED',
-    'QUOTA_MEMORY',
-    'QUOTA_CONCURRENCY',
-    'QUOTA_GPU',
-  ]),
+  after_delay: new Set(['QUOTA_RATE_LIMITED', 'QUOTA_MEMORY', 'QUOTA_CONCURRENCY', 'QUOTA_GPU']),
   after_operator_action: new Set([
     'CAP_CLOCK_UNSAFE',
     'QUOTA_STORAGE',
@@ -213,9 +204,7 @@ for (const [category, codes] of Object.entries(CODES_BY_CATEGORY)) {
         retry: Object.freeze({
           retryable: scope !== 'never',
           scope,
-          token: ['new_snapshot', 'same_idempotency_key'].includes(scope)
-            ? 'present'
-            : 'absent',
+          token: ['new_snapshot', 'same_idempotency_key'].includes(scope) ? 'present' : 'absent',
         }),
       }),
     );

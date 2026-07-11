@@ -17,6 +17,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [JavaScript/TypeScript toolchain policy](docs/architecture/javascript-toolchain-policy.md) — Node/npm window, lockfile, compiler, bundler, test runner, and browser harness.
 - [Repository layout](docs/architecture/repository-layout.md) — tracked source, conformance, benchmark, test, example, and evidence boundaries.
 - [Build profiles](docs/architecture/build-profiles.md) — native, Wasm, browser, sanitizer, coverage, and benchmark build contracts.
+- [Code quality and dependency policy](docs/architecture/code-quality-and-dependency-policy.md) — formatting, lints, warnings, unsafe review, sources, licenses, and lifecycle scripts.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

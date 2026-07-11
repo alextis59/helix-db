@@ -30,4 +30,6 @@ assert.equal(config.build.sourcemap, 'hidden');
 assert.equal(config.build.target, 'es2022');
 assert.equal(config.build.rolldownOptions.input, undefined);
 
-console.log('PASS browser profile: custom app, relative base, ES2022, external assets, hidden maps, Oxc minification, no bundle input');
+console.log(
+  'PASS browser profile: custom app, relative base, ES2022, external assets, hidden maps, Oxc minification, no bundle input',
+);

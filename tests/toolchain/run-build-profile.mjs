@@ -30,10 +30,28 @@ const definitions = {
     args: [...commonBuild, '--profile', 'release'],
   },
   wasm: {
-    args: ['build', '--frozen', '--profile', 'wasm', '--target', 'wasm32-wasip2', '--package', 'helix-core'],
+    args: [
+      'build',
+      '--frozen',
+      '--profile',
+      'wasm',
+      '--target',
+      'wasm32-wasip2',
+      '--package',
+      'helix-core',
+    ],
   },
   browser: {
-    args: ['build', '--frozen', '--profile', 'browser', '--target', 'wasm32-unknown-unknown', '--package', 'helix-core'],
+    args: [
+      'build',
+      '--frozen',
+      '--profile',
+      'browser',
+      '--target',
+      'wasm32-unknown-unknown',
+      '--package',
+      'helix-core',
+    ],
   },
   sanitizer: {
     args: [
@@ -57,14 +75,18 @@ const definitions = {
 };
 
 if (selected === 'sanitizer' && (process.platform !== 'linux' || process.arch !== 'x64')) {
-  throw new Error('the configured sanitizer lane requires an x86_64 Linux host; other host lanes are selected under P02-009');
+  throw new Error(
+    'the configured sanitizer lane requires an x86_64 Linux host; other host lanes are selected under P02-009',
+  );
 }
 
 const environment = { ...process.env, CARGO_NET_OFFLINE: 'true' };
 let coverageDirectory;
 if (selected === 'coverage') {
   if (environment.RUSTFLAGS || environment.CARGO_ENCODED_RUSTFLAGS) {
-    throw new Error('coverage verification requires an unset RUSTFLAGS and CARGO_ENCODED_RUSTFLAGS');
+    throw new Error(
+      'coverage verification requires an unset RUSTFLAGS and CARGO_ENCODED_RUSTFLAGS',
+    );
   }
   coverageDirectory = path.join(repository, 'target', 'coverage-profiles');
   rmSync(coverageDirectory, { recursive: true, force: true });
@@ -84,8 +106,12 @@ if (result.status !== 0) throw new Error(`${selected} Cargo profile exited ${res
 
 let rawCoverageProfiles = 0;
 if (coverageDirectory) {
-  rawCoverageProfiles = readdirSync(coverageDirectory).filter((file) => file.endsWith('.profraw')).length;
+  rawCoverageProfiles = readdirSync(coverageDirectory).filter((file) =>
+    file.endsWith('.profraw'),
+  ).length;
   if (rawCoverageProfiles === 0) throw new Error('coverage profile produced no .profraw files');
 }
 
-console.log(`PASS build profile ${selected}${rawCoverageProfiles ? ` (${rawCoverageProfiles} raw coverage profiles)` : ''}`);
+console.log(
+  `PASS build profile ${selected}${rawCoverageProfiles ? ` (${rawCoverageProfiles} raw coverage profiles)` : ''}`,
+);

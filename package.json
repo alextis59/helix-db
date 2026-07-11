@@ -25,13 +25,19 @@
   "workspaces": [
     "packages/*"
   ],
+  "allowScripts": {
+    "fsevents": false
+  },
   "scripts": {
+    "policy:javascript": "biome check --error-on-warnings .",
+    "policy:dependencies": "node tests/toolchain/check-dependency-policy.mjs",
     "toolchain:types": "tsc --build --pretty false && tsc --project tsconfig.tools.json --pretty false",
     "toolchain:test-runner": "vitest run --passWithNoTests",
     "toolchain:browser-harness": "playwright test --list --pass-with-no-tests",
     "toolchain:browser-profile": "node tests/toolchain/check-browser-profile.mjs"
   },
   "devDependencies": {
+    "@biomejs/biome": "2.5.3",
     "@playwright/test": "1.61.1",
     "@types/node": "22.20.1",
     "typescript": "6.0.3",

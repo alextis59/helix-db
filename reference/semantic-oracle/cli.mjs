@@ -33,7 +33,8 @@ for (let index = 0; index < arguments_.length; index += 1) {
   }
 }
 
-if (!reportPath.startsWith(repository + path.sep)) throw new Error('report path escapes repository');
+if (!reportPath.startsWith(repository + path.sep))
+  throw new Error('report path escapes repository');
 if (existsSync(reportPath) && lstatSync(reportPath).isSymbolicLink()) {
   throw new Error('report path must not be a symbolic link');
 }
@@ -45,9 +46,11 @@ const reportText = `${JSON.stringify(execution.report, null, 2)}\n`;
 if (mode === 'write') writeFileSync(reportPath, reportText);
 else if (mode === 'print') process.stdout.write(reportText);
 else {
-  if (!existsSync(reportPath)) throw new Error(`oracle report is absent: ${path.relative(repository, reportPath)}`);
+  if (!existsSync(reportPath))
+    throw new Error(`oracle report is absent: ${path.relative(repository, reportPath)}`);
   const committed = readFileSync(reportPath, 'utf8');
-  if (committed !== reportText) throw new Error('oracle report differs byte-for-byte from independent execution');
+  if (committed !== reportText)
+    throw new Error('oracle report differs byte-for-byte from independent execution');
 }
 
 if (execution.report.verdict !== 'pass') {

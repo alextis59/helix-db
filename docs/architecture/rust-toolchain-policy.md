@@ -50,7 +50,7 @@ Rustdoc is shipped with `rustc`; repository documentation builds use `cargo doc`
 
 The toolchain pins the rustfmt binary version. Formatting is checked, never silently applied, in evidence/CI commands. Generated artifacts and vendored third-party sources will be explicitly excluded by their owning tasks rather than weakening the workspace default.
 
-P02-002 selects Clippy as the linter but does not freeze the project lint allow/deny set. Strict warnings, unsafe-code review, dependency policy, and license checks remain owned by `P02-006`.
+P02-002 selects Clippy as the linter. `P02-006` freezes the inherited warning/Clippy/no-unsafe baseline and dependency/license review in the [code quality and dependency policy](code-quality-and-dependency-policy.md).
 
 ## WebAssembly target matrix
 
