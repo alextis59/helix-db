@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 57
-- Open checklist items: 465
+- Completed checklist items: 58
+- Open checklist items: 464
 - Total checklist items: 522
 - Current phase: Phase 2 — Workspace, toolchain, and continuous integration
 - Next release gate: `G02`
@@ -198,7 +198,7 @@ Dependencies: `G00`; may proceed in parallel with Phase 1.
 - [x] **P02-014** Add benchmark result schemas and a non-gating baseline job that preserves raw results.
 - [x] **P02-015** Add artifact retention for golden formats, test replays, crash matrices, browser reports, and packaged releases.
 - [x] **P02-016** Create minimal native and browser examples that prove the toolchain without implying database functionality.
-- [ ] **P02-017** Document clean-machine bootstrap, development commands, and troubleshooting.
+- [x] **P02-017** Document clean-machine bootstrap, development commands, and troubleshooting.
 - [ ] **G02** Close the toolchain gate after a clean checkout builds and tests native and browser skeletons using only documented commands.
 
 Evidence required for `G02`: clean-machine transcript, CI matrix, dependency report, Wasm/browser smoke artifacts, and reproducible command list.

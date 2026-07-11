@@ -1,0 +1,67 @@
+{
+  "schema": "helix.clean-bootstrap-preflight-evidence/1",
+  "plan_item": "P02-017",
+  "source_commit": "309b9c2d53d7340f6704b3d22a5356e21bab6765",
+  "source_tree": "5b8ccd4e23334fdb8e45ab84896d3a7cd45e8141",
+  "recorded_at": "2026-07-11T06:23:09.758Z",
+  "host": {
+    "profile": "linux-x64",
+    "operating_system": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "linker": "cc (Ubuntu 11.4.0-1ubuntu1~22.04.3) 11.4.0"
+  },
+  "lanes": [
+    {
+      "node": "22.19.0",
+      "classification": "supported-development-line",
+      "corepack": "0.34.0",
+      "npm": "11.18.0",
+      "repository_clean": true,
+      "verdict": "pass"
+    },
+    {
+      "node": "22.23.1",
+      "classification": "exact-ci-replay-line",
+      "corepack": "0.34.6",
+      "npm": "11.18.0",
+      "repository_clean": true,
+      "verdict": "pass"
+    },
+    {
+      "node": "24.18.0",
+      "classification": "exact-ci-replay-line",
+      "corepack": "0.35.0",
+      "npm": "11.18.0",
+      "repository_clean": true,
+      "verdict": "pass"
+    }
+  ],
+  "rust": {
+    "rustc": "1.96.1 (31fca3adb 2026-06-26)",
+    "cargo": "1.96.1 (356927216 2026-06-26)",
+    "components": [
+      "clippy",
+      "llvm-tools",
+      "rust-docs",
+      "rust-src",
+      "rustfmt"
+    ],
+    "targets": [
+      "wasm32-unknown-unknown",
+      "wasm32-wasip2",
+      "x86_64-unknown-linux-gnuasan"
+    ]
+  },
+  "contract": {
+    "profiles": 4,
+    "native_hosts": 5,
+    "browser_hosts": [
+      "linux-x64"
+    ],
+    "troubleshooting_codes": 17,
+    "development_name": "HelixDB",
+    "public_name_decision": "P16-016",
+    "database_functionality": false
+  },
+  "verdict": "pass"
+}

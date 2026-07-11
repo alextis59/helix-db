@@ -1,0 +1,79 @@
+{
+  "schema": "helix.documented-bootstrap-replay/1",
+  "plan_item": "P02-017",
+  "source_commit": "309b9c2d53d7340f6704b3d22a5356e21bab6765",
+  "source_tree": "5b8ccd4e23334fdb8e45ab84896d3a7cd45e8141",
+  "host": "linux-x64",
+  "profiles": [
+    {
+      "id": "contract",
+      "node_lanes": [
+        "22.23.1",
+        "24.18.0"
+      ],
+      "commands": [
+        "corepack npm run bootstrap:check",
+        "corepack npm run bootstrap:test"
+      ],
+      "verdict": "pass"
+    },
+    {
+      "id": "foundation",
+      "node_lanes": [
+        "22.23.1",
+        "24.18.0"
+      ],
+      "commands": [
+        "corepack npm ci --ignore-scripts",
+        "corepack npm run bootstrap:preflight",
+        "corepack npm run policy:javascript",
+        "corepack npm run policy:dependencies",
+        "corepack npm run dependencies:check",
+        "corepack npm run toolchain:types",
+        "corepack npm run fixtures:check",
+        "corepack npm test",
+        "corepack npm run examples:native"
+      ],
+      "verdict": "pass"
+    },
+    {
+      "id": "browser",
+      "node_lanes": [
+        "22.23.1"
+      ],
+      "system_dependencies": "preexisting-host-prerequisite",
+      "commands": [
+        "corepack npm run browser:install",
+        "corepack npm run browser:smoke"
+      ],
+      "engines": [
+        "chromium",
+        "firefox",
+        "webkit"
+      ],
+      "verdict": "pass"
+    },
+    {
+      "id": "linux-x64-gates",
+      "node_lanes": [
+        "22.23.1"
+      ],
+      "commands": [
+        "corepack npm run wasm:validate",
+        "corepack npm run coverage:check",
+        "node tests/toolchain/run-build-profile.mjs sanitizer",
+        "corepack npm run wgsl:validate"
+      ],
+      "verdict": "pass"
+    }
+  ],
+  "additional_checks": {
+    "source_mutation_canaries": 35,
+    "evidence_mutation_canaries": 17,
+    "native_tests": 9,
+    "browser_engines": 3,
+    "hosted_workflow_execution": false,
+    "database_functionality": false
+  },
+  "verdict": "pass"
+}
