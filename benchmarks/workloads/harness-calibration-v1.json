@@ -1,0 +1,68 @@
+{
+  "schema": "helix.benchmark-workload/1",
+  "id": "harness.sha256-buffer/1",
+  "version": "1.0.0",
+  "owner_task": "P02-014",
+  "status": "active",
+  "description": "Deterministic host-memory SHA-256 calibration used only to prove benchmark measurement, integrity, reporting, and retention plumbing.",
+  "claim_boundary": {
+    "eligible": false,
+    "scope": "harness-integrity-only",
+    "reason": "The workspace contains no database implementation, so this calibration cannot support a database, product, backend-comparison, or release performance claim."
+  },
+  "dataset": {
+    "generator": "helix.lcg32-byte-buffer/1",
+    "word_bits": 32,
+    "multiplier": 1664525,
+    "increment": 1013904223,
+    "output_byte": "state-high-byte",
+    "seed": 3237998081,
+    "bytes": 1048576,
+    "sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97",
+    "final_state": 3348098561,
+    "provenance": "repository-generated",
+    "license": "MIT"
+  },
+  "workload": {
+    "operation": "sha256",
+    "backend": "node:crypto",
+    "residency": "warm-host-memory",
+    "scale_input_bytes": 1048576,
+    "selectivity": "not-applicable",
+    "result_size_bytes": 32,
+    "concurrency": 1,
+    "operations_per_repetition": 8,
+    "warmup_repetitions": 5,
+    "measured_repetitions": 20,
+    "timeout_ms": 120000,
+    "stage_order": [
+      "parse_plan",
+      "storage_read",
+      "sidecar_decode",
+      "prepare",
+      "transfer_in",
+      "queue_wait",
+      "execute",
+      "transfer_out",
+      "verify",
+      "row_fetch",
+      "projection_sort",
+      "serialization",
+      "materialize",
+      "end_to_end"
+    ],
+    "failure_policy": "retain-and-fail",
+    "fallback_policy": "retain-and-fail",
+    "outlier_policy": "none",
+    "expected_digest_sha256": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97"
+  },
+  "output": {
+    "directory": "dist/benchmarks/baseline",
+    "raw_path": "dist/benchmarks/baseline/raw.json",
+    "summary_path": "dist/benchmarks/baseline/summary.json",
+    "raw_schema": "helix.benchmark-raw-result/1",
+    "summary_schema": "helix.benchmark-summary/1",
+    "max_raw_bytes": 1048576,
+    "max_summary_bytes": 131072
+  }
+}

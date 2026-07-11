@@ -18,7 +18,7 @@ This document establishes stable, reviewable locations for source code, conforma
 | [`shaders/`](../../shaders/README.md) | Internal WGSL source and shader fixtures | `predicates/`, `bitmaps/`, `vectors/`, `fixtures/` | Compile-only validation fixtures; no product kernels |
 | [`packages/`](../../packages/README.md) | Private npm workspace packages | `sdk-typescript/`, `browser-host/` | Reserved directories; not npm packages yet |
 | [`conformance/`](../../conformance/README.md) | Cross-backend suite definitions and fixture bindings | `semantics/`, `formats/`, `host/`, `compatibility/` | Semantic corpus binding only |
-| [`benchmarks/`](../../benchmarks/README.md) | Reproducible datasets, workloads, and reports | `datasets/`, `cpu-columnar/`, `webgpu/`, `reports/` | Empty contracts; no performance claims |
+| [`benchmarks/`](../../benchmarks/README.md) | Reproducible datasets, workloads, schemas, runners, and report indexes | `datasets/`, `workloads/`, `schema/`, `cpu-columnar/`, `webgpu/`, `reports/` | One integrity-only harness calibration; no database performance claim |
 | [`tests/`](../../tests/README.md) | Toolchain and cross-crate/system tests | `toolchain/`, `integration/`, `fuzz/`, `crash/`, `differential/`, `browser/`, `distributed/` | Toolchain/unit/conformance commands plus explicit reserved system-test contracts |
 | [`docs/`](../README.md) | Project documentation | Architecture, governance, quality, compatibility, ADRs, and future document classes | Active documentation system |
 | [`examples/`](../../examples/README.md) | Minimal runnable usage and toolchain examples | Children are added with real examples | Empty contract; no functional examples |
@@ -33,7 +33,7 @@ The existing [`fixtures/`](../../fixtures/README.md), [`reference/`](../../refer
 3. **Generated output is not source.** Rust targets, JavaScript dependencies/bundles, test reports, coverage, browser caches, and local benchmark output remain ignored unless a task deliberately promotes a compact artifact into evidence.
 4. **Packages are private until proven.** The reserved package directories do not contain `package.json` files and therefore are not publishable workspaces. Public identity and coordinates remain blocked by `P16-016`.
 5. **Shaders are internal.** Only repository-owned, bounded, versioned kernels may be added. Client-submitted WGSL is prohibited by `INV-006`.
-6. **Benchmarks do not create claims.** A benchmark result supports a claim only through the environment, dataset, raw-result, and review requirements in the [evidence guide](../../evidence/README.md#benchmark-specific-rules).
+6. **Benchmarks do not create claims.** The [foundation result contract](../quality/benchmark-results.md) is explicitly ineligible for a database claim. A later benchmark result supports a claim only through the environment, dataset, raw-result, and review requirements in the [evidence guide](../../evidence/README.md#benchmark-specific-rules).
 7. **Tests are organized by failure boundary.** Unit tests stay beside their implementation where idiomatic; the top-level `tests/` tree is for cross-component, process, browser, and cluster behavior.
 8. **Examples disclose maturity.** An example may prove a toolchain or API slice but must not imply durability, compatibility, security, or production readiness beyond its linked evidence.
 

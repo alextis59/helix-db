@@ -25,6 +25,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [WGSL fixture validation](docs/architecture/wgsl-fixture-validation.md) — hash-bound internal shader parsing, rejection canaries, and compile-only Dawn/SwiftShader checks.
 - [Dependency security reporting](docs/architecture/dependency-security-reporting.md) — integrity-bound license/duplicate inventory and explicit vulnerability/signature/provenance observations.
 - [Rust product coverage policy](docs/quality/code-coverage-policy.md) — compiler-matched reports, explicit test exclusions, and semantic/recovery thresholds.
+- [Benchmark result contract](docs/quality/benchmark-results.md) — strict workload/raw/summary schemas and a retained, non-gating integrity-only baseline.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

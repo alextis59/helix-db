@@ -13,7 +13,11 @@ if (!laneId || process.argv.length > (describe ? 4 : 3)) {
   throw new Error('usage: node tests/toolchain/check-ci-runtime.mjs <lane-id> [--describe]');
 }
 
-const entries = [...Object.values(matrix.gating), ...Object.values(matrix.nightly)].flat();
+const entries = [
+  ...Object.values(matrix.gating),
+  ...Object.values(matrix.nightly),
+  ...Object.values(matrix.observational),
+].flat();
 const matches = entries.filter(({ id }) => id === laneId);
 if (matches.length !== 1) throw new Error(`unknown or duplicate CI lane: ${laneId}`);
 const lane = matches[0];

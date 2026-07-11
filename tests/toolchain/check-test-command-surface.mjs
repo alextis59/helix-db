@@ -21,7 +21,7 @@ const suiteIds = [
   'distributed',
 ];
 const expectedStates = {
-  benchmark: 'reserved',
+  benchmark: 'active',
   browser: 'reserved',
   conformance: 'active',
   crash: 'reserved',
@@ -31,7 +31,7 @@ const expectedStates = {
   unit: 'active',
 };
 const expectedActivationTasks = {
-  benchmark: ['P02-014'],
+  benchmark: [],
   browser: ['P02-016'],
   conformance: [],
   crash: ['P05-021'],
@@ -41,7 +41,7 @@ const expectedActivationTasks = {
   unit: [],
 };
 const expectedSteps = {
-  benchmark: ['benchmark-profile'],
+  benchmark: ['benchmark-profile', 'benchmark-baseline'],
   browser: ['browser-harness-inventory'],
   conformance: ['semantic-conformance'],
   crash: [],
@@ -177,7 +177,7 @@ for (const suite of manifest.suites) {
 }
 
 process.stdout.write(
-  'PASS test command surface: 8 stable suites, 2 active, 6 reserved, 11 npm scripts\n',
+  'PASS test command surface: 8 stable suites, 3 active, 5 reserved, 11 npm scripts\n',
 );
 process.stdout.write('PASS runner contract: exact list/describe output and 3 rejection canaries\n');
 process.stdout.write(

@@ -3,16 +3,17 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-013`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-014`
 - Governing gate: `G02`
-- Machine authority: [`helix.ci-matrix/2`](../../.github/ci/matrix.json)
+- Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
 - Component validator authority: [`helix.wasm-tools/2`](../../.github/ci/wasm-tools.json)
 - Gating workflow: [`ci.yml`](../../.github/workflows/ci.yml)
 - Nightly workflow: [`ci-nightly.yml`](../../.github/workflows/ci-nightly.yml)
+- Observational benchmark workflow: [`benchmark-baseline.yml`](../../.github/workflows/benchmark-baseline.yml)
 
 ## Purpose and claim boundary
 
-The CI matrix fixes which foundation toolchain lanes gate every `main` push/pull request and which broader architecture lanes run nightly. It tests the current boundary skeleton, semantic authorities, and toolchain contracts; it does not prove a database product, package, browser host, supported deployment platform, performance level, or release artifact exists.
+The CI matrix fixes which foundation toolchain lanes gate every `main` push/pull request, which broader architecture lanes run nightly, and which result-producing jobs are observational only. It tests the current boundary skeleton, semantic authorities, and toolchain contracts; it does not prove a database product, package, browser host, supported deployment platform, performance level, or release artifact exists.
 
 Runner labels are explicit rather than mutable `*-latest` aliases. The selected labels and architectures follow GitHub's [hosted-runner reference](https://docs.github.com/en/actions/reference/runners/github-hosted-runners). The repository is public, so the standard Linux arm64 runner is available; Windows arm64 remains public preview and is explicitly unsupported here rather than silently omitted.
 
@@ -41,11 +42,17 @@ The scheduled/manual nightly workflow adds:
 
 Both run the same strict native format/check/Clippy/test command set. A nightly failure is actionable and blocks a support claim, but it does not currently block every pull request. Promotion to gating requires stable capacity, acceptable duration, and a reviewed matrix change. Demotion requires an incident/owner/recovery date; `continue-on-error` is prohibited.
 
+## Observational benchmark lane
+
+The `benchmark-baseline-linux-x64` lane is a scheduled/manual, non-gating benchmark job on fixed `ubuntu-24.04` with Node 22.23.1. It has no push or pull-request trigger and is not emitted into the 11-lane gating matrix. It compiles the benchmark profile, executes the one integrity-only harness calibration, validates its strict raw/summary schemas, and preserves both files for 30 days.
+
+Non-gating does not mean best effort. A schema, dataset, digest, execution, report, or upload failure makes the job fail visibly; `continue-on-error` is forbidden. The [benchmark result contract](../quality/benchmark-results.md) fixes its workload, complete stage inventory, claim boundary, failure retention, output hashes, and absence of a performance threshold.
+
 ## Workflow security and reproducibility
 
 - Workflow permissions are `contents: read`; no job receives write, package, deployment, OIDC, or artifact-attestation permission.
 - Checkout credentials do not persist.
-- `actions/checkout` 7.0.0 and `actions/setup-node` 6.4.0 use full immutable commit SHAs, recorded with their reviewed release versions in the matrix.
+- `actions/checkout` 7.0.0, `actions/setup-node` 6.4.0, and observational-only `actions/upload-artifact` 7.0.1 use full immutable commit SHAs, recorded with their reviewed release versions in the matrix.
 - Setup Node's automatic package cache is disabled. Clean installs use the repository lock and deny lifecycle scripts.
 - Workflows use fixed runner labels, fixed Node versions, the exact `rust-toolchain.toml`, frozen Cargo operations, bounded timeouts, and fail-fast disabled so every matrix failure is visible.
 - No third-party community action, service, container, mutable cache, or secret is used. P02-010 adds two explicit downloads: the matrix-selected Playwright browser revision from its documented CDN and the official Bytecode Alliance `wasm-tools` Linux x64 release archive. Neither occurs through an npm lifecycle script. P02-011 reuses Chromium's bundled Dawn/SwiftShader implementation and adds no download or dependency.
@@ -53,7 +60,7 @@ Both run the same strict native format/check/Clippy/test command set. A nightly 
 - SwiftShader is enabled only for small, committed, hash-bound repository fixtures. The validator accepts no external WGSL, URL, stdin, or environment-provided source; Chromium's documented lower-security software-renderer path is never exposed as a product interface.
 - Every Node lane verifies the integrity-bound 91-package license/source/duplicate inventory. Node 22.23.1 alone performs the explicit npm advisory query and verifies all installed registry signatures plus available SLSA provenance attestations; missing/invalid signatures, any advisory, or network/malformed-response failure is gating.
 - The Linux x64 native lane resolves `llvm-profdata`/`llvm-cov` from the exact Rust toolchain, separates explicitly marked unit-test code from product source, and enforces the [workspace, semantic-critical, and recovery-critical coverage policy](../quality/code-coverage-policy.md). The current empty product denominator is reported as an expiring boundary-skeleton exception, never as 100% coverage.
-- Artifact retention is intentionally absent until `P02-015`; compact local reports are produced under ignored `dist/validation`, `dist/dependency`, or `dist/coverage`, and failure screenshots/traces remain local outputs.
+- General test/release artifact retention remains `P02-015` work. The narrow `P02-014` exception uploads exactly the ignored benchmark `raw.json` and raw-linked `summary.json` on the scheduled/manual observational job, with missing-file failure, no overwrite, and 30-day retention. Compact validation, dependency, and coverage outputs remain local unless separately promoted to evidence.
 
 An action update requires confirming the tag-to-SHA mapping from the official action repository, reviewing release and runtime changes, updating both workflows and the machine authority together, and replaying all local CI-contract canaries. A full SHA prevents tag movement from changing accepted code but does not eliminate the need to review the action source and transitive runtime.
 
@@ -69,6 +76,9 @@ corepack npm run dependencies:check
 corepack npm run dependencies:report
 corepack npm run coverage:policy
 corepack npm run coverage:check
+corepack npm run benchmark:schemas
+corepack npm run test:benchmark
+corepack npm run benchmark:check
 corepack npm run wgsl:check
 corepack npm run browser:install
 corepack npm run wgsl:validate
@@ -78,7 +88,7 @@ corepack npm run ci:browser-smoke -- webkit
 corepack npm run toolchain:types
 ```
 
-Local checks validate exact matrix/workflow/action/validator configuration, lane identities, emitted JSON, registry signatures and provenance observations, lock/tarball license and duplicate reports, compiler-matched coverage reporting and thresholds, both Wasm forms, WGSL manifest hashes/compiler outcomes, bundle output, and real browser execution on Linux x64. GitHub itself remains the authority for hosted workflow parsing and Windows/macOS/arm64 provisioning. Therefore local evidence does not prove a hosted matrix passed; the first hosted green matrix and independent review remain required inputs to `G02`.
+Local checks validate exact matrix/workflow/action/validator configuration, lane identities, emitted JSON, registry signatures and provenance observations, lock/tarball license and duplicate reports, compiler-matched coverage reporting and thresholds, strict benchmark schemas/raw linkage, both Wasm forms, WGSL manifest hashes/compiler outcomes, bundle output, and real browser execution on Linux x64. GitHub itself remains the authority for hosted workflow parsing, artifact-service behavior, and Windows/macOS/arm64 provisioning. Therefore local evidence does not prove a hosted matrix or upload passed; the first hosted green results and independent review remain required inputs to `G02`.
 
 ## Change policy
 

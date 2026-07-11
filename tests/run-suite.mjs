@@ -24,6 +24,7 @@ const allowedSteps = new Set([
   'semantic-conformance',
   'browser-harness-inventory',
   'benchmark-profile',
+  'benchmark-baseline',
 ]);
 
 const assert = (condition, message) => {
@@ -296,11 +297,44 @@ const executeBenchmarkProfile = (suite) => {
       .map(({ name: target }) => `${name}:${target}`),
   );
   assert(
-    benchmarkTargets.length === suite.expectations.benchmark_workloads,
+    benchmarkTargets.length === suite.expectations.cargo_benchmark_targets,
     `Cargo benchmark-target inventory mismatch: ${JSON.stringify(benchmarkTargets)}`,
   );
   const output = run(process.execPath, ['tests/toolchain/run-build-profile.mjs', 'benchmark']);
   requireText(output, 'PASS build profile benchmark', 'benchmark profile');
+};
+
+const executeBenchmarkBaseline = (suite) => {
+  assert(suite.expectations.baseline_workloads === 1, 'benchmark baseline workload count mismatch');
+  const schemas = run(process.execPath, ['benchmarks/check-benchmark-artifacts.mjs', 'schemas']);
+  requireText(
+    schemas,
+    'PASS benchmark schemas: 3 strict schemas, workload harness.sha256-buffer/1, 1 deterministic dataset',
+    'benchmark schemas',
+  );
+  const baseline = run(process.execPath, ['benchmarks/run-baseline.mjs']);
+  requireText(
+    baseline,
+    `PASS benchmark baseline: ${suite.expectations.warmup_repetitions} warmups, ${suite.expectations.measured_repetitions} measurements, ${suite.expectations.measured_repetitions * suite.expectations.operations_per_repetition} operations`,
+    'benchmark baseline',
+  );
+  const report = run(process.execPath, ['benchmarks/check-benchmark-artifacts.mjs', 'report']);
+  requireText(
+    report,
+    `PASS benchmark artifacts: ${suite.expectations.warmup_repetitions} warmups, ${suite.expectations.measured_repetitions} measurements`,
+    'benchmark report',
+  );
+  requireText(
+    report,
+    'PASS benchmark claim boundary: integrity-only calibration, no performance threshold or database claim',
+    'benchmark claim boundary',
+  );
+  const rejectionCanaries = run(process.execPath, ['tests/toolchain/test-benchmark-contract.mjs']);
+  requireText(
+    rejectionCanaries,
+    'PASS benchmark rejection canaries: 19 intended mutations rejected with exact reasons',
+    'benchmark rejection canaries',
+  );
 };
 
 const stepExecutors = {
@@ -310,6 +344,7 @@ const stepExecutors = {
   'semantic-conformance': executeSemanticConformance,
   'browser-harness-inventory': executeBrowserInventory,
   'benchmark-profile': executeBenchmarkProfile,
+  'benchmark-baseline': executeBenchmarkBaseline,
 };
 
 const runSuite = (suite) => {

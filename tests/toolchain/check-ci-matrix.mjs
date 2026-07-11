@@ -52,13 +52,13 @@ const githubExpression = (body) => `\${{ ${body} }}`;
 
 same(
   sorted(Object.keys(matrix)),
-  ['actions', 'gating', 'nightly', 'plan_items', 'schema', 'unsupported'],
+  ['actions', 'gating', 'nightly', 'observational', 'plan_items', 'schema', 'unsupported'],
   'matrix fields',
 );
-assert(matrix.schema === 'helix.ci-matrix/2', 'CI matrix schema mismatch');
+assert(matrix.schema === 'helix.ci-matrix/3', 'CI matrix schema mismatch');
 same(
   matrix.plan_items,
-  ['P02-009', 'P02-010', 'P02-011', 'P02-012', 'P02-013'],
+  ['P02-009', 'P02-010', 'P02-011', 'P02-012', 'P02-013', 'P02-014'],
   'CI matrix task history',
 );
 same(
@@ -74,6 +74,11 @@ same(
       version: '6.4.0',
       sha: '48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e',
     },
+    upload_artifact: {
+      repository: 'actions/upload-artifact',
+      version: '7.0.1',
+      sha: '043fb46d1a93c77aae656e7c1c64a875d1fc6a0a',
+    },
   },
   'pinned action identities',
 );
@@ -83,6 +88,7 @@ same(
   'gating groups',
 );
 same(sorted(Object.keys(matrix.nightly)), ['native'], 'nightly groups');
+same(sorted(Object.keys(matrix.observational)), ['benchmark'], 'observational groups');
 same(
   Object.fromEntries(
     Object.entries(matrix.gating).map(([name, entries]) => [name, entries.length]),
@@ -91,8 +97,13 @@ same(
   'gating lane counts',
 );
 assert(matrix.nightly.native.length === 2, 'nightly native lane count mismatch');
+assert(matrix.observational.benchmark.length === 1, 'observational benchmark lane count mismatch');
 
-const allGroups = { ...matrix.gating, nightly_native: matrix.nightly.native };
+const allGroups = {
+  ...matrix.gating,
+  nightly_native: matrix.nightly.native,
+  observational_benchmark: matrix.observational.benchmark,
+};
 const lanes = Object.values(allGroups).flat();
 same(
   sorted(lanes.map(({ id }) => id)),
@@ -168,6 +179,25 @@ assert(
   'browser smoke/expansion boundary mismatch',
 );
 same(
+  matrix.observational.benchmark,
+  [
+    {
+      id: 'benchmark-baseline-linux-x64',
+      runner: 'ubuntu-24.04',
+      runner_os: 'Linux',
+      runner_arch: 'X64',
+      process_platform: 'linux',
+      process_arch: 'x64',
+      node: '22.23.1',
+      schedule: '17 4 * * 1',
+      workload: 'harness.sha256-buffer/1',
+      retention_days: 30,
+      gating: false,
+    },
+  ],
+  'observational benchmark authority',
+);
+same(
   matrix.unsupported.map(({ platform }) => platform),
   ['windows-arm64', 'branded-chrome-edge-safari'],
   'unsupported profiles',
@@ -205,6 +235,10 @@ expectFailure(
 
 same(
   {
+    'benchmark:baseline': packageJson.scripts['benchmark:baseline'],
+    'benchmark:check': packageJson.scripts['benchmark:check'],
+    'benchmark:schemas': packageJson.scripts['benchmark:schemas'],
+    'benchmark:test': packageJson.scripts['benchmark:test'],
     'ci:browser-smoke': packageJson.scripts['ci:browser-smoke'],
     'ci:check': packageJson.scripts['ci:check'],
     'coverage:check': packageJson.scripts['coverage:check'],
@@ -218,6 +252,10 @@ same(
     'wgsl:validate': packageJson.scripts['wgsl:validate'],
   },
   {
+    'benchmark:baseline': 'node benchmarks/run-baseline.mjs',
+    'benchmark:check': 'node benchmarks/check-benchmark-artifacts.mjs report',
+    'benchmark:schemas': 'node benchmarks/check-benchmark-artifacts.mjs schemas',
+    'benchmark:test': 'node tests/toolchain/test-benchmark-contract.mjs',
     'ci:browser-smoke': 'node tests/toolchain/run-browser-smoke.mjs',
     'ci:check': 'node tests/toolchain/check-ci-matrix.mjs',
     'coverage:check': 'node tests/toolchain/check-rust-coverage.mjs run',
@@ -261,6 +299,20 @@ expectFailure(
   'usage: node tests/toolchain/check-dependency-reports.mjs <offline|live|licenses>',
 );
 assert(
+  runNode(['benchmarks/check-benchmark-artifacts.mjs', 'schemas']).includes(
+    'PASS benchmark schemas: 3 strict schemas, workload harness.sha256-buffer/1, 1 deterministic dataset',
+  ),
+  'benchmark schema contract did not pass',
+);
+expectFailure(
+  ['benchmarks/check-benchmark-artifacts.mjs'],
+  'usage: node benchmarks/check-benchmark-artifacts.mjs <schemas|report>',
+);
+expectFailure(
+  ['benchmarks/check-benchmark-artifacts.mjs', 'unknown'],
+  'usage: node benchmarks/check-benchmark-artifacts.mjs <schemas|report>',
+);
+assert(
   runNode(['tests/toolchain/check-wgsl-fixtures.mjs', 'manifest']).includes(
     'PASS WGSL fixture manifest: 4 trusted sources, 2 accept, 2 reject',
   ),
@@ -297,7 +349,11 @@ for (const marker of [
   assert(playwright.includes(marker), `Playwright matrix marker absent: ${marker}`);
 }
 
-const workflowPaths = ['.github/workflows/ci.yml', '.github/workflows/ci-nightly.yml'];
+const workflowPaths = [
+  '.github/workflows/ci.yml',
+  '.github/workflows/ci-nightly.yml',
+  '.github/workflows/benchmark-baseline.yml',
+];
 const actionUses = [];
 let checkoutHardeningCount = 0;
 let setupHardeningCount = 0;
@@ -342,9 +398,9 @@ for (const workflowPath of workflowPaths) {
   checkoutHardeningCount += [...workflow.matchAll(/persist-credentials: false/g)].length;
   setupHardeningCount += [...workflow.matchAll(/package-manager-cache: false/g)].length;
 }
-assert(actionUses.length === 16, `workflow action-use count mismatch: ${actionUses.length}`);
-assert(checkoutHardeningCount === 8, `checkout hardening count: ${checkoutHardeningCount}`);
-assert(setupHardeningCount === 8, `setup-node hardening count: ${setupHardeningCount}`);
+assert(actionUses.length === 19, `workflow action-use count mismatch: ${actionUses.length}`);
+assert(checkoutHardeningCount === 9, `checkout hardening count: ${checkoutHardeningCount}`);
+assert(setupHardeningCount === 9, `setup-node hardening count: ${setupHardeningCount}`);
 for (const use of actionUses) {
   const action = Object.values(matrix.actions).find(({ repository: name }) => name === use[1]);
   assert(action && action.sha === use[2], `unapproved action pin: ${use[1]}@${use[2]}`);
@@ -383,6 +439,30 @@ for (const marker of [
 ]) {
   assert(nightly.includes(marker), `nightly workflow marker absent: ${marker}`);
 }
+const benchmark = readText('.github/workflows/benchmark-baseline.yml');
+for (const marker of [
+  'schedule:',
+  'cron: "17 4 * * 1"',
+  'workflow_dispatch:',
+  'runs-on: ubuntu-24.04',
+  'node-version: 22.23.1',
+  'node tests/toolchain/check-ci-runtime.mjs benchmark-baseline-linux-x64',
+  'corepack npm run benchmark:schemas',
+  'corepack npm run test:benchmark',
+  'if: always()',
+  'uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1',
+  `name: benchmark-baseline-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,
+  'path: dist/benchmarks/baseline/',
+  'if-no-files-found: error',
+  'retention-days: 30',
+  'overwrite: false',
+  'include-hidden-files: false',
+]) {
+  assert(benchmark.includes(marker), `benchmark workflow marker absent: ${marker}`);
+}
+for (const forbidden of ['pull_request:', 'push:', 'continue-on-error']) {
+  assert(!benchmark.includes(forbidden), `benchmark workflow became gating: ${forbidden}`);
+}
 
 const policy = readText('docs/architecture/continuous-integration.md');
 for (const marker of [
@@ -394,6 +474,8 @@ for (const marker of [
   'SwiftShader',
   'registry signatures',
   'source-based coverage',
+  'non-gating benchmark',
+  'upload-artifact',
   'https://docs.github.com/en/actions/reference/runners/github-hosted-runners',
   'https://playwright.dev/docs/ci',
   'does not prove',
@@ -401,11 +483,13 @@ for (const marker of [
   assert(policy.includes(marker), `CI policy marker absent: ${marker}`);
 }
 
-process.stdout.write('PASS CI matrix: 11 gating lanes and 2 nightly native lanes\n');
+process.stdout.write(
+  'PASS CI matrix: 11 gating lanes, 2 nightly native lanes, 1 observational benchmark lane\n',
+);
 process.stdout.write('PASS platforms: Linux/Windows/macOS and x64/arm64 with 2 portable targets\n');
 process.stdout.write('PASS JavaScript/browser: 2 Node lines and 3 real bundle-smoke engines\n');
 process.stdout.write(
-  'PASS workflow policy: 16 full-SHA action uses, read-only permissions, fixed runners\n',
+  'PASS workflow policy: 19 full-SHA action uses, read-only permissions, fixed runners\n',
 );
 process.stdout.write(
   'PASS portable artifacts: core module plus pinned-validator WASIp2 component\n',
@@ -418,5 +502,8 @@ process.stdout.write(
 );
 process.stdout.write(
   'PASS Rust coverage: compiler-matched LLVM report plus semantic/recovery thresholds\n',
+);
+process.stdout.write(
+  'PASS benchmark baseline: scheduled/manual only, integrity-gated raw artifact retention\n',
 );
 process.stdout.write('PASS matrix rejection: unknown emitter/runtime lanes fail\n');

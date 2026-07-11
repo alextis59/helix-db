@@ -1,0 +1,212 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.helix-db.invalid/benchmark/summary-v1.schema.json",
+  "title": "HelixDB benchmark summary version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_item",
+    "recorded_at",
+    "execution_id",
+    "claim_boundary",
+    "workload",
+    "raw_result",
+    "source_control",
+    "environment_identity",
+    "counts",
+    "stage_distributions",
+    "result_validation",
+    "acceptance",
+    "verdict"
+  ],
+  "properties": {
+    "schema": { "const": "helix.benchmark-summary/1" },
+    "plan_item": { "const": "P02-014" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "execution_id": { "type": "string", "minLength": 8, "maxLength": 160 },
+    "claim_boundary": { "$ref": "#/$defs/claimBoundary" },
+    "workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "path", "sha256"],
+      "properties": {
+        "id": { "const": "harness.sha256-buffer/1" },
+        "path": { "const": "benchmarks/workloads/harness-calibration-v1.json" },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "raw_result": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "const": "dist/benchmarks/baseline/raw.json" },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 1048576 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "source_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "dirty"],
+      "properties": {
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "dirty": { "type": "boolean" }
+      }
+    },
+    "environment_identity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "architecture",
+        "os_release",
+        "cpu_model",
+        "logical_cpus",
+        "memory_bytes",
+        "node",
+        "v8",
+        "openssl",
+        "provider"
+      ],
+      "properties": {
+        "platform": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "architecture": { "type": "string", "minLength": 1, "maxLength": 40 },
+        "os_release": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "cpu_model": { "$ref": "#/$defs/nullableShortString" },
+        "logical_cpus": { "type": "integer", "minimum": 1, "maximum": 1048576 },
+        "memory_bytes": { "type": "integer", "minimum": 1 },
+        "node": { "type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+" },
+        "v8": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "openssl": { "type": "string", "minLength": 1, "maxLength": 100 },
+        "provider": { "enum": ["local", "github-actions"] }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "warmups",
+        "measurements",
+        "passed",
+        "failed",
+        "fallbacks",
+        "measured_operations",
+        "measured_input_bytes"
+      ],
+      "properties": {
+        "warmups": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "measurements": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "passed": { "type": "integer", "minimum": 0, "maximum": 25 },
+        "failed": { "type": "integer", "minimum": 0, "maximum": 25 },
+        "fallbacks": { "type": "integer", "minimum": 0, "maximum": 25 },
+        "measured_operations": { "type": "integer", "minimum": 0, "maximum": 160 },
+        "measured_input_bytes": { "type": "integer", "minimum": 0, "maximum": 167772160 }
+      }
+    },
+    "stage_distributions": {
+      "type": "array",
+      "minItems": 14,
+      "maxItems": 14,
+      "items": { "$ref": "#/$defs/distribution" }
+    },
+    "result_validation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "expected_digest_sha256",
+        "verified_measurements",
+        "failed_measurements",
+        "fallback_measurements"
+      ],
+      "properties": {
+        "expected_digest_sha256": {
+          "const": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97"
+        },
+        "verified_measurements": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "failed_measurements": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "fallback_measurements": { "type": "integer", "minimum": 0, "maximum": 20 }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "performance_threshold", "integrity_passed"],
+      "properties": {
+        "kind": { "const": "integrity-only" },
+        "performance_threshold": { "type": "null" },
+        "integrity_passed": { "type": "boolean" }
+      }
+    },
+    "verdict": { "enum": ["pass", "fail"] }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableShortString": {
+      "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1, "maxLength": 500 }]
+    },
+    "claimBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "scope", "reason"],
+      "properties": {
+        "eligible": { "const": false },
+        "scope": { "const": "harness-integrity-only" },
+        "reason": { "type": "string", "minLength": 40, "maxLength": 500 }
+      }
+    },
+    "nullableDuration": {
+      "oneOf": [
+        { "type": "null" },
+        { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      ]
+    },
+    "distribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "name",
+        "unit",
+        "applicable",
+        "samples",
+        "min",
+        "p50",
+        "p95",
+        "p99",
+        "max",
+        "mean"
+      ],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "parse_plan",
+            "storage_read",
+            "sidecar_decode",
+            "prepare",
+            "transfer_in",
+            "queue_wait",
+            "execute",
+            "transfer_out",
+            "verify",
+            "row_fetch",
+            "projection_sort",
+            "serialization",
+            "materialize",
+            "end_to_end"
+          ]
+        },
+        "unit": { "const": "nanoseconds" },
+        "applicable": { "type": "boolean" },
+        "samples": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "min": { "$ref": "#/$defs/nullableDuration" },
+        "p50": { "$ref": "#/$defs/nullableDuration" },
+        "p95": { "$ref": "#/$defs/nullableDuration" },
+        "p99": { "$ref": "#/$defs/nullableDuration" },
+        "max": { "$ref": "#/$defs/nullableDuration" },
+        "mean": { "$ref": "#/$defs/nullableDuration" }
+      }
+    }
+  }
+}

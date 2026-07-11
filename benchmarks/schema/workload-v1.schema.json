@@ -1,0 +1,155 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.helix-db.invalid/benchmark/workload-v1.schema.json",
+  "title": "HelixDB benchmark workload version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "id",
+    "version",
+    "owner_task",
+    "status",
+    "description",
+    "claim_boundary",
+    "dataset",
+    "workload",
+    "output"
+  ],
+  "properties": {
+    "schema": { "const": "helix.benchmark-workload/1" },
+    "id": { "const": "harness.sha256-buffer/1" },
+    "version": { "const": "1.0.0" },
+    "owner_task": { "const": "P02-014" },
+    "status": { "const": "active" },
+    "description": { "type": "string", "minLength": 40, "maxLength": 500 },
+    "claim_boundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "scope", "reason"],
+      "properties": {
+        "eligible": { "const": false },
+        "scope": { "const": "harness-integrity-only" },
+        "reason": { "type": "string", "minLength": 40, "maxLength": 500 }
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "generator",
+        "word_bits",
+        "multiplier",
+        "increment",
+        "output_byte",
+        "seed",
+        "bytes",
+        "sha256",
+        "final_state",
+        "provenance",
+        "license"
+      ],
+      "properties": {
+        "generator": { "const": "helix.lcg32-byte-buffer/1" },
+        "word_bits": { "const": 32 },
+        "multiplier": { "const": 1664525 },
+        "increment": { "const": 1013904223 },
+        "output_byte": { "const": "state-high-byte" },
+        "seed": { "const": 3237998081 },
+        "bytes": { "const": 1048576 },
+        "sha256": {
+          "const": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97"
+        },
+        "final_state": { "const": 3348098561 },
+        "provenance": { "const": "repository-generated" },
+        "license": { "const": "MIT" }
+      }
+    },
+    "workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "backend",
+        "residency",
+        "scale_input_bytes",
+        "selectivity",
+        "result_size_bytes",
+        "concurrency",
+        "operations_per_repetition",
+        "warmup_repetitions",
+        "measured_repetitions",
+        "timeout_ms",
+        "stage_order",
+        "failure_policy",
+        "fallback_policy",
+        "outlier_policy",
+        "expected_digest_sha256"
+      ],
+      "properties": {
+        "operation": { "const": "sha256" },
+        "backend": { "const": "node:crypto" },
+        "residency": { "const": "warm-host-memory" },
+        "scale_input_bytes": { "const": 1048576 },
+        "selectivity": { "const": "not-applicable" },
+        "result_size_bytes": { "const": 32 },
+        "concurrency": { "const": 1 },
+        "operations_per_repetition": { "const": 8 },
+        "warmup_repetitions": { "const": 5 },
+        "measured_repetitions": { "const": 20 },
+        "timeout_ms": { "const": 120000 },
+        "stage_order": {
+          "type": "array",
+          "minItems": 14,
+          "maxItems": 14,
+          "uniqueItems": true,
+          "prefixItems": [
+            { "const": "parse_plan" },
+            { "const": "storage_read" },
+            { "const": "sidecar_decode" },
+            { "const": "prepare" },
+            { "const": "transfer_in" },
+            { "const": "queue_wait" },
+            { "const": "execute" },
+            { "const": "transfer_out" },
+            { "const": "verify" },
+            { "const": "row_fetch" },
+            { "const": "projection_sort" },
+            { "const": "serialization" },
+            { "const": "materialize" },
+            { "const": "end_to_end" }
+          ],
+          "items": false
+        },
+        "failure_policy": { "const": "retain-and-fail" },
+        "fallback_policy": { "const": "retain-and-fail" },
+        "outlier_policy": { "const": "none" },
+        "expected_digest_sha256": {
+          "const": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97"
+        }
+      }
+    },
+    "output": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "directory",
+        "raw_path",
+        "summary_path",
+        "raw_schema",
+        "summary_schema",
+        "max_raw_bytes",
+        "max_summary_bytes"
+      ],
+      "properties": {
+        "directory": { "const": "dist/benchmarks/baseline" },
+        "raw_path": { "const": "dist/benchmarks/baseline/raw.json" },
+        "summary_path": { "const": "dist/benchmarks/baseline/summary.json" },
+        "raw_schema": { "const": "helix.benchmark-raw-result/1" },
+        "summary_schema": { "const": "helix.benchmark-summary/1" },
+        "max_raw_bytes": { "const": 1048576 },
+        "max_summary_bytes": { "const": 131072 }
+      }
+    }
+  }
+}

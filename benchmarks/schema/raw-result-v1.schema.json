@@ -1,0 +1,340 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.helix-db.invalid/benchmark/raw-result-v1.schema.json",
+  "title": "HelixDB raw benchmark result version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_item",
+    "recorded_at",
+    "execution_id",
+    "claim_boundary",
+    "workload",
+    "sources",
+    "source_control",
+    "environment",
+    "configuration",
+    "dataset",
+    "observations",
+    "totals",
+    "failures",
+    "verdict"
+  ],
+  "properties": {
+    "schema": { "const": "helix.benchmark-raw-result/1" },
+    "plan_item": { "const": "P02-014" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "execution_id": { "type": "string", "minLength": 8, "maxLength": 160 },
+    "claim_boundary": { "$ref": "#/$defs/claimBoundary" },
+    "workload": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "version", "path", "bytes", "sha256"],
+      "properties": {
+        "id": { "const": "harness.sha256-buffer/1" },
+        "version": { "const": "1.0.0" },
+        "path": { "const": "benchmarks/workloads/harness-calibration-v1.json" },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 131072 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "sources": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": { "$ref": "#/$defs/fileIdentity" }
+    },
+    "source_control": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "dirty"],
+      "properties": {
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "dirty": { "type": "boolean" }
+      }
+    },
+    "environment": { "$ref": "#/$defs/environment" },
+    "configuration": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "operation",
+        "backend",
+        "residency",
+        "selectivity",
+        "result_size_bytes",
+        "concurrency",
+        "operations_per_repetition",
+        "warmup_repetitions",
+        "measured_repetitions",
+        "timeout_ms",
+        "stage_order",
+        "failure_policy",
+        "fallback_policy",
+        "outlier_policy"
+      ],
+      "properties": {
+        "operation": { "const": "sha256" },
+        "backend": { "const": "node:crypto" },
+        "residency": { "const": "warm-host-memory" },
+        "selectivity": { "const": "not-applicable" },
+        "result_size_bytes": { "const": 32 },
+        "concurrency": { "const": 1 },
+        "operations_per_repetition": { "const": 8 },
+        "warmup_repetitions": { "const": 5 },
+        "measured_repetitions": { "const": 20 },
+        "timeout_ms": { "const": 120000 },
+        "stage_order": {
+          "type": "array",
+          "minItems": 14,
+          "maxItems": 14,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "enum": [
+              "parse_plan",
+              "storage_read",
+              "sidecar_decode",
+              "prepare",
+              "transfer_in",
+              "queue_wait",
+              "execute",
+              "transfer_out",
+              "verify",
+              "row_fetch",
+              "projection_sort",
+              "serialization",
+              "materialize",
+              "end_to_end"
+            ]
+          }
+        },
+        "failure_policy": { "const": "retain-and-fail" },
+        "fallback_policy": { "const": "retain-and-fail" },
+        "outlier_policy": { "const": "none" }
+      }
+    },
+    "dataset": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["generator", "seed", "bytes", "sha256", "final_state", "provenance", "license"],
+      "properties": {
+        "generator": { "const": "helix.lcg32-byte-buffer/1" },
+        "seed": { "const": 3237998081 },
+        "bytes": { "const": 1048576 },
+        "sha256": {
+          "const": "da1702703965eace2e9df275ec2e0f94654aa11a7c25421f643f299da42fad97"
+        },
+        "final_state": { "const": 3348098561 },
+        "provenance": { "const": "repository-generated" },
+        "license": { "const": "MIT" }
+      }
+    },
+    "observations": {
+      "type": "array",
+      "minItems": 0,
+      "maxItems": 25,
+      "items": { "$ref": "#/$defs/observation" }
+    },
+    "totals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "warmup_observations",
+        "measured_observations",
+        "passed_observations",
+        "failed_observations",
+        "fallback_observations",
+        "measured_input_bytes",
+        "measured_operations"
+      ],
+      "properties": {
+        "warmup_observations": { "type": "integer", "minimum": 0, "maximum": 5 },
+        "measured_observations": { "type": "integer", "minimum": 0, "maximum": 20 },
+        "passed_observations": { "type": "integer", "minimum": 0, "maximum": 25 },
+        "failed_observations": { "type": "integer", "minimum": 0, "maximum": 25 },
+        "fallback_observations": { "type": "integer", "minimum": 0, "maximum": 25 },
+        "measured_input_bytes": { "type": "integer", "minimum": 0, "maximum": 167772160 },
+        "measured_operations": { "type": "integer", "minimum": 0, "maximum": 160 }
+      }
+    },
+    "failures": {
+      "type": "array",
+      "maxItems": 25,
+      "items": { "type": "string", "minLength": 1, "maxLength": 500 }
+    },
+    "verdict": { "enum": ["pass", "fail"] }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "nullableShortString": {
+      "oneOf": [{ "type": "null" }, { "type": "string", "minLength": 1, "maxLength": 500 }]
+    },
+    "claimBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["eligible", "scope", "reason"],
+      "properties": {
+        "eligible": { "const": false },
+        "scope": { "const": "harness-integrity-only" },
+        "reason": { "type": "string", "minLength": 40, "maxLength": 500 }
+      }
+    },
+    "fileIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 200 },
+        "bytes": { "type": "integer", "minimum": 1, "maximum": 2097152 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["hardware", "software", "execution", "conditions"],
+      "properties": {
+        "hardware": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "architecture",
+            "cpu_model",
+            "logical_cpus",
+            "memory_bytes",
+            "gpu",
+            "storage"
+          ],
+          "properties": {
+            "architecture": { "type": "string", "minLength": 1, "maxLength": 40 },
+            "cpu_model": { "$ref": "#/$defs/nullableShortString" },
+            "logical_cpus": { "type": "integer", "minimum": 1, "maximum": 1048576 },
+            "memory_bytes": { "type": "integer", "minimum": 1 },
+            "gpu": { "type": "null" },
+            "storage": { "type": "null" }
+          }
+        },
+        "software": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["platform", "os_release", "node", "v8", "openssl"],
+          "properties": {
+            "platform": { "type": "string", "minLength": 1, "maxLength": 40 },
+            "os_release": { "type": "string", "minLength": 1, "maxLength": 200 },
+            "node": { "type": "string", "pattern": "^v?[0-9]+\\.[0-9]+\\.[0-9]+" },
+            "v8": { "type": "string", "minLength": 1, "maxLength": 100 },
+            "openssl": { "type": "string", "minLength": 1, "maxLength": 100 }
+          }
+        },
+        "execution": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": [
+            "provider",
+            "runner_environment",
+            "workflow",
+            "job",
+            "repository",
+            "ref",
+            "github_sha",
+            "run_id",
+            "run_attempt"
+          ],
+          "properties": {
+            "provider": { "enum": ["local", "github-actions"] },
+            "runner_environment": { "$ref": "#/$defs/nullableShortString" },
+            "workflow": { "$ref": "#/$defs/nullableShortString" },
+            "job": { "$ref": "#/$defs/nullableShortString" },
+            "repository": { "$ref": "#/$defs/nullableShortString" },
+            "ref": { "$ref": "#/$defs/nullableShortString" },
+            "github_sha": {
+              "oneOf": [{ "type": "null" }, { "type": "string", "pattern": "^[0-9a-f]{40}$" }]
+            },
+            "run_id": {
+              "oneOf": [
+                { "type": "null" },
+                { "type": "string", "pattern": "^[0-9]+$", "maxLength": 40 }
+              ]
+            },
+            "run_attempt": {
+              "oneOf": [{ "type": "null" }, { "type": "integer", "minimum": 1, "maximum": 1000000 }]
+            }
+          }
+        },
+        "conditions": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["background_load", "isolation", "power_thermal", "network"],
+          "properties": {
+            "background_load": { "const": "unknown" },
+            "isolation": { "enum": ["uncontrolled-local", "github-hosted-runner"] },
+            "power_thermal": { "const": "unknown" },
+            "network": { "const": "not-used" }
+          }
+        }
+      }
+    },
+    "stage": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["name", "applicable", "duration_ns"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "enum": [
+            "parse_plan",
+            "storage_read",
+            "sidecar_decode",
+            "prepare",
+            "transfer_in",
+            "queue_wait",
+            "execute",
+            "transfer_out",
+            "verify",
+            "row_fetch",
+            "projection_sort",
+            "serialization",
+            "materialize",
+            "end_to_end"
+          ]
+        },
+        "applicable": { "type": "boolean" },
+        "duration_ns": { "type": "integer", "minimum": 0, "maximum": 9007199254740991 }
+      }
+    },
+    "observation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["kind", "index", "status", "fallback", "error", "stages", "result"],
+      "properties": {
+        "kind": { "enum": ["warmup", "measurement"] },
+        "index": { "type": "integer", "minimum": 1, "maximum": 20 },
+        "status": { "enum": ["pass", "fail"] },
+        "fallback": { "type": "boolean" },
+        "error": { "$ref": "#/$defs/nullableShortString" },
+        "stages": {
+          "type": "array",
+          "minItems": 14,
+          "maxItems": 14,
+          "items": { "$ref": "#/$defs/stage" }
+        },
+        "result": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["input_bytes", "operations", "output_bytes", "digest_sha256", "verified"],
+          "properties": {
+            "input_bytes": { "type": "integer", "minimum": 0, "maximum": 8388608 },
+            "operations": { "type": "integer", "minimum": 0, "maximum": 8 },
+            "output_bytes": { "type": "integer", "minimum": 0, "maximum": 32 },
+            "digest_sha256": {
+              "oneOf": [{ "type": "null" }, { "$ref": "#/$defs/sha256" }]
+            },
+            "verified": { "type": "boolean" }
+          }
+        }
+      }
+    }
+  }
+}

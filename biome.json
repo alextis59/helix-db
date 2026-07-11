@@ -12,6 +12,8 @@
       "*.json",
       "*.ts",
       ".github/ci/*.json",
+      "benchmarks/**/*.json",
+      "benchmarks/**/*.mjs",
       "compatibility/**/*.mjs",
       "differential/**/*.{mjs,js}",
       "fixtures/generation/**/*.json",

@@ -3,7 +3,7 @@
 - Status: Accepted bootstrap command contract; feature suites remain maturity-labeled
 - Last updated: 2026-07-11
 - Owner: Quality and release owner
-- Plan item: `P02-007`
+- Plan item: `P02-007`; benchmark activation completed by `P02-014`
 - Governing gate: `G02`
 - Machine authority: [`helix.test-command-surface/1`](../../tests/suites.json)
 - Runner: [`tests/run-suite.mjs`](../../tests/run-suite.mjs)
@@ -24,7 +24,7 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 | `npm run test:fuzz` | Reserved | Requires only the fuzz contract README; no property test is relabeled as fuzzing | First coverage-guided codec targets under `P03-019` |
 | `npm run test:browser` | Reserved | Lists exactly one internal smoke case expanded across Chromium, Firefox, and WebKit (3 tests in 1 file) without downloading or launching browsers | P02-010 executes this toolchain smoke in CI; P02-016 expands/activates the user-facing browser suite |
 | `npm run test:crash` | Reserved | Requires only the crash-history contract README | Storage crash/reopen histories under `P05-021` |
-| `npm run test:benchmark` | Reserved | Compiles all eight crates through the fixed benchmark profile and requires 0 workloads | Result schema and baseline job under `P02-014` |
+| `npm run test:benchmark` | Active | Compiles all eight crates through the fixed benchmark profile, requires 0 Cargo benchmark targets, then records and validates one 5-warm-up/20-measurement integrity-only baseline | Product workloads extend the versioned result contract without changing its claim boundary retroactively |
 | `npm run test:distributed` | Reserved | Requires only the distributed-history contract README | Deterministic replication simulations under `P17-016` |
 
 `npm run test:all` runs the eight commands in manifest order and is also the root `npm run test` behavior. It includes the benchmark-profile compilation, so focused development should use the narrowest relevant command. `npm run test:commands` validates the manifest, package aliases, Cargo metadata, list/describe interface, documentation, and rejection behavior without running the feature suites.
@@ -37,7 +37,9 @@ The unit command selects Rust library targets so integration, examples, binaries
 
 The [`P02-013` product coverage command](code-coverage-policy.md) is a quality gate over the same Rust library tests, not a ninth feature-suite alias. It recompiles with exact instrumentation, excludes test-only source ranges from the denominator, and enforces product/critical thresholds. `test:unit` remains the stable behavior command; `coverage:check` remains the bounded reporting command.
 
-The stable browser command uses Playwright list mode. It does not install or execute Chromium, Firefox, or WebKit; explicit `browser:install`, `browser:smoke`, and CI commands own that network/platform boundary under the [P02-010 validation contract](../architecture/wasm-browser-smoke-validation.md). The benchmark command uses the accepted `bench` compilation profile; it does not time code, emit a report, compare machines, or create a performance claim.
+The stable browser command uses Playwright list mode. It does not install or execute Chromium, Firefox, or WebKit; explicit `browser:install`, `browser:smoke`, and CI commands own that network/platform boundary under the [P02-010 validation contract](../architecture/wasm-browser-smoke-validation.md).
+
+The active benchmark command uses the accepted `bench` compilation profile and the [P02-014 result contract](benchmark-results.md). It times only a deterministic Node SHA-256 harness calibration, emits ignored raw/summary artifacts, and fails on integrity, completeness, fallback, or report drift. It does not time database code, compare machines/backends, apply a performance threshold, or create a performance claim.
 
 The underlying CLI behavior follows the official [Cargo test command](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [Vitest CLI](https://vitest.dev/guide/cli), [Playwright test CLI](https://playwright.dev/docs/test-cli), and [Rust Fuzz Book](https://rust-fuzz.github.io/book/) documentation. Tool versions remain governed by the Rust and JavaScript toolchain policies rather than by those mutable pages.
 

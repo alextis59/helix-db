@@ -29,6 +29,10 @@
     "fsevents": false
   },
   "scripts": {
+    "benchmark:baseline": "node benchmarks/run-baseline.mjs",
+    "benchmark:check": "node benchmarks/check-benchmark-artifacts.mjs report",
+    "benchmark:schemas": "node benchmarks/check-benchmark-artifacts.mjs schemas",
+    "benchmark:test": "node tests/toolchain/test-benchmark-contract.mjs",
     "browser:build": "node tests/toolchain/build-browser-smoke.mjs",
     "browser:install": "playwright install chromium firefox webkit",
     "browser:serve": "vite preview",

@@ -108,21 +108,19 @@
     {
       "id": "benchmark",
       "npm_script": "test:benchmark",
-      "state": "reserved",
+      "state": "active",
       "root": "benchmarks",
-      "description": "Reproducible workload definitions and retained, claim-bounded measurements.",
-      "activation_tasks": ["P02-014"],
-      "allowed_files": [
-        "README.md",
-        "cpu-columnar/README.md",
-        "datasets/README.md",
-        "reports/README.md",
-        "webgpu/README.md"
-      ],
-      "steps": ["benchmark-profile"],
+      "description": "Reproducible workload definitions and retained, integrity-checked, claim-bounded measurements.",
+      "activation_tasks": [],
+      "allowed_files": [],
+      "steps": ["benchmark-profile", "benchmark-baseline"],
       "expectations": {
         "workspace_packages": 8,
-        "benchmark_workloads": 0
+        "cargo_benchmark_targets": 0,
+        "baseline_workloads": 1,
+        "warmup_repetitions": 5,
+        "measured_repetitions": 20,
+        "operations_per_repetition": 8
       }
     },
     {
