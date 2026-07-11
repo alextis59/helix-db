@@ -291,10 +291,12 @@ cost, but it prevents multiple durable byte identities and is bounded per block;
 evidence may reject the optional profile, not weaken its canonicality.
 
 The dependency review selected a version outside known `RUSTSEC-2026-0041` affected ranges and
-requires safe decode into fresh zeroed exact-size output with no dictionaries. The crate is not yet
-in the production graph: `P03-008` must add fail-closed Rust advisory reporting, license/notices,
-and exact lock policy before adopting the first external Cargo dependency. `P03-009` owns the
-validating reader, and `P03-016` still owns immutable supported fixtures.
+requires safe decode into fresh zeroed exact-size output with no dictionaries. `P03-008` has now
+adopted the exact dependency graph with fail-closed Rust advisory reporting, license/notices, and
+lock policy, and has implemented the portable canonical writer. Its tests replay the exact complete
+envelopes, structural sections, typed hashes, scalar/decimal/vector payloads, LZ4 block streams,
+limit boundaries, and deterministic presentation behavior on native and Wasm builds. `P03-009`
+still owns the validating reader, and `P03-016` still owns immutable supported fixtures.
 
 ### 6.3 Field-path dictionaries
 

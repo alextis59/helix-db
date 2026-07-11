@@ -1,6 +1,6 @@
 [package]
 name = "helix-doc"
-description = "Boundary skeleton for HelixDB logical documents and canonical semantics"
+description = "Portable deterministic HDoc encoding and canonical semantics for HelixDB"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,8 +12,8 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "boundary-skeleton"
-database-functionality = false
+status = "hdoc-encoder"
+database-functionality = true
 
 [dependencies]
 blake3.workspace = true

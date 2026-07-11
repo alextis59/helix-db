@@ -32,4 +32,10 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 
-Implementation is currently in the foundation toolchain phase. The Rust crates are boundary-only `0.0.0` skeletons, the reference oracle and MongoDB differential harness are test authorities, and the two executable examples prove only native linking and browser Wasm bundling/instantiation. None is a storage engine, adapter, or production database; the broader documentation describes intended work and must not be read as a claim that database functionality already exists.
+Implementation has entered the HDoc codec phase. `helix-doc` now provides safe deterministic HDoc
+encoding with portable limit enforcement, canonical typed hashing, CRC-32C, and the optional bounded
+LZ4 profile; the other unpublished `0.0.0` crates remain boundary skeletons. The reference oracle
+and MongoDB differential harness remain test authorities, and the two executable examples still
+prove only native linking and browser Wasm bundling/instantiation. There is not yet a validating
+HDoc decoder, document view API, query engine, storage engine, adapter, network service, or
+production database release.

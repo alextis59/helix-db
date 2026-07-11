@@ -107,6 +107,7 @@ const validatePolicy = () => {
   same(
     sorted(Object.keys(policy)),
     [
+      'active_product_scope',
       'empty_product_scope',
       'execution',
       'groups',
@@ -144,7 +145,7 @@ const validatePolicy = () => {
   assert(
     policy.execution.minimum_test_binaries === 8 &&
       policy.execution.maximum_test_binaries === 128 &&
-      policy.execution.minimum_tests === 9 &&
+      policy.execution.minimum_tests === 18 &&
       policy.execution.maximum_tests === 100000 &&
       policy.execution.minimum_raw_profiles === 8 &&
       policy.execution.maximum_raw_profiles === 128,
@@ -187,6 +188,13 @@ const validatePolicy = () => {
       policy.empty_product_scope.revalidate_by === 'P03-008' &&
       policy.empty_product_scope.reason.length >= 150,
     'empty product-scope exception',
+  );
+  assert(
+    policy.active_product_scope.allowed_status === 'hdoc-encoder' &&
+      policy.active_product_scope.requires_database_functionality === true &&
+      policy.active_product_scope.activated_by === 'P03-008' &&
+      policy.active_product_scope.reason.length >= 150,
+    'active product-scope contract',
   );
   same(
     policy.groups.map(({ id }) => id),
@@ -313,7 +321,7 @@ assert(
 const sourceRecords = validatePolicy();
 if (mode === 'policy') {
   process.stdout.write(
-    'PASS Rust coverage policy: 3 threshold groups, explicit test-code exclusions, compiler-matched LLVM tools, and an expiring empty-skeleton rule\n',
+    'PASS Rust coverage policy: 3 threshold groups, explicit test-code exclusions, compiler-matched LLVM tools, and active HDoc product scope\n',
   );
   process.exit(0);
 }
@@ -361,8 +369,15 @@ const metadata = JSON.parse(
   }),
 );
 const helixMetadata = metadata.metadata.helix;
-assert(helixMetadata.status === 'boundary-skeleton', 'workspace maturity metadata');
-assert(helixMetadata['database-functionality'] === false, 'workspace functionality metadata');
+const emptyMaturity =
+  helixMetadata.status === policy.empty_product_scope.allowed_status &&
+  helixMetadata['database-functionality'] ===
+    policy.empty_product_scope.requires_database_functionality;
+const activeMaturity =
+  helixMetadata.status === policy.active_product_scope.allowed_status &&
+  helixMetadata['database-functionality'] ===
+    policy.active_product_scope.requires_database_functionality;
+assert(emptyMaturity || activeMaturity, 'workspace maturity metadata');
 
 const coverageTarget = path.join(repository, 'target', 'coverage');
 const rawDirectory = path.join(repository, 'target', 'coverage-profiles');
@@ -510,16 +525,15 @@ for (const fn of llvmData.functions) {
       if (!startExcluded) productRegions.push(region);
     }
     if (productRegions.length === 0) continue;
-    const key =
-      fn.name +
-      ':' +
-      productRegions
-        .map((region) => region.slice(0, 5).join(','))
-        .sort()
-        .join(';');
-    functionRecordsByFile.get(source).set(key, {
-      covered: productRegions.some((region) => region[4] > 0),
-      regions: productRegions,
+    const key = productRegions
+      .map((region) => region.slice(0, 4).join(','))
+      .sort()
+      .join(';');
+    const records = functionRecordsByFile.get(source);
+    const existing = records.get(key);
+    records.set(key, {
+      covered: (existing?.covered ?? false) || productRegions.some((region) => region[4] > 0),
+      regions: [...(existing?.regions ?? []), ...productRegions],
     });
   }
 }
@@ -536,8 +550,7 @@ const fileRecords = sourceRecords.map((sourceRecord) => {
   }
   const functions = [...functionRecordsByFile.get(sourceRecord.path).values()];
   const regions = new Map();
-  let coveredBranchOutcomes = 0;
-  let branchOutcomes = 0;
+  const branches = new Map();
   for (const fn of functions) {
     for (const region of fn.regions) {
       const key = region.slice(0, 4).join(':');
@@ -554,11 +567,16 @@ const fileRecords = sourceRecords.map((sourceRecord) => {
       ) {
         continue;
       }
-      branchOutcomes += 2;
-      if (branch[4] > 0) coveredBranchOutcomes += 1;
-      if (branch[5] > 0) coveredBranchOutcomes += 1;
+      const key = branch.slice(0, 4).join(':');
+      const existing = branches.get(key) ?? [false, false];
+      branches.set(key, [existing[0] || branch[4] > 0, existing[1] || branch[5] > 0]);
     }
   }
+  const branchOutcomes = branches.size * 2;
+  const coveredBranchOutcomes = [...branches.values()].reduce(
+    (sum, outcomes) => sum + Number(outcomes[0]) + Number(outcomes[1]),
+    0,
+  );
   const metrics = {
     branches: finishMetric(coveredBranchOutcomes, branchOutcomes),
     functions: finishMetric(functions.filter(({ covered }) => covered).length, functions.length),
@@ -579,10 +597,7 @@ const productMetricCount = fileRecords.reduce(
 );
 const emptyProductScope = productMetricCount === 0;
 assert(
-  !emptyProductScope ||
-    (helixMetadata.status === policy.empty_product_scope.allowed_status &&
-      helixMetadata['database-functionality'] ===
-        policy.empty_product_scope.requires_database_functionality),
+  !emptyProductScope || emptyMaturity,
   'empty product coverage scope is not permitted by workspace maturity',
 );
 
@@ -619,6 +634,14 @@ const groups = policy.groups.map((group) => {
 const coverageFailures = groups
   .filter(({ failures }) => failures.length > 0)
   .map(({ failures, id }) => `${id} (${failures.join(', ')})`);
+if (coverageFailures.length > 0) {
+  const failedFiles = fileRecords
+    .filter(({ metrics }) => metricNames.some((name) => metrics[name].missed > 0))
+    .map(({ metrics, path: file }) => ({ metrics, path: file }));
+  process.stderr.write(
+    `COVERAGE_DIAGNOSTIC ${JSON.stringify({ failed_files: failedFiles, groups })}\n`,
+  );
+}
 assert(coverageFailures.length === 0, `coverage thresholds failed: ${coverageFailures.join('; ')}`);
 
 const toolRecords = [
@@ -663,6 +686,8 @@ const report = {
     raw_profiles: rawProfiles.length,
     test_binaries: binaries.map(({ binary, target }) => ({ binary, target })),
     tests_executed: testsExecuted,
+    workspace_database_functionality: helixMetadata['database-functionality'],
+    workspace_status: helixMetadata.status,
   },
   exclusions: {
     empty_product_scope: emptyProductScope

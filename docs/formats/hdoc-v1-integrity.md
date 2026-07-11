@@ -319,7 +319,8 @@ Selected boundary digests:
 | `[null,true]` | `0x0a` | ordered indices | `e45af9eb5473d654f2505ee0e59c83ed0e01edf401f94f2a58b02270c64a97d2` |
 | `[true,null]` | `0x0a` | reversed values | `43e535fac3e406f196186829860e77528c8bc6a7e689c19dfc937c4258d9a53d` |
 
-The complete vector bodies—not only these summaries—are normative. `P03-008`/`P03-017` must replay
+The complete vector bodies—not only these summaries—are normative. `P03-008` replays them in the
+production encoder tests; `P03-017` must independently replay
 them through production and independent implementations.
 
 ## Uncompressed integrity-reference envelopes

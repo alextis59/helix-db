@@ -29,8 +29,9 @@ profile `1/1`, its independently bounded block stream, canonical selection, and 
 coordinate model are fixed by the [compression registry](hdoc-v1-compression.md). Together these
 documents complete the HDoc 1.0 byte grammar.
 
-Completion of the grammar is not an implementation or release-support claim. `P03-008` and
-`P03-009` own the production writer/reader, and `P03-016` owns immutable supported golden files.
+Completion of the grammar alone was not an implementation or release-support claim. `P03-008` now
+implements the production writer; `P03-009` still owns the validating reader, and `P03-016` owns
+immutable supported golden files.
 Footer `hash_profile_id = 1` is the only assigned base integrity profile; zero remains permanently
 invalid. The exact envelopes in the integrity and compression registries are normative executable
 references until the immutable corpus is published.
@@ -537,9 +538,9 @@ change. Unassigned reserved bits/IDs are not free for local experimentation in c
 
 No valid HDoc fixture or persisted HDoc row existed at P03-002; its then-unassigned profile zero
 ensured that partial format could not accidentally become one. P03-006 assigned integrity profile
-1, and P03-007 completed compression and the full byte grammar. Immutable support fixtures remain
-P03-016, so the format can still be superseded without stored-data migration before that
-fixture/data boundary.
+1, P03-007 completed compression and the full byte grammar, and P03-008 added a production encoder
+without publishing or persisting supported data. Immutable support fixtures remain P03-016, so the
+format can still be superseded without stored-data migration before that fixture/data boundary.
 
 Once a nonzero hash profile and immutable HDoc 1.x vectors exist, changing this layout requires:
 

@@ -15,7 +15,7 @@ This directory contains bounded verification entry points for foundation build p
 - `emit-ci-matrix.mjs` emits compact trusted `fromJSON` matrices for gating or nightly workflow contract jobs.
 - `check-ci-runtime.mjs` rejects a provisioned runner whose OS, architecture, Node version, or process identity differs from its matrix entry.
 - `check-rust-coverage.mjs` validates or executes the compiler-matched LLVM coverage pipeline, removes only reviewed test-code ranges, and enforces workspace/semantic/recovery thresholds.
-- `rust-coverage-policy.json` fixes the source inventory, exclusions, tool identities, report schema, threshold groups, execution bounds, and expiring boundary-skeleton exception.
+- `rust-coverage-policy.json` fixes the source inventory, exclusions, tool identities, report schema, threshold groups, execution bounds, historical boundary-skeleton exception, and active HDoc product scope.
 - `install-wasm-tools.mjs` downloads or reuses only the official hash-pinned Linux x64 component validator and verifies archive, inventory, executable, and version identities.
 - `check-wasm-artifacts.mjs` builds and validates the WASIp2 component and browser core-module forms and emits deterministic ignored reports.
 - `build-browser-smoke.mjs` checks the exact four-file example output, visible non-database boundary, and byte identity of its Wasm asset.

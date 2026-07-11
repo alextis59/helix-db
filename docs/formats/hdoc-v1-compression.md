@@ -25,9 +25,9 @@ content identity, or introduce dictionaries, network access, or user code during
 
 `P03-007` defined bytes and executable reference vectors without adding a production crate.
 `P03-008` has now installed fail-closed Rust dependency/advisory reporting and adopted the exact
-reviewed codec package; the same task owns the production writer. `P03-009` owns the production
-validating reader. `P03-016` owns immutable supported fixture files. Until those implementation
-tasks complete, the format is fully specified but not a support claim.
+reviewed codec package and implemented the production writer. `P03-009` owns the production
+validating reader. `P03-016` owns immutable supported fixture files. Until those later tasks
+complete, the writer is implemented but the format is not a release-support claim.
 
 The prose and machine registry are jointly normative. A disagreement is a specification defect
 that blocks `G03`; an implementation must not select whichever form is convenient.
@@ -366,10 +366,10 @@ transitive crate. Version `0.13.1` is outside the affected ranges in RustSec adv
 hashes. The profile additionally requires the safe decoder, fresh zero-initialized exact output,
 no dictionaries, and exact returned-length validation as defense in depth.
 
-This approval does not bypass repository dependency policy. `P03-008` activates the crate only
+This approval does not bypass repository dependency policy. `P03-008` activated the crate only
 after adding a pinned fail-closed scanner/report, exact graph and license authorities, updated
 notices, the `=0.13.1` lock checksum, and only the reviewed features. Its durable implementation
-evidence must additionally carry native/Wasm/independent-C vectors and scanner self-audit results.
+evidence carries native/Wasm/independent-C vectors and scanner self-audit results.
 
 ## Versioning, migration, and rollback
 
@@ -390,7 +390,7 @@ Reading never silently recompresses, repairs, or rewrites an HDoc.
 
 | Task | Owns next | Cannot change from `P03-007` |
 | --- | --- | --- |
-| `P03-008` | Canonical writer, exact dependency adoption, advisory/license gates | Profile IDs, stream bytes, block/selection rules |
+| `P03-008` (complete) | Canonical writer, exact dependency adoption, advisory/license gates | Profile IDs, stream bytes, block/selection rules |
 | `P03-009` | Bounded validating reader and stable decompression diagnostics | Trust order, resource bounds, unknown-codec behavior |
 | `P03-010`–`P03-012` | Owned/borrowed values, lookup, traversal | Whole-document validation and logical offsets |
 | `P03-015` | Extension-area negotiation and any registered extension compression rule | Four-base-section profile and existing IDs |

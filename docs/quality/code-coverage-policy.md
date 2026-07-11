@@ -1,6 +1,6 @@
 # Rust Product Code Coverage Policy
 
-- Status: Accepted executable foundation gate; no database behavior claim
+- Status: Active for the deterministic HDoc encoder
 - Last updated: 2026-07-11
 - Owner: Quality owner with storage and query-semantics review
 - Plan item: `P02-013`
@@ -126,15 +126,16 @@ semantic results and recovery decisions. Future code under the named crate sourc
 without editing this table. Moving critical behavior into another crate requires updating the
 machine group before the move can pass review.
 
-Line coverage is derived from executable LLVM source segments after exclusions. Function and
-region records are deduplicated across test objects. Branch outcomes are counted only when the
-compiler emits branch mappings. A zero-count metric is not a free pass for a nonempty metric: every
+Line coverage is derived from executable LLVM source segments after exclusions. Function, region,
+and branch records emitted into multiple Cargo test objects are deduplicated by source coordinates
+before their execution counts are combined. Branch outcomes are counted only when the compiler
+emits branch mappings. A zero-count metric is not a free pass for a nonempty metric: every
 metric that exists is enforced, while absent branch instrumentation remains visible as `null`.
 
 Critical groups enforce the same threshold on each file that has an instrumented product metric.
 One fully covered file therefore cannot hide a second partially covered critical file.
 
-## Honest Phase 2 empty-scope rule
+## Historical Phase 2 empty scope and active P03-008 scope
 
 At `P02-013` the eight Rust crates contain boundary constants and unit-test harnesses but no
 executable product function. LLVM reports 9 covered test functions, 36 test lines, and 38 test
@@ -148,13 +149,22 @@ status = "boundary-skeleton"
 database-functionality = false
 ```
 
-The exception is due for revalidation at `P03-008`, the first HDoc implementation task. More
-importantly, it applies only when the complete product metric count is zero. The first executable
-product function or region automatically makes the applicable group nonempty and activates its
-threshold; leaving the maturity flag unchanged cannot hide uncovered implementation code.
+That exception was revalidated and expired when `P03-008` introduced the safe deterministic HDoc
+encoder. The active workspace metadata is now:
 
-The current clean report therefore proves the coverage pipeline and armed thresholds, not product
-test coverage. Evidence must preserve this distinction.
+```text
+status = "hdoc-encoder"
+database-functionality = true
+```
+
+This active state requires a nonempty product denominator and enforces every applicable threshold.
+The historical exception still exists in the machine authority so an earlier source-bound report
+can explain its posture, but changing the current metadata back to the skeleton state violates the
+workspace bootstrap and implementation contract. Maturity metadata cannot hide uncovered code:
+an active empty scope fails, while a nonempty scope always activates its thresholds.
+
+The current clean report proves measured HDoc product coverage. It records workspace maturity and
+database-functionality metadata alongside the executed test and source identities.
 
 ## Report contract
 
@@ -162,7 +172,8 @@ test coverage. Evidence must preserve this distinction.
 
 - SHA-256 identities for `Cargo.toml`, `Cargo.lock`, `rust-toolchain.toml`, the policy, and the report runner itself;
 - Rust/LLVM/host/export identities and exact report-tool binary hashes;
-- the fixed Cargo arguments, test-object identities, raw-profile count, and tests executed;
+- the fixed Cargo arguments, test-object identities, raw-profile count, tests executed, and active
+  workspace maturity/functionality markers;
 - path and inline exclusion authorities plus the bounded empty-scope decision;
 - unfiltered LLVM totals including tests;
 - each product source path/hash and its branch/function/line/region metrics;
@@ -198,7 +209,8 @@ The command fails on any of the following:
 - source outside the inclusion/exclusion classification;
 - unpaired, misplaced, multiple, or nonterminal inline exclusions;
 - `#[cfg(test)]` outside an exclusion or a region crossing its boundary;
-- empty product scope outside the exact boundary-skeleton exception;
+- active product metadata with an empty product scope, or an empty scope outside the historical
+  boundary-skeleton exception;
 - aggregate or critical per-file threshold failure; or
 - oversized/unwritable report output.
 

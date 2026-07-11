@@ -1,7 +1,7 @@
 # Rust Workspace and Initial Crate Boundaries
 
-- Status: Implemented boundary skeleton; no database functionality
-- Last updated: 2026-07-10
+- Status: Active boundaries; `helix-doc` encoder implemented
+- Last updated: 2026-07-11
 - Owner: Runtime architecture owner
 - Plan item: `P02-001`
 - Governing requirements: `INV-001`, `INV-003`, `INV-004`, `CORE-001`, `CORE-003`
@@ -9,13 +9,17 @@
 - Design source: [Study section 24](../../Study.md#24-suggested-initial-repository-architecture)
 - Development identity: [ADR 0001](../adr/0001-public-product-identity.md)
 
-This document fixes the first Rust workspace boundaries and dependency direction without claiming that any database feature exists. Every crate is version `0.0.0`, has `publish = false`, and carries machine-readable `boundary-skeleton` / `database-functionality = false` metadata. Public names and package coordinates remain blocked by `P16-016`.
+This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
+unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-encoder` /
+`database-functionality = true` metadata now that `P03-008` has implemented deterministic encoding;
+the other seven crates remain `boundary-skeleton` components. Public names and package coordinates
+remain blocked by `P16-016`.
 
 ## Boundary inventory
 
 | Crate | Responsibility boundary | Allowed direct internal dependencies | Current maturity |
 | --- | --- | --- | --- |
-| `helix-doc` | Logical values, HDoc codec, canonical value semantics | None | Boundary skeleton |
+| `helix-doc` | Logical values, HDoc codec, canonical value semantics | None | Safe deterministic HDoc encoder; decoder/views pending |
 | `helix-query` | Query syntax, normalization, logical plans, CPU reference behavior | `helix-doc` | Boundary skeleton |
 | `helix-storage` | Deterministic WAL/MVCC/manifest/memtable/immutable-file algorithms; no ambient I/O | `helix-doc` | Boundary skeleton |
 | `helix-columnar` | Rebuildable field dictionaries, typed sidecars, and CPU column operators | `helix-doc`, `helix-query` | Boundary skeleton |
@@ -24,7 +28,8 @@ This document fixes the first Rust workspace boundaries and dependency direction
 | `helix-host-native` | Native files, clocks, randomness, scheduling, networking, devices, and runtime integration | `helix-core`; optional `helix-gpu` feature | Boundary skeleton |
 | `helix-server` | Native process lifecycle and future public/server protocol surface | `helix-host-native`; forwards optional GPU feature | Boundary skeleton |
 
-The responsibility column describes the intended ownership from the Study and Specifications. It does not assert that the listed subsystems are implemented.
+The responsibility column describes ownership from the Study and Specifications. Only the maturity
+column states current implementation; it does not imply that the remaining listed subsystems exist.
 
 ## Dependency direction
 
@@ -81,7 +86,11 @@ cargo test --workspace --all-features
 cargo doc --workspace --no-deps --all-features
 ```
 
-The evidence verifier independently reads Cargo metadata, requires exactly these eight unpublished `0.0.0` packages, compares every direct internal dependency/feature edge with the table above, rejects cycles and forbidden edges, and confirms that every crate declares the boundary-only maturity markers.
+The evidence verifier independently reads Cargo metadata, requires exactly these eight unpublished
+`0.0.0` packages, compares every direct internal dependency/feature edge with the table above,
+rejects cycles and forbidden edges, and confirms each crate's current maturity markers. Historical
+`P02-001` evidence remains source-bound to the all-skeleton state; current checks admit only the
+documented `helix-doc` encoder transition.
 
 ## Change rule
 

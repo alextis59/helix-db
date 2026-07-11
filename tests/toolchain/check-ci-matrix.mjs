@@ -318,7 +318,7 @@ same(
 );
 assert(
   runNode(['tests/toolchain/check-bootstrap.mjs', 'contract']).includes(
-    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 19 troubleshooting codes, database functionality false',
+    'PASS clean bootstrap contract: 4 profiles, 5 native hosts, 19 troubleshooting codes, HDoc encoder active',
   ),
   'clean bootstrap contract did not pass',
 );
