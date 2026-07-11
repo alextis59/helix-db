@@ -1,0 +1,173 @@
+{
+  "schema": "helix.ci-matrix/1",
+  "plan_item": "P02-009",
+  "actions": {
+    "checkout": {
+      "repository": "actions/checkout",
+      "version": "7.0.0",
+      "sha": "9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0"
+    },
+    "setup_node": {
+      "repository": "actions/setup-node",
+      "version": "6.4.0",
+      "sha": "48b55a011bda9f5d6aeb4c2d9c7362e8dae4041e"
+    }
+  },
+  "gating": {
+    "node": [
+      {
+        "id": "node-22-linux-x64",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "22.23.1"
+      },
+      {
+        "id": "node-24-linux-x64",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "24.18.0"
+      }
+    ],
+    "native": [
+      {
+        "id": "linux-x64",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "22.23.1"
+      },
+      {
+        "id": "windows-x64",
+        "runner": "windows-2025",
+        "runner_os": "Windows",
+        "runner_arch": "X64",
+        "process_platform": "win32",
+        "process_arch": "x64",
+        "node": "22.23.1"
+      },
+      {
+        "id": "macos-arm64",
+        "runner": "macos-15",
+        "runner_os": "macOS",
+        "runner_arch": "ARM64",
+        "process_platform": "darwin",
+        "process_arch": "arm64",
+        "node": "22.23.1"
+      }
+    ],
+    "portable": [
+      {
+        "id": "wasm-browser",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "22.23.1",
+        "target": "wasm32-unknown-unknown"
+      },
+      {
+        "id": "wasm-component",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "22.23.1",
+        "target": "wasm32-wasip2"
+      }
+    ],
+    "sanitizer": [
+      {
+        "id": "asan-linux-x64",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "22.23.1",
+        "target": "x86_64-unknown-linux-gnuasan"
+      }
+    ],
+    "browser": [
+      {
+        "id": "browser-chromium-inventory",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "22.23.1",
+        "engine": "chromium",
+        "execution": "inventory-only",
+        "activation_task": "P02-010"
+      },
+      {
+        "id": "browser-firefox-inventory",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "22.23.1",
+        "engine": "firefox",
+        "execution": "inventory-only",
+        "activation_task": "P02-010"
+      },
+      {
+        "id": "browser-webkit-inventory",
+        "runner": "ubuntu-24.04",
+        "runner_os": "Linux",
+        "runner_arch": "X64",
+        "process_platform": "linux",
+        "process_arch": "x64",
+        "node": "22.23.1",
+        "engine": "webkit",
+        "execution": "inventory-only",
+        "activation_task": "P02-010"
+      }
+    ]
+  },
+  "nightly": {
+    "native": [
+      {
+        "id": "linux-arm64",
+        "runner": "ubuntu-24.04-arm",
+        "runner_os": "Linux",
+        "runner_arch": "ARM64",
+        "process_platform": "linux",
+        "process_arch": "arm64",
+        "node": "22.23.1"
+      },
+      {
+        "id": "macos-x64",
+        "runner": "macos-15-intel",
+        "runner_os": "macOS",
+        "runner_arch": "X64",
+        "process_platform": "darwin",
+        "process_arch": "x64",
+        "node": "22.23.1"
+      }
+    ]
+  },
+  "unsupported": [
+    {
+      "platform": "windows-arm64",
+      "reason": "GitHub's standard Windows arm64 image is public preview; no HelixDB product artifact or support claim exists yet",
+      "revisit_by": "P16-002"
+    },
+    {
+      "platform": "branded-chrome-edge-safari",
+      "reason": "Playwright Chromium and WebKit are not branded browser support claims",
+      "revisit_by": "P11-018"
+    }
+  ]
+}

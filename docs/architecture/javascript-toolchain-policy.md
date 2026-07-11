@@ -19,12 +19,12 @@ The supported development/CI lines are:
 | --- | --- | --- |
 | Node 22 LTS | `>=22.12.0 <23` | Oldest supported line and default `.nvmrc` development baseline (`22.23.1`) |
 | Node 24 LTS | `>=24.11.0 <25` | Newest supported LTS line and required CI lane |
-| Node 26 Current | Unsupported/canary only until it enters LTS | Early compatibility signal under `P02-009`; never a release claim yet |
+| Node 26 Current | Unsupported until it enters LTS | No CI, fixes, or install claim; reconsider only through the promotion procedure below |
 | EOL and odd pre-27 lines | Unsupported | No CI, fixes, or install claim |
 
 The [official Node release table](https://nodejs.org/en/about/previous-releases) lists Node 22 and 24 as LTS and Node 26 as Current on the selection date, and recommends production use of Active or Maintenance LTS. The [official Node 22-to-24 migration guidance](https://nodejs.org/en/blog/migrations/v22-to-v24) records Node 24's LTS transition and support through April 2028.
 
-The lower bounds also satisfy Vite 8's published Node requirement. `.nvmrc` is a convenience pin for the oldest supported line, not the complete support declaration; `package.json` engines and the future CI matrix are authoritative.
+The lower bounds also satisfy Vite 8's published Node requirement. `.nvmrc` is a convenience pin for the oldest supported line, not the complete support declaration; `package.json` engines and the [committed CI matrix](continuous-integration.md) are authoritative.
 
 Support follows release-line status, not an indefinite major-version promise. When Node 22 reaches EOL, one reviewed change removes it from engines/CI after packages and artifacts prove Node 24. When Node 26 enters LTS, it may be promoted only after clean install, build, unit, browser, and package checks pass.
 
@@ -83,7 +83,7 @@ The root `tsconfig.json` is an empty build-graph anchor. Package-specific config
 
 Playwright is selected for Chromium, Firefox, and WebKit. `P02-003` installs only the harness package and lists its empty suite; it does not download hundreds of megabytes of mutable browser binaries during npm install.
 
-`P02-010` will pin/install the Playwright-coupled browser revisions, validate a real Vite/Wasm bundle, and retain reports. `P02-009` will define which browser/OS combinations gate every change versus nightly coverage. Branded Chrome/Edge and Safari are separate profiles; bundled Chromium/WebKit must not be mislabeled as those branded products.
+The [P02-009 CI matrix](continuous-integration.md) now gives Chromium, Firefox, and WebKit separate gating inventory jobs on Linux x64 and records broader native architectures as gating or nightly. `P02-010` will install the Playwright-coupled browser revisions, validate a real Vite/Wasm bundle, and retain smoke outputs. Branded Chrome/Edge and Safari are separate profiles; bundled Chromium/WebKit must not be mislabeled as those branded products.
 
 ## Browser build profile added by P02-005
 

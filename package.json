@@ -29,6 +29,8 @@
     "fsevents": false
   },
   "scripts": {
+    "ci:browser-inventory": "node tests/toolchain/check-browser-engine-lane.mjs",
+    "ci:check": "node tests/toolchain/check-ci-matrix.mjs",
     "fixtures:check": "node fixtures/generation/check.mjs",
     "fixtures:generate": "node fixtures/generation/generate.mjs --write",
     "policy:javascript": "biome check --error-on-warnings .",

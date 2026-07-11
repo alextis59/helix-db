@@ -94,7 +94,7 @@ helix-core
 
 The toolchain also installs `x86_64-unknown-linux-gnuasan` for the bounded Linux AddressSanitizer lane. The [official target documentation](https://doc.rust-lang.org/nightly/rustc/platform-support/x86_64-unknown-linux-gnuasan.html) classifies it as Tier 2, describes a fully ASan-instrumented standard library distributed through rustup, and states that produced binaries run on Linux without external requirements.
 
-This target is diagnostic, not a supported deployment platform. It avoids an unpinned nightly and unstable `-Zbuild-std` path for the initial x86_64 Linux lane. Other hosts, architectures, ThreadSanitizer, MemorySanitizer, and mixed-language instrumentation require their own explicit CI capability entries under `P02-009`; absence of those lanes is never represented as a sanitizer pass.
+This target is diagnostic, not a supported deployment platform. It avoids an unpinned nightly and unstable `-Zbuild-std` path for the initial x86_64 Linux lane. The [P02-009 CI matrix](continuous-integration.md) now runs it only on Linux x64 and records native x64/arm64 coverage separately. ThreadSanitizer, MemorySanitizer, Windows/macOS sanitizers, and mixed-language instrumentation remain unsupported; absence of those lanes is never represented as a sanitizer pass.
 
 The exact profile and invocation are defined in [Build Profiles](build-profiles.md). Updating or removing this target follows the same exact-toolchain and clean-replay rules as the Wasm targets.
 

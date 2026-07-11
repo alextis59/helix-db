@@ -3,5 +3,5 @@
   "compilerOptions": {
     "types": ["node"]
   },
-  "files": ["vite.config.ts"]
+  "files": ["playwright.config.ts", "vite.config.ts"]
 }
