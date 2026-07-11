@@ -1,0 +1,2 @@
+# Keep text checkout bytes stable across Linux, macOS, and Windows.
+* text=auto eol=lf

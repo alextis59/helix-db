@@ -8,15 +8,15 @@ import {
   validateBrowserBundleReport,
   validateBrowserExampleReport,
   validateExamplePolicy,
+  validateLineEndingPolicy,
   validateNativeExampleReport,
+  validateNativeLock,
 } from './examples-contract.mjs';
 
-const expectRejection = (label, marker, base, mutate, validate) => {
-  const candidate = structuredClone(base);
-  mutate(candidate);
+const expectError = (label, marker, action) => {
   let rejected = false;
   try {
-    validate(candidate);
+    action();
   } catch (error) {
     const message = error instanceof Error ? error.message : String(error);
     assert(message.includes(marker), `${label}: wrong rejection reason: ${message}`);
@@ -24,6 +24,30 @@ const expectRejection = (label, marker, base, mutate, validate) => {
   }
   assert(rejected, `${label}: mutation unexpectedly passed`);
 };
+
+const expectRejection = (label, marker, base, mutate, validate) => {
+  const candidate = structuredClone(base);
+  mutate(candidate);
+  expectError(label, marker, () => validate(candidate));
+};
+
+const lineEndingPolicy = validateLineEndingPolicy();
+const nativeLock = validateNativeLock();
+const lineEndingCases = [
+  [
+    'Windows checkout policy weakening',
+    'repository text checkout policy mismatch',
+    () => validateLineEndingPolicy(lineEndingPolicy.replace('eol=lf', 'eol=crlf')),
+  ],
+  [
+    'native lock CRLF checkout',
+    'native lock canonical LF bytes',
+    () => validateNativeLock(nativeLock.replaceAll('\n', '\r\n')),
+  ],
+];
+for (const [label, marker, validate] of lineEndingCases) {
+  expectError(label, marker, validate);
+}
 
 const policy = loadExamplePolicy();
 const policyCases = [
@@ -231,5 +255,5 @@ for (const [label, marker, mutate] of bundleCases) {
 }
 
 process.stdout.write(
-  `PASS toolchain example rejection canaries: ${policyCases.length + nativeCases.length + browserCases.length + bundleCases.length} policy/native/browser/bundle mutations rejected with exact reasons\n`,
+  `PASS toolchain example rejection canaries: ${lineEndingCases.length + policyCases.length + nativeCases.length + browserCases.length + bundleCases.length} line-ending/policy/native/browser/bundle mutations rejected with exact reasons\n`,
 );
