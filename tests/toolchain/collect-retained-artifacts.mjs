@@ -21,6 +21,7 @@ import {
   retentionClaimBoundary,
   validateBrowserExecutionReport,
   validateBundleManifest,
+  validateDependencyDiagnostics,
   validateSchemas,
 } from './artifact-retention-contract.mjs';
 
@@ -149,14 +150,28 @@ const collectSemanticReplay = (profile, producer, bundleRoot) => {
     'npm-signatures.json',
     'observation-report.json',
   ];
-  for (const file of dependencyFiles) {
-    const sourcePath = `dist/dependency/${file}`;
-    if (existsSync(resolveRepositoryPath(sourcePath))) {
-      manifest.artifacts.push(
-        copyArtifact(bundleRoot, sourcePath, `dependency/${file}`, 'dependency-diagnostic'),
-      );
-    } else if (process.env.GITHUB_ACTIONS === 'true') {
-      manifest.failures.push(`required CI dependency report absent: ${sourcePath}`);
+  if (process.env.GITHUB_ACTIONS === 'true') {
+    for (const file of dependencyFiles) {
+      const sourcePath = `dist/dependency/${file}`;
+      if (existsSync(resolveRepositoryPath(sourcePath))) {
+        manifest.artifacts.push(
+          copyArtifact(bundleRoot, sourcePath, `dependency/${file}`, 'dependency-diagnostic'),
+        );
+      } else {
+        manifest.failures.push(`required CI dependency report absent: ${sourcePath}`);
+      }
+    }
+    const completeDependencySet = dependencyFiles.every((file) =>
+      manifest.artifacts.some(({ path: artifactPath }) => artifactPath === `dependency/${file}`),
+    );
+    if (completeDependencySet) {
+      try {
+        validateDependencyDiagnostics(bundleRoot, manifest);
+      } catch (error) {
+        manifest.failures.push(
+          `dependency diagnostics: ${error instanceof Error ? error.message : String(error)}`,
+        );
+      }
     }
   }
   manifest.producer.exit_code = manifest.failures.length === 0 ? 0 : result.exitCode || 1;

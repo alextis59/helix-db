@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 
-import { mkdtempSync, rmSync, writeFileSync } from 'node:fs';
+import { mkdirSync, mkdtempSync, rmSync, writeFileSync } from 'node:fs';
 import os from 'node:os';
 import path from 'node:path';
 
@@ -12,10 +12,14 @@ import {
   fileIdentity,
   findProducer,
   findProfile,
+  jsonBytes,
   loadPolicy,
+  readBytes,
   retentionClaimBoundary,
+  sha256,
   validateBrowserExecutionReport,
   validateBundleManifest,
+  validateDependencyDiagnostics,
   validatePolicy,
   validateSchemas,
 } from './artifact-retention-contract.mjs';
@@ -320,6 +324,153 @@ for (const [label, marker, mutate] of browserCases) {
   );
 }
 
+const dependencyRoot = mkdtempSync(path.join(os.tmpdir(), 'helix-dependency-retention-'));
+let dependencyCanaries = 0;
+try {
+  const dependencyDirectory = path.join(dependencyRoot, 'dependency');
+  mkdirSync(dependencyDirectory);
+  const reportPolicy = JSON.parse(
+    readBytes('tests/toolchain/dependency-report-policy.json').toString('utf8'),
+  );
+  const recordedAt = '2026-01-01T00:00:00.000Z';
+  const manifestStub = {
+    recorded_at: recordedAt,
+    environment: { platform: process.platform, architecture: process.arch },
+  };
+  const createDependencySet = () => {
+    const installed = reportPolicy.npm.signatures.required_attested_direct_packages.map(
+      (name, index) => ({ name, path: `node_modules/direct-${index}`, version: '1.0.0' }),
+    );
+    const inventory = {
+      schema: reportPolicy.reports.inventory_schema,
+      plan_item: 'P02-012',
+      inputs: {
+        cargo_lock_sha256: sha256(readBytes('Cargo.lock')),
+        dependency_policy_sha256: sha256(readBytes(reportPolicy.authorities.dependency_policy)),
+        npm_license_inventory_sha256: sha256(
+          readBytes(reportPolicy.authorities.npm_license_inventory),
+        ),
+        package_lock_sha256: sha256(readBytes('package-lock.json')),
+        report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
+        wasm_tools_authority_sha256: sha256(readBytes(reportPolicy.authorities.wasm_tools)),
+      },
+      environment: {
+        architecture: process.arch,
+        installed_tree: 'present',
+        platform: process.platform,
+      },
+      npm: {
+        installed_packages: installed,
+        license_files: 73,
+        locked_development_packages: reportPolicy.npm.expected_locked_packages,
+      },
+      rust: { external_packages: [] },
+      verdict: 'pass',
+    };
+    const dependencies = { dev: 91, optional: 42, peer: 0, peerOptional: 0, prod: 1, total: 91 };
+    const audit = {
+      auditReportVersion: 2,
+      vulnerabilities: {},
+      metadata: {
+        vulnerabilities: reportPolicy.npm.audit.maximum_vulnerabilities,
+        dependencies,
+      },
+    };
+    const verified = installed.map(({ name, path: location, version }) => ({
+      location,
+      name,
+      version,
+    }));
+    const signatures = { invalid: [], missing: [], verified };
+    const inventoryBytes = jsonBytes(inventory);
+    const auditBytes = jsonBytes(audit);
+    const signaturesBytes = jsonBytes(signatures);
+    const observation = {
+      schema: reportPolicy.reports.observation_schema,
+      plan_item: 'P02-012',
+      recorded_at: recordedAt,
+      freshness: { maximum_age_hours: reportPolicy.live_report_max_age_hours },
+      inputs: {
+        inventory_report_bytes: inventoryBytes.length,
+        inventory_report_sha256: sha256(inventoryBytes),
+        package_lock_sha256: sha256(readBytes('package-lock.json')),
+        report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
+      },
+      registry: reportPolicy.npm.registry_prefix,
+      npm: {
+        audit: {
+          audited_dependencies: dependencies,
+          raw_bytes: auditBytes.length,
+          raw_sha256: sha256(auditBytes),
+          vulnerabilities: reportPolicy.npm.audit.maximum_vulnerabilities,
+        },
+        provenance: {
+          attested_packages: verified,
+          raw_bytes: signaturesBytes.length,
+          raw_sha256: sha256(signaturesBytes),
+          registry_signatures_invalid: 0,
+          registry_signatures_missing: 0,
+          registry_signatures_verified: installed.length,
+        },
+      },
+      verdict: 'pass',
+    };
+    return { audit, inventory, observation, signatures };
+  };
+  const writeDependencySet = (documents) => {
+    for (const [file, value] of [
+      ['inventory-report.json', documents.inventory],
+      ['npm-audit.json', documents.audit],
+      ['npm-signatures.json', documents.signatures],
+      ['observation-report.json', documents.observation],
+    ]) {
+      writeFileSync(path.join(dependencyDirectory, file), jsonBytes(value));
+    }
+  };
+  const cleanDocuments = createDependencySet();
+  writeDependencySet(cleanDocuments);
+  validateDependencyDiagnostics(dependencyRoot, manifestStub);
+  const dependencyCases = [
+    [
+      'stale dependency policy linkage',
+      'retained dependency inventory inputs',
+      (value) => (value.inventory.inputs.report_policy_sha256 = '0'.repeat(64)),
+    ],
+    [
+      'raw audit substitution',
+      'retained raw audit linkage',
+      (value) => (value.observation.npm.audit.raw_sha256 = '0'.repeat(64)),
+    ],
+    [
+      'stale dependency observation',
+      'retained dependency observation freshness',
+      (value) => (value.observation.recorded_at = '2025-12-01T00:00:00.000Z'),
+    ],
+    [
+      'missing registry signature',
+      'retained missing npm signatures',
+      (value) => (value.signatures.missing = ['node_modules/missing']),
+    ],
+  ];
+  for (const [label, marker, mutate] of dependencyCases) {
+    const candidate = createDependencySet();
+    mutate(candidate);
+    writeDependencySet(candidate);
+    let rejected = false;
+    try {
+      validateDependencyDiagnostics(dependencyRoot, manifestStub);
+    } catch (error) {
+      const message = error instanceof Error ? error.message : String(error);
+      assert(message.includes(marker), `${label}: wrong rejection reason: ${message}`);
+      rejected = true;
+    }
+    assert(rejected, `${label}: mutation unexpectedly passed`);
+  }
+  dependencyCanaries = dependencyCases.length;
+} finally {
+  rmSync(dependencyRoot, { recursive: true, force: true });
+}
+
 process.stdout.write(
-  `PASS artifact retention rejection canaries: ${cases.length + 2 + bundleCanaries + browserCases.length} policy/profile/producer/reservation/engine/bundle/browser mutations rejected with exact reasons\n`,
+  `PASS artifact retention rejection canaries: ${cases.length + 2 + bundleCanaries + browserCases.length + dependencyCanaries} policy/profile/producer/reservation/engine/bundle/browser/dependency mutations rejected with exact reasons\n`,
 );

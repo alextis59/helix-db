@@ -325,7 +325,7 @@ assert(
 );
 assert(
   runNode(['tests/toolchain/test-artifact-retention-contract.mjs']).includes(
-    'PASS artifact retention rejection canaries: 34 policy/profile/producer/reservation/engine/bundle/browser mutations rejected with exact reasons',
+    'PASS artifact retention rejection canaries: 38 policy/profile/producer/reservation/engine/bundle/browser/dependency mutations rejected with exact reasons',
   ),
   'artifact retention rejection canaries did not pass',
 );

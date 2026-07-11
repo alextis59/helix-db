@@ -81,12 +81,16 @@ Each bundle manifest records:
 The collector replaces its fixed ignored output directory on each execution, rejects symlinks and
 path escapes, caps manifests and payloads, and validates the finished directory before returning
 success. It never selects an arbitrary command, input root, output root, profile, or browser engine.
+The GitHub semantic collector additionally requires all four routine dependency reports, matches
+their policy/lock/tool inputs to the current checkout, links the compact observation to the exact
+raw inventory/audit/signature bytes, enforces its freshness relative to the bundle timestamp, and
+rejects any vulnerability, missing/invalid registry signature, or required-provenance omission.
 
 ## Active bundles and CI placement
 
 | Bundle | Upstream result | Retained payload | Gating lane |
 | --- | --- | --- | --- |
-| `test-replays/semantic` | Offline semantic conformance | Sanitized raw log; on Node 22, deterministic inventory plus raw advisory, raw signature/provenance, and compact observation reports | Node 22 Linux x64 |
+| `test-replays/semantic` | Offline semantic conformance | Sanitized raw log; in GitHub Node 22, current deterministic inventory plus raw advisory, raw signature/provenance, and compact linked observation reports | Node 22 Linux x64 |
 | `test-replays/coverage` | Compiler-matched Rust product coverage | Strict `helix.rust-coverage-report/1` | Native Linux x64 |
 | `browser-reports/chromium` | Wasm/Vite smoke in Chromium and trusted WGSL compilation | Wasm report, bundle report, structured browser execution, WGSL report, and failure attachments | Chromium Linux x64 |
 | `browser-reports/firefox` | Wasm/Vite smoke in Firefox | Wasm report, bundle report, structured browser execution, and failure attachments | Firefox Linux x64 |

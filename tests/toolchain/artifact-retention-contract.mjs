@@ -541,6 +541,150 @@ const validateFileIdentity = (identity, label, root = repository) => {
 
 const dependencyReportPolicy = () => readJson('tests/toolchain/dependency-report-policy.json');
 
+export const validateDependencyDiagnostics = (bundleRoot, manifest) => {
+  const reportPolicy = dependencyReportPolicy();
+  const artifactBytes = (file) => readFileSync(path.join(bundleRoot, 'dependency', file));
+  const artifactJson = (file) => JSON.parse(artifactBytes(file).toString('utf8'));
+  const inventoryBytes = artifactBytes('inventory-report.json');
+  const auditBytes = artifactBytes('npm-audit.json');
+  const signaturesBytes = artifactBytes('npm-signatures.json');
+  const inventory = JSON.parse(inventoryBytes.toString('utf8'));
+  const audit = JSON.parse(auditBytes.toString('utf8'));
+  const signatures = JSON.parse(signaturesBytes.toString('utf8'));
+  const observation = artifactJson('observation-report.json');
+
+  assert(
+    inventory.schema === reportPolicy.reports.inventory_schema &&
+      inventory.plan_item === 'P02-012' &&
+      inventory.verdict === 'pass',
+    'retained dependency inventory identity or verdict',
+  );
+  same(
+    inventory.inputs,
+    {
+      cargo_lock_sha256: sha256(readBytes('Cargo.lock')),
+      dependency_policy_sha256: sha256(readBytes(reportPolicy.authorities.dependency_policy)),
+      npm_license_inventory_sha256: sha256(
+        readBytes(reportPolicy.authorities.npm_license_inventory),
+      ),
+      package_lock_sha256: sha256(readBytes('package-lock.json')),
+      report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
+      wasm_tools_authority_sha256: sha256(readBytes(reportPolicy.authorities.wasm_tools)),
+    },
+    'retained dependency inventory inputs',
+  );
+  same(
+    inventory.environment,
+    {
+      architecture: manifest.environment.architecture,
+      installed_tree: 'present',
+      platform: manifest.environment.platform,
+    },
+    'retained dependency inventory environment',
+  );
+  assert(
+    inventory.npm.locked_development_packages === reportPolicy.npm.expected_locked_packages &&
+      inventory.npm.license_files === 73 &&
+      inventory.rust.external_packages.length === 0,
+    'retained dependency inventory counts',
+  );
+
+  assert(audit.auditReportVersion === 2, 'retained npm audit version');
+  same(audit.vulnerabilities, {}, 'retained npm audit vulnerabilities');
+  same(
+    audit.metadata.vulnerabilities,
+    reportPolicy.npm.audit.maximum_vulnerabilities,
+    'retained npm audit counts',
+  );
+  same(signatures.invalid, [], 'retained invalid npm signatures');
+  same(signatures.missing, [], 'retained missing npm signatures');
+  assert(Array.isArray(signatures.verified), 'retained npm attestations absent');
+  same(
+    signatures.verified.map(({ location }) => location),
+    [...new Set(signatures.verified.map(({ location }) => location))],
+    'retained npm attestation locations',
+  );
+
+  assert(
+    observation.schema === reportPolicy.reports.observation_schema &&
+      observation.plan_item === 'P02-012' &&
+      observation.verdict === 'pass',
+    'retained dependency observation identity or verdict',
+  );
+  same(
+    observation.freshness,
+    { maximum_age_hours: reportPolicy.live_report_max_age_hours },
+    'retained dependency observation freshness policy',
+  );
+  const observationTime = Date.parse(observation.recorded_at);
+  const bundleTime = Date.parse(manifest.recorded_at);
+  assert(Number.isFinite(observationTime), 'retained dependency observation time');
+  assert(
+    bundleTime - observationTime >= -300000 &&
+      bundleTime - observationTime <= reportPolicy.live_report_max_age_hours * 3600000,
+    'retained dependency observation freshness',
+  );
+  same(
+    observation.inputs,
+    {
+      inventory_report_bytes: inventoryBytes.length,
+      inventory_report_sha256: sha256(inventoryBytes),
+      package_lock_sha256: sha256(readBytes('package-lock.json')),
+      report_policy_sha256: sha256(readBytes('tests/toolchain/dependency-report-policy.json')),
+    },
+    'retained dependency observation inputs',
+  );
+  assert(observation.registry === reportPolicy.npm.registry_prefix, 'retained npm registry');
+  same(
+    observation.npm.audit.vulnerabilities,
+    audit.metadata.vulnerabilities,
+    'retained audit-observation counts',
+  );
+  same(
+    observation.npm.audit.audited_dependencies,
+    audit.metadata.dependencies,
+    'retained audit dependency counts',
+  );
+  assert(
+    observation.npm.audit.raw_bytes === auditBytes.length &&
+      observation.npm.audit.raw_sha256 === sha256(auditBytes),
+    'retained raw audit linkage',
+  );
+  assert(
+    observation.npm.provenance.raw_bytes === signaturesBytes.length &&
+      observation.npm.provenance.raw_sha256 === sha256(signaturesBytes),
+    'retained raw signature linkage',
+  );
+  assert(
+    observation.npm.provenance.registry_signatures_invalid === 0 &&
+      observation.npm.provenance.registry_signatures_missing === 0 &&
+      observation.npm.provenance.registry_signatures_verified ===
+        inventory.npm.installed_packages.length,
+    'retained registry signature counts',
+  );
+  assert(
+    observation.npm.provenance.attested_packages.length === signatures.verified.length,
+    'retained attestation count linkage',
+  );
+  same(
+    observation.npm.provenance.attested_packages.map(({ location, name, version }) => ({
+      location,
+      name,
+      version,
+    })),
+    signatures.verified
+      .map(({ location, name, version }) => ({ location, name, version }))
+      .sort((left, right) => left.location.localeCompare(right.location)),
+    'retained attestation identity linkage',
+  );
+  for (const name of reportPolicy.npm.signatures.required_attested_direct_packages) {
+    assert(
+      observation.npm.provenance.attested_packages.some((entry) => entry.name === name),
+      `retained required provenance absent: ${name}`,
+    );
+  }
+};
+
 export const validateBrowserExecutionReport = (
   report,
   expectedSelection,
@@ -866,6 +1010,7 @@ export const validateBundleManifest = (manifest, bundleRoot, { requireComplete =
           `required CI dependency report absent from bundle: ${dependencyReport}`,
         );
       }
+      validateDependencyDiagnostics(bundleRoot, manifest);
     }
   } else if (manifest.profile === 'test-replays') {
     const coverage = manifest.artifacts.find(
