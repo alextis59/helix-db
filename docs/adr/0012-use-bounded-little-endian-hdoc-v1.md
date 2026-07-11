@@ -468,7 +468,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] Record implementable endianness, alignment, offset, maximum-size, canonicalization,
   checksum, content-hash, compression, extension, rejection, and rollback decisions in this ADR.
 - [x] Freeze exact header/footer and feature/version fields under `P03-002`.
-- [ ] Freeze type tags and payload encodings under `P03-003` and `P03-004`.
+- [x] Freeze stable type tags and extension ranges under `P03-003`.
+- [ ] Freeze payload encodings under `P03-004`.
 - [ ] Freeze table/offset/section/padding rules under `P03-005`.
 - [ ] Reproduce RFC CRC-32C and official BLAKE3 vectors; freeze domain/framing and corruption
   diagnostics under `P03-006`.
@@ -500,7 +501,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 
 - [x] `P03-002`: assign exact magic, header/footer, directory, version, flag, algorithm, and feature
   fields.
-- [ ] `P03-003`: publish stable type-tag and reserved-extension registries.
+- [x] `P03-003`: publish stable type-tag and reserved-extension registries.
 - [ ] `P03-004`: publish exact canonical scalar/container payload bytes.
 - [ ] `P03-005`: publish the complete offset/section/alignment/overlap grammar.
 - [ ] `P03-006`: publish exact CRC coverage and BLAKE3 domain/framing vectors.
@@ -523,6 +524,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [Persistent format and public protocol versioning policy](../governance/versioning.md)
 - [Versioned error semantics](../architecture/error-semantics.md)
 - [HDoc 1.0 envelope format](../formats/hdoc-v1.md)
+- [HDoc 1.x logical type tags](../formats/hdoc-v1-type-tags.md)
 - [RFC 3385: Internet Checksum Considered Harmful?](https://www.rfc-editor.org/rfc/rfc3385)
 - [RFC 3720: iSCSI CRC-32C parameters and examples](https://www.rfc-editor.org/rfc/rfc3720)
 - [BLAKE3 official implementation and test vectors](https://github.com/BLAKE3-team/BLAKE3)

@@ -1,0 +1,293 @@
+{
+  "schema": "helix.hdoc-type-tag-registry/1",
+  "format": {
+    "name": "HDoc",
+    "major_version": 1,
+    "minor_version": 0,
+    "tag_width_bits": 8,
+    "unknown_tag_behavior": "reject-cap-format-unsupported",
+    "missing_is_storable": false,
+    "complete_payload_format": false,
+    "payload_completion_owner": "P03-004"
+  },
+  "tags": [
+    {
+      "tag": 1,
+      "tag_hex": "0x01",
+      "tag_name": "null",
+      "logical_type": "null",
+      "family": "singleton",
+      "width_class": "none",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 2,
+      "tag_hex": "0x02",
+      "tag_name": "bool",
+      "logical_type": "bool",
+      "family": "scalar",
+      "width_class": "fixed",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 3,
+      "tag_hex": "0x03",
+      "tag_name": "int32",
+      "logical_type": "int32",
+      "family": "numeric",
+      "width_class": "fixed",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 4,
+      "tag_hex": "0x04",
+      "tag_name": "int64",
+      "logical_type": "int64",
+      "family": "numeric",
+      "width_class": "fixed",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 5,
+      "tag_hex": "0x05",
+      "tag_name": "float64",
+      "logical_type": "float64",
+      "family": "numeric",
+      "width_class": "fixed",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 6,
+      "tag_hex": "0x06",
+      "tag_name": "decimal128",
+      "logical_type": "decimal128",
+      "family": "numeric",
+      "width_class": "fixed",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 7,
+      "tag_hex": "0x07",
+      "tag_name": "string",
+      "logical_type": "string",
+      "family": "byte-sequence",
+      "width_class": "variable",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 8,
+      "tag_hex": "0x08",
+      "tag_name": "binary",
+      "logical_type": "binary",
+      "family": "byte-sequence",
+      "width_class": "variable",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 9,
+      "tag_hex": "0x09",
+      "tag_name": "object",
+      "logical_type": "object",
+      "family": "container",
+      "width_class": "container-reference",
+      "payload_owner": "P03-005"
+    },
+    {
+      "tag": 10,
+      "tag_hex": "0x0a",
+      "tag_name": "array",
+      "logical_type": "array",
+      "family": "container",
+      "width_class": "container-reference",
+      "payload_owner": "P03-005"
+    },
+    {
+      "tag": 11,
+      "tag_hex": "0x0b",
+      "tag_name": "timestamp",
+      "logical_type": "timestamp",
+      "family": "temporal",
+      "width_class": "fixed",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 12,
+      "tag_hex": "0x0c",
+      "tag_name": "date",
+      "logical_type": "date",
+      "family": "temporal",
+      "width_class": "fixed",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 13,
+      "tag_hex": "0x0d",
+      "tag_name": "uuid",
+      "logical_type": "uuid",
+      "family": "identifier",
+      "width_class": "fixed-opaque",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 14,
+      "tag_hex": "0x0e",
+      "tag_name": "object_id",
+      "logical_type": "objectId",
+      "family": "identifier",
+      "width_class": "fixed-opaque",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 15,
+      "tag_hex": "0x0f",
+      "tag_name": "vector_f32",
+      "logical_type": "vector<f32,N>",
+      "family": "vector",
+      "width_class": "dimensioned",
+      "payload_owner": "P03-004"
+    },
+    {
+      "tag": 16,
+      "tag_hex": "0x10",
+      "tag_name": "vector_f16",
+      "logical_type": "vector<f16,N>",
+      "family": "vector",
+      "width_class": "dimensioned",
+      "payload_owner": "P03-004"
+    }
+  ],
+  "reserved_ranges": [
+    {
+      "start": 0,
+      "end": 0,
+      "start_hex": "0x00",
+      "end_hex": "0x00",
+      "class": "invalid-sentinel",
+      "read_behavior": "reject",
+      "write_behavior": "forbidden",
+      "allocation_owner": "none"
+    },
+    {
+      "start": 17,
+      "end": 63,
+      "start_hex": "0x11",
+      "end_hex": "0x3f",
+      "class": "future-standard-logical-types",
+      "read_behavior": "reject-unassigned",
+      "write_behavior": "forbidden-until-registered",
+      "allocation_owner": "accepted-format-change"
+    },
+    {
+      "start": 64,
+      "end": 127,
+      "start_hex": "0x40",
+      "end_hex": "0x7f",
+      "class": "registered-semantic-extensions",
+      "read_behavior": "reject-unless-feature-and-registry-understood",
+      "write_behavior": "forbidden-until-registered",
+      "allocation_owner": "P03-015-or-successor"
+    },
+    {
+      "start": 128,
+      "end": 239,
+      "start_hex": "0x80",
+      "end_hex": "0xef",
+      "class": "experimental-private",
+      "read_behavior": "reject-in-supported-hdoc",
+      "write_behavior": "forbidden-in-supported-hdoc",
+      "allocation_owner": "explicit-experimental-profile-only"
+    },
+    {
+      "start": 240,
+      "end": 254,
+      "start_hex": "0xf0",
+      "end_hex": "0xfe",
+      "class": "future-control-or-escape",
+      "read_behavior": "reject",
+      "write_behavior": "forbidden",
+      "allocation_owner": "future-major-format-only"
+    },
+    {
+      "start": 255,
+      "end": 255,
+      "start_hex": "0xff",
+      "end_hex": "0xff",
+      "class": "permanently-invalid",
+      "read_behavior": "reject",
+      "write_behavior": "forbidden",
+      "allocation_owner": "none"
+    }
+  ],
+  "fixture_mapping": {
+    "fixture_required_tags": [
+      "array",
+      "binary",
+      "bool",
+      "date",
+      "decimal128",
+      "float64",
+      "int32",
+      "int64",
+      "missing",
+      "null",
+      "object",
+      "objectId",
+      "string",
+      "timestamp",
+      "uuid",
+      "vector"
+    ],
+    "nonstorable_fixture_tags": [
+      "missing"
+    ],
+    "expanded_fixture_tags": {
+      "vector": [
+        "vector<f32,N>",
+        "vector<f16,N>"
+      ]
+    },
+    "resulting_hdoc_logical_type_count": 16
+  },
+  "rules": [
+    {
+      "id": "one-tag-per-logical-type",
+      "rule": "Each accepted stored logical type has exactly one HDoc 1.x tag."
+    },
+    {
+      "id": "no-missing-tag",
+      "rule": "Missing is path-evaluation state and has no storable HDoc type tag."
+    },
+    {
+      "id": "no-compact-alias-tags",
+      "rule": "Inline, short, compressed, dictionary, or common-value encodings do not receive alternate logical type tags."
+    },
+    {
+      "id": "tag-does-not-coerce",
+      "rule": "A tag selects exact logical type; readers never infer or coerce a different type from payload shape."
+    },
+    {
+      "id": "unknown-is-critical",
+      "rule": "Every unknown or unassigned value tag changes semantics and is rejected before value exposure."
+    },
+    {
+      "id": "extension-requires-feature",
+      "rule": "A registered extension tag requires an understood required feature and stable registry assignment."
+    },
+    {
+      "id": "never-reuse",
+      "rule": "Assigned and retired tag values are never reused for another logical meaning."
+    },
+    {
+      "id": "typed-hash-includes-tag",
+      "rule": "The canonical typed content hash includes the stable tag and canonical payload framing."
+    },
+    {
+      "id": "comparison-separate",
+      "rule": "Semantic comparison equality/hash may normalize across numeric types but never changes the stored HDoc tag."
+    },
+    {
+      "id": "payload-owned-later",
+      "rule": "This registry assigns type identity only; P03-004 and P03-005 define payload and container bytes."
+    }
+  ]
+}

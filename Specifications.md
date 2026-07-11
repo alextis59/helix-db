@@ -467,6 +467,14 @@ value_length: u32
 flags: u16
 ```
 
+The one-byte `type_tag` assignments are fixed by the
+[HDoc 1.x Logical Type Tag Registry](docs/formats/hdoc-v1-type-tags.md) and its
+[machine-readable registry](docs/formats/hdoc-v1-type-tags.json). Tags `0x01`–`0x10` cover the 16
+stored logical types. Missing has no stored tag; the semantic fixture umbrella vector type expands
+to distinct f32/f16 vector tags; unknown/unassigned tags fail closed; and reserved assignments are
+never inferred or reused. Payload bytes and field/container record positions remain
+`P03-004`/`P03-005`.
+
 Design requirements:
 
 - Stable binary representation for hashing and replication.

@@ -16,6 +16,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Evidence guide](../evidence/README.md) | Durable task and gate proof conventions |
 | [Persistent/public format index](formats/README.md) | Versioned byte/field layouts, maturity boundaries, compatibility, and migration ownership |
 | [HDoc 1.0 envelope format](formats/hdoc-v1.md) | Exact outer header, directory, body placement, flags/features, lengths/counts, CRC slot, and footer |
+| [HDoc 1.x logical type tags](formats/hdoc-v1-type-tags.md) | Stable one-byte assignments, missing exclusion, extension ranges, and unknown-tag rejection |
 | [Reference semantic oracle](../reference/semantic-oracle/README.md) | Independent executable semantic baseline and report commands |
 | [Initial MongoDB differential result](compatibility/mongodb-initial-differential.md) | Experimental `P01-021` overlap/difference evidence; not a public compatibility claim |
 | [V1 semantic and compatibility matrix](compatibility/v1-semantic-compatibility-matrix.md) | Versioned closed-world `P01-022` publication of semantic maturity and unsupported behavior |

@@ -15,10 +15,11 @@ support claim exists; each document states its own maturity boundary and owning 
 | Format | Version | Status | Machine companion | Owner task |
 | --- | --- | --- | --- | --- |
 | [HDoc envelope](hdoc-v1.md) | 1.0 outer envelope | Accepted outer layout; incomplete byte format | [Envelope registry](hdoc-v1-envelope.json) | `P03-002` |
+| [HDoc logical type tags](hdoc-v1-type-tags.md) | 1.x one-byte tag registry | Accepted type identity; payloads incomplete | [Type-tag registry](hdoc-v1-type-tags.json) | `P03-003` |
 
-HDoc type tags, payloads, internal tables, hash framing, compression, dictionary, golden vectors,
-codec implementations, fuzzing, and migrations remain the subsequent `P03-*` work listed in the
-format document. No WAL, MANIFEST, SST, VLOG, CSEG, IDX, backup, or public protocol format has been
+HDoc payloads, internal tables, hash framing, compression, dictionary, golden vectors, codec
+implementations, fuzzing, and migrations remain the subsequent `P03-*` work listed in the format
+documents. No WAL, MANIFEST, SST, VLOG, CSEG, IDX, backup, or public protocol format has been
 specified here yet.
 
 ## Format document rule

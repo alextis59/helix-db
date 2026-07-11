@@ -221,8 +221,15 @@ version/extension rules. Exact header, tag, payload, table, hash-framing, and co
 bytes are dependency-ordered rather than guessed by the first codec implementation. The
 [HDoc 1.0 envelope format](docs/formats/hdoc-v1.md) now fixes the `P03-002` 64-byte header,
 32-byte section directory, canonical body placement, structural/feature flags, and 64-byte footer.
-It deliberately leaves hash profile zero invalid until `P03-006`, so the remaining
-`P03-003`–`P03-007` contracts must land before any complete HDoc byte fixture or writer claim.
+It deliberately leaves hash profile zero invalid until `P03-006`; after the tag registry below,
+the remaining `P03-004`–`P03-007` contracts must land before any complete HDoc byte fixture or
+writer claim.
+
+The [HDoc 1.x type-tag registry](docs/formats/hdoc-v1-type-tags.md) now closes `P03-003` with one
+stable byte for each of the 16 stored logical types. It deliberately excludes transient Missing,
+splits the fixture-level vector umbrella into f32/f16 tags, and reserves standard, registered,
+experimental/private, control/escape, and invalid ranges with fail-closed behavior. Payload and
+container bytes remain `P03-004`/`P03-005`.
 
 ### 6.3 Field-path dictionaries
 
