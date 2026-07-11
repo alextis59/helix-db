@@ -1,0 +1,312 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-010",
+  "verdict": "pass",
+  "requirements": [
+    "CORE-001",
+    "DATA-001",
+    "DATA-002",
+    "INV-001",
+    "INV-007",
+    "SEC-002"
+  ],
+  "accepted_adrs": [
+    "0012"
+  ],
+  "base_commit": "ad56a635db614bb92dbe2e8d2b79d0ac62c61947",
+  "source_commits": [
+    "0b2138d0c7f29738d6ba9f5750761ac54680bb27"
+  ],
+  "commit": "0b2138d0c7f29738d6ba9f5750761ac54680bb27",
+  "source_tree": "c844b774f7408d91a94658ddd6793efb554a3aa9",
+  "recorded_at": "2026-07-11T15:22:27Z",
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "active_node": "22.19.0",
+      "verification_node_lanes": [
+        "22.23.1",
+        "24.18.0"
+      ],
+      "rustc": "1.96.1",
+      "cargo": "1.96.1",
+      "llvm": "22.1.2",
+      "blake3": "1.8.5",
+      "crc": "3.4.0",
+      "lz4_flex": "0.13.1"
+    },
+    "network_required_for_replay": false,
+    "hosted_workflow_execution": false
+  },
+  "commands": [
+    {
+      "command": "cargo fmt --all -- --check && cargo check/clippy/test/doc --frozen --workspace --all-features",
+      "exit_code": 0
+    },
+    {
+      "command": "cargo clippy --frozen --target wasm32-unknown-unknown/wasm32-wasip2 --package helix-doc --all-features -- -D warnings",
+      "exit_code": 0
+    },
+    {
+      "command": "node tests/toolchain/run-build-profile.mjs wasm/browser/sanitizer",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run coverage:check",
+      "exit_code": 0
+    },
+    {
+      "command": "node compatibility/v1/generate-matrix.mjs --write && node compatibility/v1/check-matrix.mjs",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run fixtures:generate && corepack npm run fixtures:check",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run policy:javascript && corepack npm run policy:dependencies",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run dependencies:check && corepack npm run dependencies:report",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm run bootstrap:check && corepack npm run bootstrap:test && corepack npm run ci:check && corepack npm run test:commands",
+      "exit_code": 0
+    },
+    {
+      "command": "corepack npm test",
+      "exit_code": 0
+    },
+    {
+      "command": "Node 22.23.1 and 24.18.0 immutable P03-010 evidence replay",
+      "exit_code": 0
+    }
+  ],
+  "verification": {
+    "source_artifacts": 30,
+    "source_commits": 1,
+    "retained_reports": 1,
+    "helix_doc_tests": 17,
+    "workspace_tests": 25,
+    "value_type_tags": 16,
+    "borrowed_view_types": 8,
+    "owned_value_types": 4,
+    "payload_vectors": 41,
+    "payload_rejections": 17,
+    "structural_examples": 4,
+    "compression_block_vectors": 7,
+    "compression_section_vectors": 5,
+    "complete_hdoc_vectors": 4,
+    "compression_negative_classes": 18,
+    "coverage_functions": 206,
+    "coverage_functions_basis_points": 10000,
+    "coverage_lines": 2455,
+    "coverage_lines_basis_points": 10000,
+    "coverage_regions_covered": 4863,
+    "coverage_regions": 5106,
+    "coverage_regions_basis_points": 9524,
+    "portable_targets": 2,
+    "sanitizer_profiles": 1,
+    "mutation_canaries": 17,
+    "node_lanes": 2,
+    "failed": 0,
+    "skipped": 0
+  },
+  "source_artifacts": [
+    {
+      "status": "M",
+      "path": ".github/ci/matrix.json",
+      "bytes": 5354,
+      "sha256": "e86b260aae485efa6d44507a9a31ae636f5cddfbf0e77b76d2364bbe4561a0af"
+    },
+    {
+      "status": "M",
+      "path": "Cargo.toml",
+      "bytes": 4251,
+      "sha256": "aa87ef5847232bd7ed128e2aeee157f8626493890d2f4aba4a416b17cdf9946e"
+    },
+    {
+      "status": "M",
+      "path": "README.md",
+      "bytes": 5108,
+      "sha256": "d08de090aff0a3e9d6e4c8af0dd8edd9f61b0300a7ccce45aaa9df28f6c99539"
+    },
+    {
+      "status": "M",
+      "path": "Specifications.md",
+      "bytes": 83209,
+      "sha256": "22e1903bce3c87923a122a56b2165f23328a9dcf0bec43d4a2fe47216e1b5517"
+    },
+    {
+      "status": "M",
+      "path": "Study.md",
+      "bytes": 69223,
+      "sha256": "0838c20bdbea38def864925737dd0617713ccdbe8e2b8217dbb54fe2bfa596e7"
+    },
+    {
+      "status": "M",
+      "path": "compatibility/v1/matrix-v1.json",
+      "bytes": 217132,
+      "sha256": "895cd5878816e7f2d70eca6aa6832cceb218fad3d99c3677b28538bb034f4ff9"
+    },
+    {
+      "status": "M",
+      "path": "crates/helix-doc/Cargo.toml",
+      "bytes": 489,
+      "sha256": "ddefca5475e9531a377544ce5949288934933b71ba42e418ac9663e526f292ac"
+    },
+    {
+      "status": "M",
+      "path": "crates/helix-doc/src/lib.rs",
+      "bytes": 259274,
+      "sha256": "85fb7b28234cec65598a6850fbf80949ef35e52406b1710039ab680da4742e46"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/0012-use-bounded-little-endian-hdoc-v1.md",
+      "bytes": 33984,
+      "sha256": "abe056bf0492d952dcb6047d4f132ecb5cb7035380494e9e5b121afc247d8de3"
+    },
+    {
+      "status": "M",
+      "path": "docs/adr/README.md",
+      "bytes": 4461,
+      "sha256": "ae75a2c645ac5ec98b23775a14dc0f03597f680045586f3f84543644d68400a8"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/continuous-integration.md",
+      "bytes": 13828,
+      "sha256": "5eb88428d3e31959bf45b86df60e99a65bb7a96b137e8892dc2f5f5d5eb437dc"
+    },
+    {
+      "status": "M",
+      "path": "docs/architecture/workspace-boundaries.md",
+      "bytes": 6696,
+      "sha256": "1740f361f8239e076ab2b27dd353e3b02be010d9e38be4e8110b52dde27540fe"
+    },
+    {
+      "status": "M",
+      "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
+      "bytes": 103065,
+      "sha256": "102c385c8ad237f0f7ce11a468a5c2fb364adf42466f1e720c9df935cfe400d7"
+    },
+    {
+      "status": "M",
+      "path": "docs/development/bootstrap.json",
+      "bytes": 9262,
+      "sha256": "5bd9b2c0d57e1022de4e68aa3307985a3f4c9c3569a438ffc30b47b8d45317fb"
+    },
+    {
+      "status": "M",
+      "path": "docs/development/bootstrap.md",
+      "bytes": 25821,
+      "sha256": "d7d4b9d7a40d05deebc83282ee69ee123a3fee2d5104b3ac12cf52d8c5cf7a1d"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-compression.md",
+      "bytes": 24239,
+      "sha256": "34d4f5b7a734d38e4b4a19e098dcfdac4c35264cc77a163df36db57c5fc2e80b"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-integrity.md",
+      "bytes": 23684,
+      "sha256": "7bc00cf932737e2684fb4ef8c223bf76bf1535d495882ac0a24aa7d00ee25a6a"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-payloads.md",
+      "bytes": 30078,
+      "sha256": "34759e9362c9be32023c75ad9ad4b6929625fb075beb6ffe2e4e8ad8d3b1237f"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-records.md",
+      "bytes": 33610,
+      "sha256": "fd0cbf007c6abf7b652be99b4c3ca99d131ea243b3fcfbeabaf06e47895ce75c"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1-type-tags.md",
+      "bytes": 20297,
+      "sha256": "3e2cc44166545f89e86efc0cac95856bc03fe20adefa065e7999b8de71ff61ed"
+    },
+    {
+      "status": "M",
+      "path": "docs/formats/hdoc-v1.md",
+      "bytes": 37137,
+      "sha256": "de239cfa071affb3345ad902f9b1b6c7e89a759338daf0de666a5ea00ec57af6"
+    },
+    {
+      "status": "M",
+      "path": "docs/governance/decision-owners.md",
+      "bytes": 6178,
+      "sha256": "5f45ab9bb010cbbb54c780dcafc2778f8b57148e18abaf3412255890e7ba80c0"
+    },
+    {
+      "status": "M",
+      "path": "docs/quality/code-coverage-policy.md",
+      "bytes": 12663,
+      "sha256": "5c71d32e5963e8afae7cc562b459b1961e6c6177ff86abd67673b0c7593106ce"
+    },
+    {
+      "status": "M",
+      "path": "fixtures/generation/report-v1.json",
+      "bytes": 2547,
+      "sha256": "43155f0ab08e9c856b66d6b1a40429d69ef515c267c30c60b9808fa5c7bdc423"
+    },
+    {
+      "status": "M",
+      "path": "tests/suites.json",
+      "bytes": 4011,
+      "sha256": "d508e0b356c2f1355e0399856f300af75d4a9b5d3d72b3ac362cc3aa2a7220a1"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/bootstrap-contract.mjs",
+      "bytes": 16764,
+      "sha256": "3a921e38d2a0ac1d0fc86c242ff0c319b7bc1650871550ba84eea27e87e86326"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-bootstrap.mjs",
+      "bytes": 4183,
+      "sha256": "725089cc4a65d4cb845b28c4752397a3e9441124e25975c2f238f9e86ff7e32d"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-ci-matrix.mjs",
+      "bytes": 27581,
+      "sha256": "e7b1b04d77d4285b59ca27e9f0a68e9b55558e266f810777b7a20c7c6bb5db5f"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/check-rust-coverage.mjs",
+      "bytes": 26258,
+      "sha256": "459aa80bcc7248ffc7cf9c8539cddccd109dc3e6d18618554f86ee3f05f3ffad"
+    },
+    {
+      "status": "M",
+      "path": "tests/toolchain/rust-coverage-policy.json",
+      "bytes": 3393,
+      "sha256": "2feabe8631aaa8aafb42d241b6000f0d9ecc6360ffa7ded9d39927faf8c0765d"
+    }
+  ],
+  "retained_reports": [
+    {
+      "path": "rust-coverage-report.json",
+      "bytes": 15610,
+      "sha256": "36ce60681f6963c9d99f7cd774f500d2e820af5a78ebe2f9860f69ce4e600455"
+    }
+  ],
+  "verifier": {
+    "bytes": 17160,
+    "sha256": "8490388deac43dc093bf2441286e17b044f70df35e7700ce330c34f3bccad104"
+  }
+}

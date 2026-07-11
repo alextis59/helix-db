@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 68
-- Open checklist items: 454
+- Completed checklist items: 69
+- Open checklist items: 453
 - Total checklist items: 522
 - Current phase: Phase 3 — HDoc format, codec, and path dictionary
 - Next release gate: `G03`
@@ -218,7 +218,7 @@ Dependencies: `G01`, `G02`.
 - [x] **P03-007** Define optional compression blocks, supported algorithms, block boundaries, and unknown-codec rejection.
 - [x] **P03-008** Implement a safe HDoc encoder with limit enforcement and deterministic output.
 - [x] **P03-009** Implement a validating HDoc decoder that rejects unknown required features, invalid offsets, overlap, truncation, and checksum failure.
-- [ ] **P03-010** Implement owned document values and borrowed read-only views without changing semantics.
+- [x] **P03-010** Implement owned document values and borrowed read-only views without changing semantics.
 - [ ] **P03-011** Implement fast field and nested-path lookup over raw HDoc views.
 - [ ] **P03-012** Implement canonical JSON-like rendering and import conversion for debugging and SDK boundaries.
 - [ ] **P03-013** Implement the collection field-path dictionary format, monotonic IDs, versions, and non-reuse rule.
