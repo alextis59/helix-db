@@ -56,7 +56,7 @@ same(
   'matrix fields',
 );
 assert(matrix.schema === 'helix.ci-matrix/2', 'CI matrix schema mismatch');
-same(matrix.plan_items, ['P02-009', 'P02-010'], 'CI matrix task history');
+same(matrix.plan_items, ['P02-009', 'P02-010', 'P02-011'], 'CI matrix task history');
 same(
   matrix.actions,
   {
@@ -205,14 +205,32 @@ same(
     'ci:check': packageJson.scripts['ci:check'],
     'wasm:install-validator': packageJson.scripts['wasm:install-validator'],
     'wasm:validate': packageJson.scripts['wasm:validate'],
+    'wgsl:check': packageJson.scripts['wgsl:check'],
+    'wgsl:validate': packageJson.scripts['wgsl:validate'],
   },
   {
     'ci:browser-smoke': 'node tests/toolchain/run-browser-smoke.mjs',
     'ci:check': 'node tests/toolchain/check-ci-matrix.mjs',
     'wasm:install-validator': 'node tests/toolchain/install-wasm-tools.mjs',
     'wasm:validate': 'node tests/toolchain/check-wasm-artifacts.mjs all',
+    'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
+    'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
   'CI npm scripts',
+);
+assert(
+  runNode(['tests/toolchain/check-wgsl-fixtures.mjs', 'manifest']).includes(
+    'PASS WGSL fixture manifest: 4 trusted sources, 2 accept, 2 reject',
+  ),
+  'WGSL fixture manifest check did not pass',
+);
+expectFailure(
+  ['tests/toolchain/check-wgsl-fixtures.mjs'],
+  'usage: node tests/toolchain/check-wgsl-fixtures.mjs <manifest|chromium>',
+);
+expectFailure(
+  ['tests/toolchain/check-wgsl-fixtures.mjs', 'unknown'],
+  'usage: node tests/toolchain/check-wgsl-fixtures.mjs <manifest|chromium>',
 );
 const { authority: wasmTools, host: wasmToolsHost } = validateWasmToolsAuthority();
 assert(wasmTools.version === '1.253.0', 'component validator version mismatch');
@@ -303,6 +321,9 @@ for (const marker of [
   `cargo clippy --frozen --target ${githubExpression('matrix.target')} --package helix-core -- -D warnings`,
   `node tests/toolchain/check-wasm-artifacts.mjs ${githubExpression('matrix.artifact')}`,
   `playwright install --with-deps ${githubExpression('matrix.engine')}`,
+  'corepack npm run wgsl:check',
+  "if: matrix.engine == 'chromium'",
+  'corepack npm run wgsl:validate',
   `corepack npm run ci:browser-smoke -- ${githubExpression('matrix.engine')}`,
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
@@ -324,6 +345,7 @@ for (const marker of [
   'windows-2025',
   'toolchain-smoke',
   'wasm-tools',
+  'SwiftShader',
   'https://docs.github.com/en/actions/reference/runners/github-hosted-runners',
   'https://playwright.dev/docs/ci',
   'does not prove',
@@ -339,5 +361,8 @@ process.stdout.write(
 );
 process.stdout.write(
   'PASS portable artifacts: core module plus pinned-validator WASIp2 component\n',
+);
+process.stdout.write(
+  'PASS WGSL fixtures: 2 accepted pipelines and 2 rejection canaries in Chromium\n',
 );
 process.stdout.write('PASS matrix rejection: unknown emitter/runtime lanes fail\n');

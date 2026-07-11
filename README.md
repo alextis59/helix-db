@@ -22,6 +22,7 @@ The project owner has chosen to keep `helix-db` during development. Existing dat
 - [Deterministic fixture generation](docs/quality/deterministic-fixture-generation.md) — versioned generators, committed seeds, artifact schemas, and byte-for-byte checks.
 - [Continuous integration matrix](docs/architecture/continuous-integration.md) — fixed gating/nightly platforms, targets, Node lines, browser smoke lanes, and action pins.
 - [Wasm/component/browser smoke validation](docs/architecture/wasm-browser-smoke-validation.md) — pinned component validation, byte-identical Vite bundling, and real three-engine execution.
+- [WGSL fixture validation](docs/architecture/wgsl-fixture-validation.md) — hash-bound internal shader parsing, rejection canaries, and compile-only Dawn/SwiftShader checks.
 - [Documentation guide](docs/README.md) — documentation authority and structure.
 - [Contributing](CONTRIBUTING.md) — contribution, review, commit, and release workflow.
 

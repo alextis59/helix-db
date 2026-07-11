@@ -14,5 +14,6 @@ This directory contains bounded verification entry points for foundation build p
 - `check-wasm-artifacts.mjs` builds and validates the WASIp2 component and browser core-module forms and emits deterministic ignored reports.
 - `build-browser-smoke.mjs` checks the exact four-file Vite output and byte identity of its Wasm asset.
 - `run-browser-smoke.mjs` executes the built bundle in one selected engine or all three pinned engines.
+- `check-wgsl-fixtures.mjs` validates the strict trusted-source manifest without a browser or parses, validates, and creates compute pipelines for every fixture through pinned Chromium Dawn/SwiftShader.
 
-These checks prove toolchain configuration and artifact plumbing only. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; user-facing browser examples and product-host behavior remain `P02-016`/`P11-*` work.
+These checks prove toolchain configuration, artifact plumbing, and compile-only WGSL acceptance/rejection only. They do not dispatch a shader or prove GPU correctness/support. The stable unit, integration, conformance, fuzz, browser, crash, benchmark, and distributed commands are defined by `P02-007`; user-facing browser examples and product-host behavior remain `P02-016`/`P11-*` work.

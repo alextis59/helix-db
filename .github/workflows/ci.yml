@@ -74,7 +74,9 @@ jobs:
           corepack npm run policy:dependencies
           corepack npm run toolchain:types
       - name: Run deterministic fixture checks
-        run: corepack npm run fixtures:check
+        run: |
+          corepack npm run fixtures:check
+          corepack npm run wgsl:check
       - name: Run aggregate tests
         run: corepack npm test
 
@@ -185,5 +187,8 @@ jobs:
         run: corepack npm ci --ignore-scripts
       - name: Install the Playwright-coupled browser and operating-system dependencies
         run: corepack npm exec -- playwright install --with-deps ${{ matrix.engine }}
+      - name: Parse, validate, and compile trusted WGSL fixtures
+        if: matrix.engine == 'chromium'
+        run: corepack npm run wgsl:validate
       - name: Build and execute the browser bundle smoke
         run: corepack npm run ci:browser-smoke -- ${{ matrix.engine }}

@@ -17,6 +17,7 @@
       "fixtures/generation/**/*.json",
       "fixtures/**/*.mjs",
       "reference/**/*.mjs",
+      "shaders/**/*.json",
       "tests/**/*.mjs",
       "tests/**/*.ts",
       "!package-lock.json",

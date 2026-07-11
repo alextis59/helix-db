@@ -15,7 +15,7 @@ This document establishes stable, reviewable locations for source code, conforma
 | Root | Purpose | Initial tracked children | Current maturity |
 | --- | --- | --- | --- |
 | [`crates/`](../../crates/README.md) | Rust workspace source | Eight boundary crates from `P02-001` | Compilable boundary skeletons |
-| [`shaders/`](../../shaders/README.md) | Internal WGSL source and shader fixtures | `predicates/`, `bitmaps/`, `vectors/` | Empty contracts; no kernels |
+| [`shaders/`](../../shaders/README.md) | Internal WGSL source and shader fixtures | `predicates/`, `bitmaps/`, `vectors/`, `fixtures/` | Compile-only validation fixtures; no product kernels |
 | [`packages/`](../../packages/README.md) | Private npm workspace packages | `sdk-typescript/`, `browser-host/` | Reserved directories; not npm packages yet |
 | [`conformance/`](../../conformance/README.md) | Cross-backend suite definitions and fixture bindings | `semantics/`, `formats/`, `host/`, `compatibility/` | Semantic corpus binding only |
 | [`benchmarks/`](../../benchmarks/README.md) | Reproducible datasets, workloads, and reports | `datasets/`, `cpu-columnar/`, `webgpu/`, `reports/` | Empty contracts; no performance claims |

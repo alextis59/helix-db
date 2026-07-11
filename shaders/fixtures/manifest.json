@@ -1,0 +1,56 @@
+{
+  "schema": "helix.wgsl-fixtures/1",
+  "plan_item": "P02-011",
+  "validator": {
+    "browser": "chromium",
+    "backend": "dawn-swiftshader",
+    "playwright_version": "1.61.1",
+    "operation": "shader-module-validation-and-compute-pipeline-creation",
+    "trusted_repository_sources_only": true
+  },
+  "fixtures": [
+    {
+      "id": "valid-noop-compute",
+      "path": "valid/noop-compute.wgsl",
+      "source_sha256": "adc0c0186ec26eda6839d1377a685adfcc7f17639bc8ae284ff884d2fffaa215",
+      "stage": "compute",
+      "entry_point": "main",
+      "purpose": "minimal-compute-pipeline",
+      "expected_outcome": "accept",
+      "required_diagnostic_markers": []
+    },
+    {
+      "id": "valid-storage-binding-layout",
+      "path": "valid/storage-binding-layout.wgsl",
+      "source_sha256": "0c6900ac304b5310bc8712008030ec3b6c2a3d324c7790e710c3b0a63d554406",
+      "stage": "compute",
+      "entry_point": "main",
+      "purpose": "storage-resource-layout",
+      "expected_outcome": "accept",
+      "required_diagnostic_markers": []
+    },
+    {
+      "id": "invalid-malformed-function",
+      "path": "invalid/malformed-function.wgsl",
+      "source_sha256": "5538e78a7318f0c88d81c25fd09c6e65fcdc63dcd433d090b2087669f3127644",
+      "stage": "compute",
+      "entry_point": "main",
+      "purpose": "syntax-rejection",
+      "expected_outcome": "reject",
+      "required_diagnostic_markers": ["expected ')' for function declaration"]
+    },
+    {
+      "id": "invalid-duplicate-resource-binding",
+      "path": "invalid/duplicate-resource-binding.wgsl",
+      "source_sha256": "a45fbdda64979fbed45abff03a590cf0afea9e9ddf2eb6395817dd63b5c1528e",
+      "stage": "compute",
+      "entry_point": "main",
+      "purpose": "resource-binding-rejection",
+      "expected_outcome": "reject",
+      "required_diagnostic_markers": [
+        "references multiple variables that use the same resource binding",
+        "first resource binding usage declared here"
+      ]
+    }
+  ]
+}

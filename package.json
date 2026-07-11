@@ -55,7 +55,9 @@
     "toolchain:browser-harness": "playwright test --list",
     "toolchain:browser-profile": "node tests/toolchain/check-browser-profile.mjs",
     "wasm:install-validator": "node tests/toolchain/install-wasm-tools.mjs",
-    "wasm:validate": "node tests/toolchain/check-wasm-artifacts.mjs all"
+    "wasm:validate": "node tests/toolchain/check-wasm-artifacts.mjs all",
+    "wgsl:check": "node tests/toolchain/check-wgsl-fixtures.mjs manifest",
+    "wgsl:validate": "node tests/toolchain/check-wgsl-fixtures.mjs chromium"
   },
   "devDependencies": {
     "@biomejs/biome": "2.5.3",
