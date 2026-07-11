@@ -44,6 +44,22 @@ const lineEndingCases = [
     'native lock canonical LF bytes',
     () => validateNativeLock(nativeLock.replaceAll('\n', '\r\n')),
   ],
+  [
+    'native lock external version drift',
+    'native lock root graph mismatch: arrayref',
+    () => validateNativeLock(nativeLock.replace('version = "0.3.9"', 'version = "0.3.8"')),
+  ],
+  [
+    'native lock codec edge removal',
+    'native lock root graph mismatch: helix-doc',
+    () =>
+      validateNativeLock(
+        nativeLock.replace(
+          'dependencies = [\n "blake3",\n "crc",\n "lz4_flex",\n]',
+          'dependencies = [\n "crc",\n "lz4_flex",\n]',
+        ),
+      ),
+  ],
 ];
 for (const [label, marker, validate] of lineEndingCases) {
   expectError(label, marker, validate);

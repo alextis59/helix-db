@@ -344,7 +344,7 @@ assert(
 );
 assert(
   runNode(['tests/toolchain/test-examples-contract.mjs']).includes(
-    'PASS toolchain example rejection canaries: 30 line-ending/policy/native/browser/bundle mutations rejected with exact reasons',
+    'PASS toolchain example rejection canaries: 32 line-ending/policy/native/browser/bundle mutations rejected with exact reasons',
   ),
   'toolchain example rejection canaries did not pass',
 );
