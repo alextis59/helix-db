@@ -545,6 +545,16 @@ for (const use of actionUses) {
   assert(action && action.sha === use[2], `unapproved action pin: ${use[1]}@${use[2]}`);
 }
 const ci = readText('.github/workflows/ci.yml');
+const contractFetchStep = `      - name: Fetch the exact locked Rust graph for offline contract checks
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: cargo fetch --locked
+`;
+assert(ci.includes(contractFetchStep), 'contract-job Rust fetch boundary absent');
+assert(
+  ci.indexOf(contractFetchStep) < ci.indexOf('      - name: Validate CI contract'),
+  'contract-job Rust fetch must precede offline CI validation',
+);
 for (const marker of [
   'pull_request:',
   'push:',

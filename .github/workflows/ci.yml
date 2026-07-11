@@ -43,6 +43,10 @@ jobs:
         run: |
           corepack npm run bootstrap:check
           corepack npm run bootstrap:test
+      - name: Fetch the exact locked Rust graph for offline contract checks
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: cargo fetch --locked
       - name: Validate CI contract
         run: node tests/toolchain/check-ci-matrix.mjs
       - name: Emit gating matrices
