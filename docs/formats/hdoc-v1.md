@@ -1,6 +1,6 @@
 # HDoc 1.0 Envelope, Section Directory, and Footer Format
 
-- Status: Accepted envelope layout; not yet a complete HDoc byte format
+- Status: Accepted envelope/integrity layout; compression keeps complete format open
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner
 - Format identity: HDoc major `1`, minor `0`
@@ -23,16 +23,16 @@ This is not yet permission to emit a valid persistent HDoc. The stable logical t
 ranges and exact noncontainer bytes are now fixed by the
 [HDoc 1.x type-tag registry](hdoc-v1-type-tags.md),
 [HDoc 1.0 payload registry](hdoc-v1-payloads.md), and
-[HDoc 1.0 record registry](hdoc-v1-records.md). The following byte contracts remain open and are
-required before the first complete golden document or writer:
+[HDoc 1.0 record registry](hdoc-v1-records.md). CRC coverage and typed-content hash algorithm/
+profile `1/1` are fixed by the [HDoc 1.0 integrity registry](hdoc-v1-integrity.md). The following
+byte contract remains open before the complete format gate:
 
-- the first nonzero content-hash profile and exact typed-hash framing (`P03-006`); and
 - compression codecs, block tables, settings, and rejection fixtures (`P03-007`).
 
-The machine-readable companion therefore sets `complete_byte_format` to `false` and the footer
-`hash_profile_id` to the invalid/unassigned value `0`. A document using hash profile zero MUST be
-rejected. `P03-006` assigns the first valid nonzero profile only after exact framing and vectors
-exist. No example in this document is a golden HDoc or a compatibility promise.
+The machine-readable companion therefore still sets `complete_byte_format` to `false`, but footer
+`hash_profile_id = 1` is now the only assigned base profile. Profile zero remains permanently
+invalid. P03-006 integrity envelopes are normative references, not immutable P03-016 golden files
+or a complete-format support claim.
 
 ## Normative notation
 
@@ -84,7 +84,7 @@ The base uncompressed profile has four directory entries, so its `header_bytes` 
 The structural lower bound before any body bytes is 256 bytes: 192 header/directory bytes plus the
 64-byte footer. The record grammar requires at least one 32-byte root descriptor, so the unique
 empty-root structure is 288 bytes. It is still not an accepted document: normal rows require root
-`_id`, and hash profile zero remains invalid until `P03-006`.
+`_id`, profile zero is invalid, and the complete-format gate remains `P03-007`.
 
 ## Header magic
 
@@ -196,8 +196,8 @@ until the higher-level `DATA-001` rule verifies its required `_id`.
 The four bytes at `[32,36)` hold the little-endian CRC-32C selected by ADR 0012. Computation covers
 the entire stored `[0,total_length)` byte range while treating `[32,36)` as four zero bytes. It
 therefore covers header, directory, stored/compressed body bytes, padding, footer metadata, and
-content hash. P03-006 adds exact whole-document vectors and differentiated diagnostics; it does not
-move this field or change its coverage rule.
+content hash. The [integrity registry](hdoc-v1-integrity.md) supplies exact whole-document vectors
+and differentiated diagnostics without moving this field or changing its coverage rule.
 
 ## Document flags
 
@@ -407,7 +407,7 @@ The footer begins at `footer_offset` and exactly fills `[footer_offset,total_len
 | 8 | 2 | `footer_bytes` | `u16 = 64` | Footer size |
 | 10 | 2 | `footer_version` | `u16 = 1` | Footer grammar version |
 | 12 | 2 | `hash_algorithm_id` | `u16 = 1` | BLAKE3-256 |
-| 14 | 2 | `hash_profile_id` | `u16 = 0` for now | Invalid/unassigned until `P03-006` |
+| 14 | 2 | `hash_profile_id` | `u16 = 1` | `hdoc-typed-content-tree-v1` |
 | 16 | 4 | `hash_length` | `u32 = 32` | Content-hash byte length |
 | 20 | 4 | `total_length_copy` | `u32` | Must equal header `total_length` |
 | 24 | 4 | `canonical_length_copy` | `u32` | Must equal header `canonical_length` |
@@ -425,10 +425,11 @@ The three repeated header values do not replace CRC/hash validation. They let a 
 reject an obviously misdirected/truncated footer before recursive parsing. Any mismatch is
 `DUR_CORRUPTION` for authoritative stored data.
 
-Algorithm ID `1` is permanently assigned to 32-byte unkeyed BLAKE3 output by ADR 0012. Profile ID
-`0` means “unassigned/invalid,” not a zero hash, no-hash mode, or implied default. P03-006 assigns
-the first valid nonzero profile to exact domain/framing rules and golden vectors. Until then, all
-would-be HDoc bytes fail the hash-profile check and cannot become fixtures or persisted rows.
+Algorithm ID `1` is permanently assigned to 32-byte default-unkeyed BLAKE3 output by ADR 0012.
+Profile ID `1` selects the exact domain, node frame, noncontainer body, canonical object body, and
+dense array body in the [integrity registry](hdoc-v1-integrity.md). Profile ID `0` remains
+unassigned/invalid—not a zero hash, no-hash mode, or implied default. Any other profile is rejected
+until an accepted registry/version explicitly assigns it.
 
 ## Base profile
 
@@ -440,6 +441,8 @@ minor_version = 0
 document_flags = 0
 required_features = 0
 optional_features = 0
+hash_algorithm_id = 1
+hash_profile_id = 1
 section_count = 4
 header_bytes = 192
 directory kinds = [0x0001, 0x0002, 0x0003, 0x0004]
@@ -472,7 +475,8 @@ document/view until every required stage succeeds:
 8. Validate each known section's internal grammar, type tags, payloads, names, container ranges,
    offsets, counts, canonicality, and all semantic limits under P03-003–P03-005.
 9. Perform bounded decompression where enabled and prove exact logical lengths under P03-007.
-10. Reconstruct and compare the canonical typed content hash under P03-006.
+10. Reconstruct and compare the canonical typed content hash under the
+    [integrity registry](hdoc-v1-integrity.md).
 11. Only then construct an owned value or validated borrowed view for caller access.
 
 Checking CRC before complex body parsing is an optimization and corruption classification aid; it
@@ -518,9 +522,10 @@ change. Unassigned reserved bits/IDs are not free for local experimentation in c
 
 ## Migration and rollback
 
-No valid HDoc fixture or persisted HDoc row exists at P03-002, and hash profile zero ensures this
-partial format cannot accidentally become one. Therefore this envelope layout can still be
-superseded without data migration before P03-016.
+No valid HDoc fixture or persisted HDoc row existed at P03-002; its then-unassigned profile zero
+ensured that partial format could not accidentally become one. P03-006 now assigns profile 1
+reference envelopes, while immutable support fixtures remain P03-016. This envelope can still be
+superseded without stored-data migration before that fixture/data boundary.
 
 Once a nonzero hash profile and immutable HDoc 1.x vectors exist, changing this layout requires:
 
@@ -542,7 +547,7 @@ fields based on its own format version.
 | [`P03-003`](hdoc-v1-type-tags.md) | Stable value type tags and reserved tag ranges | Header/directory/footer offsets or section kinds |
 | [`P03-004`](hdoc-v1-payloads.md) | Canonical noncontainer bytes inside `value_area` | Envelope endianness, lengths, placement, or footer |
 | [`P03-005`](hdoc-v1-records.md) | Field/name/container entries and `item_count` meanings | Absolute offset base, directory stride, top-level order |
-| `P03-006` | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
+| [`P03-006`](hdoc-v1-integrity.md) | First nonzero hash profile, exact typed framing/vectors, corruption diagnostics | CRC field/coverage, BLAKE3 algorithm slot, 32-byte footer hash slot |
 | `P03-007` | Nonzero codec/profile IDs and internal bounded block grammar | Directory stride, logical/stored length fields, canonical limit |
 | `P03-013`–`P03-015` | Path dictionary and extension record grammars/negotiation | Existing flag/feature bit meanings or ID reuse |
 
@@ -577,6 +582,7 @@ bytes. P03-016/P03-018 must eventually include at least:
 - [HDoc 1.x logical type tags](hdoc-v1-type-tags.md)
 - [HDoc 1.0 canonical noncontainer payloads](hdoc-v1-payloads.md)
 - [HDoc 1.0 field/name/value-reference/container records](hdoc-v1-records.md)
+- [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
 - [Logical value model](../architecture/value-model.md)
 - [Object semantics and typed content hashes](../architecture/object-semantics.md)
 - [Portable v1 limits](../architecture/limits-v1.md)

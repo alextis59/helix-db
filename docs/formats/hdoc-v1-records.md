@@ -1,6 +1,6 @@
 # HDoc 1.0 Field, Name, Value-Reference, and Container Records
 
-- Status: Accepted table/container layout; complete HDoc still blocked by `P03-006` and `P03-007`
+- Status: Accepted table/container layout; integrity fixed; complete HDoc still blocked by `P03-007`
 - Last updated: 2026-07-11
 - Owner: Storage architecture owner
 - Plan item: `P03-005`
@@ -16,9 +16,10 @@ This document fixes every HDoc 1.0 base-profile record inside `field_table`, `na
 IDs, name deduplication, object presentation metadata, dense arrays, the uniquely owned container
 tree, value placement, section `item_count` meanings, and canonical rejection rules.
 
-It does **not** assign the first valid typed-content hash profile or compression profile. Footer
-hash profile zero therefore remains invalid. The layouts below are normative structural vectors,
-not complete persisted HDoc fixtures; `P03-006`, `P03-007`, and `P03-016` own those later steps.
+The [integrity registry](hdoc-v1-integrity.md) now assigns typed-content hash profile 1 and CRC
+coverage. This document does **not** assign compression. The layouts below remain section-local
+structural vectors rather than immutable persisted fixtures; `P03-007` and `P03-016` own those
+later steps.
 
 ## Normative status and notation
 
@@ -401,8 +402,9 @@ A writer follows these dependency-ordered steps:
    then resolve all cross-references.
 10. Revalidate the staged result independently: exact coverage, counts, names, tags, tree,
     offsets, payloads, limits, and root `_id`.
-11. `P03-006` computes CRC/content hash and `P03-007` may produce a smaller registered compressed
-    stored form; no caller sees a value/view until the complete validating-reader pipeline passes.
+11. The integrity profile computes CRC/content hash and `P03-007` may produce a smaller registered
+    compressed stored form; no caller sees a value/view until the complete validating-reader
+    pipeline passes.
 
 Host hash-map order, pointer identity, allocation address, locale, normalization, thread completion
 order, and compressor behavior never participate in these steps.
@@ -421,8 +423,9 @@ root identifier.
 
 ## Structural worked vectors
 
-These vectors fix section-local bytes and absolute offsets while hash profile zero still prevents
-them from being complete HDocs. Hex in the machine registry is normative and executable.
+These vectors fix section-local bytes and absolute offsets but omit a complete profile-1
+header/footer/CRC. The integrity registry wraps the scalar-root case in complete 408-byte integrity
+references. Hex here remains normative and executable without becoming a P03-016 fixture file.
 
 ### Empty root structure
 
@@ -533,8 +536,8 @@ After the outer bounded checks and CRC stage defined by the envelope, the base t
 8. replays canonical value occurrence order, alignment, padding, exact payload validators, and
    value-area count/coverage;
 9. validates root `_id` and remaining semantic limits; and
-10. continues to bounded decompression and typed-content hash validation under `P03-007` and
-    `P03-006` before exposing any owned or borrowed value.
+10. continues to bounded decompression under `P03-007` and profile-1 typed-content hash validation
+    under the integrity registry before exposing any owned or borrowed value.
 
 An implementation may fuse passes while preserving these dependencies and error priorities. It
 must use iterative/bounded worklists rather than trusting descriptor depth as permission for host
@@ -610,7 +613,7 @@ Reading never silently renumbers, canonicalizes, repairs, or rewrites an old HDo
 
 | Task | Owns next | Cannot change from P03-005 |
 | --- | --- | --- |
-| `P03-006` | CRC replay; nonzero BLAKE3 typed-content domain/framing and vectors | Table bytes, presentation/container/value ordering |
+| [`P03-006`](hdoc-v1-integrity.md) | CRC replay; BLAKE3 typed-content domain/framing and vectors | Table bytes, presentation/container/value ordering |
 | `P03-007` | Registered deterministic compression block grammar | Expanded canonical section bytes and item meanings |
 | `P03-008`–`P03-011` | Safe writer/reader, owned/borrowed values, raw lookup | Accepted structure or fail-closed validation |
 | `P03-013` | Feature-gated collection path dictionary/profile | Base document-local field IDs and self-containment |
@@ -648,6 +651,7 @@ Complete fixture/property/fuzz work must include:
 - [HDoc 1.0 envelope](hdoc-v1.md)
 - [HDoc 1.x type tags](hdoc-v1-type-tags.md)
 - [HDoc 1.0 noncontainer payloads](hdoc-v1-payloads.md)
+- [HDoc 1.0 CRC-32C and canonical typed-content hashing](hdoc-v1-integrity.md)
 - [Logical value model](../architecture/value-model.md)
 - [Object semantics](../architecture/object-semantics.md)
 - [Array semantics](../architecture/array-semantics.md)

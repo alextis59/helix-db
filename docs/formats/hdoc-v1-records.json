@@ -9,8 +9,10 @@
     "offset_base": "document-start",
     "offset_width_bits": 32,
     "complete_table_and_container_format": true,
+    "integrity_registry": "docs/formats/hdoc-v1-integrity.json",
+    "complete_integrity_format": true,
     "complete_hdoc_format": false,
-    "remaining_completion_owners": ["P03-006", "P03-007"]
+    "remaining_completion_owners": ["P03-007"]
   },
   "constants": {
     "field_entry_bytes": 24,
@@ -436,7 +438,7 @@
     },
     {
       "id": "root-scalars-presentation",
-      "semantic_status": "structurally-and-logically-valid-before-hash-profile",
+      "semantic_status": "structurally-and-logically-valid-under-profile-1",
       "logical_presentation": "{s:string(\"\"),_id:uuid(00000000-0000-0000-0000-000000000000),n:null}",
       "directory": {
         "field_table": { "offset": 192, "length": 72, "item_count": 3 },
@@ -453,7 +455,7 @@
     },
     {
       "id": "internal-payload-alignment",
-      "semantic_status": "structurally-and-logically-valid-before-hash-profile",
+      "semantic_status": "structurally-and-logically-valid-under-profile-1",
       "logical_presentation": "{b:int64(1),_id:uuid(00000000-0000-0000-0000-000000000000),a:true}",
       "directory": {
         "field_table": { "offset": 192, "length": 72, "item_count": 3 },
@@ -470,7 +472,7 @@
     },
     {
       "id": "nested-object-array",
-      "semantic_status": "structurally-and-logically-valid-before-hash-profile",
+      "semantic_status": "structurally-and-logically-valid-under-profile-1",
       "logical_presentation": "{z:[null,{a:true}],_id:objectId(000102030405060708090a0b),a:{}}",
       "directory": {
         "field_table": { "offset": 192, "length": 96, "item_count": 4 },
@@ -487,10 +489,6 @@
     }
   ],
   "deferrals": [
-    {
-      "owner": "P03-006",
-      "scope": "crc-replay-content-hash-profile-domain-framing-and-complete-envelope-vectors"
-    },
     {
       "owner": "P03-007",
       "scope": "compressed-section-block-grammar-codecs-and-profiles"

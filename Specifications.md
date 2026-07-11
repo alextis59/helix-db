@@ -494,6 +494,15 @@ finite f32/f16 vectors. Every payload has one exact length/alignment/canonicalit
 registry fixes their containing field/array references, canonical value-area occurrence order,
 zero-length cursors, container references, and minimal external padding.
 
+Stored-byte integrity and logical content identity are fixed by
+[HDoc 1.0 CRC-32C and Canonical Typed-Content Hashing](docs/formats/hdoc-v1-integrity.md) and its
+[machine-readable registry](docs/formats/hdoc-v1-integrity.json). CRC-32C covers the complete exact
+stored envelope with header bytes `[32,36)` treated as zero. Footer algorithm/profile `1/1` stores
+the exact 32-byte default-unkeyed BLAKE3 digest of a domain-separated recursive tree: every node
+frames profile ID, type tag, `u64` body length, and an exact noncontainer or canonical object/array
+body. Object presentation and permitted physical encodings do not affect this typed hash; names,
+tags, exact payloads, object mappings, and dense array positions do.
+
 Design requirements:
 
 - Stable binary representation for hashing and replication.
@@ -517,9 +526,9 @@ Footer Format](docs/formats/hdoc-v1.md) and its
 [machine-readable companion](docs/formats/hdoc-v1-envelope.json). It fixes the 64-byte header,
 32-byte directory entries, body section registry/order, structural/feature flags, length/count/CRC
 slots, and 64-byte footer while deliberately keeping the complete byte format invalid until
-`P03-006` assigns the first nonzero hash profile and `P03-007` closes the compression registry.
-`P03-003`–`P03-005` now fix all base tags, payloads, records, names, value placement, and container
-bytes, but no partial structural example is yet a persisted HDoc fixture.
+`P03-007` closes the compression registry. `P03-003`–`P03-006` now fix all base tags, payloads,
+records, names, value placement, containers, CRC coverage, and typed-hash profile. Integrity
+reference envelopes are not yet the immutable supported fixtures owned by `P03-016`.
 
 ### 7.4 Field path dictionary
 

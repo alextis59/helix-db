@@ -221,8 +221,8 @@ version/extension rules. Exact header, tag, payload, table, hash-framing, and co
 bytes are dependency-ordered rather than guessed by the first codec implementation. The
 [HDoc 1.0 envelope format](docs/formats/hdoc-v1.md) now fixes the `P03-002` 64-byte header,
 32-byte section directory, canonical body placement, structural/feature flags, and 64-byte footer.
-It deliberately leaves hash profile zero invalid until `P03-006`; the subordinate registries below
-close tags and noncontainer payloads in order while preserving that incomplete-format brake.
+It permanently rejects hash profile zero; the subordinate registries below now assign profile 1
+after closing tags, payloads, and records in dependency order.
 
 The [HDoc 1.x type-tag registry](docs/formats/hdoc-v1-type-tags.md) now closes `P03-003` with one
 stable byte for each of the 16 stored logical types. It deliberately excludes transient Missing,
@@ -241,8 +241,16 @@ dense 12-byte array entries, 32-byte uniquely owned breadth-first container desc
 minimal-aligned value-area occurrence per noncontainer reference. Its structural vectors exercise
 empty spans, zero-byte null/string cursors, nested objects/arrays, recursive field counts, and
 absolute references without confusing document-local name IDs with the later collection path
-dictionary. `P03-006` and `P03-007` must still close hash framing and compression before a valid
-complete HDoc fixture or writer exists.
+dictionary.
+
+The [HDoc 1.0 integrity registry](docs/formats/hdoc-v1-integrity.md) now closes `P03-006` with the
+exact reflected CRC-32C parameters/whole-envelope coverage and BLAKE3 algorithm/profile `1/1`.
+Profile 1 hashes a domain-separated, length-delimited typed tree bottom-up: exact payload bodies,
+canonical object names plus child digests, and explicit dense array indices. Presentation order,
+offsets, dictionary IDs, compression, padding, and nonsemantic extensions stay physical and do not
+change logical identity. RFC CRC and official BLAKE3 boundaries plus two complete 408-byte
+presentation variants make CRC-different/hash-equal behavior executable. `P03-007` must still
+close compression before the complete-format gate and immutable `P03-016` fixtures.
 
 ### 6.3 Field-path dictionaries
 

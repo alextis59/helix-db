@@ -12,6 +12,8 @@
     "complete_noncontainer_payload_format": true,
     "complete_container_payload_format": true,
     "container_completion_owner": "P03-005",
+    "integrity_registry": "docs/formats/hdoc-v1-integrity.json",
+    "complete_integrity_format": true,
     "complete_hdoc_format": false
   },
   "payloads": [

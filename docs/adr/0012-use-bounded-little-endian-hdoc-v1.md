@@ -471,7 +471,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] Freeze stable type tags and extension ranges under `P03-003`.
 - [x] Freeze canonical noncontainer payload encodings and binary-subtype ranges under `P03-004`.
 - [x] Freeze table/offset/section/padding rules under `P03-005`.
-- [ ] Reproduce RFC CRC-32C and official BLAKE3 vectors; freeze domain/framing and corruption
+- [x] Reproduce RFC CRC-32C and official BLAKE3 vectors; freeze domain/framing and corruption
   diagnostics under `P03-006`.
 - [ ] Select and validate deterministic bounded compression profiles under `P03-007`.
 - [ ] Implement the bounded encoder/validating decoder and independent owned/borrowed paths under
@@ -505,7 +505,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] `P03-004`: publish exact canonical scalar, byte-sequence, temporal, identifier, and vector
   payload bytes.
 - [x] `P03-005`: publish the complete offset/section/alignment/overlap grammar.
-- [ ] `P03-006`: publish exact CRC coverage and BLAKE3 domain/framing vectors.
+- [x] `P03-006`: publish exact CRC coverage and BLAKE3 domain/framing vectors.
 - [ ] `P03-007`: select compression algorithms/settings after dependency and benchmark review.
 - [ ] `P03-015`: publish the HDoc reader/writer/feature migration matrix.
 - [ ] `P03-016`–`P03-021`: freeze independent fixtures, fuzz/corruption evidence, and experiment
@@ -528,6 +528,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [HDoc 1.x logical type tags](../formats/hdoc-v1-type-tags.md)
 - [HDoc 1.0 canonical noncontainer payloads](../formats/hdoc-v1-payloads.md)
 - [HDoc 1.0 field/name/value-reference/container records](../formats/hdoc-v1-records.md)
+- [HDoc 1.0 CRC-32C and canonical typed-content hashing](../formats/hdoc-v1-integrity.md)
 - [RFC 3385: Internet Checksum Considered Harmful?](https://www.rfc-editor.org/rfc/rfc3385)
 - [RFC 3720: iSCSI CRC-32C parameters and examples](https://www.rfc-editor.org/rfc/rfc3720)
 - [BLAKE3 official implementation and test vectors](https://github.com/BLAKE3-team/BLAKE3)

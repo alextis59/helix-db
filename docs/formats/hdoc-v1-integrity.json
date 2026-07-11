@@ -1,0 +1,524 @@
+{
+  "schema": "helix.hdoc-integrity-registry/1",
+  "format": {
+    "name": "HDoc",
+    "major_version": 1,
+    "minor_version": 0,
+    "checksum_field_offset": 32,
+    "checksum_field_bytes": 4,
+    "footer_hash_algorithm_id": 1,
+    "footer_hash_profile_id": 1,
+    "footer_hash_bytes": 32,
+    "complete_integrity_format": true,
+    "complete_hdoc_format": false,
+    "remaining_completion_owners": ["P03-007"]
+  },
+  "crc32c": {
+    "name": "CRC-32C",
+    "polynomial_normal_hex": "0x1edc6f41",
+    "polynomial_reflected_hex": "0x82f63b78",
+    "width_bits": 32,
+    "initial_register_hex": "0xffffffff",
+    "reflect_input": true,
+    "reflect_output": true,
+    "final_xor_hex": "0xffffffff",
+    "check_input_ascii": "123456789",
+    "check_value_hex": "0xe3069283",
+    "stored_encoding": "u32-le",
+    "coverage_start": 0,
+    "coverage_end": "header.total_length",
+    "zeroed_range": { "offset": 32, "length": 4 },
+    "includes": [
+      "header",
+      "section-directory",
+      "stored-section-bytes",
+      "all-padding",
+      "footer-metadata",
+      "footer-content-hash"
+    ],
+    "excludes": ["bytes-outside-exact-HDoc-slice"],
+    "security_role": "accidental-corruption-detection-not-authentication"
+  },
+  "crc32c_vectors": [
+    {
+      "id": "standard-check-123456789",
+      "source": "algorithm-check-value",
+      "input_kind": "ascii",
+      "input": "123456789",
+      "input_length": 9,
+      "crc_value_hex": "0xe3069283",
+      "stored_le_hex": "839206e3"
+    },
+    {
+      "id": "rfc3720-zero32",
+      "source": "RFC-3720-appendix-B.4",
+      "input_kind": "repeated-byte",
+      "byte_hex": "00",
+      "input_length": 32,
+      "crc_value_hex": "0x8a9136aa",
+      "stored_le_hex": "aa36918a"
+    },
+    {
+      "id": "rfc3720-ones32",
+      "source": "RFC-3720-appendix-B.4",
+      "input_kind": "repeated-byte",
+      "byte_hex": "ff",
+      "input_length": 32,
+      "crc_value_hex": "0x62a8ab43",
+      "stored_le_hex": "43aba862"
+    },
+    {
+      "id": "rfc3720-incrementing32",
+      "source": "RFC-3720-appendix-B.4",
+      "input_kind": "incrementing-inclusive",
+      "start_hex": "00",
+      "end_hex": "1f",
+      "input_length": 32,
+      "crc_value_hex": "0x46dd794e",
+      "stored_le_hex": "4e79dd46"
+    },
+    {
+      "id": "rfc3720-decrementing32",
+      "source": "RFC-3720-appendix-B.4",
+      "input_kind": "decrementing-inclusive",
+      "start_hex": "1f",
+      "end_hex": "00",
+      "input_length": 32,
+      "crc_value_hex": "0x113fdb5c",
+      "stored_le_hex": "5cdb3f11"
+    },
+    {
+      "id": "rfc3720-iscsi-read10-pdu",
+      "source": "RFC-3720-appendix-B.4",
+      "input_kind": "hex",
+      "input_hex": "01c000000000000000000000000000001400000000000400000000140000001828000000000000000200000000000000",
+      "input_length": 48,
+      "crc_value_hex": "0xd9963a56",
+      "stored_le_hex": "563a96d9"
+    }
+  ],
+  "blake3_algorithm": {
+    "algorithm_id": 1,
+    "name": "BLAKE3-256",
+    "mode": "default-unkeyed-hash",
+    "output_bytes": 32,
+    "digest_storage": "exact-output-octet-order",
+    "keyed": false,
+    "derive_key_mode": false,
+    "security_role": "collision-resistant-content-identity-not-authentication"
+  },
+  "blake3_official_vectors": {
+    "input_generation": "byte_at_index_i = i mod 251",
+    "output": "first-32-bytes-of-default-hash-output",
+    "cases": [
+      {
+        "input_length": 0,
+        "digest_hex": "af1349b9f5f9a1a6a0404dea36dcc9499bcb25c9adc112b7cc9a93cae41f3262"
+      },
+      {
+        "input_length": 1,
+        "digest_hex": "2d3adedff11b61f14c886e35afa036736dcd87a74d27b5c1510225d0f592e213"
+      },
+      {
+        "input_length": 63,
+        "digest_hex": "e9bc37a594daad83be9470df7f7b3798297c3d834ce80ba85d6e207627b7db7b"
+      },
+      {
+        "input_length": 64,
+        "digest_hex": "4eed7141ea4a5cd4b788606bd23f46e212af9cacebacdc7d1f4c6dc7f2511b98"
+      },
+      {
+        "input_length": 1023,
+        "digest_hex": "10108970eeda3eb932baac1428c7a2163b0e924c9a9e25b35bba72b28f70bd11"
+      },
+      {
+        "input_length": 1024,
+        "digest_hex": "42214739f095a406f3fc83deb889744ac00df831c10daa55189b5d121c855af7"
+      },
+      {
+        "input_length": 1025,
+        "digest_hex": "d00278ae47eb27b34faecf67b4fe263f82d5412916c1ffd97c8cb7fb814b8444"
+      }
+    ]
+  },
+  "typed_content_profile": {
+    "profile_id": 1,
+    "name": "hdoc-typed-content-tree-v1",
+    "root": "canonical-root-object-node-digest",
+    "domain_ascii_escaped": "HDOC-TYPED-CONTENT-HASH-V1\\0",
+    "domain_hex": "48444f432d54595045442d434f4e54454e542d484153482d563100",
+    "domain_bytes": 27,
+    "node_frame": [
+      { "name": "domain", "encoding": "exact-octets", "bytes": 27 },
+      { "name": "profile_id", "encoding": "u16-le", "constant": 1 },
+      { "name": "type_tag", "encoding": "u8", "registry": "docs/formats/hdoc-v1-type-tags.json" },
+      { "name": "body_length", "encoding": "u64-le", "meaning": "exact-following-node-body-bytes" },
+      { "name": "body", "encoding": "type-specific-exact-octets" }
+    ],
+    "node_header_bytes": 38,
+    "noncontainer_body": "exact-P03-004-canonical-payload-bytes",
+    "object_body": {
+      "prefix": { "name": "field_count", "encoding": "u32-le" },
+      "entry_order": "strict-binary_utf8_v1-field-name-order",
+      "entry": [
+        { "name": "field_name_length", "encoding": "u32-le" },
+        { "name": "field_name", "encoding": "exact-utf8-bytes" },
+        { "name": "child_digest", "encoding": "32-exact-BLAKE3-output-octets" }
+      ],
+      "presentation_metadata_included": false
+    },
+    "array_body": {
+      "prefix": { "name": "element_count", "encoding": "u32-le" },
+      "entry_order": "dense-array-index-order",
+      "entry": [
+        { "name": "element_index", "encoding": "u32-le", "must_equal": "zero-based-entry-position" },
+        { "name": "child_digest", "encoding": "32-exact-BLAKE3-output-octets" }
+      ]
+    },
+    "excludes": [
+      "object-presentation-ordinal",
+      "physical-field-or-container-id",
+      "physical-offset-or-length",
+      "section-order-or-padding",
+      "compression-bytes-or-codec-id",
+      "path-dictionary-numeric-id",
+      "nonsemantic-extension-bytes",
+      "crc32c-and-footer-metadata"
+    ],
+    "semantic_extension_rule": "registered-required-logical-contribution-only",
+    "collision_rule": "digest-equality-never-substitutes-for-canonical-typed-equality"
+  },
+  "typed_node_vectors": [
+    {
+      "id": "null",
+      "kind": "noncontainer",
+      "type_tag": 1,
+      "body_hex": "",
+      "frame_bytes": 38,
+      "digest_hex": "e0ac2679c836c542a2722eb2dc548301293b90ba0399164560a22191ef46c101"
+    },
+    {
+      "id": "bool-false",
+      "kind": "noncontainer",
+      "type_tag": 2,
+      "body_hex": "00",
+      "frame_bytes": 39,
+      "digest_hex": "be3b5db36773c2ffacad8da0096d97c90c3047870d0bac18e71f7b154ac0f7c9"
+    },
+    {
+      "id": "bool-true",
+      "kind": "noncontainer",
+      "type_tag": 2,
+      "body_hex": "01",
+      "frame_bytes": 39,
+      "digest_hex": "18d31e64b4341afc28b0c50caded9bc0869f16e59bc6d745ecd841e769c8448d"
+    },
+    {
+      "id": "int32-one",
+      "kind": "noncontainer",
+      "type_tag": 3,
+      "body_hex": "01000000",
+      "frame_bytes": 42,
+      "digest_hex": "9cd88954ec556868cd45482e3967f48f68be3a2328378c2a8af049833668ebfd"
+    },
+    {
+      "id": "int64-one",
+      "kind": "noncontainer",
+      "type_tag": 4,
+      "body_hex": "0100000000000000",
+      "frame_bytes": 46,
+      "digest_hex": "ef0dcdaf0af4fdb4bf04244dbfbde78d57cf82d74bad7ddad11307cf53bca235"
+    },
+    {
+      "id": "float64-positive-zero",
+      "kind": "noncontainer",
+      "type_tag": 5,
+      "body_hex": "0000000000000000",
+      "frame_bytes": 46,
+      "digest_hex": "6f3edcd4166eb8e5a0320e2c5a5bf110c70d6db4800f542d1eb5bacb631fcce6"
+    },
+    {
+      "id": "float64-negative-zero",
+      "kind": "noncontainer",
+      "type_tag": 5,
+      "body_hex": "0000000000000080",
+      "frame_bytes": 46,
+      "digest_hex": "52a756ed60bc94450d9abd529f75d6f3b5ed824996babf699cf38f8414b0d320"
+    },
+    {
+      "id": "decimal128-one",
+      "kind": "noncontainer",
+      "type_tag": 6,
+      "body_hex": "01000000000000000000000000004030",
+      "frame_bytes": 54,
+      "digest_hex": "8b3b0de27455d6866d2e9a07616832129edf58ebc355e8cc83dcaaec5956fea1"
+    },
+    {
+      "id": "string-empty",
+      "kind": "noncontainer",
+      "type_tag": 7,
+      "body_hex": "",
+      "frame_bytes": 38,
+      "digest_hex": "4c5bb70a9e7c38e3e5fb193b3bb59244932ac3d7135f73329e0230fbf7fb7c2c"
+    },
+    {
+      "id": "binary-generic-empty",
+      "kind": "noncontainer",
+      "type_tag": 8,
+      "body_hex": "00",
+      "frame_bytes": 39,
+      "digest_hex": "7ab6865422870e470c39656338611862c0d5bd1d7f40354fdc98a6204ac2a4b2"
+    },
+    {
+      "id": "timestamp-epoch",
+      "kind": "noncontainer",
+      "type_tag": 11,
+      "body_hex": "0000000000000000",
+      "frame_bytes": 46,
+      "digest_hex": "99b55e88d6374da0469718a537ab0ec597b56a377e0582309ec7da7e9736250d"
+    },
+    {
+      "id": "date-epoch",
+      "kind": "noncontainer",
+      "type_tag": 12,
+      "body_hex": "00000000",
+      "frame_bytes": 42,
+      "digest_hex": "2800b9efefcbe856a1ea619a335a22260004edbeef630e075f66213a844327ed"
+    },
+    {
+      "id": "uuid-nil",
+      "kind": "noncontainer",
+      "type_tag": 13,
+      "body_hex": "00000000000000000000000000000000",
+      "frame_bytes": 54,
+      "digest_hex": "7b7e0ade6952ce302b35791dc5a041cdbfabd6341f03e86262fd93f812117dd2"
+    },
+    {
+      "id": "objectid-incrementing",
+      "kind": "noncontainer",
+      "type_tag": 14,
+      "body_hex": "000102030405060708090a0b",
+      "frame_bytes": 50,
+      "digest_hex": "633522e95a33995ab08cfe52284fe9c86bc3bda35d867a315acd580dfea3f4fa"
+    },
+    {
+      "id": "vector-f32-one",
+      "kind": "noncontainer",
+      "type_tag": 15,
+      "body_hex": "010000000000803f",
+      "frame_bytes": 46,
+      "digest_hex": "2a6091790ab5416ce5ccbeff5a46a4b60c8f17a7294c16e09f62a60d5a2ea146"
+    },
+    {
+      "id": "vector-f16-one",
+      "kind": "noncontainer",
+      "type_tag": 16,
+      "body_hex": "01000000003c",
+      "frame_bytes": 44,
+      "digest_hex": "bfa0e24c35e80f19a7f37e2c43338978355110e182aa378b38bd076e4d547e2a"
+    },
+    {
+      "id": "empty-object",
+      "kind": "object",
+      "type_tag": 9,
+      "body_hex": "00000000",
+      "frame_bytes": 42,
+      "digest_hex": "6b80baab2bce106382e6b54e5002065a77053dfc51a25917c2251fa83915d05a"
+    },
+    {
+      "id": "empty-array",
+      "kind": "array",
+      "type_tag": 10,
+      "body_hex": "00000000",
+      "frame_bytes": 42,
+      "digest_hex": "0f672ab2e0178f22272b7abf5e0a1965dc167289284712c856efd262466e374c"
+    },
+    {
+      "id": "array-null-true",
+      "kind": "array",
+      "type_tag": 10,
+      "body_hex": "0200000000000000e0ac2679c836c542a2722eb2dc548301293b90ba0399164560a22191ef46c1010100000018d31e64b4341afc28b0c50caded9bc0869f16e59bc6d745ecd841e769c8448d",
+      "frame_bytes": 114,
+      "digest_hex": "e45af9eb5473d654f2505ee0e59c83ed0e01edf401f94f2a58b02270c64a97d2"
+    },
+    {
+      "id": "array-true-null",
+      "kind": "array",
+      "type_tag": 10,
+      "body_hex": "020000000000000018d31e64b4341afc28b0c50caded9bc0869f16e59bc6d745ecd841e769c8448d01000000e0ac2679c836c542a2722eb2dc548301293b90ba0399164560a22191ef46c101",
+      "frame_bytes": 114,
+      "digest_hex": "43e535fac3e406f196186829860e77528c8bc6a7e689c19dfc937c4258d9a53d"
+    },
+    {
+      "id": "object-a-true-b-null",
+      "kind": "object",
+      "type_tag": 9,
+      "body_hex": "02000000010000006118d31e64b4341afc28b0c50caded9bc0869f16e59bc6d745ecd841e769c8448d0100000062e0ac2679c836c542a2722eb2dc548301293b90ba0399164560a22191ef46c101",
+      "frame_bytes": 116,
+      "digest_hex": "0bb315a78c32311bc9cc3ccaa2da59da6e7a6c1318fce941a9d248338d72f2df"
+    },
+    {
+      "id": "object-with-array",
+      "kind": "object",
+      "type_tag": 9,
+      "body_hex": "010000000100000061e45af9eb5473d654f2505ee0e59c83ed0e01edf401f94f2a58b02270c64a97d2",
+      "frame_bytes": 79,
+      "digest_hex": "b5b551bc5eb894dde887877f546ffe1f7e096aa892cfe7c61fe147f299815f12"
+    },
+    {
+      "id": "root-scalars",
+      "kind": "object",
+      "type_tag": 9,
+      "body_hex": "03000000030000005f69647b7e0ade6952ce302b35791dc5a041cdbfabd6341f03e86262fd93f812117dd2010000006ee0ac2679c836c542a2722eb2dc548301293b90ba0399164560a22191ef46c10101000000734c5bb70a9e7c38e3e5fb193b3bb59244932ac3d7135f73329e0230fbf7fb7c2c",
+      "frame_bytes": 155,
+      "digest_hex": "b3c73f825bbc1f2fecd295a9ee93bff822dae8ba50f9209e5b85fd31b928ba74"
+    }
+  ],
+  "uncompressed_integrity_reference_vectors": [
+    {
+      "id": "root-scalars-presentation-s-id-n",
+      "status": "normative-integrity-reference-not-immutable-P03-016-golden",
+      "logical_mapping": "{_id:uuid-nil,n:null,s:string-empty}",
+      "presentation_order": ["s", "_id", "n"],
+      "total_length": 408,
+      "content_hash_hex": "b3c73f825bbc1f2fecd295a9ee93bff822dae8ba50f9209e5b85fd31b928ba74",
+      "crc32c_value_hex": "0xf2666c12",
+      "crc32c_stored_le_hex": "126c66f2",
+      "artifact_sha256": "d5c6f839335e39dc08d17d87ab3bbd1764504bb5103794f45df7b51cc0e0d36c",
+      "hdoc_hex": "48444f430d0a1a0a01000000c000200000000000980100009801000003000000126c66f20400000040000000580100000000000000000000000000000000000001000600c000000048000000480000000300000000000000010000000000000002000600080100001d0000001d0000000300000000000000010000000000000003000600280100001000000010000000030000000000000001000000000000000400060038010000200000002000000001000000000000000100000000000000000000002001000003000d002801000010000000010000000100000023010000010001003801000000000000020000000200000024010000010007003801000000000000000000002001000003000300230100000100010024010000010001005f69646e73000000000000000000000000000000000000000000000009000100c00000000300000003000000ffffffffffffffff0000000048444f43454e440a400001000100010020000000980100009801000003000000b3c73f825bbc1f2fecd295a9ee93bff822dae8ba50f9209e5b85fd31b928ba74"
+    },
+    {
+      "id": "root-scalars-presentation-id-n-s",
+      "status": "normative-integrity-reference-not-immutable-P03-016-golden",
+      "logical_mapping": "{_id:uuid-nil,n:null,s:string-empty}",
+      "presentation_order": ["_id", "n", "s"],
+      "total_length": 408,
+      "content_hash_hex": "b3c73f825bbc1f2fecd295a9ee93bff822dae8ba50f9209e5b85fd31b928ba74",
+      "crc32c_value_hex": "0x5f209897",
+      "crc32c_stored_le_hex": "9798205f",
+      "artifact_sha256": "6e333c8d15e3c6e9d9436795fe9011c5d8bf6f4ad45713650559dd9690dc2a97",
+      "hdoc_hex": "48444f430d0a1a0a01000000c0002000000000009801000098010000030000009798205f0400000040000000580100000000000000000000000000000000000001000600c000000048000000480000000300000000000000010000000000000002000600080100001d0000001d0000000300000000000000010000000000000003000600280100001000000010000000030000000000000001000000000000000400060038010000200000002000000001000000000000000100000000000000000000002001000003000d002801000010000000000000000100000023010000010001003801000000000000010000000200000024010000010007003801000000000000020000002001000003000300230100000100010024010000010001005f69646e73000000000000000000000000000000000000000000000009000100c00000000300000003000000ffffffffffffffff0000000048444f43454e440a400001000100010020000000980100009801000003000000b3c73f825bbc1f2fecd295a9ee93bff822dae8ba50f9209e5b85fd31b928ba74"
+    }
+  ],
+  "corruption_and_identity_cases": [
+    {
+      "id": "stored-byte-flip-without-crc-repair",
+      "base_vector": "root-scalars-presentation-s-id-n",
+      "mutation": "xor one covered byte outside [32,36)",
+      "recompute_crc32c": false,
+      "expected_result": "reject",
+      "error_code": "DUR_CORRUPTION",
+      "check_class": "stored-crc32c",
+      "content_hash_evaluated": false
+    },
+    {
+      "id": "semantic-payload-flip-with-crc-repair",
+      "base_vector": "root-scalars-presentation-s-id-n",
+      "mutation": "xor byte 296 by 0x01",
+      "recompute_crc32c": true,
+      "update_content_hash": false,
+      "expected_result": "reject",
+      "error_code": "DUR_CORRUPTION",
+      "check_class": "typed-content-hash"
+    },
+    {
+      "id": "footer-hash-flip-with-crc-repair",
+      "base_vector": "root-scalars-presentation-s-id-n",
+      "mutation": "xor byte 376 by 0x01",
+      "recompute_crc32c": true,
+      "expected_result": "reject",
+      "error_code": "DUR_CORRUPTION",
+      "check_class": "typed-content-hash"
+    },
+    {
+      "id": "padding-nonzero-with-crc-repair",
+      "base_vector": "root-scalars-presentation-s-id-n",
+      "mutation": "set byte 293 to 0x01",
+      "recompute_crc32c": true,
+      "expected_result": "reject",
+      "error_code": "DUR_CORRUPTION",
+      "check_class": "structural-canonicality"
+    },
+    {
+      "id": "presentation-permutation-reencoded",
+      "base_vectors": [
+        "root-scalars-presentation-s-id-n",
+        "root-scalars-presentation-id-n-s"
+      ],
+      "expected_result": "accept-both-after-complete-format-gate",
+      "crc32c_relation": "different",
+      "content_hash_relation": "equal",
+      "logical_mapping_relation": "equal",
+      "presentation_relation": "different"
+    },
+    {
+      "id": "attacker-rewrites-bytes-crc-and-unkeyed-hash",
+      "mutation": "replace logical content and recompute both integrity fields",
+      "expected_result": "integrity-fields-can-pass",
+      "security_result": "not-authenticated-require-authenticated-enclosing-layer"
+    }
+  ],
+  "validation_order": [
+    "validate-minimal-header-length-version-and-total-length-bounds-without-trusting-offsets",
+    "recompute-crc32c-over-exact-stored-slice-with-checksum-field-zero-and-compare",
+    "validate-directory-footer-profile-structure-canonicality-payloads-and-limits",
+    "perform-P03-007-bounded-decompression-where-required-before-logical-hashing",
+    "reconstruct-canonical-typed-tree-bottom-up-and-compare-root-BLAKE3-256",
+    "expose-owned-or-borrowed-values-only-after-all-prior-stages-pass"
+  ],
+  "external_reference_snapshots": [
+    {
+      "id": "rfc3720-text",
+      "authority": "RFC-Editor",
+      "url": "https://www.rfc-editor.org/rfc/rfc3720.txt",
+      "bytes": 578468,
+      "sha256": "0c014dbc041bfc2308c1990387aabffdb21050c3ec140c96522c12005b572db3",
+      "used_for": "appendix-B.4-CRC32C-vectors"
+    },
+    {
+      "id": "blake3-official-test-vectors",
+      "authority": "BLAKE3-team/BLAKE3",
+      "commit": "8aa5145039b972ba30e98e788752d37d14568824",
+      "path": "test_vectors/test_vectors.json",
+      "bytes": 31922,
+      "sha256": "dcb91ea8accc77e6d6e632af7cdc1a99a9f3ae78cf648da595c7d064db32f624",
+      "used_for": "default-hash-algorithm-boundary-vectors"
+    },
+    {
+      "id": "blake3-official-c-example",
+      "authority": "BLAKE3-team/BLAKE3",
+      "commit": "8aa5145039b972ba30e98e788752d37d14568824",
+      "path": "c/example.c",
+      "bytes": 868,
+      "sha256": "280e37e4afa96a97d1cf31411bb6d956352f561d2d10893f413eb2cdfa003121",
+      "used_for": "independent-C-profile-vector-replay"
+    },
+    {
+      "id": "blake3-specification-pdf",
+      "authority": "BLAKE3-team/BLAKE3-specs",
+      "commit": "ea51a3ac997288bf690ee82ac9cfc8b3e0e60f2a",
+      "path": "blake3.pdf",
+      "bytes": 304371,
+      "sha256": "ce179e62f29a6e43ec1ac2fe62b5e063a18632cf936c430d1373bfa0b81fb349",
+      "used_for": "algorithm-mode-and-output-semantics"
+    }
+  ],
+  "deferrals": [
+    {
+      "owner": "P03-007",
+      "scope": "compressed-section-codecs-blocks-and-stored-byte-vectors"
+    },
+    {
+      "owner": "P03-008-P03-009",
+      "scope": "production-encoder-decoder-and-integrity-implementation"
+    },
+    {
+      "owner": "P03-016",
+      "scope": "immutable-complete-positive-and-malformed-HDoc-fixture-files"
+    },
+    {
+      "owner": "P03-017-P03-019",
+      "scope": "independent-cross-language-property-fuzz-and-corruption-replay"
+    }
+  ]
+}

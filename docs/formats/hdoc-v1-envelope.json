@@ -12,6 +12,7 @@
     "minimum_envelope_bytes_without_section_payloads": 256,
     "minimum_base_structural_root_bytes_before_hash_profile": 288,
     "record_registry": "docs/formats/hdoc-v1-records.json",
+    "integrity_registry": "docs/formats/hdoc-v1-integrity.json",
     "complete_byte_format": false,
     "completion_gate": "P03-007"
   },
@@ -357,8 +358,8 @@
     "version": 1,
     "hash_algorithm_id": 1,
     "hash_algorithm": "blake3-256",
-    "hash_profile_id": 0,
-    "hash_profile_status": "unassigned-until-P03-006",
+    "hash_profile_id": 1,
+    "hash_profile_status": "assigned-hdoc-typed-content-tree-v1",
     "hash_bytes": 32,
     "fields": [
       {
@@ -394,8 +395,8 @@
         "offset": 14,
         "bytes": 2,
         "encoding": "u16-le",
-        "constant": 0,
-        "valid_document": false,
+        "constant": 1,
+        "valid_document": true,
         "assignment_owner": "P03-006"
       },
       {
