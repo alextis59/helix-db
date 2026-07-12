@@ -3,7 +3,7 @@
 - Status: Accepted bootstrap command contract; feature suites remain maturity-labeled
 - Last updated: 2026-07-11
 - Owner: Quality and release owner
-- Plan item: `P02-007`; benchmark activation completed by `P02-014`; browser boundary activation completed by `P02-016`; integration activation completed by `P03-017`; fuzz activation completed by `P03-019`
+- Plan item: `P02-007`; benchmark activation completed by `P02-014` and extended with HDoc product-code measurements by `P03-020`; browser boundary activation completed by `P02-016`; integration activation completed by `P03-017`; fuzz activation completed by `P03-019`
 - Governing gate: `G02`
 - Machine authority: [`helix.test-command-surface/1`](../../tests/suites.json)
 - Runner: [`tests/run-suite.mjs`](../../tests/run-suite.mjs)
@@ -24,7 +24,7 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 | `npm run test:fuzz` | Active | Runs five pinned libFuzzer targets for decode, encode/decode invariants, path lookup, tagged render/import, and migration; the bounded gate executes 128 coverage-guided units each (640 total) from 57 assembled seeds | Longer campaigns and newly retained regression inputs extend the same targets |
 | `npm run test:browser` | Active | Rebuilds and validates the non-database browser example, then lists two cases expanded across Chromium, Firefox, and WebKit (6 tests in 2 files): bundle instantiation plus bounded replay of all 24 immutable HDoc fuzz seeds through a real-browser CRC/directory probe | `P11-014` expands the same suite to product lifecycle/capability/storage behavior |
 | `npm run test:crash` | Reserved | Requires only the crash-history contract README | Storage crash/reopen histories under `P05-021` |
-| `npm run test:benchmark` | Active | Compiles all eight crates through the fixed benchmark profile, requires 0 Cargo benchmark targets, then records and validates one 5-warm-up/20-measurement integrity-only baseline | Product workloads extend the versioned result contract without changing its claim boundary retroactively |
+| `npm run test:benchmark` | Active | Compiles all eight crates through the fixed benchmark profile, requires 0 Cargo benchmark targets, validates the P02-014 calibration, then records 600 samples/9,600 timed iterations over five HDoc shapes and six codec/lookup operations | P03-021 interprets the raw HDoc results; no timing value gates this command |
 | `npm run test:distributed` | Reserved | Requires only the distributed-history contract README | Deterministic replication simulations under `P17-016` |
 
 `npm run test:all` runs the eight commands in manifest order and is also the root `npm run test` behavior. It includes the benchmark-profile compilation, so focused development should use the narrowest relevant command. `npm run test:commands` validates the manifest, package aliases, Cargo metadata, list/describe interface, documentation, and rejection behavior without running the feature suites.
@@ -53,7 +53,13 @@ The [`P02-013` product coverage command](code-coverage-policy.md) is a quality g
 
 The active browser command first builds and structurally checks the fixed example and then uses Playwright list mode. It does not install or execute Chromium, Firefox, or WebKit; explicit `browser:install`, `browser:smoke`, and CI commands own that network/platform boundary under the [P02-010/P02-016 validation contract](../architecture/wasm-browser-smoke-validation.md).
 
-The active benchmark command uses the accepted `bench` compilation profile and the [P02-014 result contract](benchmark-results.md). It times only a deterministic Node SHA-256 harness calibration, emits ignored raw/summary artifacts, and fails on integrity, completeness, fallback, or report drift. It does not time database code, compare machines/backends, apply a performance threshold, or create a performance claim.
+The active benchmark command uses the accepted `bench` compilation profile and the
+[versioned result contract](benchmark-results.md). It retains the P02-014 Node SHA-256 calibration
+and adds P03-020 production HDoc encode/decode/direct-field/path measurements over minimal,
+mixed-type, nested-fanout, wide, and compressible shapes. Raw/summary artifacts bind exact source,
+environment, sizes, dictionary arithmetic, and all 600 samples. Integrity and completeness gate;
+timings do not. Storage, concurrency, cross-machine comparison, and decisions remain outside this
+task.
 
 The underlying CLI behavior follows the official [Cargo test command](https://doc.rust-lang.org/cargo/commands/cargo-test.html), [Vitest CLI](https://vitest.dev/guide/cli), [Playwright test CLI](https://playwright.dev/docs/test-cli), and [Rust Fuzz Book](https://rust-fuzz.github.io/book/) documentation. Tool versions remain governed by the Rust and JavaScript toolchain policies rather than by those mutable pages.
 

@@ -3,7 +3,7 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-017`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-017` and `P03-020`
 - Governing gate: `G02`
 - Accepted gate evidence: [`G02` hosted toolchain review](../../evidence/phase-02/G02/README.md)
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
@@ -47,7 +47,11 @@ Both run the same strict native format/check/Clippy/test command set and the loc
 
 ## Observational benchmark lane
 
-The `benchmark-baseline-linux-x64` lane is a scheduled/manual, non-gating benchmark job on fixed `ubuntu-24.04` with Node 22.23.1. It has no push or pull-request trigger and is not emitted into the 11-lane gating matrix. It compiles the benchmark profile, executes the one integrity-only harness calibration, validates its strict raw/summary schemas, and preserves both files for 30 days.
+The `benchmark-baseline-linux-x64` lane is a scheduled/manual, non-gating benchmark job on fixed
+`ubuntu-24.04` with Node 22.23.1. It has no push or pull-request trigger and is not emitted into the
+11-lane gating matrix. It compiles the benchmark profile, executes the integrity-only harness
+calibration and the production HDoc v1 codec/lookup workload, validates both raw-linked result
+contracts, and preserves both two-file directories for 30 days.
 
 Non-gating does not mean best effort. A schema, dataset, digest, execution, report, or upload failure makes the job fail visibly; `continue-on-error` is forbidden. The [benchmark result contract](../quality/benchmark-results.md) fixes its workload, complete stage inventory, claim boundary, failure retention, output hashes, and absence of a performance threshold.
 
@@ -87,6 +91,11 @@ P03-019 activates the stable fuzz suite on both exact Node lanes. Setup installs
 tool/authority rejection canaries, then returns to offline execution. Five libFuzzer/AddressSanitizer
 targets execute 640 bounded units per aggregate run. The three browser jobs also replay all 24
 immutable HDoc seeds through a bounds-checked CRC/directory probe in Chromium, Firefox, and WebKit.
+
+P03-020 adds a five-shape HDoc workload to the stable benchmark suite and observational workflow.
+The root suite gates only shape, operation, sample, correctness, size, dictionary-arithmetic, source,
+and report integrity. The 600 retained timings have a null threshold; `P03-021` alone may interpret
+them for the format/dictionary experiments.
 
 ## Workflow security and reproducibility
 

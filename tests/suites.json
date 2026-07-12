@@ -114,11 +114,15 @@
       "description": "Reproducible workload definitions and retained, integrity-checked, claim-bounded measurements.",
       "activation_tasks": [],
       "allowed_files": [],
-      "steps": ["benchmark-profile", "benchmark-baseline"],
+      "steps": ["benchmark-profile", "benchmark-baseline", "hdoc-benchmark"],
       "expectations": {
         "workspace_packages": 8,
         "cargo_benchmark_targets": 0,
         "baseline_workloads": 1,
+        "hdoc_workloads": 1,
+        "hdoc_shapes": 5,
+        "hdoc_operations": 30,
+        "hdoc_measurement_samples": 600,
         "warmup_repetitions": 5,
         "measured_repetitions": 20,
         "operations_per_repetition": 8

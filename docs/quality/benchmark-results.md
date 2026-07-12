@@ -1,15 +1,29 @@
 # Benchmark Result, Baseline, and Retention Contract
 
-- Status: Accepted foundation benchmark contract; no database performance claim
+- Status: Accepted foundation and HDoc v1 benchmark contracts; no release performance claim
 - Last updated: 2026-07-11
 - Owner: Performance owner with quality and release review
-- Plan item: `P02-014`
+- Plan items: `P02-014`, extended by `P03-020`
 - Governing requirements: `INV-007`, `QUAL-001`
 - Governing gate: `G02`
 - Workload authority: [`helix.benchmark-workload/1`](../../benchmarks/workloads/harness-calibration-v1.json)
 - Raw-result schema: [`helix.benchmark-raw-result/1`](../../benchmarks/schema/raw-result-v1.schema.json)
 - Summary schema: [`helix.benchmark-summary/1`](../../benchmarks/schema/summary-v1.schema.json)
 - Observational workflow: [`benchmark-baseline.yml`](../../.github/workflows/benchmark-baseline.yml)
+
+The P03-020 extension adds [`helix.hdoc-benchmark-workload/1`](../../benchmarks/workloads/hdoc-v1.json),
+[`helix.hdoc-benchmark-raw/1`](../../benchmarks/schema/hdoc-raw-v1.schema.json), and
+[`helix.hdoc-benchmark-summary/1`](../../benchmarks/schema/hdoc-summary-v1.schema.json). Its Rust
+engine executes production codec/view APIs for five fixed shapes and six operations. Each operation
+retains 20 samples of 16 iterations after five warm-ups: 600 samples and 9,600 timed iterations.
+Exact base/canonical/tagged sizes and real path-dictionary snapshot overhead are correctness-checked.
+The dictionary comparison models 10,000 documents with one u32 ID per registered path reference;
+it is explicitly not an implemented dictionary-reference HDoc profile.
+
+P03-020 records facts but makes no format decision. Every raw result binds seven source files, the
+Git commit/dirty state, allowlisted host facts, every timing, verification checksum, compression
+count, and dictionary equation. The summary links exact raw bytes and recomputes nearest-rank
+p50/p95/p99 plus min/max/mean. Its timing threshold is always null and `P03-021` owns interpretation.
 
 ## Purpose and claim boundary
 

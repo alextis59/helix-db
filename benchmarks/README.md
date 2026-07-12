@@ -11,7 +11,12 @@ This root contains versioned workload/result schemas, a bounded runner, and comp
 
 Every publishable result must follow the [benchmark evidence rules](../evidence/README.md#benchmark-specific-rules) and the [result contract](../docs/quality/benchmark-results.md).
 
-`npm run test:benchmark` compiles the eight-crate workspace through the fixed benchmark profile, requires exactly zero Cargo benchmark targets, then runs one deterministic SHA-256 harness calibration. It retains five warm-ups and twenty measurements in ignored `dist/benchmarks/baseline/raw.json`, derives a raw-linked summary, and applies integrity checks only. This proves the reporting/retention path, not database performance.
+`npm run test:benchmark` compiles the eight-crate workspace through the fixed benchmark profile,
+requires exactly zero Cargo benchmark targets, and runs two versioned workloads. The P02-014
+SHA-256 calibration proves the reporting path. The P03-020 workload executes the production HDoc
+encoder, validating decoder, direct-field lookup, and dotted-path lookup across five fixed shapes;
+it also records exact base/compressed/tagged sizes and a real-snapshot-plus-u32-ID dictionary byte
+model. Both retain five warm-ups and twenty raw measurement samples without a timing threshold.
 
 Focused commands:
 
@@ -20,4 +25,8 @@ corepack npm run benchmark:schemas
 corepack npm run benchmark:baseline
 corepack npm run benchmark:check
 corepack npm run benchmark:test
+corepack npm run benchmark:hdoc:policy
+corepack npm run benchmark:hdoc
+corepack npm run benchmark:hdoc:check
+corepack npm run benchmark:hdoc:test
 ```

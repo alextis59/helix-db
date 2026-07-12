@@ -14,7 +14,7 @@ support claim exists; each document states its own maturity boundary and owning 
 
 | Format | Version | Status | Machine companion | Owner task |
 | --- | --- | --- | --- | --- |
-| [HDoc envelope](hdoc-v1.md) | 1.0 outer envelope | Writer, validating reader, views, lookup, tagged conversion, negotiation, [immutable fixtures](../../fixtures/hdoc/v1/README.md), Rust/TypeScript parity, deterministic properties/mutations, and coverage-guided fuzz/browser replay implemented | [Envelope registry](hdoc-v1-envelope.json) | `P03-002`–`P03-019` |
+| [HDoc envelope](hdoc-v1.md) | 1.0 outer envelope | Writer, validating reader, views, lookup, tagged conversion, negotiation, [immutable fixtures](../../fixtures/hdoc/v1/README.md), Rust/TypeScript parity, deterministic hardening, coverage-guided fuzz/browser replay, and representative raw benchmarks implemented | [Envelope registry](hdoc-v1-envelope.json) | `P03-002`–`P03-020` |
 | [HDoc logical type tags](hdoc-v1-type-tags.md) | 1.x one-byte tag registry | Accepted type identity | [Type-tag registry](hdoc-v1-type-tags.json) | `P03-003` |
 | [HDoc noncontainer payloads](hdoc-v1-payloads.md) | 1.0 payload registry | Accepted scalar/byte/vector payloads | [Payload registry](hdoc-v1-payloads.json) | `P03-004` |
 | [HDoc field/name/container records](hdoc-v1-records.md) | 1.0 base record registry | Accepted tables, references, value packing, and container tree | [Record registry](hdoc-v1-records.json) | `P03-005` |

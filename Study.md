@@ -359,6 +359,13 @@ dependency graph. Bounded local/CI campaigns execute 640 coverage-guided units a
 encode, lookup, tagged conversion, and migration with AddressSanitizer enabled, while all 24
 immutable HDoc seeds replay in Chromium, Firefox, and WebKit through a bounded envelope probe.
 Long-running campaigns may grow retained regression corpora without changing the stable targets.
+P03-020 adds the first representative measurement corpus without pre-deciding `EXP-001` or
+`EXP-002`: five fixed shapes exercise 30 production encode/decode/direct-field/path combinations,
+retain 600 raw timing samples (9,600 timed iterations), record exact stored/logical/tagged sizes,
+and compare repeated raw path-name bytes with a real versioned dictionary snapshot plus u32
+references over 10,000 modeled documents. The smallest shape is deliberately allowed to show
+negative savings. All timing thresholds remain null; P03-021 owns interpretation and the selected
+format/dictionary conclusions.
 
 ### 6.3 Field-path dictionaries
 

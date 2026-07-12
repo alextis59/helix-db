@@ -1,0 +1,67 @@
+{
+  "schema": "helix.hdoc-benchmark-workload/1",
+  "plan_item": "P03-020",
+  "status": "active",
+  "profile": "bench",
+  "warmups": 5,
+  "measurements": 20,
+  "iterations_per_sample": 16,
+  "dictionary_documents": 10000,
+  "dictionary_basis": "snapshot-plus-u32-path-id-per-reference",
+  "operations": [
+    "encode_base",
+    "encode_canonical",
+    "decode_base",
+    "decode_canonical",
+    "field_lookup",
+    "path_lookup"
+  ],
+  "shapes": [
+    {
+      "id": "minimal",
+      "root_fields": 1,
+      "recursive_fields": 1,
+      "path_depth": 1,
+      "expected_path_candidates": 1,
+      "dictionary_path_count": 1
+    },
+    {
+      "id": "mixed_types",
+      "root_fields": 12,
+      "recursive_fields": 12,
+      "path_depth": 1,
+      "expected_path_candidates": 1,
+      "dictionary_path_count": 12
+    },
+    {
+      "id": "nested_fanout",
+      "root_fields": 4,
+      "recursive_fields": 54,
+      "path_depth": 2,
+      "expected_path_candidates": 16,
+      "dictionary_path_count": 9
+    },
+    {
+      "id": "wide_128",
+      "root_fields": 128,
+      "recursive_fields": 128,
+      "path_depth": 1,
+      "expected_path_candidates": 1,
+      "dictionary_path_count": 128
+    },
+    {
+      "id": "compressible_32k",
+      "root_fields": 3,
+      "recursive_fields": 3,
+      "path_depth": 1,
+      "expected_path_candidates": 1,
+      "dictionary_path_count": 3
+    }
+  ],
+  "claim_boundary": {
+    "timing_threshold": null,
+    "decision_owner": "P03-021",
+    "scope": "single-process production HDoc codec, validated warm-memory views, and an explicit dictionary byte model",
+    "excludes": "storage, WAL, query planning, concurrency, cross-machine comparison, and release performance claims"
+  }
+}

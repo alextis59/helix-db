@@ -160,11 +160,12 @@ registration/resolution/recovery with immutable version pins, `P03-015` added ex
 closed-world negotiation/no-rewrite migration assessment, `P03-016` froze executable immutable
 golden vectors, `P03-017` added cross-language reader parity, and `P03-018` added deterministic
 round-trip/canonicalization/malformed/property/mutation suites, and `P03-019` added five pinned
-coverage-guided libFuzzer targets plus browser seed replay. The active workspace
-metadata is now:
+coverage-guided libFuzzer targets plus browser seed replay, and `P03-020` added a benchmark-only
+production-code example without changing the product denominator. The active workspace metadata
+is now:
 
 ```text
-status = "hdoc-fuzz-v1"
+status = "hdoc-benchmark-v1"
 database-functionality = true
 ```
 

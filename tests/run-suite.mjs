@@ -28,6 +28,7 @@ const allowedSteps = new Set([
   'browser-harness-inventory',
   'benchmark-profile',
   'benchmark-baseline',
+  'hdoc-benchmark',
 ]);
 
 const assert = (condition, message) => {
@@ -379,6 +380,31 @@ const executeBenchmarkBaseline = (suite) => {
   );
 };
 
+const executeHDocBenchmark = (suite) => {
+  assert(suite.expectations.hdoc_workloads === 1, 'HDoc benchmark workload count mismatch');
+  const policy = run(process.execPath, ['benchmarks/check-hdoc.mjs', 'policy']);
+  requireText(
+    policy,
+    `PASS HDoc benchmark policy: 2 schemas, ${suite.expectations.hdoc_shapes} shapes, 6 operations`,
+    'HDoc benchmark policy',
+  );
+  const benchmark = run(process.execPath, ['benchmarks/run-hdoc.mjs']);
+  requireText(
+    benchmark,
+    `PASS HDoc benchmark: ${suite.expectations.hdoc_shapes} shapes, ${suite.expectations.hdoc_operations} operations, ${suite.expectations.hdoc_measurement_samples} samples`,
+    'HDoc benchmark execution',
+  );
+  const report = run(process.execPath, ['benchmarks/check-hdoc.mjs', 'report']);
+  requireText(
+    report,
+    `PASS HDoc benchmark report: ${suite.expectations.hdoc_shapes} shapes, ${suite.expectations.hdoc_measurement_samples} samples`,
+    'HDoc benchmark report',
+  );
+  requireText(report, 'timing threshold null; P03-021 owns decisions', 'HDoc claim boundary');
+  const canaries = run(process.execPath, ['tests/toolchain/test-hdoc-benchmark-contract.mjs']);
+  requireText(canaries, '13 report/authority mutations rejected', 'HDoc benchmark canaries');
+};
+
 const stepExecutors = {
   'rust-unit': executeRustUnit,
   'rust-integration-inventory': executeRustIntegrationInventory,
@@ -390,6 +416,7 @@ const stepExecutors = {
   'browser-harness-inventory': executeBrowserInventory,
   'benchmark-profile': executeBenchmarkProfile,
   'benchmark-baseline': executeBenchmarkBaseline,
+  'hdoc-benchmark': executeHDocBenchmark,
 };
 
 const runSuite = (suite) => {

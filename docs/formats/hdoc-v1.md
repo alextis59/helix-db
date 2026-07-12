@@ -136,8 +136,9 @@ partial/truncated iterator. Syntax and contextual-index diagnostics are redacted
 `VAL_INVALID_PATH`; byte/segment/field/candidate limit failures are redacted
 `QUOTA_LIMIT_EXCEEDED` with stable limit IDs. Lookup borrows the validated logical sections and path
 text and cannot outlive either. Canonical lossless rendering and strict detached import use the
-implemented [`helix.hdoc-tagged-json/1`](hdoc-v1-tagged-json.md) profile. `P03-020` owns formal
-lookup measurements.
+implemented [`helix.hdoc-tagged-json/1`](hdoc-v1-tagged-json.md) profile. P03-020 now retains formal
+direct-field and dotted-path measurements across five representative shapes; P03-021 owns their
+interpretation.
 
 ## Normative notation
 

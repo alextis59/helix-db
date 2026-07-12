@@ -1,0 +1,223 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.helix-db.invalid/benchmark/hdoc-raw-v1.schema.json",
+  "title": "HelixDB HDoc benchmark raw result version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_item",
+    "recorded_at",
+    "source_control",
+    "environment",
+    "claim_boundary",
+    "workload",
+    "sources",
+    "engine",
+    "totals",
+    "verdict"
+  ],
+  "properties": {
+    "schema": { "const": "helix.hdoc-benchmark-raw/1" },
+    "plan_item": { "const": "P03-020" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "source_control": { "$ref": "#/$defs/sourceControl" },
+    "environment": { "$ref": "#/$defs/environment" },
+    "claim_boundary": { "$ref": "#/$defs/claimBoundary" },
+    "workload": { "$ref": "#/$defs/fileIdentity" },
+    "sources": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": { "$ref": "#/$defs/fileIdentity" }
+    },
+    "engine": { "$ref": "#/$defs/engine" },
+    "totals": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["shapes", "operations", "measurement_samples", "timed_iterations"],
+      "properties": {
+        "shapes": { "const": 5 },
+        "operations": { "const": 30 },
+        "measurement_samples": { "const": 600 },
+        "timed_iterations": { "const": 9600 }
+      }
+    },
+    "verdict": { "const": "pass" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "fileIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "sourceControl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "dirty"],
+      "properties": {
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "dirty": { "type": "boolean" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "architecture",
+        "os_release",
+        "cpu_model",
+        "logical_cpus",
+        "memory_bytes",
+        "node",
+        "rustc"
+      ],
+      "properties": {
+        "platform": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "architecture": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "os_release": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "cpu_model": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "logical_cpus": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "memory_bytes": { "type": "integer", "minimum": 1 },
+        "node": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "rustc": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    },
+    "claimBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["timing_threshold", "decision_owner", "scope", "excludes"],
+      "properties": {
+        "timing_threshold": { "type": "null" },
+        "decision_owner": { "const": "P03-021" },
+        "scope": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "excludes": { "type": "string", "minLength": 20, "maxLength": 500 }
+      }
+    },
+    "engine": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "schema",
+        "warmups",
+        "measurements",
+        "iterations_per_sample",
+        "shape_count",
+        "operation_count_per_shape",
+        "shapes",
+        "verdict"
+      ],
+      "properties": {
+        "schema": { "const": "helix.hdoc-benchmark-engine/1" },
+        "warmups": { "const": 5 },
+        "measurements": { "const": 20 },
+        "iterations_per_sample": { "const": 16 },
+        "shape_count": { "const": 5 },
+        "operation_count_per_shape": { "const": 6 },
+        "shapes": {
+          "type": "array",
+          "minItems": 5,
+          "maxItems": 5,
+          "items": { "$ref": "#/$defs/shape" }
+        },
+        "verdict": { "const": "pass" }
+      }
+    },
+    "shape": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "root_fields",
+        "recursive_fields",
+        "path_depth",
+        "expected_path_candidates",
+        "sizes",
+        "dictionary_model",
+        "operations"
+      ],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "root_fields": { "type": "integer", "minimum": 1, "maximum": 10000 },
+        "recursive_fields": { "type": "integer", "minimum": 1, "maximum": 100000 },
+        "path_depth": { "type": "integer", "minimum": 1, "maximum": 100 },
+        "expected_path_candidates": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "sizes": { "$ref": "#/$defs/sizes" },
+        "dictionary_model": { "$ref": "#/$defs/dictionaryModel" },
+        "operations": {
+          "type": "array",
+          "minItems": 6,
+          "maxItems": 6,
+          "items": { "$ref": "#/$defs/operation" }
+        }
+      }
+    },
+    "sizes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "base_bytes",
+        "canonical_stored_bytes",
+        "canonical_logical_bytes",
+        "tagged_json_bytes",
+        "compressed_sections"
+      ],
+      "properties": {
+        "base_bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "canonical_stored_bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "canonical_logical_bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "tagged_json_bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "compressed_sections": { "type": "integer", "minimum": 0, "maximum": 4 }
+      }
+    },
+    "dictionaryModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "basis",
+        "path_count",
+        "documents",
+        "snapshot_bytes",
+        "raw_name_reference_bytes",
+        "id_reference_bytes",
+        "amortized_dictionary_bytes",
+        "savings_bytes",
+        "savings_basis_points"
+      ],
+      "properties": {
+        "basis": { "const": "snapshot-plus-u32-path-id-per-reference" },
+        "path_count": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "documents": { "const": 10000 },
+        "snapshot_bytes": { "type": "integer", "minimum": 1 },
+        "raw_name_reference_bytes": { "type": "integer", "minimum": 1 },
+        "id_reference_bytes": { "type": "integer", "minimum": 1 },
+        "amortized_dictionary_bytes": { "type": "integer", "minimum": 1 },
+        "savings_bytes": { "type": "integer" },
+        "savings_basis_points": { "type": "integer" }
+      }
+    },
+    "operation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "iterations_per_sample", "durations_ns", "checksum"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "iterations_per_sample": { "const": 16 },
+        "durations_ns": {
+          "type": "array",
+          "minItems": 20,
+          "maxItems": 20,
+          "items": { "type": "integer", "minimum": 1 }
+        },
+        "checksum": { "type": "integer", "minimum": 1 }
+      }
+    }
+  }
+}

@@ -503,8 +503,10 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   `P03-017`.
 - [x] Run property/mutation tests, coverage-guided fuzzing, ASan, and Wasm/browser replay under
   `P03-018` and `P03-019`.
-- [ ] Publish raw encode/decode/lookup/size/alignment/compression results for `EXP-001` and
-  `EXP-002` under `P03-020`/`P03-021`.
+- [x] Publish versioned raw encode/decode/lookup/size/compression/dictionary-model measurements
+  under `P03-020`, with 600 samples across five representative shapes and no timing threshold.
+- [ ] Complete `EXP-001`/`EXP-002` interpretation and record the selected format/dictionary
+  conclusions under `P03-021`.
 - [ ] Complete independent format/security review and close `G03` only with no open critical
   parser, corruption, migration, or portability issue.
 
@@ -512,8 +514,9 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 
 - Format, codec, and dictionary lifecycle work: `P03-002`–`P03-014`, `helix-doc`, format fixtures,
   and fuzz targets.
-- Dictionary reference/extension evolution remains unsupported; independent reading and hardening
-  continue at `P03-017`–`P03-019` after P03-016 froze the first supported fixtures.
+- Dictionary reference/extension evolution remains unsupported; independent reading, hardening,
+  and representative raw measurement continue at `P03-017`–`P03-020` after P03-016 froze the
+  first supported fixtures.
 - Experiments/gate: `P03-020`, `P03-021`, `EXP-001`, `EXP-002`, and `G03`.
 - Later authoritative consumers: storage, WAL/value-log/SST, replication, backup/restore,
   migration, browser persistence, SDK/protocols, and compatibility adapters.
@@ -553,7 +556,9 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   and checksum-repaired mutation evidence.
 - [x] `P03-019`: add pinned coverage-guided encoder/decoder/lookup/render/migration fuzzing,
   AddressSanitizer execution, and real-browser immutable-seed replay.
-- [ ] `P03-020`–`P03-021`: complete experiments and conclusions before `G03`.
+- [x] `P03-020`: publish source-bound raw codec/lookup/size/dictionary-model measurements over five
+  representative shapes.
+- [ ] `P03-021`: complete experiment conclusions before `G03`.
 
 ## References
 

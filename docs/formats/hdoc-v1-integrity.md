@@ -445,7 +445,8 @@ and typed hash before deriving a new artifact and retains the source until its r
 | [`P03-013`–`P03-014`](path-dictionary-v1.md), [`P03-015`](hdoc-v1-compatibility.md) complete | Dictionary format/lifecycle and closed-world negotiation; references/extensions remain unsupported | Resolved names/content identity or ID reuse |
 | [`P03-016`](../../fixtures/hdoc/v1/README.md) complete | Immutable complete positive/rejection HDoc files | Existing registry vectors/expectations |
 | `P03-017`–`P03-019` complete | Independent codec, deterministic properties/corruption tests, and coverage-guided fuzz/browser replay complete | Exact outputs and fail-closed behavior |
-| `P03-020`–`P03-021` | Integrity-inclusive format/compression performance | Correctness, coverage, or authentication boundary |
+| `P03-020` (complete) | Integrity-inclusive raw format/compression/lookup/size measurements | Correctness, coverage, or authentication boundary |
+| `P03-021` | Interpret `EXP-001`/`EXP-002` and record decisions | Retroactively alter retained measurements |
 
 ## Required later fixtures
 

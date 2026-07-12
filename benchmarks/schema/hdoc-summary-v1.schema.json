@@ -1,0 +1,184 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://schemas.helix-db.invalid/benchmark/hdoc-summary-v1.schema.json",
+  "title": "HelixDB HDoc benchmark summary version 1",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema",
+    "plan_item",
+    "recorded_at",
+    "raw_result",
+    "source_control",
+    "environment",
+    "claim_boundary",
+    "shapes",
+    "acceptance",
+    "verdict"
+  ],
+  "properties": {
+    "schema": { "const": "helix.hdoc-benchmark-summary/1" },
+    "plan_item": { "const": "P03-020" },
+    "recorded_at": { "type": "string", "format": "date-time" },
+    "raw_result": { "$ref": "#/$defs/fileIdentity" },
+    "source_control": { "$ref": "#/$defs/sourceControl" },
+    "environment": { "$ref": "#/$defs/environment" },
+    "claim_boundary": { "$ref": "#/$defs/claimBoundary" },
+    "shapes": {
+      "type": "array",
+      "minItems": 5,
+      "maxItems": 5,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "sizes", "dictionary_model", "operations"],
+        "properties": {
+          "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+          "sizes": { "$ref": "#/$defs/sizes" },
+          "dictionary_model": { "$ref": "#/$defs/dictionaryModel" },
+          "operations": {
+            "type": "array",
+            "minItems": 6,
+            "maxItems": 6,
+            "items": { "$ref": "#/$defs/operationSummary" }
+          }
+        }
+      }
+    },
+    "acceptance": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["correctness_passed", "timing_threshold", "decision_owner"],
+      "properties": {
+        "correctness_passed": { "const": true },
+        "timing_threshold": { "type": "null" },
+        "decision_owner": { "const": "P03-021" }
+      }
+    },
+    "verdict": { "const": "pass" }
+  },
+  "$defs": {
+    "sha256": { "type": "string", "pattern": "^[0-9a-f]{64}$" },
+    "fileIdentity": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": { "type": "string", "minLength": 1, "maxLength": 256 },
+        "bytes": { "type": "integer", "minimum": 1 },
+        "sha256": { "$ref": "#/$defs/sha256" }
+      }
+    },
+    "sourceControl": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["commit", "dirty"],
+      "properties": {
+        "commit": { "type": "string", "pattern": "^[0-9a-f]{40}$" },
+        "dirty": { "type": "boolean" }
+      }
+    },
+    "environment": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "platform",
+        "architecture",
+        "os_release",
+        "cpu_model",
+        "logical_cpus",
+        "memory_bytes",
+        "node",
+        "rustc"
+      ],
+      "properties": {
+        "platform": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "architecture": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "os_release": { "type": "string", "minLength": 1, "maxLength": 128 },
+        "cpu_model": { "type": "string", "minLength": 1, "maxLength": 500 },
+        "logical_cpus": { "type": "integer", "minimum": 1, "maximum": 4096 },
+        "memory_bytes": { "type": "integer", "minimum": 1 },
+        "node": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "rustc": { "type": "string", "minLength": 1, "maxLength": 160 }
+      }
+    },
+    "claimBoundary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["timing_threshold", "decision_owner", "scope", "excludes"],
+      "properties": {
+        "timing_threshold": { "type": "null" },
+        "decision_owner": { "const": "P03-021" },
+        "scope": { "type": "string", "minLength": 20, "maxLength": 500 },
+        "excludes": { "type": "string", "minLength": 20, "maxLength": 500 }
+      }
+    },
+    "sizes": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "base_bytes",
+        "canonical_stored_bytes",
+        "canonical_logical_bytes",
+        "tagged_json_bytes",
+        "compressed_sections"
+      ],
+      "properties": {
+        "base_bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "canonical_stored_bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "canonical_logical_bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "tagged_json_bytes": { "type": "integer", "minimum": 1, "maximum": 16777216 },
+        "compressed_sections": { "type": "integer", "minimum": 0, "maximum": 4 }
+      }
+    },
+    "dictionaryModel": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "basis",
+        "path_count",
+        "documents",
+        "snapshot_bytes",
+        "raw_name_reference_bytes",
+        "id_reference_bytes",
+        "amortized_dictionary_bytes",
+        "savings_bytes",
+        "savings_basis_points"
+      ],
+      "properties": {
+        "basis": { "const": "snapshot-plus-u32-path-id-per-reference" },
+        "path_count": { "type": "integer", "minimum": 1, "maximum": 1000000 },
+        "documents": { "const": 10000 },
+        "snapshot_bytes": { "type": "integer", "minimum": 1 },
+        "raw_name_reference_bytes": { "type": "integer", "minimum": 1 },
+        "id_reference_bytes": { "type": "integer", "minimum": 1 },
+        "amortized_dictionary_bytes": { "type": "integer", "minimum": 1 },
+        "savings_bytes": { "type": "integer" },
+        "savings_basis_points": { "type": "integer" }
+      }
+    },
+    "operationSummary": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "iterations_per_sample", "sample_count", "duration_ns"],
+      "properties": {
+        "id": { "type": "string", "minLength": 1, "maxLength": 64 },
+        "iterations_per_sample": { "const": 16 },
+        "sample_count": { "const": 20 },
+        "duration_ns": {
+          "type": "object",
+          "additionalProperties": false,
+          "required": ["min", "p50", "p95", "p99", "max", "mean"],
+          "properties": {
+            "min": { "type": "integer", "minimum": 1 },
+            "p50": { "type": "integer", "minimum": 1 },
+            "p95": { "type": "integer", "minimum": 1 },
+            "p99": { "type": "integer", "minimum": 1 },
+            "max": { "type": "integer", "minimum": 1 },
+            "mean": { "type": "integer", "minimum": 1 }
+          }
+        }
+      }
+    }
+  }
+}
