@@ -84,7 +84,8 @@ metrics, secrets, networking, object storage, and GPU.
 
 Declaring a kind does not grant it. P04-003 defines concrete capability resource identities in ABI
 2.0; operations are defined by P04-004 in ABI 3.0; resource lifecycles are defined by P04-005 in
-ABI 4.0. All remain unbound.
+ABI 4.0; explicit copy is defined by P04-006 in ABI 5.0; completion semantics are defined by
+P04-008 in ABI 6.0. All remain unbound.
 There is no wildcard or ambient capability, and a missing required descriptor returns
 `CAP_HOST_UNAVAILABLE` before resource use.
 
@@ -112,4 +113,5 @@ enforces version, bounds, ownership, cancellation, capability, negotiation, and 
 
 P04-003 owns concrete capability definitions, P04-004 owns operations, P04-005 owns resource
 lifecycles, and P04-006 owns explicit-copy reference execution. P04-007 onward own alternatives,
-completion semantics, bindings, hosts, and transport selection.
+while P04-008 owns completion semantics. P04-009 onward own injected budgets, bindings, hosts, and
+transport selection.

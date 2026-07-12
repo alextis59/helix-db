@@ -30,7 +30,8 @@ declared for later interfaces but none is implemented or granted by P04-002.
 Ambient results may enter the core only as versioned bounded values returned by explicit capability
 interfaces. Host failures enter as `helix.errors/v1` errors with mutation outcomes. P04-003 defines
 the concrete imports; P04-004 defines asynchronous storage batches; P04-005 defines resource
-ownership; P04-008 defines partial-I/O, cancellation, and shutdown behavior.
+ownership; P04-008 defines partial-I/O, cancellation, deadline, backpressure, and shutdown behavior
+in ABI 6.0.
 
 ## Executable enforcement
 

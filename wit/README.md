@@ -16,12 +16,13 @@ Versioned packages:
   handle lifecycle methods and ownership transitions without implementing transport or hosts.
 - [`helix:core-abi@5.0.0`](helix-core-abi-v5/world.wit) adds the P04-006 explicit-copy immutable
   read, staging write, and immutable-to-staging operations with an executable safe Rust model.
+- [`helix:core-abi@6.0.0`](helix-core-abi-v6/world.wit) adds P04-008 monotonic operation deadlines
+  and explicit running/draining/stopped host lifecycle values; completion semantics remain unbound.
 
 P04-007 deliberately leaves ABI 5.0 unchanged: its host-owned-handle and exclusive shared-staging
-prototypes are internal experiments, not WIT features.
-
-The accepted sources are not yet embedded in the built component. P04-007 onward own alternatives,
-bindings, hosts, and transport selection. Parse and contract checks are stable commands:
+prototypes are internal experiments, not WIT features. The accepted sources are not yet embedded in
+the built component. P04-009 onward own budgets, bindings, hosts, and transport selection. Parse and
+contract checks are stable commands:
 
 ```bash
 corepack npm run wasm:abi:check
@@ -36,6 +37,8 @@ corepack npm run buffers:copy:check
 corepack npm run buffers:copy:test
 corepack npm run buffers:alternatives:check
 corepack npm run buffers:alternatives:test
+corepack npm run async:completion:check
+corepack npm run async:completion:test
 ```
 
 Every package must have an accepted ADR, a closed machine policy, exact-version negotiation rules,

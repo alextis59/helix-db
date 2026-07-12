@@ -89,6 +89,7 @@ same(
     'P04-005',
     'P04-006',
     'P04-007',
+    'P04-008',
   ],
   'CI matrix task history',
 );
@@ -272,6 +273,8 @@ same(
     'artifacts:policy': packageJson.scripts['artifacts:policy'],
     'artifacts:test': packageJson.scripts['artifacts:test'],
     'artifacts:test-replay': packageJson.scripts['artifacts:test-replay'],
+    'async:completion:check': packageJson.scripts['async:completion:check'],
+    'async:completion:test': packageJson.scripts['async:completion:test'],
     'benchmark:baseline': packageJson.scripts['benchmark:baseline'],
     'benchmark:check': packageJson.scripts['benchmark:check'],
     'benchmark:schemas': packageJson.scripts['benchmark:schemas'],
@@ -327,6 +330,8 @@ same(
     'artifacts:test': 'node tests/toolchain/test-artifact-retention-contract.mjs',
     'artifacts:test-replay':
       'node tests/toolchain/collect-retained-artifacts.mjs test-replays semantic',
+    'async:completion:check': 'node tests/toolchain/check-async-completion-contract.mjs',
+    'async:completion:test': 'node tests/toolchain/test-async-completion-contract.mjs',
     'benchmark:baseline': 'node benchmarks/run-baseline.mjs',
     'benchmark:check': 'node benchmarks/check-benchmark-artifacts.mjs report',
     'benchmark:schemas': 'node benchmarks/check-benchmark-artifacts.mjs schemas',
@@ -369,7 +374,7 @@ same(
     'wasm:abi:check': 'node tests/toolchain/check-wasm-abi.mjs',
     'wasm:abi:test': 'node tests/toolchain/test-wasm-abi-contract.mjs',
     'wasm:validate':
-      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-explicit-copy-buffer.mjs && node tests/toolchain/check-buffer-transport-alternatives.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
+      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-explicit-copy-buffer.mjs && node tests/toolchain/check-buffer-transport-alternatives.mjs && node tests/toolchain/check-async-completion-contract.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
@@ -675,6 +680,8 @@ for (const marker of [
   'corepack npm run buffers:copy:test',
   'corepack npm run buffers:alternatives:check',
   'corepack npm run buffers:alternatives:test',
+  'corepack npm run async:completion:check',
+  'corepack npm run async:completion:test',
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }

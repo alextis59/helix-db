@@ -44,8 +44,8 @@ write/rename/delete batches require an idempotency key.
 - A successful batch covers every request. An error releases no success payload.
 
 Mutation ambiguity is carried only by the existing `helix-error.outcome`; a caller must not infer
-rollback from cancellation or transport failure. Exact partial-I/O, deadline, backpressure, and
-shutdown behavior remains P04-008.
+rollback from cancellation or transport failure. P04-008 defines exact partial-I/O, deadline,
+backpressure, and shutdown behavior in ABI 6.0.
 
 ## Claim boundary
 

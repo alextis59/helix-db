@@ -380,6 +380,23 @@ crosses WIT, maps OS memory, uses browser shared memory, establishes a performan
 selects a transport. Required equivalence covers immutable bytes, initialized prefixes, bounds,
 unique ownership, and no uninitialized disclosure.
 
+P04-008 preserves ABI 5.0 and defines exact `helix:core-abi@6.0.0`. Every operation context may
+carry a deadline naming a negotiated monotonic timer and tick; wall-clock deadlines are forbidden.
+The host exposes only `running`, `draining`, or `stopped`, with monotonic state transitions and an
+optional monotonic shutdown deadline.
+
+Terminal conditions are observed only before admission, before item dispatch, after bounded host
+I/O chunks, between retries, and before success publication. At one safe point precedence is
+stopped host, draining host for new admission, cancellation, deadline, then backpressure. Published
+success cannot be rewritten. Cancellation/deadline never imply rollback; mutation outcomes are
+`not-committed`, `committed`, or `unknown` according to what the host can prove.
+
+Backpressure rejects before dispatch with `CAP_BACKPRESSURE` and after-delay advice; admitted work
+is not retroactively rejected. Reads retry until requested length or EOF, writes until all bytes,
+and zero progress is `IO_NO_PROGRESS`. Errors return no success payload and retries preserve the
+idempotency key. Draining rejects new work but lets admitted work run until its shutdown deadline;
+stopped rejects all work. P04-008 defines no numeric budgets, bindings, hosts, or database behavior.
+
 ### 6.2 `helix-host`
 
 Native host process.

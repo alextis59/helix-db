@@ -38,6 +38,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Wasm resource lifecycle ABI 4.0](architecture/resource-lifecycle-abi-v1.md) | Immutable, staging, and opaque-handle ownership, drop, bounds, and claim boundaries |
 | [Explicit-copy buffer transport ABI 5.0](architecture/explicit-copy-buffer-transport-v1.md) | Executable detached-read, contiguous-write, exact-copy, atomic-failure baseline |
 | [Buffer transport alternatives](architecture/buffer-transport-alternatives-v1.md) | Non-required generational-handle and exclusive shared-staging prototypes |
+| [Asynchronous completion ABI 6.0](architecture/async-completion-contract-v1.md) | Deadlines, cancellation, backpressure, partial-I/O, and shutdown result rules |
 | [WGSL fixture validation](architecture/wgsl-fixture-validation.md) | Hash-bound trusted shaders, Dawn/SwiftShader parsing, validation, compilation, and security boundaries |
 | [Dependency security reporting](architecture/dependency-security-reporting.md) | Deterministic lock/license/duplicate inventory plus dated vulnerability, signature, and provenance observations |
 | [Rust product code coverage policy](quality/code-coverage-policy.md) | Compiler-matched LLVM reporting, explicit product/test classification, and workspace/critical thresholds |

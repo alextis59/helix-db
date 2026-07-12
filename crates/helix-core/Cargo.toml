@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 workspace = true
 
 [package.metadata.helix]
-status = "buffer-alternatives-prototype-v1"
+status = "async-completion-contract-v1"
 database-functionality = false
 
 [dependencies]

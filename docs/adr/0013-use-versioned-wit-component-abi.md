@@ -162,6 +162,8 @@ requires an accepted matrix proving older peers can ignore or reject every addit
   P04-006 without rewriting 4.0 or overclaiming bindings and hosts.
 - [x] Prototype handles/shared staging under P04-007 without changing required ABI 5.0, selecting a
   transport, or claiming mapped/shared host integration.
+- [x] Define exact ABI 6.0 completion/deadline/shutdown semantics under P04-008 without rewriting
+  5.0 or claiming bindings and hosts.
 - [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
 - [ ] Benchmark explicit-copy and alternative buffer strategies under P04-014.
@@ -184,7 +186,7 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] `P04-005`: freeze buffer/resource lifecycles.
 - [x] `P04-006`: implement the explicit-copy correctness baseline.
 - [x] `P04-007`: prototype non-required handle/shared-staging alternatives.
-- [ ] `P04-008`: freeze cancellation, deadline, partial-I/O, and shutdown behavior.
+- [x] `P04-008`: freeze cancellation, deadline, partial-I/O, and shutdown behavior.
 - [ ] `P04-014`: publish boundary-strategy measurements.
 
 ## References

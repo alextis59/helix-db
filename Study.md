@@ -239,6 +239,15 @@ against explicit-copy byte semantics, but neither changes ABI 5.0 or carries tim
 This is the right intermediate result: feasibility and failure modes are inspectable now, while
 P04-011/P04-012 supply real hosts and P04-016/P04-017 supply measurement and selection.
 
+P04-008 removes the most dangerous ambiguity in an asynchronous host boundary: what happens when
+several stop conditions race with partial I/O. ABI 6.0 uses named monotonic deadlines and a visible
+running/draining/stopped lifecycle. Five bounded safe points plus fixed same-point precedence make
+the observable result reproducible. Reads absorb partial host progress until EOF or completion;
+writes absorb it until all bytes are written; zero progress fails. Cancellation and shutdown carry
+explicit mutation outcomes instead of pretending rollback. Admission-only backpressure avoids
+turning already admitted work into a new failure class. Numeric limits and actual execution remain
+separate so P04-009 and the host tasks can implement this contract without retrofitting semantics.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

@@ -1,0 +1,118 @@
+{
+  "schema": "helix.async-completion-contract/1",
+  "plan_item": "P04-008",
+  "base": {
+    "package": "helix:core-abi@5.0.0",
+    "path": "wit/helix-core-abi-v5/world.wit",
+    "bytes": 10490,
+    "sha256": "2d92cc7bf4e4b190af2dc96e7fbb4a5800303416982021a8c656c19a07977963",
+    "immutable": true
+  },
+  "current": {
+    "package": "helix:core-abi@6.0.0",
+    "path": "wit/helix-core-abi-v6/world.wit",
+    "bytes": 10871,
+    "sha256": "fd9a2401ed4b3350ed8f24e128c96de8e313197e5acff82218256e95548b68d8",
+    "world": "helix-core-v1",
+    "abi": { "major": 6, "minor": 0 },
+    "accepted": [{ "major": 6, "minor": 0 }]
+  },
+  "safe_points": [
+    "before-batch-admission",
+    "before-each-item-dispatch",
+    "after-each-bounded-host-io-chunk",
+    "between-host-retries",
+    "before-success-publication"
+  ],
+  "terminal_precedence_at_same_safe_point": [
+    "host-stopped",
+    "host-draining-new-admission",
+    "cancelled",
+    "deadline-exceeded",
+    "backpressure"
+  ],
+  "deadlines": {
+    "clock": "negotiated-monotonic-timer-only",
+    "wall_clock_forbidden": true,
+    "timer_name_maximum_bytes": 64,
+    "expires_when_current_tick_greater_than_or_equal": true,
+    "absent_means_no_deadline": true,
+    "checked_only_at_safe_points": true,
+    "expiration_never_implies_rollback": true
+  },
+  "cancellation": {
+    "cooperative_only": true,
+    "polled_only_at_safe_points": true,
+    "before_dispatch_outcome": "not-committed",
+    "after_confirmed_commit_outcome": "committed",
+    "ambiguous_mutation_outcome": "unknown",
+    "never_implies_rollback": true,
+    "success_wins_only_after_publication": true
+  },
+  "backpressure": {
+    "evaluated_at_admission": true,
+    "rejection_occurs_before_dispatch": true,
+    "error_code": "CAP_BACKPRESSURE",
+    "retry_scope": "after-delay",
+    "busy_wait_forbidden": true,
+    "admitted_work_not_retroactively_rejected": true,
+    "numeric_budgets_owner": "P04-009"
+  },
+  "partial_io": {
+    "read_retries_until_requested_length_or_eof": true,
+    "read_short_success_only_at_eof": true,
+    "write_retries_until_every_byte_written": true,
+    "zero_progress_before_completion_is_error": true,
+    "zero_progress_error_code": "IO_NO_PROGRESS",
+    "error_releases_no_success_payload": true,
+    "completed_mutations_use_helix_error_outcome": true,
+    "batch_retry_requires_same_idempotency_key": true,
+    "list_limit_error_code": "IO_RESULT_LIMIT"
+  },
+  "shutdown": {
+    "states": ["running", "draining", "stopped"],
+    "transitions_are_monotonic": true,
+    "draining_rejects_new_admission": true,
+    "draining_error_code": "HOST_DRAINING",
+    "admitted_work_runs_until_shutdown_deadline": true,
+    "deadline_triggers_cooperative_cancellation": true,
+    "stopped_rejects_every_operation": true,
+    "stopped_error_code": "HOST_STOPPED",
+    "resources_drop_exactly_once": true,
+    "cleanup_failure_never_rewrites_result": true
+  },
+  "errors": {
+    "cancelled": "OP_CANCELLED",
+    "deadline_exceeded": "OP_DEADLINE_EXCEEDED",
+    "backpressure": "CAP_BACKPRESSURE",
+    "io_no_progress": "IO_NO_PROGRESS",
+    "io_result_limit": "IO_RESULT_LIMIT",
+    "host_draining": "HOST_DRAINING",
+    "host_stopped": "HOST_STOPPED"
+  },
+  "versioning": {
+    "change": "incompatible-operation-deadline-and-host-lifecycle-shape",
+    "same_patch_rewrite_forbidden": true,
+    "package_semver_alone_is_not_compatibility": true,
+    "implicit_5_0_acceptance": false,
+    "unsupported_result": "CAP_UNSUPPORTED_VERSION"
+  },
+  "deferred": {
+    "numeric_memory_and_admission_budgets": "P04-009",
+    "mock_host_execution": "P04-010",
+    "native_host_execution": "P04-011",
+    "browser_host_execution": "P04-012",
+    "shared_host_conformance": "P04-013",
+    "transport_benchmarks": "P04-016",
+    "transport_selection": "P04-017"
+  },
+  "claim_boundary": {
+    "completion_semantics_defined": true,
+    "deadline_and_lifecycle_wit_defined": true,
+    "operation_bindings_present": false,
+    "host_implementations_present": false,
+    "numeric_budgets_defined": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-009"
+  }
+}
