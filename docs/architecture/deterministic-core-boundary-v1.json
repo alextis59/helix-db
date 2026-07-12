@@ -1,0 +1,83 @@
+{
+  "schema": "helix.deterministic-core-boundary/1",
+  "plan_item": "P04-002",
+  "core_crate": "helix-core",
+  "core_module": "crates/helix-core/src/deterministic.rs",
+  "deterministic_workspace_crates": [
+    "helix-doc",
+    "helix-query",
+    "helix-storage",
+    "helix-columnar",
+    "helix-core"
+  ],
+  "allowed_direct_dependencies": [
+    "helix-columnar",
+    "helix-doc",
+    "helix-query",
+    "helix-storage"
+  ],
+  "forbidden_workspace_dependencies": ["helix-gpu", "helix-host-native", "helix-server"],
+  "forbidden_dependency_names": [
+    "getrandom",
+    "rand",
+    "mio",
+    "tokio",
+    "async-std",
+    "smol",
+    "socket2",
+    "reqwest",
+    "wasi",
+    "wasip2",
+    "wgpu",
+    "naga"
+  ],
+  "forbidden_source_patterns": [
+    "std::fs",
+    "std::net",
+    "std::time",
+    "std::thread",
+    "std::process",
+    "std::env",
+    "std::sync::mpsc",
+    "SystemTime",
+    "Instant::now",
+    "thread_rng",
+    "getrandom",
+    "wasm_bindgen",
+    "web_sys",
+    "navigator.gpu"
+  ],
+  "forbidden_browser_wasm_imports": true,
+  "ambient_categories": [
+    "files",
+    "directories",
+    "networking",
+    "wall-clock",
+    "monotonic-clock",
+    "randomness",
+    "threads",
+    "process",
+    "environment",
+    "secrets",
+    "object-storage",
+    "gpu-device"
+  ],
+  "explicit_input_rule": "ambient-results-enter-only-as-versioned-bounded-values-returned-by-capability-interfaces",
+  "decision_rule": "core-may-decide-from-explicit-facts-but-must-not-discover-ambient-state",
+  "failure_rule": "host-failure-enters-as-versioned-helix-error-and-mutation-outcome",
+  "wasm": {
+    "browser_target": "wasm32-unknown-unknown",
+    "browser_artifact": "target/wasm32-unknown-unknown/browser/helix_core.wasm",
+    "required_imports": [],
+    "component_binding_owner": "P04-003"
+  },
+  "claim_boundary": {
+    "deterministic_module_separated": true,
+    "ambient_source_and_dependency_gate_active": true,
+    "browser_zero_import_gate_active": true,
+    "capability_interfaces_implemented": false,
+    "host_implementations_present": false,
+    "deterministic_database_orchestration_present": false,
+    "next_implementation_owner": "P04-003"
+  }
+}

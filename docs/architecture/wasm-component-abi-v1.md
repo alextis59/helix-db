@@ -13,7 +13,8 @@
 ## Boundary
 
 The WIT package defines the language-neutral type and negotiation surface between the deterministic
-core and a capability host. It does not bind those interfaces into the current component binary,
+core and a capability host. P04-002 now enforces the core's ambient-free source/dependency/import
+boundary. It does not bind those interfaces into the current component binary,
 implement files/network/time/randomness/GPU operations, or establish public SDK/protocol support.
 
 The world imports `host-control` and exports `core-control`. WIT also imports its shared `types`
@@ -106,3 +107,6 @@ enforces version, bounds, ownership, cancellation, capability, negotiation, and 
 - Add a major for incompatible shape/semantics; add a minor only with a proven compatibility matrix.
 - A new resource operation must name its owner task, lifecycle, error/outcome, cancellation, bounds,
   capability requirement, and rollback behavior.
+
+P04-003 owns generated bindings and concrete capability interfaces. P04-005 owns resource
+lifecycle semantics and P04-006 owns the explicit-copy implementation.

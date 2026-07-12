@@ -18,6 +18,11 @@ This directory contains bounded verification entry points for foundation build p
 - `rust-coverage-policy.json` fixes the source inventory, exclusions, tool identities, report schema, threshold groups, execution bounds, historical boundary-skeleton exception, and active HDoc product scope.
 - `install-wasm-tools.mjs` downloads or reuses only the official hash-pinned Linux x64 component validator and verifies archive, inventory, executable, and version identities.
 - `check-wasm-artifacts.mjs` builds and validates the WASIp2 component and browser core-module forms and emits deterministic ignored reports.
+- `check-deterministic-core.mjs` binds the portable core to its reviewed dependency closure, scans
+  the deterministic Rust crates for ambient access, and proves that the browser core has zero
+  imports; `test-deterministic-core-contract.mjs` rejects 30 policy/source mutations.
+- `check-wasm-abi.mjs` validates the exact versioned WIT package and its explicit-copy,
+  opaque-resource, cancellation, and capability boundary; its contract tests reject ABI drift.
 - `build-browser-smoke.mjs` checks the exact four-file example output, visible non-database boundary, and byte identity of its Wasm asset.
 - `run-browser-smoke.mjs` executes the built bundle in one selected engine or all three pinned engines and writes a sanitized, strict execution report with launcher-entrypoint identity.
 - `check-wgsl-fixtures.mjs` validates the strict trusted-source manifest without a browser or parses, validates, and creates compute pipelines for every fixture through pinned Chromium Dawn/SwiftShader.

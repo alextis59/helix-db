@@ -155,7 +155,7 @@ export const validatePolicy = (candidate = policy) => {
       component_execution_proven: false,
       public_sdk_or_protocol: false,
       database_functionality_added: false,
-      next_implementation_owner: 'P04-002',
+      next_implementation_owner: 'P04-003',
     },
     'claim boundary',
   );

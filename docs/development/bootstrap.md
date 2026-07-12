@@ -240,10 +240,11 @@ node tests/toolchain/run-build-profile.mjs sanitizer
 corepack npm run wgsl:validate
 ```
 
-- `wasm:validate` first parses and contract-checks `helix:core-abi@1.0.0` with 20 rejection
-  canaries, then builds both portable forms. The core module uses the platform-independent built-in
+- `wasm:validate` first checks the deterministic Cargo/source/zero-import boundary, then parses and
+  contract-checks `helix:core-abi@1.0.0` with 20 rejection canaries and builds both portable forms.
+  The core module uses the platform-independent built-in
   validator; the WASIp2 component uses the hash-pinned `wasm-tools` Linux x64 archive. The current
-  binary still exposes empty WIT until P04-002/P04-003 bind the accepted source interface.
+  binary still exposes empty WIT until P04-003 binds the accepted source interface.
 - `coverage:check` uses only the compiler-matched `llvm-profdata` and `llvm-cov` shipped with Rust
   `1.96.1`; current product coverage remains honestly empty after boundary-test exclusions.
 - `sanitizer` uses `x86_64-unknown-linux-gnuasan`; it is a diagnostic build, not a deployment target.

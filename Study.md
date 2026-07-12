@@ -189,8 +189,11 @@ identities, bounded values and structured errors, declared-but-inactive buffer/o
 cooperative cancellation polling, and explicit capability descriptors. Only exact ABI 1.0 is
 accepted; package SemVer does not imply another compatibility window. Canonical ABI byte lists use
 explicit copies, resource operations and zero-copy remain disabled until their owning tasks, and
-the current component artifact remains intentionally unbound until P04-002/P04-003 implement guest
-and host sides. This separates a parseable contract decision from an unsupported execution claim.
+the current component artifact remains intentionally unbound until P04-003 implements guest and
+host sides. P04-002 instead makes the deterministic/ambient separation executable: the five-crate
+core closure excludes host/GPU/runtime packages, 11 Rust source files reject ambient access
+patterns, and the browser core module must retain zero imports. This separates a parseable contract
+and physical source boundary from an unsupported execution claim.
 
 ### 5.4 Portability test
 

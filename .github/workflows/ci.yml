@@ -84,6 +84,8 @@ jobs:
         run: |
           corepack npm run policy:javascript
           corepack npm run policy:dependencies
+          corepack npm run core:boundary:check
+          corepack npm run core:boundary:test
           corepack npm run rust:dependencies:test
           corepack npm run rust:audit:test
           corepack npm run dependencies:check

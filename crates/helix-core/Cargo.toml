@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 workspace = true
 
 [package.metadata.helix]
-status = "component-abi-v1"
+status = "deterministic-core-boundary-v1"
 database-functionality = false
 
 [dependencies]

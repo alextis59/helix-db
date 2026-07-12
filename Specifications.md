@@ -301,6 +301,16 @@ P04-003/P04-004/P04-008 own concrete host operations, asynchronous batching, and
 semantics. P04-001 defines the contract source only: bindings, component execution, host operations,
 public protocol/SDK support, and added database functionality remain false.
 
+P04-002 physically isolates the portable deterministic composition in
+`crates/helix-core/src/deterministic.rs`. Its only direct workspace dependencies are document,
+query, storage, and columnar deterministic crates. The full closure forbids host/server/GPU-device,
+random, async-runtime, socket, WASI, browser-binding, and shader/compiler packages. All Rust sources
+in the deterministic set are scanned for ambient file/network/time/random/thread/process/environment/
+device APIs, unsafe blocks, and native extern boundaries; the real browser Wasm must have exactly
+zero imports. Ambient results may enter only as bounded versioned values from later explicit
+capability interfaces, and host failures enter as structured errors plus mutation outcomes. This
+gate proves separation, not implemented capabilities, hosts, or database orchestration.
+
 ### 6.2 `helix-host`
 
 Native host process.
