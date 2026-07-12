@@ -114,6 +114,8 @@ jobs:
           corepack npm run host:tracing:test
           corepack npm run benchmark:host:check
           corepack npm run benchmark:host:test
+          corepack npm run transport:selection:check
+          corepack npm run transport:selection:test
           corepack npm run rust:dependencies:test
           corepack npm run rust:audit:test
           corepack npm run dependencies:check

@@ -473,6 +473,16 @@ and twenty measurements per runtime/strategy, record the runtime environment, an
 summary artifacts. Timing remains observational with no pass threshold or transport-selection
 claim; P04-017 owns the decision.
 
+P04-017 selects bounded explicit copy with coarse batched calls as the required initial ABI 7 host
+transport. Per-byte host calls **MUST NOT** be used, storage batches **MUST NOT** exceed 1,024 items,
+and one explicit copy **MUST NOT** exceed 16 MiB. Explicit-copy counts **MUST** remain traceable and
+explicit copy **MUST** remain the fallback for any optional alternative. The decision **MUST** be
+revisited after three qualifying runs show boundary work at or above 15% of representative end-to-
+end time, native coarse-copy p95 above 100 microseconds, or browser coarse-copy p95 above 1
+millisecond. A replacement **MUST** retain exact output equivalence and isolation/lifecycle safety,
+use at least 30 measurements per strategy/runtime across all four supported runtimes, improve
+median time by at least 20% in at least three runtimes, and regress no runtime by more than 10%.
+
 ### 6.2 `helix-host`
 
 Native host process.

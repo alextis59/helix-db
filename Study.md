@@ -338,6 +338,13 @@ uses one. The 400 raw observations are environment-stamped and observational onl
 that call granularity dominates in every runtime, but P04-017—not this measurement task—owns the
 transport selection and revisit thresholds.
 
+P04-017 therefore selects bounded explicit copy with coarse batched host calls. It does not select
+zero copy, mapped memory, handles, or shared staging. The choice is evidence-revisable rather than
+permanent: three qualifying runs must cross a defined boundary-share or native/browser p95 trigger,
+and an alternative must then improve median time by at least 20% in three of four runtimes without
+regressing any runtime by more than 10%. Exact output equivalence, capability isolation, safe
+resource lifecycle behavior, and an explicit-copy fallback remain non-negotiable.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

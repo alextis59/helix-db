@@ -151,7 +151,7 @@ assert(
   'promoted report identity',
 );
 validateHostBenchmarkReport(JSON.parse(promotedBytes));
-assert(JSON.parse(read('.github/ci/matrix.json')).plan_items.at(-1) === 'P04-016', 'CI history');
+assert(JSON.parse(read('.github/ci/matrix.json')).plan_items.includes('P04-016'), 'CI history');
 process.stdout.write(
   'PASS host boundary benchmark contract: 4 strategies, native plus 3 browsers, 400 correctness-checked samples\n',
 );

@@ -157,7 +157,7 @@ validateTracingSources({
   browserTest: read(policy.validation.browser_content_redaction_test),
 });
 const matrix = JSON.parse(read('.github/ci/matrix.json'));
-assert(matrix.plan_items.at(-1) === 'P04-015', 'CI implementation history');
+assert(matrix.plan_items.includes('P04-015'), 'CI implementation history');
 process.stdout.write(
   'PASS host boundary tracing: 21 structural calls, bounded copy/batch counts, no document content\n',
 );

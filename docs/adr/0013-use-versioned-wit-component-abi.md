@@ -98,6 +98,14 @@ declared so bindings reserve stable identities, but buffer/handle acquisition, m
 and lifecycle operations remain absent from immutable ABI 1.0; P04-005 defines them in ABI 4.0.
 There is no zero-copy claim.
 
+P04-017 selects bounded explicit copy with coarse batched calls as the required initial transport
+for current ABI 7 hosts. Per-byte host crossings are forbidden; opaque handles and exclusive shared
+staging remain optional prototypes, and explicit copy remains the mandatory fallback. The decision
+is reopened only after three qualifying runs reach a 15% end-to-end boundary share, native coarse-
+copy p95 exceeds 100 microseconds, or browser coarse-copy p95 exceeds 1 millisecond. A replacement
+must preserve exact outputs, capability isolation, and lifecycle safety while improving median
+time by at least 20% in three of four supported runtimes with no runtime regressing by over 10%.
+
 Errors carry the `helix.errors/v1` stable code, phase, mutation outcome, retry advice, bounded
 redacted detail pairs, and no human message. Cancellation is an explicit borrowed resource polled
 cooperatively; observing cancellation does not prove rollback or non-commit. Concrete deadlines and
@@ -182,6 +190,8 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
 - [x] Benchmark explicit-copy and alternative buffer strategies under P04-016 using correctness-
   checked native and three-engine browser observations.
+- [x] Select coarse bounded explicit copy under P04-017 and bind quantitative revisit and
+  replacement thresholds without claiming zero copy or mapped memory.
 
 ## Implementation impact
 
@@ -210,6 +220,7 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] `P04-014`: prove ungranted file, socket, clock, and device scopes are unreachable.
 - [x] `P04-015`: add content-safe boundary tracing.
 - [x] `P04-016`: publish boundary-strategy measurements.
+- [x] `P04-017`: select the required initial transport and freeze its revisit policy.
 
 ## References
 
