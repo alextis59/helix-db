@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-003",
+  "verdict": "pass",
+  "commit": "bb4cbb48558dcc0df948d45518882e4af591a3b1",
+  "base_commit": "f763170f12e9978e91f0181466096d5533690dc4",
+  "source_tree": "e1d6da72dae5755db83afa1edef428bb2ef03c1a",
+  "diff_sha256": "40fed28a3082c0abf89e52e0776876c35d640a3039f95c69c220db501a5f852f",
+  "recorded_on": "2026-07-12",
+  "requirements": [
+    "CORE-001",
+    "CORE-002",
+    "CORE-003",
+    "INV-004",
+    "INV-007",
+    "SEC-001",
+    "SEC-002"
+  ],
+  "accepted_adrs": ["0013"],
+  "source_commits": ["bb4cbb48558dcc0df948d45518882e4af591a3b1"],
+  "authorities": [
+    {
+      "path": "wit/helix-core-abi-v1_1/world.wit",
+      "bytes": 6076,
+      "sha256": "cdffa3263bbaed6bc9c19d3859c3ed5cb5235996c169eb5a6c53a334b85865b8"
+    },
+    {
+      "path": "docs/architecture/host-capability-abi-v1.json",
+      "bytes": 3403,
+      "sha256": "d9c8187d02b341409870c1426d1e29c793d105e0faf250bf6e59bcbc0e8e8bc2"
+    },
+    {
+      "path": "docs/architecture/host-capability-abi-v1.md",
+      "bytes": 3565,
+      "sha256": "674e5e6b031ab58ccbf21ac1bac6a4f48aba1815ef9ba3585a3ba42baaeebfe9"
+    },
+    {
+      "path": "tests/toolchain/check-host-capabilities.mjs",
+      "bytes": 8075,
+      "sha256": "ce0d29801eb32e188b7970b2b2ca5be2f4e143255f7f2cbd66fe5215216c5927"
+    },
+    {
+      "path": "tests/toolchain/test-host-capabilities-contract.mjs",
+      "bytes": 3795,
+      "sha256": "2f970440456002643ddf3d5a0cdf43103e0b31ba80ee75800ba4d0254b158851"
+    }
+  ],
+  "verifier": {
+    "bytes": 7013,
+    "sha256": "a9a6032b786fe0eb83baaa3cb23cbf3308e4e1b5a0a88d5cdaf6fc4a14b7cc12"
+  },
+  "verification": {
+    "source_artifacts": 37,
+    "wit_versions": 2,
+    "interfaces": 12,
+    "capability_interfaces": 9,
+    "capability_resources": 9,
+    "capability_kinds": 12,
+    "resolved_types": 56,
+    "functions": 3,
+    "world_imports": 11,
+    "world_exports": 1,
+    "capability_operations": 0,
+    "mutation_canaries": 27,
+    "workspace_tests": 49,
+    "fuzz_executions": 640,
+    "browser_executions": 6,
+    "product_lines_covered": 4565,
+    "product_lines_total": 4565
+  }
+}
