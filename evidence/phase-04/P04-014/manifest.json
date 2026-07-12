@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-014",
+  "verdict": "pass",
+  "commit": "787899e498a705e583cbf783640f8a6989684be6",
+  "base_commit": "fc9dace6397c7eaa2ee99eb53f8469699413ca15",
+  "source_tree": "449b0dac4ab9db4dbef3c48a194d125ab2aae208",
+  "diff_sha256": "715c2e1c64adbc84edaf61e6be105f3e1d466eeb7539ffc644c1c5e07df41504",
+  "recorded_on": "2026-07-12",
+  "requirements": ["CORE-001", "CORE-002", "CORE-003", "INV-003", "INV-004", "INV-007", "PLAT-001", "PLAT-002", "QUAL-001", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0013"],
+  "authorities": [
+    {"path": "docs/architecture/host-capability-isolation-v1.json", "bytes": 1400, "sha256": "77124ca6ca416e527e7571d9529e27ccdf00a0f5c8ad3028df160827538d32c7"},
+    {"path": "docs/architecture/host-capability-isolation-v1.md", "bytes": 1347, "sha256": "a7e8ea0db2cbf90173353b59bb4fed812b3cc175efbee690b4adb829f406ec54"},
+    {"path": "crates/helix-host-native/src/lib.rs", "bytes": 15025, "sha256": "7ca7412fee667c7e2a3b2b10cf43ee25dca2d6b6f665afbdc0aef1d5f5ad38e1"},
+    {"path": "examples/browser-toolchain/main.ts", "bytes": 10223, "sha256": "5a74403b8b4be37ae9f9f95a7cd9819dd6c7f87b0f3c3d96766da957696d3ee4"},
+    {"path": "examples/browser-toolchain/report.ts", "bytes": 2066, "sha256": "0562b95ec9dc619495746999f8eaeb827790ca7ddc1f2a5d9d972ceb5f50cd68"},
+    {"path": "tests/browser/capability-isolation.spec.ts", "bytes": 648, "sha256": "8a4f54083ad216851ff4b2b96675382450affab73778d2baf49877229d658c3d"},
+    {"path": "tests/toolchain/check-host-isolation.mjs", "bytes": 4676, "sha256": "edd04c7106cd6daedbb44c81d78dd72bbde27f89f4bcd7234c71f848c281afd5"},
+    {"path": "tests/toolchain/test-host-isolation.mjs", "bytes": 3385, "sha256": "06aa992ce944e22a40fc582a4d06873e99f6f9cc0f04808b0cf65921974c8202"},
+    {"path": ".github/ci/matrix.json", "bytes": 5739, "sha256": "501a9562595e1b002aacd327729cd95ec25372210dbffd52aeab7c561872bc91"},
+    {"path": ".github/workflows/ci.yml", "bytes": 14282, "sha256": "17388648e48119e80a36bfe8f572dbee46dc569433abf0ce4609b1460ac40075"},
+    {"path": "package.json", "bytes": 8847, "sha256": "81bf3494254daa57b7ee8e8bff4ed9b03a5d3e33c3b7370f4da7fca38efd5acc"}
+  ],
+  "verifier": {"bytes": 5427, "sha256": "fb0a3e9cdc076843e82dfda8b776bbf539f194569edbfab7c1329a485ec5c37e"},
+  "verification": {
+    "source_artifacts": 24,
+    "resource_classes": 4,
+    "host_executions": 4,
+    "policy_mutation_canaries": 22,
+    "source_mutation_canaries": 8,
+    "workspace_tests": 69,
+    "browser_executions": 15,
+    "fuzz_executions": 640,
+    "workspace_product_lines_covered": 5224,
+    "workspace_product_lines_total": 5263,
+    "semantic_lines_covered": 4891,
+    "semantic_lines_total": 4891,
+    "recovery_lines_covered": 326,
+    "recovery_lines_total": 326
+  }
+}
