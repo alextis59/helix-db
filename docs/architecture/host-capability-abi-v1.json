@@ -9,13 +9,13 @@
     "immutable": true
   },
   "current": {
-    "package": "helix:core-abi@1.1.0",
-    "path": "wit/helix-core-abi-v1_1/world.wit",
+    "package": "helix:core-abi@2.0.0",
+    "path": "wit/helix-core-abi-v2/world.wit",
     "bytes": 6076,
-    "sha256": "cdffa3263bbaed6bc9c19d3859c3ed5cb5235996c169eb5a6c53a334b85865b8",
+    "sha256": "ffb2d309cb7d03cd69da4fbad8bcfbc2ae7508ba302a53585dde48bec3553030",
     "world": "helix-core-v1",
-    "abi": { "major": 1, "minor": 1 },
-    "accepted": [{ "major": 1, "minor": 1 }]
+    "abi": { "major": 2, "minor": 0 },
+    "accepted": [{ "major": 2, "minor": 0 }]
   },
   "interfaces": [
     "types",
@@ -80,7 +80,7 @@
     "revocation_fails_closed": true
   },
   "versioning": {
-    "change": "add-required-imported-capability-interfaces",
+    "change": "incompatible-required-imported-capability-interfaces",
     "same_patch_rewrite_forbidden": true,
     "package_semver_alone_is_not_compatibility": true,
     "implicit_1_0_acceptance": false,

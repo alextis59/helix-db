@@ -53,8 +53,8 @@ The first concrete component authority is
 use when version or required capabilities are unsupported.
 
 P04-003 preserves that source and adds
-[`helix:core-abi@1.1.0`](../../wit/helix-core-abi-v1_1/world.wit) for the required capability
-interface identities. The current matrix accepts only ABI 1.1; the minor package number alone does
+[`helix:core-abi@2.0.0`](../../wit/helix-core-abi-v2/world.wit) for the required capability
+interface identities. The current matrix accepts only ABI 2.0; the package version alone does
 not make a 1.0 peer compatible.
 
 ### Packages and releases

@@ -312,7 +312,7 @@ capability interfaces, and host failures enter as structured errors plus mutatio
 gate proves separation, not implemented capabilities, hosts, or database orchestration.
 
 P04-003 preserves immutable `helix:core-abi@1.0.0` and defines the required imported capability
-identities in `helix:core-abi@1.1.0`. Exact ABI 1.1 is the only current negotiation success; 1.0 is
+identities in `helix:core-abi@2.0.0`. Exact ABI 2.0 is the only current negotiation success; 1.0 is
 not accepted implicitly. Nine interfaces cover file and directory namespaces, durability levels,
 advisory/scoped locks, distinct wall/monotonic timers, purpose-separated randomness, bounded
 cooperative scheduling, redacted metrics, and named secrets. Each exposes a host-owned nominal

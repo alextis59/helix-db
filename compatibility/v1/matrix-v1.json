@@ -40,7 +40,7 @@
     "specifications": {
       "path": "Specifications.md",
       "bytes": 95538,
-      "sha256": "5a777cd5bb87258c375a288a5aa266bb52f991763d8ff6db33bc1e0b16bee1c0"
+      "sha256": "16be2f6149c27faf5205e4a5ad16530222847eeb89786ca37e19e460db7ca6aa"
     },
     "semantic_coverage": {
       "path": "fixtures/semantic/coverage-v1.json",

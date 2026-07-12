@@ -12,10 +12,10 @@ pub const COMPONENT_NAME: &str = "helix-core";
 pub const MATURITY: &str = "host-capability-abi-v1";
 
 /// Exact internal component ABI accepted by the current contract.
-pub const COMPONENT_ABI_VERSION: (u16, u16) = (1, 1);
+pub const COMPONENT_ABI_VERSION: (u16, u16) = (2, 0);
 
 /// Canonical WIT package identity. Package `SemVer` never replaces ABI negotiation.
-pub const COMPONENT_ABI_PACKAGE: &str = "helix:core-abi@1.1.0";
+pub const COMPONENT_ABI_PACKAGE: &str = "helix:core-abi@2.0.0";
 
 /// Deterministic internal boundaries composed by the portable core.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[

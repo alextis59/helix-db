@@ -1,4 +1,4 @@
-# Host Capability ABI 1.1
+# Host Capability ABI 2.0
 
 - Status: Accepted interface/type definition; operations and hosts not implemented
 - Last updated: 2026-07-12
@@ -7,13 +7,13 @@
 - Governing requirements: `CORE-001`, `CORE-002`, `CORE-003`, `INV-004`, `INV-007`, `SEC-001`, `SEC-002`
 - Governing gate: `G04`
 - Machine authority: [`helix.host-capability-abi/1`](host-capability-abi-v1.json)
-- WIT authority: [`helix:core-abi@1.1.0`](../../wit/helix-core-abi-v1_1/world.wit)
+- WIT authority: [`helix:core-abi@2.0.0`](../../wit/helix-core-abi-v2/world.wit)
 
 ## Version decision
 
 The accepted P04-001 package `helix:core-abi@1.0.0` is immutable. Adding required imported
-interfaces changes the component shape, so P04-003 creates `1.1.0` and advances the negotiated ABI
-to exact `1.1`; it does not rewrite 1.0 or infer compatibility from SemVer. No deployed compatibility
+interfaces changes the component shape incompatibly, so P04-003 creates `2.0.0` and advances the
+negotiated ABI to exact `2.0`; it does not rewrite 1.0 or infer compatibility from SemVer. No deployed compatibility
 window exists, and a 1.0 peer fails with `CAP_UNSUPPORTED_VERSION` before resource use.
 
 ## Capability identities
@@ -50,7 +50,7 @@ binding and execution cannot be claimed from an IDL definition.
 
 ## Executable enforcement
 
-The checker parses both immutable 1.0 and current 1.1 sources with pinned `wasm-tools` 1.253.0,
+The checker parses both immutable 1.0 and current 2.0 sources with pinned `wasm-tools` 1.253.0,
 requires 12 interfaces, 56 resolved type entries, three control functions, nine capability resources,
 11 world imports, and one export, and rejects policy/WIT drift through 27 mutation canaries. Both
 WIT revisions are byte/hash-bound by the machine policy.

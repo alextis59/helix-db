@@ -151,7 +151,7 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] Check the closed machine policy and 20 mutation canaries.
 - [x] Bind the contract into the stable local and hosted Wasm validation commands.
 - [x] Enforce the deterministic core source/dependency/import boundary under P04-002.
-- [x] Define exact 1.1 guest/host capability interface identities under P04-003 without rewriting
+- [x] Define exact 2.0 guest/host capability interface identities under P04-003 without rewriting
   1.0 or overclaiming bindings.
 - [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.

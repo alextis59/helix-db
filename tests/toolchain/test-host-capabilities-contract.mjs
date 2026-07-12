@@ -64,7 +64,7 @@ for (const [label, mutate] of policyMutations) {
 }
 
 const resolutionMutations = [
-  ['package', (value) => (value.packages[0].name = 'helix:core-abi@1.2.0')],
+  ['package', (value) => (value.packages[0].name = 'helix:core-abi@2.1.0')],
   ['interface', (value) => value.interfaces.pop()],
   ['resource', (value) => delete value.interfaces[1].types['file-capability']],
   ['operation', (value) => (value.interfaces[1].functions.read = {})],

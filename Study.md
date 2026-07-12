@@ -196,7 +196,7 @@ patterns, and the browser core module must retain zero imports. This separates a
 and physical source boundary from an unsupported execution claim.
 
 P04-003 demonstrates the versioning rule instead of rewriting the accepted 1.0 package: required
-capability imports live in `helix:core-abi@1.1.0`, with exact 1.1 negotiation and no inferred 1.0
+capability imports live in `helix:core-abi@2.0.0`, with exact 2.0 negotiation and no inferred 1.0
 window. Nine narrow interfaces separate file, directory, durability, lock, timer, randomness,
 scheduling, metrics, and secret authority. Their nominal resources and bounded policy records make
 the intended host boundary parseable while deliberately withholding operations and lifecycle

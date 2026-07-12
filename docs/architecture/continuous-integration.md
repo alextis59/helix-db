@@ -26,7 +26,7 @@ Runner labels are explicit rather than mutable `*-latest` aliases. The selected 
 | --- | --- | --- |
 | Node | 22.23.1 and 24.18.0 on `ubuntu-24.04` x64 | Clean script-suppressed install; formatting/dependency/types; deterministic dependency/license/duplicate inventory and fixtures; aggregate tests; Node 22 additionally records the live advisory/signature/provenance observation |
 | Native Rust | `ubuntu-24.04` x64, `windows-2025` x64, `macos-15` arm64 | Exact Rust toolchain; format, check, Clippy, all-feature tests, and locked/offline native boundary-example execution; docs and compiler-matched source-based coverage thresholds additionally on Linux x64 |
-| Portable Rust | `wasm32-unknown-unknown`, `wasm32-wasip2` on Linux x64 | Strict Clippy plus real core-module/component builds; the component lane checks immutable ABI 1.0, current capability ABI 1.1, their rejection canaries, then validates/classifies the still-unbound WASIp2 artifact |
+| Portable Rust | `wasm32-unknown-unknown`, `wasm32-wasip2` on Linux x64 | Strict Clippy plus real core-module/component builds; the component lane checks immutable ABI 1.0, current capability ABI 2.0, their rejection canaries, then validates/classifies the still-unbound WASIp2 artifact |
 | Sanitizer | `x86_64-unknown-linux-gnuasan` on Linux x64 | Stable fully instrumented standard-library build profile; no non-Linux sanitizer claim |
 | Browser boundary example | Chromium, Firefox, WebKit on Linux x64 | Install only the Playwright-coupled engine/dependencies; all three build and execute the byte-identical core Wasm example with explicit non-database output; Chromium additionally validates and compiles hash-bound internal WGSL through Dawn/SwiftShader |
 
@@ -104,7 +104,7 @@ error, cancellation, capability, negotiation, and claim mutations. This defines 
 does not conceal that the compiled component remains empty until later binding/host tasks.
 
 P04-002 adds the deterministic-core checker and 30 rejection canaries to both Node policy lanes.
-P04-003 adds exact 1.1 capability-interface parsing and 27 policy/resolution rejection canaries to
+P04-003 adds exact 2.0 capability-interface parsing and 27 policy/resolution rejection canaries to
 both Node policy lanes and the component lane.
 It validates the live Cargo closure, scans 11 deterministic Rust files for ambient APIs, and builds
 the real browser module to require zero imports. `wasm:validate` replays the same boundary before

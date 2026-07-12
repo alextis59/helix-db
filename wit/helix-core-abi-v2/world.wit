@@ -1,4 +1,4 @@
-package helix:core-abi@1.1.0;
+package helix:core-abi@2.0.0;
 
 /// Common value, resource, error, cancellation, and capability identities.
 interface types {

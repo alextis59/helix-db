@@ -8,7 +8,7 @@ Versioned packages:
 
 - [`helix:core-abi@1.0.0`](helix-core-abi-v1/world.wit) defines the P04-001 value, resource, error,
   cancellation, capability, and negotiation baseline and remains immutable.
-- [`helix:core-abi@1.1.0`](helix-core-abi-v1_1/world.wit) adds the nine P04-003 required capability
+- [`helix:core-abi@2.0.0`](helix-core-abi-v2/world.wit) adds the nine P04-003 required capability
   interface/resource/policy identities without defining their operations.
 
 The accepted sources are not yet embedded in the built component. P04-004 onward own operations,

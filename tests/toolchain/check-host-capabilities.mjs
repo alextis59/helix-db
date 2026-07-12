@@ -79,12 +79,12 @@ export const validateCapabilityPolicy = (candidate = policy) => {
     },
     'base package',
   );
-  same(candidate.current.abi, { major: 1, minor: 1 }, 'current ABI');
-  same(candidate.current.accepted, [{ major: 1, minor: 1 }], 'accepted ABI');
-  assert(candidate.current.package === 'helix:core-abi@1.1.0', 'current package');
+  same(candidate.current.abi, { major: 2, minor: 0 }, 'current ABI');
+  same(candidate.current.accepted, [{ major: 2, minor: 0 }], 'accepted ABI');
+  assert(candidate.current.package === 'helix:core-abi@2.0.0', 'current package');
   assert(candidate.current.bytes === 6076, 'current WIT bytes');
   assert(
-    candidate.current.sha256 === 'cdffa3263bbaed6bc9c19d3859c3ed5cb5235996c169eb5a6c53a334b85865b8',
+    candidate.current.sha256 === 'ffb2d309cb7d03cd69da4fbad8bcfbc2ae7508ba302a53585dde48bec3553030',
     'current WIT hash',
   );
   assert(candidate.current.world === 'helix-core-v1', 'current world');
@@ -213,7 +213,7 @@ const run = async () => {
   );
   validateCapabilityResolution(resolution);
   process.stdout.write(
-    'PASS host capability ABI: exact 1.1, 9 capability interfaces/resources, 11 imports\n',
+    'PASS host capability ABI: exact 2.0, 9 capability interfaces/resources, 11 imports\n',
   );
   process.stdout.write(
     'PASS capability boundary: 56 resolved types, 3 control functions, 0 capability operations\n',
