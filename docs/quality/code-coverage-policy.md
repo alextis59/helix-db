@@ -165,7 +165,7 @@ production-code example without changing the product denominator. The active wor
 is now:
 
 ```text
-status = "explicit-copy-buffer-v1"
+status = "buffer-alternatives-prototype-v1"
 database-functionality = true
 ```
 

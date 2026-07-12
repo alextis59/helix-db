@@ -9,7 +9,7 @@
 pub const COMPONENT_NAME: &str = "helix-core";
 
 /// Current implementation maturity; no host operation or database orchestration exists yet.
-pub const MATURITY: &str = "explicit-copy-buffer-v1";
+pub const MATURITY: &str = "buffer-alternatives-prototype-v1";
 
 /// Exact internal component ABI accepted by the current contract.
 pub const COMPONENT_ABI_VERSION: (u16, u16) = (5, 0);

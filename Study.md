@@ -191,7 +191,7 @@ accepted; package SemVer does not imply another compatibility window. Canonical 
 explicit copies, resource operations and zero-copy remain disabled until their owning tasks, and
 the current component artifact remains intentionally unbound. P04-003 defines capability identities
 while later tasks bind operations and hosts. P04-002 instead makes the deterministic/ambient separation executable: the five-crate
-core closure excludes host/GPU/runtime packages, 12 Rust source files reject ambient access
+core closure excludes host/GPU/runtime packages, 13 Rust source files reject ambient access
 patterns, and the browser core module must retain zero imports. This separates a parseable contract
 and physical source boundary from an unsupported execution claim.
 
@@ -230,6 +230,14 @@ errors leave targets unchanged. This creates a portable correctness oracle for l
 and browser hosts without pretending the component is already bound. The extra copy is deliberate:
 it makes ownership and failure behavior unambiguous, while P04-007/P04-016 can measure handles and
 shared staging against a working reference rather than an aspirational zero-copy design.
+
+P04-007 makes those alternatives concrete without contaminating the required interface. A bounded
+generational registry tests host-owned identity, slot reuse, stale-handle rejection, and unique
+removal. A safe exclusive-lease region tests the control plane needed by shared staging while
+deliberately avoiding OS mappings, `SharedArrayBuffer`, and cross-process claims. Both are executable
+against explicit-copy byte semantics, but neither changes ABI 5.0 or carries timing thresholds.
+This is the right intermediate result: feasibility and failure modes are inspectable now, while
+P04-011/P04-012 supply real hosts and P04-016/P04-017 supply measurement and selection.
 
 ### 5.4 Portability test
 

@@ -164,7 +164,7 @@ const browser = {
   schema: 'helix.browser-toolchain-example/1',
   planItem: 'P02-016',
   example: 'browser-toolchain',
-  component: { name: 'helix-core', maturity: 'explicit-copy-buffer-v1' },
+  component: { name: 'helix-core', maturity: 'buffer-alternatives-prototype-v1' },
   databaseFunctionality: false,
   demonstrates: ['rust-wasm-build', 'vite-bundle', 'wasm-validation', 'wasm-instantiation'],
   notImplemented: [

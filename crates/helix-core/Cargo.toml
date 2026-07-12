@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 workspace = true
 
 [package.metadata.helix]
-status = "explicit-copy-buffer-v1"
+status = "buffer-alternatives-prototype-v1"
 database-functionality = false
 
 [dependencies]

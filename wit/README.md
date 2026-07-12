@@ -17,6 +17,9 @@ Versioned packages:
 - [`helix:core-abi@5.0.0`](helix-core-abi-v5/world.wit) adds the P04-006 explicit-copy immutable
   read, staging write, and immutable-to-staging operations with an executable safe Rust model.
 
+P04-007 deliberately leaves ABI 5.0 unchanged: its host-owned-handle and exclusive shared-staging
+prototypes are internal experiments, not WIT features.
+
 The accepted sources are not yet embedded in the built component. P04-007 onward own alternatives,
 bindings, hosts, and transport selection. Parse and contract checks are stable commands:
 
@@ -31,6 +34,8 @@ corepack npm run resources:lifecycle:check
 corepack npm run resources:lifecycle:test
 corepack npm run buffers:copy:check
 corepack npm run buffers:copy:test
+corepack npm run buffers:alternatives:check
+corepack npm run buffers:alternatives:test
 ```
 
 Every package must have an accepted ADR, a closed machine policy, exact-version negotiation rules,

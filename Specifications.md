@@ -304,7 +304,7 @@ public protocol/SDK support, and added database functionality remain false.
 P04-002 physically isolates the portable deterministic composition in
 `crates/helix-core/src/deterministic.rs`. Its only direct workspace dependencies are document,
 query, storage, and columnar deterministic crates. The full closure forbids host/server/GPU-device,
-random, async-runtime, socket, WASI, browser-binding, and shader/compiler packages. All 12 current
+random, async-runtime, socket, WASI, browser-binding, and shader/compiler packages. All 13 current
 Rust sources in the deterministic set are scanned for ambient file/network/time/random/thread/
 process/environment/device APIs, unsafe blocks, and native extern boundaries; the real browser Wasm
 must have exactly zero imports. Ambient results may enter only as bounded versioned values from later explicit
@@ -367,6 +367,18 @@ mutation, making failures target-atomic and leaving immutable sources unchanged.
 reference model executes allocation, contiguous writes, reads, exact copies, duplication, and seal
 semantics for later cross-host conformance. P04-006 adds no pointer/alias crossing, mapping, shared
 memory, zero-copy claim, component binding, host implementation, or database execution.
+
+P04-007 keeps required ABI 5.0 byte-identical and adds two executable, non-ABI prototypes. The
+host-owned handle store holds at most 4,096 immutable buffers behind private store-local
+slot/generation identities. Slot reuse increments the generation; unknown and stale handles fail
+closed, removal transfers unique ownership, and reads reuse the explicit-copy oracle.
+
+The shared-staging prototype is safe and same-address-space only. It has fixed capacity up to 16
+MiB, zeroes each declared initialized prefix, permits exactly one exclusive mutable lease, forbids
+snapshots during the lease, and returns only detached snapshot copies afterward. Neither prototype
+crosses WIT, maps OS memory, uses browser shared memory, establishes a performance threshold, or
+selects a transport. Required equivalence covers immutable bytes, initialized prefixes, bounds,
+unique ownership, and no uninitialized disclosure.
 
 ### 6.2 `helix-host`
 

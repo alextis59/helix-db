@@ -54,8 +54,8 @@ unimplemented = "deny"
 unwrap_used = "deny"
 
 [workspace.metadata.helix]
-plan-item = "P04-006"
-status = "explicit-copy-buffer-v1"
+plan-item = "P04-007"
+status = "buffer-alternatives-prototype-v1"
 database-functionality = true
 public-release = false
 rust-toolchain = "1.96.1"

@@ -1,0 +1,77 @@
+{
+  "schema": "helix.buffer-transport-alternatives/1",
+  "plan_item": "P04-007",
+  "required_abi": {
+    "package": "helix:core-abi@5.0.0",
+    "path": "wit/helix-core-abi-v5/world.wit",
+    "bytes": 10490,
+    "sha256": "2d92cc7bf4e4b190af2dc96e7fbb4a5800303416982021a8c656c19a07977963",
+    "accepted": [{ "major": 5, "minor": 0 }],
+    "changed_by_prototype": false
+  },
+  "implementation": {
+    "crate": "helix-core",
+    "path": "crates/helix-core/src/transport_alternatives.rs",
+    "bytes": 11906,
+    "sha256": "f5b61f3d2cd5d1566ae38e8013fdcb12113a897572ea727920b453d4b12d5a23"
+  },
+  "prototypes": ["host-owned-generational-handles", "exclusive-shared-staging"],
+  "bounds": {
+    "maximum_live_handles": 4096,
+    "maximum_shared_staging_bytes": 16777216,
+    "maximum_active_leases_per_region": 1
+  },
+  "handle_rules": {
+    "identity_is_store_local_and_not_a_wit_value": true,
+    "identity_fields_are_private": true,
+    "slot_reuse_increments_generation": true,
+    "unknown_handles_fail_closed": true,
+    "stale_handles_fail_closed": true,
+    "remove_transfers_unique_buffer_ownership": true,
+    "reads_reuse_explicit_copy_semantics": true,
+    "live_handle_count_is_bounded": true
+  },
+  "shared_staging_rules": {
+    "prototype_is_safe_same_address_space_only": true,
+    "capacity_is_fixed_and_bounded": true,
+    "new_initialized_prefix_is_zeroed": true,
+    "one_exclusive_mutable_lease": true,
+    "snapshot_forbidden_during_lease": true,
+    "snapshot_is_detached_copy": true,
+    "no_pointer_or_mapping_crosses_wit": true,
+    "no_cross_process_or_cross_origin_claim": true
+  },
+  "comparison": {
+    "semantic_oracle": "explicit-copy-buffer-v1",
+    "required_equivalence": [
+      "immutable-read-bytes",
+      "initialized-prefix-bytes",
+      "bounds-fail-closed",
+      "unique-ownership",
+      "no-uninitialized-disclosure"
+    ],
+    "timing_threshold": null,
+    "selected_transport": null
+  },
+  "deferred": {
+    "cancellation_deadlines_backpressure_partial_io_shutdown": "P04-008",
+    "resource_budgets": "P04-009",
+    "mock_host": "P04-010",
+    "native_mapping_or_handle_integration": "P04-011",
+    "browser_shared_memory_or_handle_integration": "P04-012",
+    "shared_host_conformance": "P04-013",
+    "transport_benchmarks": "P04-016",
+    "transport_selection": "P04-017"
+  },
+  "claim_boundary": {
+    "alternatives_prototyped": true,
+    "required_abi_feature_added": false,
+    "component_binding_present": false,
+    "actual_shared_memory_or_mapping_present": false,
+    "host_implementations_present": false,
+    "performance_claim_present": false,
+    "transport_selected": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-008"
+  }
+}

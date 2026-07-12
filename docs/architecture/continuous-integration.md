@@ -3,7 +3,7 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-12
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-017`, `P03-020`–`P03-021`, and `P04-001`–`P04-006`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-017`, `P03-020`–`P03-021`, and `P04-001`–`P04-007`
 - Governing gate: `G02`
 - Accepted gate evidence: [`G02` hosted toolchain review](../../evidence/phase-02/G02/README.md)
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
@@ -104,7 +104,7 @@ error, cancellation, capability, negotiation, and claim mutations. This defines 
 does not conceal that the compiled component remains empty until later binding/host tasks.
 
 P04-002 adds the deterministic-core checker and 30 rejection canaries to both Node policy lanes. It
-validates the live Cargo closure, scans 12 deterministic Rust files for ambient APIs, and builds
+validates the live Cargo closure, scans 13 deterministic Rust files for ambient APIs, and builds
 the real browser module to require zero imports. `wasm:validate` replays the same boundary before
 the ABI and artifact checks.
 
@@ -115,6 +115,9 @@ component lane.
 
 P04-006 adds exact 5.0 copy-operation parsing, the safe Rust reference tests, and 38 rejection
 canaries in the same lanes.
+
+P04-007 adds two non-ABI executable alternative prototypes and 32 rejection canaries while
+rechecking that required ABI 5.0 is byte-identical.
 
 ## Workflow security and reproducibility
 
