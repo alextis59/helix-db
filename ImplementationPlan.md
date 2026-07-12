@@ -33,19 +33,19 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 80
-- Open checklist items: 442
+- Completed checklist items: 81
+- Open checklist items: 441
 - Total checklist items: 522
-- Current phase: Phase 3 — HDoc format, codec, and path dictionary
-- Next release gate: `G03`
+- Current phase: Phase 4 — Portable Wasm core and host capability ABI
+- Next release gate: `G04`
 
 | Phase | Deliverable | Release track | Status |
 | --- | --- | --- | --- |
 | 0 | Governance and project baseline | Foundation | Completed |
 | 1 | Semantic contract and compatibility corpus | Foundation | Completed |
 | 2 | Workspace, toolchain, and CI | Foundation | Completed |
-| 3 | HDoc format and codec | Research prototype | In progress |
-| 4 | Wasm core and host capability ABI | Research prototype | Not started |
+| 3 | HDoc format and codec | Research prototype | Completed |
+| 4 | Wasm core and host capability ABI | Research prototype | In progress |
 | 5 | Single-node storage foundation | v1 | Not started |
 | 6 | MVCC, transactions, and sessions | v1 | Not started |
 | 7 | Query language and CPU reference engine | v1 | Not started |
@@ -230,7 +230,7 @@ Dependencies: `G01`, `G02`.
 - [x] **P03-019** Add coverage-guided fuzzing for encoder, decoder, path lookup, rendering, and migration entry points.
 - [x] **P03-020** Benchmark encoding, decoding, field lookup, document size, and dictionary savings across representative shapes.
 - [x] **P03-021** Complete `EXP-001` and `EXP-002`, publish raw results, and record the selected format/dictionary decisions.
-- [ ] **G03** Close the HDoc gate after golden vectors freeze HDoc v1, independent readers agree, fuzzing finds no open critical issue, and migration rejection is tested.
+- [x] **G03** Close the HDoc gate after golden vectors freeze HDoc v1, independent readers agree, fuzzing finds no open critical issue, and migration rejection is tested.
 
 Evidence required for `G03`: format document, ADR, golden vector hashes, cross-language results, fuzz corpus, benchmark report, and corruption diagnostics.
 

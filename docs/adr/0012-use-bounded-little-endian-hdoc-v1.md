@@ -507,7 +507,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   under `P03-020`, with 600 samples across five representative shapes and no timing threshold.
 - [x] Complete `EXP-001`/`EXP-002` interpretation under `P03-021`: retain self-contained HDoc 1.0
   base/canonical-compression profiles and keep collection dictionary IDs out of authoritative rows.
-- [ ] Complete independent format/security review and close `G03` only with no open critical
+- [x] Complete independent format/security review and close `G03` only with no open critical
   parser, corruption, migration, or portability issue.
 
 ## Implementation impact

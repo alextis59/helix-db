@@ -1,0 +1,111 @@
+{
+  "schema": "helix.gate-hosted-observation/1",
+  "gate": "G03",
+  "run_id": 29186601834,
+  "head_sha": "6f5b88a8e5f11ccc4fabc264a1fe76aba5109445",
+  "head_branch": "main",
+  "event": "push",
+  "status": "completed",
+  "conclusion": "success",
+  "created_at": "2026-07-12T08:55:00Z",
+  "updated_at": "2026-07-12T09:00:59Z",
+  "url": "https://github.com/alextis59/helix-db/actions/runs/29186601834",
+  "jobs": [
+    {
+      "id": 86633754401,
+      "name": "Matrix contract",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:03Z",
+      "completed_at": "2026-07-12T08:55:32Z"
+    },
+    {
+      "id": 86633794693,
+      "name": "Sanitizer / asan-linux-x64",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:35Z",
+      "completed_at": "2026-07-12T08:56:19Z"
+    },
+    {
+      "id": 86633794707,
+      "name": "Node 24.18.0 / Linux x64",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:36Z",
+      "completed_at": "2026-07-12T08:58:13Z"
+    },
+    {
+      "id": 86633794710,
+      "name": "Portable Rust / wasm32-wasip2",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:35Z",
+      "completed_at": "2026-07-12T08:56:10Z"
+    },
+    {
+      "id": 86633794733,
+      "name": "Portable Rust / wasm32-unknown-unknown",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:37Z",
+      "completed_at": "2026-07-12T08:56:09Z"
+    },
+    {
+      "id": 86633794736,
+      "name": "Native / windows-x64",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:37Z",
+      "completed_at": "2026-07-12T08:57:41Z"
+    },
+    {
+      "id": 86633794737,
+      "name": "Browser bundle smoke / chromium",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:36Z",
+      "completed_at": "2026-07-12T08:56:46Z"
+    },
+    {
+      "id": 86633794738,
+      "name": "Native / macos-arm64",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:35Z",
+      "completed_at": "2026-07-12T08:56:19Z"
+    },
+    {
+      "id": 86633794739,
+      "name": "Browser bundle smoke / firefox",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:36Z",
+      "completed_at": "2026-07-12T08:56:36Z"
+    },
+    {
+      "id": 86633794741,
+      "name": "Node 22.23.1 / Linux x64",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:35Z",
+      "completed_at": "2026-07-12T09:00:58Z"
+    },
+    {
+      "id": 86633794743,
+      "name": "Native / linux-x64",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:35Z",
+      "completed_at": "2026-07-12T08:56:32Z"
+    },
+    {
+      "id": 86633794746,
+      "name": "Browser bundle smoke / webkit",
+      "status": "completed",
+      "conclusion": "success",
+      "started_at": "2026-07-12T08:55:37Z",
+      "completed_at": "2026-07-12T08:57:10Z"
+    }
+  ]
+}

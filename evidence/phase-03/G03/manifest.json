@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "gate_id": "G03",
+  "reviewed_commit": "6f5b88a8e5f11ccc4fabc264a1fe76aba5109445",
+  "reviewed_tree": "1509de1c8ef7b1096b15ce2e1288f44ac650d510",
+  "recorded_at": "2026-07-12T09:01:00Z",
+  "gate_checked_at_reviewed_commit": false,
+  "requirements": [
+    "CORE-001",
+    "DATA-001",
+    "DATA-002",
+    "DATA-003",
+    "INV-001",
+    "INV-007",
+    "QUAL-001",
+    "SEC-001",
+    "SEC-002"
+  ],
+  "accepted_adrs": ["0011", "0012"],
+  "task_evidence": {
+    "directory": "evidence/phase-03",
+    "tasks": 21,
+    "distinct_source_commits": 21,
+    "source_artifact_records": 666,
+    "verifier_records": 21,
+    "verdict_required": "pass"
+  },
+  "hosted_run": {
+    "id": 29186601834,
+    "head_sha": "6f5b88a8e5f11ccc4fabc264a1fe76aba5109445",
+    "conclusion": "success",
+    "jobs": 12,
+    "url": "https://github.com/alextis59/helix-db/actions/runs/29186601834"
+  },
+  "gate_authorities": [
+    {
+      "path": "review.md",
+      "bytes": 8627,
+      "sha256": "d92accaec4334ad75dbf4fc09257fe95543a7e550cf615cb9d4a62c1b803337e"
+    },
+    {
+      "path": "hosted-observation.json",
+      "bytes": 3181,
+      "sha256": "df25cd3e760d8c3e1fa050d7a724cee4d014a0b494bf3db35dd1dd6b72797548"
+    },
+    {
+      "path": "gate-contract.mjs",
+      "bytes": 2000,
+      "sha256": "c8027846ba732c77a84bb9d3251671c51ae83a9b751dd6e3d60af463a620085f"
+    },
+    {
+      "path": "test-verifier.mjs",
+      "bytes": 1238,
+      "sha256": "0838026ca9b19c7b7edf1bbf45802f66e21327158cabac7ff81cbf10fbe144f2"
+    },
+    {
+      "path": "verify.mjs",
+      "bytes": 8976,
+      "sha256": "951ccd9da1f8d158172b163427d212a0b46e3014451e4ef32cace7312fd88275"
+    }
+  ],
+  "verification": {
+    "implementation_plan_items": 522,
+    "reviewed_checked_items": 80,
+    "phase_03_tasks": 21,
+    "task_source_commits": 21,
+    "task_source_artifact_records": 666,
+    "task_verifiers": 21,
+    "golden_files": 24,
+    "positive_files": 4,
+    "rejection_files": 20,
+    "cross_reader_values": 4,
+    "cross_reader_hashes": 4,
+    "checksum_repaired_bit_mutations": 2656,
+    "fuzz_targets": 5,
+    "fuzz_seeds": 57,
+    "bounded_fuzz_executions": 640,
+    "browser_executions": 6,
+    "benchmark_shapes": 5,
+    "benchmark_operations": 30,
+    "benchmark_samples": 600,
+    "benchmark_iterations": 9600,
+    "hosted_jobs": 12,
+    "hosted_successful_jobs": 12,
+    "review_findings": 5,
+    "resolved_findings": 3,
+    "tracked_later_findings": 2,
+    "gate_rejection_canaries": 5
+  },
+  "review": "review.md",
+  "verifier": "verify.mjs",
+  "verifier_test": "test-verifier.mjs",
+  "verdict": "pass"
+}
