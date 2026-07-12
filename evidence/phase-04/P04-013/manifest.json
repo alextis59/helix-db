@@ -9,7 +9,14 @@
   "recorded_on":"2026-07-12",
   "requirements":["CORE-001","CORE-002","CORE-003","INV-004","INV-007","PLAT-001","QUAL-001","SEC-001","SEC-002"],
   "accepted_adrs":["0013"],
-  "source_commits":["703b20d2ce9d17c9ad41ebf0b1c1e17f8c817212"],
+  "source_commits":["703b20d2ce9d17c9ad41ebf0b1c1e17f8c817212","dd09f3c707212dacb134f8091dd6e83f23e0d22c"],
+  "remediation":{
+    "commit":"dd09f3c707212dacb134f8091dd6e83f23e0d22c",
+    "parent":"9da10a5b1f1f063d062c19b0fdba8ab0b821f44c",
+    "tree":"c973b4b953595c9c239444f7cd3f622d1c42222a",
+    "changed_artifacts":6,
+    "diff_sha256":"29cbae34176de3f0f6db3ef5b575af17b0a5297e53c790bda2a0263badf78f19"
+  },
   "authorities":[
     {"path":"conformance/host/abi-v7-explicit-copy.vectors","bytes":357,"sha256":"aee7b9e4fd29c562d929497daecf1ba068e1f8722a78610dd51019be68de067f"},
     {"path":"docs/architecture/host-abi-conformance-v1.json","bytes":1881,"sha256":"b34723a45df06fa2bef6730c67f403fde812e365bdc6bcda8b0b4b0bab68f4f0"},
@@ -23,7 +30,7 @@
     {"path":".github/ci/matrix.json","bytes":5724,"sha256":"d400f8ca49b769f755410d9c7fa0f8bceda71ae735410f1cb3ff73343a2cadfb"},
     {"path":".github/workflows/ci.yml","bytes":14187,"sha256":"859e629d023d1bf868e0d58d2def37477daee0712bab31762860d6803d43ae6e"}
   ],
-  "verifier":{"bytes":5998,"sha256":"6be6df9e8adefa47f40d87b203aace997495e5df62f9063151f6d5cca62ba374"},
+  "verifier":{"bytes":7010,"sha256":"07fb7e2b7702768d2df5203831e7b5d76813f3fe1c41c37f5c194057288575db"},
   "verification":{
     "source_artifacts":34,
     "imported_calls":21,

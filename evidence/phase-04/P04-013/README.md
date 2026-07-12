@@ -3,6 +3,7 @@
 - Task: `P04-013`
 - Verdict: **PASS**
 - Source commit: `703b20d2ce9d17c9ad41ebf0b1c1e17f8c817212`
+- CI remediation commit: `dd09f3c707212dacb134f8091dd6e83f23e0d22c`
 - Source base: `38b379bd860b04ecf156173b7cc883b5516f8018`
 - Source tree: `69dc633c8903089c2e8951003d15eab7346615d4`
 - Accepted ADR: `0013`
@@ -42,6 +43,11 @@ reject. The complete aggregate passes with 68 Rust tests, 12 browser executions,
 executions, 5,224/5,263 workspace-product lines, and 100% semantic/recovery-critical line coverage.
 Native debug/release, browser, dependency/license, artifact retention, CI matrix, bootstrap, strict
 lint/type, and warning-free documentation gates pass.
+
+The first hosted run then applied pedantic Clippy to test targets and rejected six unchecked
+`u64 as u32` vector-length casts before the conformance tests ran. The remediation uses explicit
+`u32::try_from` fallbacks in both Rust parsers, updates their hash authorities, and passes the exact
+workspace/all-target/all-feature Clippy command locally.
 
 ```bash
 corepack npm run host:conformance:check
