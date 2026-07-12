@@ -100,6 +100,8 @@ jobs:
           corepack npm run async:completion:test
           corepack npm run inputs:deterministic:check
           corepack npm run inputs:deterministic:test
+          corepack npm run host:mock:check
+          corepack npm run host:mock:test
           corepack npm run rust:dependencies:test
           corepack npm run rust:audit:test
           corepack npm run dependencies:check
@@ -263,6 +265,8 @@ jobs:
             corepack npm run async:completion:test
             corepack npm run inputs:deterministic:check
             corepack npm run inputs:deterministic:test
+            corepack npm run host:mock:check
+            corepack npm run host:mock:test
           fi
           node tests/toolchain/check-wasm-artifacts.mjs ${{ matrix.artifact }}
 

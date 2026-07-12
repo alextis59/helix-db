@@ -198,7 +198,7 @@ const validatePolicy = () => {
     'empty product-scope exception',
   );
   assert(
-    policy.active_product_scope.allowed_status === 'deterministic-injection-contract-v1' &&
+    policy.active_product_scope.allowed_status === 'mock-host-v1' &&
       policy.active_product_scope.requires_database_functionality === true &&
       policy.active_product_scope.activated_by === 'P03-008' &&
       policy.active_product_scope.reason.length >= 150,

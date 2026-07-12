@@ -23,7 +23,7 @@
       "allowed_files": [],
       "steps": ["rust-unit", "javascript-unit-inventory"],
       "expectations": {
-        "rust_tests": 59,
+        "rust_tests": 64,
         "javascript_test_files": 0
       }
     },
@@ -121,7 +121,7 @@
         "hdoc-decisions"
       ],
       "expectations": {
-        "workspace_packages": 8,
+        "workspace_packages": 9,
         "cargo_benchmark_targets": 0,
         "baseline_workloads": 1,
         "hdoc_workloads": 1,

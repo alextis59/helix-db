@@ -166,6 +166,8 @@ requires an accepted matrix proving older peers can ignore or reject every addit
   5.0 or claiming bindings and hosts.
 - [x] Define exact ABI 7.0 deterministic clock/random/memory/device injection under P04-009 without
   rewriting 6.0 or claiming bindings and hosts.
+- [x] Execute a deterministic bounded mock for all 21 ABI 7 host imports under P04-010 without
+  claiming component, native, browser, durability, or GPU integration.
 - [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
 - [ ] Benchmark explicit-copy and alternative buffer strategies under P04-014.
@@ -190,6 +192,7 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] `P04-007`: prototype non-required handle/shared-staging alternatives.
 - [x] `P04-008`: freeze cancellation, deadline, partial-I/O, and shutdown behavior.
 - [x] `P04-009`: freeze deterministic injected values, numeric memory budgets, and device profiles.
+- [x] `P04-010`: implement the deterministic all-call mock and exact failure injection.
 - [ ] `P04-014`: publish boundary-strategy measurements.
 
 ## References

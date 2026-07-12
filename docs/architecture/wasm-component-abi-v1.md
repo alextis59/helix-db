@@ -86,7 +86,8 @@ Declaring a kind does not grant it. P04-003 defines concrete capability resource
 2.0; operations are defined by P04-004 in ABI 3.0; resource lifecycles are defined by P04-005 in
 ABI 4.0; explicit copy is defined by P04-006 in ABI 5.0; completion semantics are defined by
 P04-008 in ABI 6.0, and deterministic input operations/profiles are defined by P04-009 in ABI 7.0.
-All remain unbound.
+P04-010 supplies a deterministic in-process oracle for all 21 imported calls, but all component,
+native, and browser host bindings remain unbound.
 There is no wildcard or ambient capability, and a missing required descriptor returns
 `CAP_HOST_UNAVAILABLE` before resource use.
 
@@ -114,5 +115,5 @@ enforces version, bounds, ownership, cancellation, capability, negotiation, and 
 
 P04-003 owns concrete capability definitions, P04-004 owns operations, P04-005 owns resource
 lifecycles, and P04-006 owns explicit-copy reference execution. P04-007 onward own alternatives,
-while P04-008 owns completion semantics and P04-009 owns injected inputs/budgets. P04-010 onward own bindings, hosts, and
-transport selection.
+while P04-008 owns completion semantics and P04-009 owns injected inputs/budgets. P04-010 owns the
+unbound mock oracle; P04-011 onward own platform bindings, hosts, and transport selection.

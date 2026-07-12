@@ -91,6 +91,7 @@ same(
     'P04-007',
     'P04-008',
     'P04-009',
+    'P04-010',
   ],
   'CI matrix task history',
 );
@@ -306,6 +307,8 @@ same(
     'fuzz:test': packageJson.scripts['fuzz:test'],
     'host:capabilities:check': packageJson.scripts['host:capabilities:check'],
     'host:capabilities:test': packageJson.scripts['host:capabilities:test'],
+    'host:mock:check': packageJson.scripts['host:mock:check'],
+    'host:mock:test': packageJson.scripts['host:mock:test'],
     'storage:batch:check': packageJson.scripts['storage:batch:check'],
     'storage:batch:test': packageJson.scripts['storage:batch:test'],
     'resources:lifecycle:check': packageJson.scripts['resources:lifecycle:check'],
@@ -366,6 +369,8 @@ same(
     'fuzz:test': 'node tests/toolchain/test-hdoc-fuzz-contract.mjs',
     'host:capabilities:check': 'node tests/toolchain/check-host-capabilities.mjs',
     'host:capabilities:test': 'node tests/toolchain/test-host-capabilities-contract.mjs',
+    'host:mock:check': 'node tests/toolchain/check-mock-host-contract.mjs',
+    'host:mock:test': 'node tests/toolchain/test-mock-host-contract.mjs',
     'storage:batch:check': 'node tests/toolchain/check-storage-batch-abi.mjs',
     'storage:batch:test': 'node tests/toolchain/test-storage-batch-abi-contract.mjs',
     'resources:lifecycle:check': 'node tests/toolchain/check-resource-lifecycle-abi.mjs',
@@ -379,7 +384,7 @@ same(
     'wasm:abi:check': 'node tests/toolchain/check-wasm-abi.mjs',
     'wasm:abi:test': 'node tests/toolchain/test-wasm-abi-contract.mjs',
     'wasm:validate':
-      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-explicit-copy-buffer.mjs && node tests/toolchain/check-buffer-transport-alternatives.mjs && node tests/toolchain/check-async-completion-contract.mjs && node tests/toolchain/check-deterministic-injection-contract.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
+      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-explicit-copy-buffer.mjs && node tests/toolchain/check-buffer-transport-alternatives.mjs && node tests/toolchain/check-async-completion-contract.mjs && node tests/toolchain/check-deterministic-injection-contract.mjs && node tests/toolchain/check-mock-host-contract.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
@@ -689,6 +694,8 @@ for (const marker of [
   'corepack npm run async:completion:test',
   'corepack npm run inputs:deterministic:check',
   'corepack npm run inputs:deterministic:test',
+  'corepack npm run host:mock:check',
+  'corepack npm run host:mock:test',
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }

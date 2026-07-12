@@ -117,6 +117,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "helix-host-mock"
+version = "0.0.0"
+dependencies = [
+ "helix-core",
+]
+
+[[package]]
 name = "helix-host-native"
 version = "0.0.0"
 dependencies = [

@@ -3,18 +3,18 @@
 - Status: Accepted layout baseline; most implementation areas remain empty
 - Last updated: 2026-07-12
 - Owner: Runtime architecture owner
-- Plan items: `P02-004`; examples activated by `P02-016`; WIT authority revised through `P04-009`
+- Plan items: `P02-004`; examples activated by `P02-016`; WIT/mock-host authority revised through `P04-010`
 - Governing gate: `G02`
 - Design source: [Study section 24](../../Study.md#24-suggested-initial-repository-architecture)
 - Ownership source: [Ownership and review boundaries](../governance/ownership.md)
 
-This document establishes stable, reviewable locations for source code, conformance assets, benchmarks, tests, examples, documentation, and release evidence. A tracked directory proves only that its boundary exists. The Phase 1 semantic corpus, eight Rust boundary crates, and two toolchain examples are executable authorities within their stated limits; none claims implemented database behavior.
+This document establishes stable, reviewable locations for source code, conformance assets, benchmarks, tests, examples, documentation, and release evidence. A tracked directory proves only that its boundary exists. The Phase 1 semantic corpus, nine Rust boundary crates, and two toolchain examples are executable authorities within their stated limits; none claims production database behavior.
 
 ## Tracked roots
 
 | Root | Purpose | Initial tracked children | Current maturity |
 | --- | --- | --- | --- |
-| [`crates/`](../../crates/README.md) | Rust workspace source | Eight boundary crates from `P02-001` | Compilable boundary skeletons |
+| [`crates/`](../../crates/README.md) | Rust workspace source | Eight initial boundary crates plus the deterministic mock host | Mock host executable; remaining host boundaries are skeletons |
 | [`shaders/`](../../shaders/README.md) | Internal WGSL source and shader fixtures | `predicates/`, `bitmaps/`, `vectors/`, `fixtures/` | Compile-only validation fixtures; no product kernels |
 | [`packages/`](../../packages/README.md) | Private npm workspace packages | `sdk-typescript/`, `browser-host/` | Reserved directories; not npm packages yet |
 | [`wit/`](../../wit/README.md) | Versioned WebAssembly Interface Type packages | `helix-core-abi-v1/` through `helix-core-abi-v7/` | Immutable ABI 1.0–6.0 plus current deterministic-injection ABI 7.0; bindings/hosts remain absent |

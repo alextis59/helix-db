@@ -1,0 +1,112 @@
+{
+  "schema": "helix.mock-host-contract/1",
+  "plan_item": "P04-010",
+  "abi": {
+    "package": "helix:core-abi@7.0.0",
+    "path": "wit/helix-core-abi-v7/world.wit",
+    "bytes": 12413,
+    "sha256": "80b9e2de39338377aa8e71ca603ac75cbda801c3822ef948b5c0e86539dc79a0",
+    "immutable": true
+  },
+  "implementation": {
+    "crate": "helix-host-mock",
+    "path": "crates/helix-host-mock/src/lib.rs",
+    "bytes": 40551,
+    "sha256": "2cf3bc70846eacbce3822a0cec70e0f07f781d9837b24a11c4590257adac0763",
+    "workspace_dependency": "helix-core",
+    "external_dependencies": 0
+  },
+  "calls": [
+    "immutable-buffer.length",
+    "mutable-staging-buffer.capacity",
+    "mutable-staging-buffer.initialized-length",
+    "opaque-handle.descriptor",
+    "host-resources.allocate-staging",
+    "host-resources.seal-staging",
+    "host-resources.duplicate-immutable",
+    "host-resources.read-immutable",
+    "host-resources.write-staging",
+    "host-resources.copy-immutable-to-staging",
+    "host-files.read-batch",
+    "host-files.write-batch",
+    "host-directories.rename-batch",
+    "host-directories.list-batch",
+    "host-directories.delete-batch",
+    "host-durability.sync-batch",
+    "host-timers.read-clock",
+    "host-randomness.read-random",
+    "host-control.poll-cancellation",
+    "host-control.lifecycle",
+    "host-control.capture-execution-profile"
+  ],
+  "bounds": {
+    "maximum_failure_rules": 4096,
+    "maximum_call_records": 16384,
+    "maximum_batch_requests": 1024,
+    "maximum_file_bytes": 16777216,
+    "maximum_path_bytes": 4096
+  },
+  "failure_injection": {
+    "selector": "call-kind-plus-one-based-occurrence",
+    "duplicate_selectors_rejected": true,
+    "zero_occurrence_rejected": true,
+    "rule_fires_exactly_once": true,
+    "failure_occurrence_is_recorded": true,
+    "result_includes_mutation_outcome": true,
+    "faults": [
+      "CAP_HOST_UNAVAILABLE",
+      "AUTH_SCOPE_DENIED",
+      "IO_HOST_FAILURE",
+      "CAP_CLOCK_UNSAFE",
+      "QUOTA_MEMORY",
+      "DEADLINE_CANCELLED",
+      "DEADLINE_EXCEEDED",
+      "CAP_GPU_DEVICE_LOST"
+    ]
+  },
+  "behavior": {
+    "total_call_order_recorded": true,
+    "per_kind_occurrence_recorded": true,
+    "resource_calls_reuse_explicit_copy_model": true,
+    "read_results_are_detached": true,
+    "write_rename_delete_batches_are_failure_atomic": true,
+    "directory_lists_are_sorted": true,
+    "paths_are_relative_and_parent_traversal_is_rejected": true,
+    "clock_and_random_inputs_use_exact_deterministic_queues": true,
+    "execution_profile_is_pinned": true,
+    "ambient_discovery_present": false
+  },
+  "lifecycle": {
+    "stopped_rejects_every_call_except_lifecycle_query": true,
+    "draining_rejects_six_new_batch_admissions": true,
+    "lifecycle_failure_precedes_configured_fault": true,
+    "running_executes_normally": true
+  },
+  "validation": {
+    "unit_tests": 5,
+    "every_call_has_success_coverage": true,
+    "every_call_has_injected_failure_coverage": true,
+    "foreign_ambient_apis_forbidden": true
+  },
+  "deferred": {
+    "native_host_execution": "P04-011",
+    "browser_host_execution": "P04-012",
+    "shared_host_conformance": "P04-013",
+    "capability_denial_proof": "P04-014",
+    "boundary_tracing": "P04-015",
+    "transport_benchmarks": "P04-016",
+    "transport_selection": "P04-017"
+  },
+  "claim_boundary": {
+    "all_current_imported_calls_modeled": true,
+    "deterministic_failure_injection_present": true,
+    "in_memory_storage_behavior_present": true,
+    "component_binding_present": false,
+    "native_host_present": false,
+    "browser_host_present": false,
+    "real_durability_present": false,
+    "gpu_execution_present": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-011"
+  }
+}

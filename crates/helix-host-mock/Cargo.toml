@@ -1,0 +1,19 @@
+[package]
+name = "helix-host-mock"
+description = "Deterministic capability-host oracle with exact failure injection"
+version.workspace = true
+edition.workspace = true
+rust-version.workspace = true
+license.workspace = true
+repository.workspace = true
+publish.workspace = true
+
+[package.metadata.helix]
+status = "mock-host-v1"
+database-functionality = false
+
+[dependencies]
+helix-core.workspace = true
+
+[lints]
+workspace = true

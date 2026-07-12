@@ -4,6 +4,7 @@ members = [
     "crates/helix-core",
     "crates/helix-doc",
     "crates/helix-gpu",
+    "crates/helix-host-mock",
     "crates/helix-host-native",
     "crates/helix-query",
     "crates/helix-server",
@@ -27,6 +28,7 @@ helix-columnar = { path = "crates/helix-columnar" }
 helix-core = { path = "crates/helix-core" }
 helix-doc = { path = "crates/helix-doc" }
 helix-gpu = { path = "crates/helix-gpu" }
+helix-host-mock = { path = "crates/helix-host-mock" }
 helix-host-native = { path = "crates/helix-host-native" }
 helix-query = { path = "crates/helix-query" }
 helix-storage = { path = "crates/helix-storage" }
@@ -54,8 +56,8 @@ unimplemented = "deny"
 unwrap_used = "deny"
 
 [workspace.metadata.helix]
-plan-item = "P04-009"
-status = "deterministic-injection-contract-v1"
+plan-item = "P04-010"
+status = "mock-host-v1"
 database-functionality = true
 public-release = false
 rust-toolchain = "1.96.1"

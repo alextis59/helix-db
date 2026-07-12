@@ -1,7 +1,7 @@
 # Rust Workspace and Initial Crate Boundaries
 
-- Status: Active boundaries; `helix-doc` codec, dictionary lifecycle, and feature negotiation implemented
-- Last updated: 2026-07-11
+- Status: Active boundaries; deterministic mock host and `helix-doc` authorities implemented
+- Last updated: 2026-07-12
 - Owner: Runtime architecture owner
 - Plan item: `P02-001`
 - Governing requirements: `INV-001`, `INV-003`, `INV-004`, `CORE-001`, `CORE-003`
@@ -11,7 +11,7 @@
 
 This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
 unpublished at version `0.0.0`. The workspace carries machine-readable
-`deterministic-injection-contract-v1` /
+`mock-host-v1` /
 `database-functionality = true` metadata now that `P03-008`–`P03-021` have implemented
 deterministic encoding, whole-envelope validation, borrowed/owned logical values, exact-name/path
 lookup, canonical lossless tagged JSON rendering with strict detached import, and canonical
@@ -22,7 +22,8 @@ replay, representative source-bound codec/lookup/size measurements, and the acce
 self-contained-format/derived-only-dictionary experiment boundary. `helix-core` now carries the
 `deterministic-injection-contract-v1` composition, required explicit copy, non-ABI alternatives,
 completion semantics, and executable deterministic input/budget validation and still reports
-`database-functionality = false`; the other six
+`database-functionality = false`. `helix-host-mock` executes all 21 ABI 7 host imports with exact
+failure injection and no ambient access; the other six
 crates remain `boundary-skeleton` components. Public names and package coordinates remain blocked by
 `P16-016`.
 
@@ -36,6 +37,7 @@ crates remain `boundary-skeleton` components. Public names and package coordinat
 | `helix-columnar` | Rebuildable field dictionaries, typed sidecars, and CPU column operators | `helix-doc`, `helix-query` | Boundary skeleton |
 | `helix-core` | Portable deterministic orchestration and versioned capability ABI | `helix-columnar`, `helix-doc`, `helix-query`, `helix-storage` | Deterministic gate, nine capabilities, and six async operations defined; bindings absent |
 | `helix-gpu` | Optional GPU profiles, buffers, plans, dispatch, candidates, and CPU verification integration | `helix-columnar`, `helix-doc`, `helix-query` | Boundary skeleton |
+| `helix-host-mock` | Deterministic in-memory oracle for all imported ABI host calls and exact failures | `helix-core` | Executable ABI 7 mock oracle; no component/native/browser binding |
 | `helix-host-native` | Native files, clocks, randomness, scheduling, networking, devices, and runtime integration | `helix-core`; optional `helix-gpu` feature | Boundary skeleton |
 | `helix-server` | Native process lifecycle and future public/server protocol surface | `helix-host-native`; forwards optional GPU feature | Boundary skeleton |
 
@@ -47,7 +49,8 @@ column states current implementation; it does not imply that the remaining liste
 ```text
 helix-doc
   ├──> helix-query ──────┬──> helix-columnar ──┐
-  └──> helix-storage ────┴─────────────────────┼──> helix-core ──> helix-host-native ──> helix-server
+  └──> helix-storage ────┴─────────────────────┼──> helix-core ──┬──> helix-host-native ──> helix-server
+                                              │                 └──> helix-host-mock
                          helix-query ──────────┘                     └─ optional ─> helix-gpu
 helix-doc + helix-query + helix-columnar ──────────────────────────────────────> helix-gpu
 ```
@@ -60,6 +63,7 @@ Arrows point from dependency to consumer. The graph is acyclic and has these enf
 - The portable core has no dependency on native hosts, the server, or GPU code.
 - GPU code has no dependency on authoritative storage or the portable core and can never become required for correctness.
 - Ambient platform access enters through host crates only.
+- The mock host depends only on the portable core and performs no ambient platform access.
 - The server is an outer leaf; deterministic crates never depend on it.
 
 ## Feature boundary
@@ -97,7 +101,7 @@ cargo test --workspace --all-features
 cargo doc --workspace --no-deps --all-features
 ```
 
-The evidence verifier independently reads Cargo metadata, requires exactly these eight unpublished
+The evidence verifier independently reads Cargo metadata, requires exactly these nine unpublished
 `0.0.0` packages, compares every direct internal dependency/feature edge with the table above,
 rejects cycles and forbidden edges, and confirms each crate's current maturity markers. Historical
 `P02-001` evidence remains source-bound to the all-skeleton state; current checks admit only the

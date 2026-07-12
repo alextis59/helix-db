@@ -422,6 +422,24 @@ The safe Rust reference model executes exact clock/random queues, failure-atomic
 and redacted profile validation without ambient discovery. P04-009 defines no component operation
 bindings, host implementation, GPU execution, identifier generator, or database behavior.
 
+P04-010 adds `helix-host-mock`, a deterministic in-memory oracle for every one of the 21 imported
+ABI 7 calls: four resource methods, six resource operations, six storage batches, clock and random
+reads, and three host-control calls. The two `core-control` functions remain guest exports and are
+not mock-host operations. Every call is represented in one stable inventory and recorded with a
+total sequence plus its one-based per-kind occurrence.
+
+Failure rules select an exact call kind and occurrence. Zero occurrences, duplicate selectors, and
+more than 4,096 rules are rejected; a rule fires once and records a stable fault plus explicit
+mutation outcome. The log is bounded to 16,384 calls. Lifecycle rejection precedes configured
+failure: stopped rejects every call except lifecycle inspection, while draining rejects the six new
+storage-batch admissions. Tests inject a fault into every imported call kind.
+
+The mock reuses the explicit-copy and deterministic-input reference models. Its relative in-memory
+file map bounds batches to 1,024 requests, paths to 4,096 bytes, and files to 16 MiB. Reads detach;
+lists sort; write, rename, and delete validate and mutate a candidate map before publication. The
+crate performs no filesystem, wall-clock, random-device, network, thread, process, GPU, native,
+browser, or component-binding work. Mock sync success is observable behavior, not durability.
+
 ### 6.2 `helix-host`
 
 Native host process.

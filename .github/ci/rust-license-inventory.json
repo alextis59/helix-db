@@ -1,7 +1,7 @@
 {
   "schema": "helix.rust-license-inventory/1",
   "plan_item": "P03-008",
-  "cargo_lock_sha256": "731783458dbef335e830d369b4220bd598ea1f1d6595209b8d1898801c8c8381",
+  "cargo_lock_sha256": "2418c092f10eb1f4227506a1cc177a26c97237fb177bcdb09c78f835380ce173",
   "packages": [
     {
       "name": "arrayref",

@@ -263,6 +263,24 @@ decisions. The profile may select CPU versus an eligible GPU candidate only when
 same result. Actual values and failures arrive from the mock/native/browser hosts in P04-010 onward,
 so this step establishes an executable oracle without claiming integration.
 
+P04-010 makes that first host executable without introducing platform variability. The mock models
+all 21 ABI 7 imports in one stable enumeration and allows a test to fail an exact one-based
+occurrence of any call. A total-order log makes extra, missing, or reordered capability use visible,
+while explicit mutation outcomes avoid treating an injected I/O error as implicit rollback.
+
+The in-memory storage model is deliberately stronger than a bag of canned return values: detached
+reads, sorted lists, and candidate-map publication exercise the same atomicity properties expected
+from later hosts. Reusing the P04-006 copy oracle and P04-009 input queues also prevents a second
+interpretation of those contracts. Bounded rules, logs, batches, paths, and files keep adversarial
+tests finite. Lifecycle-before-fault precedence lets conformance distinguish host shutdown from a
+scheduled capability failure.
+
+This is still an oracle rather than an integration claim. It has no generated component binding and
+does not touch a filesystem, clock, entropy source, GPU, browser API, or native runtime. That narrow
+boundary is useful: P04-011 and P04-012 can replay identical scenarios against real hosts, and
+P04-013 can compare their observations to the mock rather than inventing expected behavior inside
+each platform suite.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.
