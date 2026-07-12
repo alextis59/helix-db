@@ -100,6 +100,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | [`P04-002`](../../evidence/phase-04/P04-002/README.md) | `CORE-001`, `CORE-002`, `INV-004`, `SEC-001`, `SEC-002` | Physically separates the five-crate deterministic core, denies ambient APIs and dependencies, and proves zero browser-Wasm imports; concrete capability interfaces, hosts, denial conformance, and database orchestration remain open. |
 | [`P04-003`](../../evidence/phase-04/P04-003/README.md) | `CORE-001`, `CORE-002`, `CORE-003`, `INV-004`, `INV-007`, `SEC-001`, `SEC-002` | Preserves immutable ABI 1.0 and defines exact ABI 2.0 identities/policies for nine required host capabilities; operations, resource lifecycles, bindings, hosts, and cross-host conformance remain open. |
 | [`P04-004`](../../evidence/phase-04/P04-004/README.md) | `CORE-001`, `CORE-002`, `CORE-003`, `INV-004`, `INV-007`, `STORE-001`, `STORE-002`, `SEC-001`, `SEC-002` | Preserves ABI 2.0 and defines exact ABI 3.0 with six bounded deterministic async storage batches; bindings, resource lifecycles, partial-I/O/deadline behavior, and hosts remain open. |
+| [`P04-005`](../../evidence/phase-04/P04-005/README.md) | `CORE-001`, `CORE-002`, `CORE-003`, `INV-004`, `INV-007`, `SEC-001`, `SEC-002` | Preserves ABI 3.0 and defines exact ABI 4.0 with unique owned transfer, call-scoped borrows, exactly-once drop, bounded staging-to-immutable transitions, and redacted noncloneable opaque handles; transport, budgets, and hosts remain open. |
 
 ## Accepted phase-gate evidence
 

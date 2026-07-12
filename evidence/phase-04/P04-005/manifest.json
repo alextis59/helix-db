@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-005",
+  "verdict": "pass",
+  "commit": "ecf2e8e0bd35982291ea5fbb32917aaab834c962",
+  "base_commit": "1746257f1dde145fa60a01e06a0a0988ac7fbcc1",
+  "source_tree": "7c9455ff9a80d67ec61bdecd25e63e13c4a617a2",
+  "diff_sha256": "6ed7771b52b0f8e51db791f5a711f23fbb9ad7d101339c393c2af42528ee583d",
+  "recorded_on": "2026-07-12",
+  "requirements": ["CORE-001", "CORE-002", "CORE-003", "INV-004", "INV-007", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0013"],
+  "source_commits": ["ecf2e8e0bd35982291ea5fbb32917aaab834c962"],
+  "authorities": [
+    {
+      "path": "wit/helix-core-abi-v4/world.wit",
+      "bytes": 9765,
+      "sha256": "5bd1312132c9edbede3d41e8223d95483a4a027d4ebf45c38440f44e2c53cfac"
+    },
+    {
+      "path": "docs/architecture/resource-lifecycle-abi-v1.json",
+      "bytes": 2971,
+      "sha256": "ca7afbba226759c656a149ec5194c42a861c7d5f7743c9f5cf709aeeb338d7ee"
+    },
+    {
+      "path": "docs/architecture/resource-lifecycle-abi-v1.md",
+      "bytes": 3008,
+      "sha256": "c032b5ec400dbe3128df50308c85a2006ad5629ef696a64db24677998d207f13"
+    },
+    {
+      "path": "tests/toolchain/check-resource-lifecycle-abi.mjs",
+      "bytes": 7099,
+      "sha256": "4d1d1adf126e4003d36c17efd9da7441cc2dbedf50e6da35cde3cac3d0fa74c6"
+    },
+    {
+      "path": "tests/toolchain/test-resource-lifecycle-abi-contract.mjs",
+      "bytes": 5285,
+      "sha256": "a990a9716f5081274247d3237c1ca6e806f7598e16acef8416f77527ccae965e"
+    }
+  ],
+  "verifier": {
+    "bytes": 6873,
+    "sha256": "6ce8baa16f819cdfca9ee2436aa1ad66f5e3bd1c76cf989b682c6085753b7b99"
+  },
+  "verification": {
+    "source_artifacts": 38,
+    "wit_versions": 2,
+    "interfaces": 13,
+    "resolved_types": 85,
+    "total_functions": 16,
+    "async_functions": 6,
+    "resource_methods": 4,
+    "lifecycle_operations": 3,
+    "world_imports": 12,
+    "world_exports": 1,
+    "maximum_buffer_bytes": 16777216,
+    "maximum_live_resources_per_instance": 4096,
+    "maximum_handle_name_bytes": 64,
+    "mutation_canaries": 42,
+    "workspace_tests": 49,
+    "fuzz_executions": 640,
+    "browser_executions": 6,
+    "product_lines_covered": 4565,
+    "product_lines_total": 4565
+  }
+}
