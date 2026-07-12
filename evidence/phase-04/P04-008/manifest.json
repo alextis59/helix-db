@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-008",
+  "verdict": "pass",
+  "commit": "b3746c1ae16644447ebb5430d4cf8a1d985ef34b",
+  "base_commit": "ae9ddb1fa2b05ac62a845fd051aacfbdddb1a967",
+  "source_tree": "3463316078878a74792f2a7b1b7290f51f0330f7",
+  "diff_sha256": "ab0ad6e2f8eae47563b1236b2fdc00878e3fb6beae3ce3ec2f52f1245e8c6955",
+  "recorded_on": "2026-07-12",
+  "requirements": ["CORE-001", "CORE-002", "CORE-003", "INV-004", "INV-007", "STORE-001", "STORE-002", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0013"],
+  "source_commits": ["b3746c1ae16644447ebb5430d4cf8a1d985ef34b"],
+  "authorities": [
+    {
+      "path": "wit/helix-core-abi-v6/world.wit",
+      "bytes": 10871,
+      "sha256": "fd9a2401ed4b3350ed8f24e128c96de8e313197e5acff82218256e95548b68d8"
+    },
+    {
+      "path": "docs/architecture/async-completion-contract-v1.json",
+      "bytes": 4127,
+      "sha256": "2be033a2795c0d938a7ed5660e6730c1101371763033c0925da3123b001e9574"
+    },
+    {
+      "path": "docs/architecture/async-completion-contract-v1.md",
+      "bytes": 2940,
+      "sha256": "8395ed573ea1ba711835ce25c9e18e918558e0a7efa3a5ab256d91044e67ef4a"
+    },
+    {
+      "path": "tests/toolchain/check-async-completion-contract.mjs",
+      "bytes": 9249,
+      "sha256": "f7ef5e836873c331cf3dfba252c7cf75ded0396d9f07b003b0dc4aa9c67fa9cc"
+    },
+    {
+      "path": "tests/toolchain/test-async-completion-contract.mjs",
+      "bytes": 5741,
+      "sha256": "ac8bd4dcc2585f93dc76367132d8fcd854718c22efebe28c25ebe268eba7eb11"
+    }
+  ],
+  "verifier": {
+    "bytes": 6597,
+    "sha256": "3fe8d18752c0ca6122e308a426609b8e73e42c656a84e5c0fbf8b2d5e2739863"
+  },
+  "verification": {
+    "source_artifacts": 39,
+    "required_abi_major": 6,
+    "interfaces": 13,
+    "resolved_types": 92,
+    "functions": 20,
+    "async_functions": 6,
+    "imports": 12,
+    "exports": 1,
+    "safe_points": 5,
+    "stable_errors": 7,
+    "mutation_canaries": 43,
+    "workspace_tests": 55,
+    "fuzz_executions": 640,
+    "browser_executions": 6,
+    "product_lines_covered": 4738,
+    "product_lines_total": 4738
+  }
+}
