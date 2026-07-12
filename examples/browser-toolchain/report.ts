@@ -75,5 +75,25 @@ declare global {
         denied: { file: boolean; socket: boolean; clock: boolean; device: boolean };
       };
     }>;
+    __HELIX_BOUNDARY_BENCHMARK__?: () => {
+      schema: string;
+      config: {
+        byteLength: number;
+        chunkBytes: number;
+        chattyIterations: number;
+        coarseIterations: number;
+        warmups: number;
+        measurements: number;
+        expectedChecksum: number;
+      };
+      samples: Array<{
+        strategy: string;
+        index: number;
+        durationNs: number;
+        iterations: number;
+        bytes: number;
+        checksum: number;
+      }>;
+    };
   }
 }

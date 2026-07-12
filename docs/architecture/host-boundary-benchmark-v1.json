@@ -1,0 +1,48 @@
+{
+  "schema": "helix.host-boundary-benchmark/1",
+  "plan_item": "P04-016",
+  "experiment": "EXP-003",
+  "strategies": ["chatty", "batched-copy", "opaque-handle", "shared-staging"],
+  "runtimes": ["native", "chromium", "firefox", "webkit"],
+  "configuration": {
+    "bytes_per_iteration": 65536,
+    "chatty_chunk_bytes": 64,
+    "chatty_calls_per_iteration": 1024,
+    "chatty_iterations_per_sample": 1,
+    "coarse_iterations_per_sample": 256,
+    "warmups_per_strategy_runtime": 5,
+    "measurements_per_strategy_runtime": 20
+  },
+  "correctness": {
+    "deterministic_dataset": true,
+    "expected_fnv1a32": 574135749,
+    "output_bytes_checked_every_sample": true,
+    "checksum_checked_every_sample": true
+  },
+  "implementation": {
+    "native": "crates/helix-core/examples/host_boundary_benchmark.rs",
+    "browser": "examples/browser-toolchain/main.ts",
+    "runner": "benchmarks/run-host-boundary.mjs"
+  },
+  "report": {
+    "raw_output": "dist/benchmarks/host-boundary/raw.json",
+    "summary_output": "dist/benchmarks/host-boundary/summary.json",
+    "promoted_observation": {
+      "path": "benchmarks/reports/host-boundary-2026-07-12.json",
+      "bytes": 3089,
+      "sha256": "2f8c8bd3c102679aa7201ef8e49b9f1f962e2783e0fbd0727e53c9e4ca71397f"
+    },
+    "total_samples": 400,
+    "measured_samples": 320,
+    "timing_statistic": "upper-middle-median-ns-per-iteration"
+  },
+  "claim_boundary": {
+    "observational_only": true,
+    "timing_threshold": null,
+    "transport_selected": false,
+    "production_native_host_linkage_measured": false,
+    "platform_storage_measured": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-017"
+  }
+}

@@ -466,6 +466,13 @@ clock/random values, device identifiers, or error messages. Each host retains at
 records; overflow **MUST NOT** change call behavior. This does not claim a telemetry exporter,
 distributed trace context, wall-clock timing, or linked native ABI-call tracing.
 
+P04-016 benchmarks the explicit chatty/coarse-copy, opaque-handle, and exclusive-staging shapes on
+native Rust and Chromium, Firefox, and WebKit. The workload **MUST** use identical deterministic
+64 KiB bytes, verify exact output length and FNV-1a checksum for every sample, retain five warmups
+and twenty measurements per runtime/strategy, record the runtime environment, and publish raw plus
+summary artifacts. Timing remains observational with no pass threshold or transport-selection
+claim; P04-017 owns the decision.
+
 ### 6.2 `helix-host`
 
 Native host process.

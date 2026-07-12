@@ -3,6 +3,8 @@ import sharedVectorsText from '../../conformance/host/abi-v7-explicit-copy.vecto
 import {
   BrowserHost,
   BrowserHostError,
+  BrowserImmutableBuffer,
+  BrowserOpaqueHandle,
   detectBrowserRuntimeFeatures,
 } from '../../packages/browser-host/src/index';
 
@@ -71,6 +73,78 @@ const run = async () => {
   const immutable = host.bindings.sealStaging(staging, 4n);
   const roundTrip = host.bindings.readImmutable(immutable, 0n, 4);
   const instance = await host.compileAndInstantiate(bytes);
+  window.__HELIX_BOUNDARY_BENCHMARK__ = () => {
+    const byteLength = 64 * 1024;
+    const chunkBytes = 64;
+    const chattyIterations = 1;
+    const coarseIterations = 256;
+    const warmups = 5;
+    const measurements = 20;
+    const sourceBytes = Uint8Array.from(
+      { length: byteLength },
+      (_, index) => (index * 31 + 17) & 0xff,
+    );
+    const source = new BrowserImmutableBuffer(sourceBytes);
+    const benchmarkHost = new BrowserHost({
+      grants: [],
+      features,
+      executionProfile: host.bindings.captureExecutionProfile(),
+      traceCapacity: 0,
+    });
+    const checksum = (value: Uint8Array) => {
+      let hash = 0x811c9dc5;
+      for (const byte of value) hash = Math.imul(hash ^ byte, 0x01000193) >>> 0;
+      return hash;
+    };
+    const expected = checksum(sourceBytes);
+    const samples: Array<{
+      strategy: string;
+      index: number;
+      durationNs: number;
+      iterations: number;
+      bytes: number;
+      checksum: number;
+    }> = [];
+    for (const strategy of ['chatty', 'batched-copy', 'opaque-handle', 'shared-staging']) {
+      for (let index = 0; index < warmups + measurements; index += 1) {
+        const start = performance.now();
+        let output: Uint8Array = new Uint8Array();
+        const iterations = strategy === 'chatty' ? chattyIterations : coarseIterations;
+        for (let iteration = 0; iteration < iterations; iteration += 1) {
+          if (strategy === 'chatty') {
+            output = new Uint8Array(byteLength);
+            for (let offset = 0; offset < byteLength; offset += chunkBytes) {
+              output.set(
+                benchmarkHost.bindings.readImmutable(source, BigInt(offset), chunkBytes).bytes,
+                offset,
+              );
+            }
+          } else if (strategy === 'batched-copy') {
+            output = benchmarkHost.bindings.readImmutable(source, 0n, byteLength).bytes;
+          } else if (strategy === 'opaque-handle') {
+            const handle = new BrowserOpaqueHandle({ kind: 'immutable-buffer', name: 'benchmark-buffer', version: { major: 1, minor: 0 } });
+            benchmarkHost.bindings.opaqueHandleDescriptor(handle);
+            output = benchmarkHost.bindings.readImmutable(source, 0n, byteLength).bytes;
+          } else {
+            const staging = new Uint8Array(byteLength);
+            staging.set(source.copy());
+            output = staging.slice();
+          }
+        }
+        const durationNs = Math.max(1, Math.round((performance.now() - start) * 1_000_000));
+        const observed = checksum(output);
+        if (output.byteLength !== byteLength || observed !== expected) {
+          throw new Error('browser boundary benchmark correctness mismatch');
+        }
+        samples.push({ strategy, index, iterations, durationNs, bytes: output.byteLength, checksum: observed });
+      }
+    }
+    return {
+      schema: 'helix.host-boundary-benchmark-browser/1',
+      config: { byteLength, chunkBytes, chattyIterations, coarseIterations, warmups, measurements, expectedChecksum: expected },
+      samples,
+    };
+  };
   window.__HELIX_BROWSER_HOST_TEST__ = async () => {
     const codes: string[] = [];
     const capture = async (operation: () => unknown | Promise<unknown>) => {

@@ -1,0 +1,106 @@
+{
+  "schema": "helix.host-boundary-benchmark-summary/1",
+  "plan_item": "P04-016",
+  "recorded_at": "2026-07-12T16:12:16.499Z",
+  "environment": {
+    "platform": "linux",
+    "architecture": "x64",
+    "cpu": "11th Gen Intel(R) Core(TM) i5-11300H @ 3.10GHz",
+    "logical_cpus": 8,
+    "memory_bytes": 16503111680,
+    "node": "v22.19.0",
+    "rustc": "rustc 1.96.1 (31fca3adb 2026-06-26)",
+    "browsers": { "chromium": "149.0.7827.55", "firefox": "151.0", "webkit": "26.5" },
+    "source_commit": "231010315810ad56e2a38a38eda9c532055053ef",
+    "source_dirty": true
+  },
+  "configuration": {
+    "byteLength": 65536,
+    "chunkBytes": 64,
+    "chattyIterations": 1,
+    "coarseIterations": 256,
+    "warmups": 5,
+    "measurements": 20,
+    "expectedChecksum": 574135749
+  },
+  "native": {
+    "chatty": { "median_ns_per_iteration": 4158, "iterations_per_sample": 1, "samples": 20 },
+    "batched-copy": {
+      "median_ns_per_iteration": 1165.796875,
+      "iterations_per_sample": 256,
+      "samples": 20
+    },
+    "opaque-handle": {
+      "median_ns_per_iteration": 2462.19921875,
+      "iterations_per_sample": 256,
+      "samples": 20
+    },
+    "shared-staging": {
+      "median_ns_per_iteration": 1228.84765625,
+      "iterations_per_sample": 256,
+      "samples": 20
+    }
+  },
+  "browsers": {
+    "chromium": {
+      "chatty": { "median_ns_per_iteration": 23400000, "iterations_per_sample": 1, "samples": 20 },
+      "batched-copy": {
+        "median_ns_per_iteration": 44531.25,
+        "iterations_per_sample": 256,
+        "samples": 20
+      },
+      "opaque-handle": {
+        "median_ns_per_iteration": 46484.375,
+        "iterations_per_sample": 256,
+        "samples": 20
+      },
+      "shared-staging": {
+        "median_ns_per_iteration": 73437.5,
+        "iterations_per_sample": 256,
+        "samples": 20
+      }
+    },
+    "firefox": {
+      "chatty": { "median_ns_per_iteration": 12000000, "iterations_per_sample": 1, "samples": 20 },
+      "batched-copy": {
+        "median_ns_per_iteration": 27343.75,
+        "iterations_per_sample": 256,
+        "samples": 20
+      },
+      "opaque-handle": {
+        "median_ns_per_iteration": 39062.5,
+        "iterations_per_sample": 256,
+        "samples": 20
+      },
+      "shared-staging": {
+        "median_ns_per_iteration": 31250,
+        "iterations_per_sample": 256,
+        "samples": 20
+      }
+    },
+    "webkit": {
+      "chatty": { "median_ns_per_iteration": 4000000, "iterations_per_sample": 1, "samples": 20 },
+      "batched-copy": {
+        "median_ns_per_iteration": 7812.5,
+        "iterations_per_sample": 256,
+        "samples": 20
+      },
+      "opaque-handle": {
+        "median_ns_per_iteration": 11718.75,
+        "iterations_per_sample": 256,
+        "samples": 20
+      },
+      "shared-staging": {
+        "median_ns_per_iteration": 11718.75,
+        "iterations_per_sample": 256,
+        "samples": 20
+      }
+    }
+  },
+  "claim_boundary": {
+    "observational_only": true,
+    "timing_threshold": null,
+    "transport_selected": false,
+    "database_functionality_added": false
+  }
+}

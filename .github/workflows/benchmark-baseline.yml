@@ -42,8 +42,14 @@ jobs:
           corepack npm run policy:dependencies
           corepack npm run benchmark:schemas
           corepack npm run benchmark:hdoc:policy
+          corepack npm run benchmark:host:check
+          corepack npm run benchmark:host:test
+      - name: Install the Playwright-coupled browser engines
+        run: corepack npm exec -- playwright install --with-deps chromium firefox webkit
       - name: Run claim-bounded benchmark reports
-        run: corepack npm run test:benchmark
+        run: |
+          corepack npm run test:benchmark
+          corepack npm run benchmark:host
       - name: Preserve raw results and summaries
         if: always()
         id: upload

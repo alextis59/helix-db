@@ -21,6 +21,11 @@ The P03-021 decision checker binds those immutable inputs, selects the self-cont
 base/canonical-compression profiles, and retains collection dictionary IDs only for derived data.
 Its contract test rejects 13 kinds of decision, input, or claim-boundary drift.
 
+P04-016 adds the host-boundary harness: 400 correctness-checked observations across native Rust,
+Chromium, Firefox, and WebKit for chatty, batched-copy, opaque-handle, and shared-staging shapes.
+Raw/summary output is written under `dist/benchmarks/host-boundary/`; the accepted local observation
+is retained in `reports/host-boundary-2026-07-12.json`. Timing is observational until P04-017.
+
 Focused commands:
 
 ```bash
@@ -34,4 +39,7 @@ corepack npm run benchmark:hdoc:check
 corepack npm run benchmark:hdoc:test
 corepack npm run benchmark:hdoc:decisions
 corepack npm run benchmark:hdoc:decisions:test
+corepack npm run benchmark:host
+corepack npm run benchmark:host:check
+corepack npm run benchmark:host:test
 ```

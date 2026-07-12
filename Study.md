@@ -329,6 +329,15 @@ error messages. Browser overflow drops and counts trace records without changing
 mock retains its existing 16,384-call bound. This is local diagnostic structure, not a telemetry
 exporter, wall-clock profiler, distributed trace context, or linked native-call claim.
 
+P04-016 measures the four candidate boundary shapes with one deterministic 64 KiB value and exact
+output checks on every sample. Native Rust plus Chromium, Firefox, and WebKit each retain five
+warmups and twenty measurements for chatty 64-byte reads, one coarse copy, opaque-handle dispatch
+plus coarse copy, and exclusive staging. Coarse samples use 256 inner iterations to exceed browser
+timer resolution and are normalized per iteration; the already expensive 1,024-call chatty sample
+uses one. The 400 raw observations are environment-stamped and observational only. They establish
+that call granularity dominates in every runtime, but P04-017—not this measurement task—owns the
+transport selection and revisit thresholds.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

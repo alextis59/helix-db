@@ -97,6 +97,7 @@ same(
     'P04-013',
     'P04-014',
     'P04-015',
+    'P04-016',
   ],
   'CI matrix task history',
 );
@@ -288,6 +289,9 @@ same(
     'benchmark:check': packageJson.scripts['benchmark:check'],
     'benchmark:schemas': packageJson.scripts['benchmark:schemas'],
     'benchmark:test': packageJson.scripts['benchmark:test'],
+    'benchmark:host': packageJson.scripts['benchmark:host'],
+    'benchmark:host:check': packageJson.scripts['benchmark:host:check'],
+    'benchmark:host:test': packageJson.scripts['benchmark:host:test'],
     'buffers:copy:check': packageJson.scripts['buffers:copy:check'],
     'buffers:copy:test': packageJson.scripts['buffers:copy:test'],
     'buffers:alternatives:check': packageJson.scripts['buffers:alternatives:check'],
@@ -359,6 +363,9 @@ same(
     'benchmark:check': 'node benchmarks/check-benchmark-artifacts.mjs report',
     'benchmark:schemas': 'node benchmarks/check-benchmark-artifacts.mjs schemas',
     'benchmark:test': 'node tests/toolchain/test-benchmark-contract.mjs',
+    'benchmark:host': 'node benchmarks/run-host-boundary.mjs',
+    'benchmark:host:check': 'node tests/toolchain/check-host-boundary-benchmark.mjs',
+    'benchmark:host:test': 'node tests/toolchain/test-host-boundary-benchmark.mjs',
     'buffers:copy:check': 'node tests/toolchain/check-explicit-copy-buffer.mjs',
     'buffers:copy:test': 'node tests/toolchain/test-explicit-copy-buffer-contract.mjs',
     'buffers:alternatives:check': 'node tests/toolchain/check-buffer-transport-alternatives.mjs',
@@ -731,6 +738,8 @@ for (const marker of [
   'corepack npm run host:isolation:test',
   'corepack npm run host:tracing:check',
   'corepack npm run host:tracing:test',
+  'corepack npm run benchmark:host:check',
+  'corepack npm run benchmark:host:test',
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }
@@ -782,7 +791,11 @@ for (const marker of [
   'node tests/toolchain/check-ci-runtime.mjs benchmark-baseline-linux-x64',
   'corepack npm run benchmark:schemas',
   'corepack npm run benchmark:hdoc:policy',
+  'corepack npm run benchmark:host:check',
+  'corepack npm run benchmark:host:test',
   'corepack npm run test:benchmark',
+  'corepack npm run benchmark:host',
+  'playwright install --with-deps chromium firefox webkit',
   'if: always()',
   'uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1',
   `name: benchmark-results-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,

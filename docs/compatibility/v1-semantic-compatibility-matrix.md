@@ -21,7 +21,7 @@ Native rows distinguish executable reference semantics from accepted contracts a
 
 | Input | Path | SHA-256 | Bytes |
 | --- | --- | --- | ---: |
-| `specifications` | [Specifications.md](../../Specifications.md) | `edd40992d44e4d6d03a482b8bd20b8d72489bf3b525e3bea11e3a5100679557c` | 106309 |
+| `specifications` | [Specifications.md](../../Specifications.md) | `dfa5f724fb5d7be5ba61f11ca15211e00e58f4928c5fb0390cd96af9e7d3ce8e` | 106832 |
 | `semantic_coverage` | [fixtures/semantic/coverage-v1.json](../../fixtures/semantic/coverage-v1.json) | `9bfecda0e6133dab6a9d25ca6fa84468f9b16e94d50f22d9d7bdd4ee103b6327` | 4551 |
 | `semantic_operations` | [fixtures/semantic/operations-v1.json](../../fixtures/semantic/operations-v1.json) | `d5aaa5ecb693d58607635a94f6e7361613ce4fa42922ce8bb331fe25ec365474` | 3066 |
 | `semantic_errors` | [fixtures/semantic/error-cases-v1.json](../../fixtures/semantic/error-cases-v1.json) | `798d6d47afcc5992373acb98ae4ebbda22379c25ea986c6da50816d5d9859f68` | 16242 |
