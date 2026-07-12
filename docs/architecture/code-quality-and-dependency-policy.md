@@ -1,9 +1,9 @@
 # Code Quality, Unsafe Review, and Dependency Policy
 
 - Status: Accepted and executable bootstrap policy with dependency security reporting
-- Last updated: 2026-07-11
+- Last updated: 2026-07-12
 - Owner: Runtime architecture owner with security and release review
-- Plan items: `P02-006`, extended by `P02-012` and `P03-008`
+- Plan items: `P02-006`, extended by `P02-012`, `P03-008`, and `P04-011`
 - Governing requirements: `INV-003`, `INV-004`, `INV-006`, `INV-007`, `CORE-001`, `CORE-003`, `SEC-001`, `SEC-002`, `QUAL-001`
 - Governing gate: `G02`
 - Machine dependency policy: [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json)
@@ -87,7 +87,7 @@ For npm it requires:
 
 The [npm lock documentation](https://docs.npmjs.com/cli/v11/configuring-npm/package-lock-json/) defines the committed exact-tree role. The [npm CI documentation](https://docs.npmjs.com/cli/v11/commands/npm-ci/) defines frozen installs and script controls. `.npmrc` enables strict script review, while `package.json` denies `fsevents`; a newly introduced script fails policy until reviewed.
 
-For Rust it requires exactly nine unpublished MIT workspace paths and the 13 exact crates.io packages reached by `blake3 = 1.8.5`, `crc = 3.4.0`, and `lz4_flex = 0.13.1`. Every external version, checksum, license, selected feature, direct purpose, build script, and one of 26 source license files is deny-by-default policy data. Git sources, default-feature drift, extra packages, missing license text, local build scripts, and first-party unsafe tokens fail. Exact `cargo-audit 0.22.2`, built from its verified source archive and repository-owned reviewed lock, scans the workspace and its own tool graph with a fresh non-stale RustSec database and no exceptions.
+For Rust it requires exactly nine unpublished MIT workspace paths and 121 exact crates.io packages reached by the three HDoc dependencies plus Wasmtime 46.0.1. Every external version, checksum, license, selected feature, direct purpose, build script, 204 source license files, and 14 reviewed missing-text exceptions is deny-by-default policy data. Git sources, default-feature drift, extra packages, missing license text outside those exceptions, local build scripts, and first-party unsafe tokens fail. Exact `cargo-audit 0.22.2`, built from its verified source archive and repository-owned reviewed lock, scans the workspace and its own tool graph with a fresh non-stale RustSec database and no advisory exceptions.
 
 Downloaded development executables are not smuggled into npm/Cargo product graphs. The P02-010 component validator has a separate machine authority that pins its official release URL, host, archive inventory, byte counts, archive/executable SHA-256 values, license forms/files, and exact version output. The P03-008 RustSec scanner similarly lives only under ignored `target/toolchain`, but is built from verified source using a full reviewed lock whose graph is self-audited on every live observation. Neither enters product artifacts.
 

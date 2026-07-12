@@ -147,6 +147,24 @@ const cases = [
       return { license };
     },
   },
+  {
+    label: 'missing license-text exception',
+    marker: 'license text absent',
+    candidate: () => {
+      const rules = clone(policy);
+      rules.license_text_exceptions.shift();
+      return { rules };
+    },
+  },
+  {
+    label: 'license-text exception deadline',
+    marker: 'license exception deadline',
+    candidate: () => {
+      const rules = clone(policy);
+      rules.license_text_exceptions[0].revalidate_by = 'P16-011';
+      return { rules };
+    },
+  },
 ];
 
 for (const { candidate, label, marker } of cases) {

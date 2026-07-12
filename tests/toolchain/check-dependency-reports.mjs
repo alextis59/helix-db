@@ -178,7 +178,7 @@ const validatePolicy = () => {
     assert(exception.revalidate_by === 'P16-010', `${exception.package}: deadline mismatch`);
   }
   assert(policy.rust.workspace_packages === 9, 'Rust workspace package count mismatch');
-  assert(policy.rust.expected_external_packages === 13, 'Rust external package count mismatch');
+  assert(policy.rust.expected_external_packages === 121, 'Rust external package count mismatch');
   assert(
     policy.rust.external_package_policy === 'exact-registry-allowlist-with-live-rustsec',
     'Rust external package policy mismatch',

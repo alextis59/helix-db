@@ -1,7 +1,7 @@
 # Stable Test Command Surface
 
 - Status: Accepted bootstrap command contract; feature suites remain maturity-labeled
-- Last updated: 2026-07-11
+- Last updated: 2026-07-12
 - Owner: Quality and release owner
 - Plan item: `P02-007`; benchmark activation completed by `P02-014`, extended with HDoc product-code measurements by `P03-020`, and decision validation by `P03-021`; browser boundary activation completed by `P02-016`; integration activation completed by `P03-017`; fuzz activation completed by `P03-019`
 - Governing gate: `G02`
@@ -18,7 +18,7 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 
 | Command | Bootstrap state | Current behavior | Activation or expansion |
 | --- | --- | --- | --- |
-| `npm run test:unit` | Active | Runs 64 all-feature Rust library tests and inventories 0 JavaScript unit files; three P04-006 tests cover explicit-copy success, bounds, and failure atomicity, three P04-007 tests cover handle/shared-staging prototypes, four P04-009 tests cover exact input streams, memory accounting, and device profiles, five P04-010 tests cover all-call failure injection, resources, storage, inputs, and lifecycle, and five deterministic P03-018 property/mutation tests cover 512-seed codec and tagged-JSON properties, 256 presentation permutations, every positive-fixture prefix, sampled stored-byte damage, and 2,656 checksum-repaired one-bit mutations | Counts change with reviewed implementation tests |
+| `npm run test:unit` | Active | Runs 66 all-feature Rust library tests and inventories 0 JavaScript unit files; P04-006–P04-010 cover copy, transport, deterministic inputs, and the all-call mock; four P04-011 tests cover exact capability grants and bounded Wasmtime component validation; five deterministic P03-018 property/mutation tests cover 512-seed codec and tagged-JSON properties, 256 presentation permutations, every positive-fixture prefix, sampled stored-byte damage, and 2,656 checksum-repaired one-bit mutations | Counts change with reviewed implementation tests |
 | `npm run test:integration` | Active | Runs one five-case Vitest file: fixed inventory plus complete logical-value and independently recomputed typed-hash parity across all four immutable HDoc 1.0 positive vectors | Later cross-crate, language, and process boundaries extend the same command |
 | `npm run test:conformance` | Active | Replays semantic examples, canonical bytes, the 17-fixture/319-step corpus, 382 oracle assertions, the 265-row compatibility matrix, and offline MongoDB artifacts | Later format, host, engine, and adapter bindings extend the same command |
 | `npm run test:fuzz` | Active | Runs five pinned libFuzzer targets for decode, encode/decode invariants, path lookup, tagged render/import, and migration; the bounded gate executes 128 coverage-guided units each (640 total) from 57 assembled seeds | Longer campaigns and newly retained regression inputs extend the same targets |

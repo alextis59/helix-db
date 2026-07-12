@@ -41,6 +41,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Asynchronous completion ABI 6.0](architecture/async-completion-contract-v1.md) | Deadlines, cancellation, backpressure, partial-I/O, and shutdown result rules |
 | [Deterministic injection ABI 7.0](architecture/deterministic-injection-contract-v1.md) | Clock/random streams, memory budgets, and redacted device profiles |
 | [Deterministic mock host v1](architecture/mock-host-contract-v1.md) | In-memory behavior and exact failure injection for all 21 ABI 7 host calls |
+| [Native Wasmtime host skeleton v1](architecture/native-host-skeleton-v1.md) | Bounded component compilation and deny-by-default native capability grants |
 | [WGSL fixture validation](architecture/wgsl-fixture-validation.md) | Hash-bound trusted shaders, Dawn/SwiftShader parsing, validation, compilation, and security boundaries |
 | [Dependency security reporting](architecture/dependency-security-reporting.md) | Deterministic lock/license/duplicate inventory plus dated vulnerability, signature, and provenance observations |
 | [Rust product code coverage policy](quality/code-coverage-policy.md) | Compiler-matched LLVM reporting, explicit product/test classification, and workspace/critical thresholds |

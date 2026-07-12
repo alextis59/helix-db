@@ -168,6 +168,8 @@ requires an accepted matrix proving older peers can ignore or reject every addit
   rewriting 6.0 or claiming bindings and hosts.
 - [x] Execute a deterministic bounded mock for all 21 ABI 7 host imports under P04-010 without
   claiming component, native, browser, durability, or GPU integration.
+- [x] Build the exact bounded Wasmtime native skeleton and deny-by-default capability grants under
+  P04-011 without claiming linked ABI calls, ambient adapters, or platform behavior.
 - [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
 - [ ] Benchmark explicit-copy and alternative buffer strategies under P04-014.
@@ -193,6 +195,7 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] `P04-008`: freeze cancellation, deadline, partial-I/O, and shutdown behavior.
 - [x] `P04-009`: freeze deterministic injected values, numeric memory budgets, and device profiles.
 - [x] `P04-010`: implement the deterministic all-call mock and exact failure injection.
+- [x] `P04-011`: configure the bounded native Wasmtime skeleton and exact capability grants.
 - [ ] `P04-014`: publish boundary-strategy measurements.
 
 ## References

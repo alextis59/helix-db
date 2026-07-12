@@ -1,6 +1,6 @@
 [package]
 name = "helix-host-native"
-description = "Boundary skeleton for native HelixDB host capabilities and optional GPU integration"
+description = "Wasmtime native host skeleton with deny-by-default capability grants"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -12,7 +12,7 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "boundary-skeleton"
+status = "wasmtime-host-skeleton-v1"
 database-functionality = false
 
 [features]
@@ -22,3 +22,4 @@ gpu = ["dep:helix-gpu"]
 [dependencies]
 helix-core.workspace = true
 helix-gpu = { workspace = true, optional = true }
+wasmtime.workspace = true

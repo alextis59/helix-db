@@ -3,7 +3,7 @@
 - Status: Accepted layout baseline; most implementation areas remain empty
 - Last updated: 2026-07-12
 - Owner: Runtime architecture owner
-- Plan items: `P02-004`; examples activated by `P02-016`; WIT/mock-host authority revised through `P04-010`
+- Plan items: `P02-004`; examples activated by `P02-016`; host authority revised through `P04-011`
 - Governing gate: `G02`
 - Design source: [Study section 24](../../Study.md#24-suggested-initial-repository-architecture)
 - Ownership source: [Ownership and review boundaries](../governance/ownership.md)

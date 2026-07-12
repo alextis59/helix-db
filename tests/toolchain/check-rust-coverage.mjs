@@ -176,6 +176,10 @@ const validatePolicy = () => {
         reason: 'cfg-test-only-deterministic-property-module',
         regex: '^crates/helix-doc/src/property_tests\\.rs$',
       },
+      {
+        reason: 'external-build-script-generated-source',
+        regex: '^target/coverage/build/[^/]+/out/.+\\.rs$',
+      },
     ],
     'path exclusions',
   );
@@ -198,7 +202,7 @@ const validatePolicy = () => {
     'empty product-scope exception',
   );
   assert(
-    policy.active_product_scope.allowed_status === 'mock-host-v1' &&
+    policy.active_product_scope.allowed_status === 'native-host-skeleton-v1' &&
       policy.active_product_scope.requires_database_functionality === true &&
       policy.active_product_scope.activated_by === 'P03-008' &&
       policy.active_product_scope.reason.length >= 150,

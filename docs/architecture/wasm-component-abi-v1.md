@@ -116,4 +116,5 @@ enforces version, bounds, ownership, cancellation, capability, negotiation, and 
 P04-003 owns concrete capability definitions, P04-004 owns operations, P04-005 owns resource
 lifecycles, and P04-006 owns explicit-copy reference execution. P04-007 onward own alternatives,
 while P04-008 owns completion semantics and P04-009 owns injected inputs/budgets. P04-010 owns the
-unbound mock oracle; P04-011 onward own platform bindings, hosts, and transport selection.
+unbound mock oracle; P04-011 owns bounded native runtime construction and grants without linking
+calls; P04-012 onward own browser bindings, shared conformance, and transport selection.

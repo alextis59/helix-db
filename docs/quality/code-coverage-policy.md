@@ -1,7 +1,7 @@
 # Rust Product Code Coverage Policy
 
-- Status: Active for the deterministic HDoc codec
-- Last updated: 2026-07-11
+- Status: Active for deterministic HDoc and host product sources
+- Last updated: 2026-07-12
 - Owner: Quality owner with storage and query-semantics review
 - Plan item: `P02-013`
 - Governing requirements: `INV-007`, `QUAL-001`
@@ -165,7 +165,7 @@ production-code example without changing the product denominator. The active wor
 is now:
 
 ```text
-status = "mock-host-v1"
+status = "native-host-skeleton-v1"
 database-functionality = true
 ```
 

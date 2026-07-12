@@ -1,7 +1,7 @@
 # Licensing and Third-Party Material Policy
 
 - Status: Approved
-- Effective date: 2026-07-11
+- Effective date: 2026-07-12
 - Project license: [MIT](../../LICENSE)
 - Notice index: [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md)
 
@@ -125,6 +125,6 @@ notice, yanked, ignored-advisory, or scanner-self-audit exception exists.
 
 ## Current third-party inventory
 
-The exact current npm and Rust inventories and license counts are maintained in [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md), enforced by [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json), and expanded by the [dependency reporting contract](../architecture/dependency-security-reporting.md). All locked npm entries are development-only; the twelve MPL-2.0 `lightningcss` entries are a bounded build-tool exception and cannot enter shipped artifacts without revalidation. Cargo contains nine unpublished MIT workspace packages and 13 exact registry crates for HDoc checksum, hash, and compression. No vendored product code, third-party shader, generated SDK, benchmark dataset, or browser binary is committed.
+The exact current npm and Rust inventories and license counts are maintained in [THIRD_PARTY_NOTICES.md](../../THIRD_PARTY_NOTICES.md), enforced by [`helix.dependency-policy/1`](../../tests/toolchain/dependency-policy.json), and expanded by the [dependency reporting contract](../architecture/dependency-security-reporting.md). All locked npm entries are development-only; the twelve MPL-2.0 `lightningcss` entries are a bounded build-tool exception and cannot enter shipped artifacts without revalidation. Cargo contains nine unpublished MIT workspace packages and 121 exact registry crates for HDoc plus the native Wasmtime skeleton, with 14 reviewed upstream-tarball missing-text exceptions. No vendored product code, third-party shader, generated SDK, benchmark dataset, or browser binary is committed.
 
 The transcript contains source citations as documentation links; those links do not incorporate the cited content into distributed software.

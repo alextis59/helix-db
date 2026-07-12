@@ -3,7 +3,7 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-12
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-017`, `P03-020`–`P03-021`, and `P04-001`–`P04-010`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-017`, `P03-020`–`P03-021`, and `P04-001`–`P04-011`
 - Governing gate: `G02`
 - Accepted gate evidence: [`G02` hosted toolchain review](../../evidence/phase-02/G02/README.md)
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
@@ -127,6 +127,9 @@ memory-accounting model, and 64 policy/resolution/WIT/Rust rejection canaries.
 
 P04-010 adds the deterministic in-memory mock-host checker, all 21 imported-call Rust tests, and 60
 policy/resolution/source rejection canaries to both Node policy lanes and the component lane.
+
+P04-011 adds exact Wasmtime/runtime dependency validation plus 41 native-host policy/source
+canaries to both Node policy lanes; native jobs compile and execute the skeleton on every host.
 
 ## Workflow security and reproducibility
 

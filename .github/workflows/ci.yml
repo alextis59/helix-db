@@ -102,6 +102,8 @@ jobs:
           corepack npm run inputs:deterministic:test
           corepack npm run host:mock:check
           corepack npm run host:mock:test
+          corepack npm run host:native:check
+          corepack npm run host:native:test
           corepack npm run rust:dependencies:test
           corepack npm run rust:audit:test
           corepack npm run dependencies:check

@@ -119,9 +119,12 @@ const parseLockPackages = (candidate, label) => {
   )) {
     const block = `[[package]]\n${match[1].trimEnd()}\n`;
     const name = block.match(/^name = "([^"]+)"$/m)?.[1];
+    const version = block.match(/^version = "([^"]+)"$/m)?.[1];
     assert(name, `${label} package name`);
-    assert(!packages.has(name), `${label} duplicate package: ${name}`);
-    packages.set(name, block);
+    assert(version, `${label} package version`);
+    const identity = `${name}@${version}`;
+    assert(!packages.has(identity), `${label} duplicate package: ${identity}`);
+    packages.set(identity, block);
   }
   assert(packages.size > 0, `${label} package inventory empty`);
   return packages;
@@ -134,53 +137,14 @@ export const validateNativeLock = (candidate = readText(expectedNative.lockfile)
     'native lock header',
   );
   const packages = parseLockPackages(candidate, 'native lock');
-  same(
-    [...packages.keys()],
-    [
-      'arrayref',
-      'arrayvec',
-      'blake3',
-      'cc',
-      'cfg-if',
-      'constant_time_eq',
-      'cpufeatures',
-      'crc',
-      'crc-catalog',
-      'find-msvc-tools',
-      'helix-columnar',
-      'helix-core',
-      'helix-doc',
-      'helix-host-native',
-      'helix-native-toolchain-example',
-      'helix-query',
-      'helix-storage',
-      'libc',
-      'lz4_flex',
-      'shlex',
-    ],
-    'native lock package inventory',
-  );
   const rootPackages = parseLockPackages(readText('Cargo.lock'), 'root lock');
-  for (const name of [
-    'arrayref',
-    'arrayvec',
-    'blake3',
-    'cc',
-    'cfg-if',
-    'constant_time_eq',
-    'cpufeatures',
-    'crc',
-    'crc-catalog',
-    'find-msvc-tools',
-    'helix-doc',
-    'libc',
-    'lz4_flex',
-    'shlex',
-  ]) {
-    assert(
-      packages.get(name) === rootPackages.get(name),
-      `native lock root graph mismatch: ${name}`,
-    );
+  for (const [identity, block] of packages) {
+    if (
+      identity.startsWith('helix-native-toolchain-example@') ||
+      identity.startsWith('helix-host-native@')
+    )
+      continue;
+    assert(block === rootPackages.get(identity), `native lock root graph mismatch: ${identity}`);
   }
   return candidate;
 };
@@ -253,7 +217,7 @@ export const validateNativeExampleReport = (report) => {
     report.component,
     {
       name: 'helix-host-native',
-      maturity: 'boundary-skeleton',
+      maturity: 'wasmtime-host-skeleton-v1',
       required_dependencies: ['helix-core'],
     },
     'native report component',

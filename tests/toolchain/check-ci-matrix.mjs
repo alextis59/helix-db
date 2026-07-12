@@ -92,6 +92,7 @@ same(
     'P04-008',
     'P04-009',
     'P04-010',
+    'P04-011',
   ],
   'CI matrix task history',
 );
@@ -309,6 +310,8 @@ same(
     'host:capabilities:test': packageJson.scripts['host:capabilities:test'],
     'host:mock:check': packageJson.scripts['host:mock:check'],
     'host:mock:test': packageJson.scripts['host:mock:test'],
+    'host:native:check': packageJson.scripts['host:native:check'],
+    'host:native:test': packageJson.scripts['host:native:test'],
     'storage:batch:check': packageJson.scripts['storage:batch:check'],
     'storage:batch:test': packageJson.scripts['storage:batch:test'],
     'resources:lifecycle:check': packageJson.scripts['resources:lifecycle:check'],
@@ -371,6 +374,8 @@ same(
     'host:capabilities:test': 'node tests/toolchain/test-host-capabilities-contract.mjs',
     'host:mock:check': 'node tests/toolchain/check-mock-host-contract.mjs',
     'host:mock:test': 'node tests/toolchain/test-mock-host-contract.mjs',
+    'host:native:check': 'node tests/toolchain/check-native-host-skeleton.mjs',
+    'host:native:test': 'node tests/toolchain/test-native-host-skeleton.mjs',
     'storage:batch:check': 'node tests/toolchain/check-storage-batch-abi.mjs',
     'storage:batch:test': 'node tests/toolchain/test-storage-batch-abi-contract.mjs',
     'resources:lifecycle:check': 'node tests/toolchain/check-resource-lifecycle-abi.mjs',
@@ -446,7 +451,7 @@ expectFailure(
 );
 assert(
   runNode(['tests/toolchain/check-dependency-reports.mjs', 'offline']).includes(
-    'PASS dependency inventory: 91 npm development packages, 13 external Rust packages, 73 license/notice files, 1 duplicate family',
+    'PASS dependency inventory: 91 npm development packages, 121 external Rust packages, 73 license/notice files, 1 duplicate family',
   ),
   'dependency inventory report did not pass',
 );
@@ -696,6 +701,8 @@ for (const marker of [
   'corepack npm run inputs:deterministic:test',
   'corepack npm run host:mock:check',
   'corepack npm run host:mock:test',
+  'corepack npm run host:native:check',
+  'corepack npm run host:native:test',
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }

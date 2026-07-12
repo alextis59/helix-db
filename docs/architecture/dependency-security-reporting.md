@@ -1,9 +1,9 @@
 # Dependency Vulnerability, Provenance, License, and Duplicate Reporting
 
 - Status: Accepted foundation reporting policy; not a production SBOM or legal opinion
-- Last updated: 2026-07-11
+- Last updated: 2026-07-12
 - Owner: Release owner with security review
-- Plan items: `P02-012`, extended by `P03-008`
+- Plan items: `P02-012`, extended by `P03-008` and `P04-011`
 - Governing gate: `G02`
 - Report policy: [`helix.dependency-report-policy/1`](../../tests/toolchain/dependency-report-policy.json)
 - npm license authority: [`helix.npm-license-inventory/1`](../../.github/ci/npm-license-inventory.json)
@@ -57,11 +57,12 @@ root license/notice file to match its integrity-verified tarball record. If the 
 in the first CI contract job, lock/authority validation still runs and the report explicitly marks
 the installed tree absent. A partially corrupted or substituted installed license file fails.
 
-Cargo metadata must contain exactly the eight MIT workspace paths plus the 13-package registry
-allowlist for `blake3 = 1.8.5`, `crc = 3.4.0`, and `lz4_flex = 0.13.1`. The deterministic checker
+Cargo metadata must contain exactly nine MIT workspace paths plus the 121-package registry
+allowlist for the three exact HDoc dependencies and Wasmtime 46.0.1. The deterministic checker
 binds every external package's exact version, crates.io checksum, selected feature set, declared
-license, and build-script presence; git sources and additional packages fail. It also hashes all 26
-license files from the fetched sources against `helix.rust-license-inventory/1`. The offline report
+license, and build-script presence; git sources and additional packages fail. It also hashes all 204
+license files and checks 14 explicit missing-text exceptions against
+`helix.rust-license-inventory/1`. The offline report
 labels this graph `live-observation-required`; it never synthesizes “zero findings.”
 
 `P03-008` installs exact `cargo-audit 0.22.2` from its checksum-verified official source archive,

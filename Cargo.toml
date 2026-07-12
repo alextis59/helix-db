@@ -33,6 +33,7 @@ helix-host-native = { path = "crates/helix-host-native" }
 helix-query = { path = "crates/helix-query" }
 helix-storage = { path = "crates/helix-storage" }
 lz4_flex = { version = "=0.13.1", default-features = false, features = ["safe-decode", "safe-encode"] }
+wasmtime = { version = "=46.0.1", default-features = false, features = ["async", "component-model", "component-model-async", "cranelift", "runtime", "std"] }
 
 [workspace.lints.rust]
 warnings = { level = "deny", priority = -3 }
@@ -56,8 +57,8 @@ unimplemented = "deny"
 unwrap_used = "deny"
 
 [workspace.metadata.helix]
-plan-item = "P04-010"
-status = "mock-host-v1"
+plan-item = "P04-011"
+status = "native-host-skeleton-v1"
 database-functionality = true
 public-release = false
 rust-toolchain = "1.96.1"

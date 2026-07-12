@@ -83,6 +83,8 @@
     "host:capabilities:test": "node tests/toolchain/test-host-capabilities-contract.mjs",
     "host:mock:check": "node tests/toolchain/check-mock-host-contract.mjs",
     "host:mock:test": "node tests/toolchain/test-mock-host-contract.mjs",
+    "host:native:check": "node tests/toolchain/check-native-host-skeleton.mjs",
+    "host:native:test": "node tests/toolchain/test-native-host-skeleton.mjs",
     "policy:javascript": "biome check --error-on-warnings .",
     "policy:dependencies": "node tests/toolchain/check-dependency-policy.mjs",
     "rust:audit:install": "node tests/toolchain/install-cargo-audit.mjs",

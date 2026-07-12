@@ -440,6 +440,18 @@ lists sort; write, rename, and delete validate and mutate a candidate map before
 crate performs no filesystem, wall-clock, random-device, network, thread, process, GPU, native,
 browser, or component-binding work. Mock sync success is observable behavior, not durability.
 
+P04-011 turns the native boundary into a real Wasmtime skeleton. It pins Wasmtime 46.0.1 with
+default features disabled and enables only async Component Model, Cranelift, runtime, and standard
+library support. The engine enables component validation, fuel accounting, and epoch interruption,
+accepts at most 16 MiB of component bytes, and rejects core modules as components. No WASI or
+ambient adapter is linked.
+
+Native capability configuration is immutable and deny-by-default. At most 128 grants name one of
+the eleven ABI capability kinds plus an exact scope of at most 4,096 UTF-8 bytes. Empty scopes,
+wildcards, control text, duplicates, and absent grants reject. This step compiles components but
+does not instantiate the Helix world or link ABI calls; filesystem, durability, networking,
+entropy, clocks, GPU execution, and database behavior remain unimplemented.
+
 ### 6.2 `helix-host`
 
 Native host process.

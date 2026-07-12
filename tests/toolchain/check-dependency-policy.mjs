@@ -230,7 +230,7 @@ const notices = readFileSync(path.join(repository, 'THIRD_PARTY_NOTICES.md'), 'u
 for (const marker of [
   '91 locked npm development packages',
   '| MPL-2.0 | 12 |',
-  '13 exact external Rust crates are locked',
+  '121 exact external Rust crates are locked',
   'cargo-audit 0.22.2',
   'No npm dependency is a production/runtime dependency',
   '73 root license/notice files across 65 packages',

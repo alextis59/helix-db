@@ -33,15 +33,21 @@ The lock records two optional Darwin-only `fsevents` install scripts and the onl
 
 All 91 registry tarballs were downloaded from their locked URLs and reproduced their SHA-512 integrities. The license authority records 73 root license/notice files across 65 packages by path, size, and SHA-256. Twenty-six development-only tarballs omit root license text: eight Biome platform binaries, `@napi-rs/wasm-runtime`, fifteen Rolldown platform bindings, `@tybys/wasm-util`, and `stackback`. Those omissions are explicit reviewed exceptions through `P16-010`; none is eligible for shipment without resolved notice obligations.
 
-13 exact external Rust crates are locked for the portable HDoc encoder. The three direct crates are:
+121 exact external Rust crates are locked for the portable HDoc encoder and native Wasmtime host
+skeleton. The four direct crates are:
 
 | Package | Version | Declared license | Selected features | Purpose |
 | --- | ---: | --- | --- | --- |
 | `blake3` | 1.8.5 | CC0-1.0 OR Apache-2.0 OR Apache-2.0 WITH LLVM-exception | `pure`; defaults disabled | Canonical typed BLAKE3-256 identity without architecture-specific SIMD selection |
 | `crc` | 3.4.0 | MIT OR Apache-2.0 | defaults disabled | CRC-32C through the registered CRC-32/ISCSI parameters |
 | `lz4_flex` | 0.13.1 | MIT | `safe-encode`, `safe-decode`; defaults disabled | Bounded raw-LZ4 HDoc compression profile `1/1` |
+| `wasmtime` | 46.0.1 | Apache-2.0 WITH LLVM-exception | `async`, `component-model`, `component-model-async`, `cranelift`, `runtime`, `std`; defaults disabled | Native async Component Model validation without ambient WASI adapters |
 
-Their exact registry graph adds `arrayref` 0.3.9, `arrayvec` 0.7.8, `cc` 1.2.67, `cfg-if` 1.0.4, `constant_time_eq` 0.4.2, `cpufeatures` 0.3.0, `crc-catalog` 2.5.0, `find-msvc-tools` 0.1.9, `libc` 0.2.186, and `shlex` 2.0.1. All 13 versions, crates.io SHA-256 checksums, selected features, build-script presence, and SPDX forms are an exact deny-by-default allowlist. The license authority verifies 26 files byte-for-byte from the fetched crate sources. No git dependency, default feature drift, unreviewed crate, or advisory exception is allowed.
+The original HDoc graph adds ten transitives. Wasmtime adds 108 exact packages for its selected
+compiler, runtime, async, and Component Model features. All 121 versions, crates.io SHA-256
+checksums, selected features, build-script presence, and SPDX forms are an exact deny-by-default
+allowlist. The license authority verifies 204 files byte-for-byte from fetched crate sources. No git
+dependency, default-feature drift, unreviewed crate, or advisory exception is allowed.
 
 The BLAKE3 crate's build script is retained under its portable `pure` profile; it does not compile the optional SIMD C/assembly paths used by other feature selections. `libc` is a target-conditioned transitive lock entry through `cpufeatures`. Neither broadens HDoc semantics or grants network, file, clock, randomness, or host capability access to the portable encoder.
 

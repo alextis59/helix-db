@@ -1,6 +1,6 @@
 # Rust Workspace and Initial Crate Boundaries
 
-- Status: Active boundaries; deterministic mock host and `helix-doc` authorities implemented
+- Status: Active boundaries; native/mock hosts and `helix-doc` authorities implemented
 - Last updated: 2026-07-12
 - Owner: Runtime architecture owner
 - Plan item: `P02-001`
@@ -11,7 +11,7 @@
 
 This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
 unpublished at version `0.0.0`. The workspace carries machine-readable
-`mock-host-v1` /
+`native-host-skeleton-v1` /
 `database-functionality = true` metadata now that `P03-008`–`P03-021` have implemented
 deterministic encoding, whole-envelope validation, borrowed/owned logical values, exact-name/path
 lookup, canonical lossless tagged JSON rendering with strict detached import, and canonical
@@ -23,7 +23,8 @@ self-contained-format/derived-only-dictionary experiment boundary. `helix-core` 
 `deterministic-injection-contract-v1` composition, required explicit copy, non-ABI alternatives,
 completion semantics, and executable deterministic input/budget validation and still reports
 `database-functionality = false`. `helix-host-mock` executes all 21 ABI 7 host imports with exact
-failure injection and no ambient access; the other six
+failure injection and no ambient access. `helix-host-native` provides exact Wasmtime component
+validation and a deny-by-default capability policy without ambient adapters; the other five
 crates remain `boundary-skeleton` components. Public names and package coordinates remain blocked by
 `P16-016`.
 
@@ -38,7 +39,7 @@ crates remain `boundary-skeleton` components. Public names and package coordinat
 | `helix-core` | Portable deterministic orchestration and versioned capability ABI | `helix-columnar`, `helix-doc`, `helix-query`, `helix-storage` | Deterministic gate, nine capabilities, and six async operations defined; bindings absent |
 | `helix-gpu` | Optional GPU profiles, buffers, plans, dispatch, candidates, and CPU verification integration | `helix-columnar`, `helix-doc`, `helix-query` | Boundary skeleton |
 | `helix-host-mock` | Deterministic in-memory oracle for all imported ABI host calls and exact failures | `helix-core` | Executable ABI 7 mock oracle; no component/native/browser binding |
-| `helix-host-native` | Native files, clocks, randomness, scheduling, networking, devices, and runtime integration | `helix-core`; optional `helix-gpu` feature | Boundary skeleton |
+| `helix-host-native` | Native files, clocks, randomness, scheduling, networking, devices, and runtime integration | `helix-core`; optional `helix-gpu` feature | Wasmtime async Component Model skeleton and exact capability grants; ABI calls unlinked |
 | `helix-server` | Native process lifecycle and future public/server protocol surface | `helix-host-native`; forwards optional GPU feature | Boundary skeleton |
 
 The responsibility column describes ownership from the Study and Specifications. Only the maturity
@@ -86,7 +87,8 @@ The original `P02-001` boundary had no external dependencies. `P03-008` later ad
 portable dependencies to the leaf `helix-doc` crate—BLAKE3, CRC, and bounded raw LZ4—and their ten
 locked registry transitives. They do not add a workspace edge or grant an ambient host capability.
 Their complete checksum/license/feature/build-script allowlist and fail-closed RustSec reporting live
-under the dependency policy. The exact compiler, MSRV, components, formatter, linter, and Wasm
+under the dependency policy. P04-011 adds exact Wasmtime 46.0.1 and its selected 108-package
+runtime/compiler closure only to the native host. The exact compiler, MSRV, components, formatter, linter, and Wasm
 targets remain selected by the [Rust toolchain policy](rust-toolchain-policy.md); future dependencies
 must preserve this graph unless an accepted architecture change says otherwise.
 

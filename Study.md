@@ -281,6 +281,19 @@ boundary is useful: P04-011 and P04-012 can replay identical scenarios against r
 P04-013 can compare their observations to the mock rather than inventing expected behavior inside
 each platform suite.
 
+P04-011 validates that the native boundary can use the selected production runtime without opening
+ambient authority. Exact Wasmtime 46.0.1 is built with a deliberately narrow feature closure: async
+components and Cranelift are present, while WASI adapters, cache, profiling, pooling, threads, and
+text-format compilation are absent. A tiny real component compiles and a core module rejects, so
+the result is stronger than a type-only placeholder while still stopping before instantiation.
+
+The exact kind/scope allowlist makes runtime construction independent from resource discovery.
+This is the correct intermediate boundary: later adapters can receive already-validated grants,
+and conformance tests can prove that missing grants fail before I/O. Fuel and epoch interruption
+prepare bounded execution, but they do not by themselves prove cancellation or deadline behavior;
+that proof remains with linked calls and P04-013. The 108-package runtime/compiler closure is a
+real supply-chain cost and is therefore checksum-, feature-, license-, and RustSec-gated now.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

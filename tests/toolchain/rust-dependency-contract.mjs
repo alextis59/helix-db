@@ -67,7 +67,7 @@ const licensePaths = (packageRoot) => {
   return paths.sort();
 };
 
-const validateLicenseInventory = ({ cargoLockBytes, external, licenseAuthority }) => {
+const validateLicenseInventory = ({ cargoLockBytes, external, licenseAuthority, policy }) => {
   same(
     sorted(Object.keys(licenseAuthority)),
     ['cargo_lock_sha256', 'packages', 'plan_item', 'schema'],
@@ -77,7 +77,7 @@ const validateLicenseInventory = ({ cargoLockBytes, external, licenseAuthority }
     licenseAuthority.schema === 'helix.rust-license-inventory/1',
     'Rust license authority schema mismatch',
   );
-  assert(licenseAuthority.plan_item === 'P03-008', 'Rust license authority task mismatch');
+  assert(licenseAuthority.plan_item === 'P04-011', 'Rust license authority task mismatch');
   assert(
     licenseAuthority.cargo_lock_sha256 === sha256(cargoLockBytes),
     'Rust license authority Cargo.lock digest mismatch',
@@ -88,10 +88,22 @@ const validateLicenseInventory = ({ cargoLockBytes, external, licenseAuthority }
     'Rust license authority package identities',
   );
 
+  const exceptions = new Map(
+    policy.license_text_exceptions.map((entry) => [`${entry.name}@${entry.version}`, entry]),
+  );
+  assert(exceptions.size === policy.license_text_exceptions.length, 'duplicate license exception');
   let licenseFileCount = 0;
   for (const [index, authority] of licenseAuthority.packages.entries()) {
     const pkg = external[index];
-    assert(authority.license_files.length > 0, `${pkg.name}: license text absent`);
+    const exception = exceptions.get(`${pkg.name}@${pkg.version}`);
+    if (authority.license_files.length === 0) {
+      assert(exception, `${pkg.name}: license text absent`);
+      assert(exception.reason.length >= 100, `${pkg.name}: license exception reason`);
+      assert(exception.revalidate_by === 'P16-010', `${pkg.name}: license exception deadline`);
+      exceptions.delete(`${pkg.name}@${pkg.version}`);
+    } else {
+      assert(!exception, `${pkg.name}: stale license exception`);
+    }
     const packageRoot = path.dirname(pkg.manifest_path);
     same(
       authority.license_files.map(({ path: licensePath }) => licensePath),
@@ -109,6 +121,7 @@ const validateLicenseInventory = ({ cargoLockBytes, external, licenseAuthority }
       licenseFileCount += 1;
     }
   }
+  assert(exceptions.size === 0, 'unmatched license-text exception');
   return licenseFileCount;
 };
 
@@ -147,10 +160,14 @@ export const validateRustDependencyGraph = ({
   assert(policy.allow_git_sources === false, 'Rust git sources must remain disabled');
   same(actual, policy.external_packages, 'exact external Rust package allowlist');
 
-  const helixDoc = metadata.packages.find(({ name }) => name === 'helix-doc');
-  assert(helixDoc, 'helix-doc package absent');
-  const direct = helixDoc.dependencies
+  const direct = metadata.packages
+    .filter(({ id }) => workspaceMembers.has(id))
+    .flatMap(({ dependencies }) => dependencies)
     .filter(({ source }) => source !== null)
+    .filter(
+      (dependency, index, dependencies) =>
+        dependencies.findIndex(({ name }) => name === dependency.name) === index,
+    )
     .map((dependency) => ({
       default_features: dependency.uses_default_features,
       features: sorted(dependency.features),
@@ -183,6 +200,7 @@ export const validateRustDependencyGraph = ({
     cargoLockBytes,
     external,
     licenseAuthority,
+    policy,
   });
   return {
     externalPackages: actual,

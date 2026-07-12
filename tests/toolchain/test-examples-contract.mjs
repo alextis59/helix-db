@@ -46,12 +46,12 @@ const lineEndingCases = [
   ],
   [
     'native lock external version drift',
-    'native lock root graph mismatch: arrayref',
+    'native lock root graph mismatch: arrayref@0.3.8',
     () => validateNativeLock(nativeLock.replace('version = "0.3.9"', 'version = "0.3.8"')),
   ],
   [
     'native lock codec edge removal',
-    'native lock root graph mismatch: helix-doc',
+    'native lock root graph mismatch: helix-doc@0.0.0',
     () =>
       validateNativeLock(
         nativeLock.replace(
@@ -114,7 +114,7 @@ const native = {
   example: 'native-toolchain',
   component: {
     name: 'helix-host-native',
-    maturity: 'boundary-skeleton',
+    maturity: 'wasmtime-host-skeleton-v1',
     required_dependencies: ['helix-core'],
   },
   target: { architecture: 'x86_64', operating_system: 'linux' },

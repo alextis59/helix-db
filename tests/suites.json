@@ -23,7 +23,7 @@
       "allowed_files": [],
       "steps": ["rust-unit", "javascript-unit-inventory"],
       "expectations": {
-        "rust_tests": 64,
+        "rust_tests": 66,
         "javascript_test_files": 0
       }
     },
