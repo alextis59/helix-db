@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-006",
+  "verdict": "pass",
+  "commit": "647b70a502ad48ac752977657937aab053dbd075",
+  "base_commit": "823c901c27c08a647f9c09c0850b2e633bdb65ba",
+  "source_tree": "afe75d1631d4a51864d084eb940df34f28783cd7",
+  "diff_sha256": "68ef010a2f8c5af09838708138ea93ee2599b794c21c9c1457463d70603c9c53",
+  "recorded_on": "2026-07-12",
+  "requirements": ["CORE-001", "CORE-002", "CORE-003", "INV-004", "INV-007", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0013"],
+  "source_commits": ["647b70a502ad48ac752977657937aab053dbd075"],
+  "authorities": [
+    {
+      "path": "wit/helix-core-abi-v5/world.wit",
+      "bytes": 10490,
+      "sha256": "2d92cc7bf4e4b190af2dc96e7fbb4a5800303416982021a8c656c19a07977963"
+    },
+    {
+      "path": "docs/architecture/explicit-copy-buffer-transport-v1.json",
+      "bytes": 3358,
+      "sha256": "32752c04354ef9a2c31c366170925a35129d77efcbbb4338777475f2637912bf"
+    },
+    {
+      "path": "docs/architecture/explicit-copy-buffer-transport-v1.md",
+      "bytes": 2767,
+      "sha256": "8646f4a3ccef103634c4286c9822f98f666d9bfbbdd160a3c8ac8b916b6c49b9"
+    },
+    {
+      "path": "crates/helix-core/src/explicit_copy.rs",
+      "bytes": 12270,
+      "sha256": "b1c4c9b06b5ccda52a5d74f1019cd9f6e2768e59442fbc3b15e45a3e7c9de48c"
+    },
+    {
+      "path": "tests/toolchain/check-explicit-copy-buffer.mjs",
+      "bytes": 7586,
+      "sha256": "116d4fbe6e196691b5a01e1cdec93d325a13f0f05f57105dbe85b2db81b3386b"
+    },
+    {
+      "path": "tests/toolchain/test-explicit-copy-buffer-contract.mjs",
+      "bytes": 5435,
+      "sha256": "f10fe7af7ee5d0f49a10961490b413ed8034f133c6516d658f48cd0a7693b3f7"
+    }
+  ],
+  "verifier": {
+    "bytes": 7074,
+    "sha256": "c128d054dc6e58221a43fb6f1b1f7f04646804d491f905fe79964bef9581b5fd"
+  },
+  "verification": {
+    "source_artifacts": 42,
+    "wit_versions": 2,
+    "interfaces": 13,
+    "resolved_types": 87,
+    "total_functions": 19,
+    "async_functions": 6,
+    "resource_methods": 4,
+    "copy_operations": 3,
+    "world_imports": 12,
+    "world_exports": 1,
+    "maximum_buffer_bytes": 16777216,
+    "maximum_transfer_bytes": 16777216,
+    "stable_errors": 6,
+    "mutation_canaries": 38,
+    "workspace_tests": 52,
+    "fuzz_executions": 640,
+    "browser_executions": 6,
+    "product_lines_covered": 4652,
+    "product_lines_total": 4652
+  }
+}

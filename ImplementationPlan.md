@@ -245,7 +245,7 @@ Dependencies: `G02`, enough of `G03` to expose the codec.
 - [x] **P04-003** Define host capability interfaces for files, directory operations, durability, locks, timers, randomness, scheduling, metrics, and secrets.
 - [x] **P04-004** Define coarse-grained asynchronous read, write, sync, rename, list, and delete operations suitable for storage batches.
 - [x] **P04-005** Define immutable buffer, mutable staging buffer, and opaque-handle lifecycles across the Wasm boundary.
-- [ ] **P04-006** Implement explicit-copy buffer transport as the correctness baseline.
+- [x] **P04-006** Implement explicit-copy buffer transport as the correctness baseline.
 - [ ] **P04-007** Prototype host-owned handle and shared-staging alternatives without making them required ABI features.
 - [ ] **P04-008** Define cancellation, deadline, backpressure, partial-I/O, and host-shutdown behavior.
 - [ ] **P04-009** Define deterministic injection of clocks, random IDs, memory budgets, and device profiles.
