@@ -39,6 +39,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Explicit-copy buffer transport ABI 5.0](architecture/explicit-copy-buffer-transport-v1.md) | Executable detached-read, contiguous-write, exact-copy, atomic-failure baseline |
 | [Buffer transport alternatives](architecture/buffer-transport-alternatives-v1.md) | Non-required generational-handle and exclusive shared-staging prototypes |
 | [Asynchronous completion ABI 6.0](architecture/async-completion-contract-v1.md) | Deadlines, cancellation, backpressure, partial-I/O, and shutdown result rules |
+| [Deterministic injection ABI 7.0](architecture/deterministic-injection-contract-v1.md) | Clock/random streams, memory budgets, and redacted device profiles |
 | [WGSL fixture validation](architecture/wgsl-fixture-validation.md) | Hash-bound trusted shaders, Dawn/SwiftShader parsing, validation, compilation, and security boundaries |
 | [Dependency security reporting](architecture/dependency-security-reporting.md) | Deterministic lock/license/duplicate inventory plus dated vulnerability, signature, and provenance observations |
 | [Rust product code coverage policy](quality/code-coverage-policy.md) | Compiler-matched LLVM reporting, explicit product/test classification, and workspace/critical thresholds |

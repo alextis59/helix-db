@@ -73,6 +73,10 @@ P04-008 preserves ABI 5.0 and adds
 [`helix:core-abi@6.0.0`](../../wit/helix-core-abi-v6/world.wit). The operation deadline field and
 required host lifecycle function are incompatible, so the current matrix accepts only ABI 6.0.
 
+P04-009 preserves ABI 6.0 and adds
+[`helix:core-abi@7.0.0`](../../wit/helix-core-abi-v7/world.wit). Clock/random operations and the
+pinned execution-profile shape are incompatible, so the current matrix accepts only ABI 7.0.
+
 ### Packages and releases
 
 Published crates, npm packages, SDKs, binaries, containers, operators, and managed APIs follow semantic versioning once their public contract is declared stable. Pre-1.0 artifacts still carry independent format/protocol versions and do not receive permission to reinterpret them silently.

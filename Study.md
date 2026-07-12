@@ -248,6 +248,21 @@ explicit mutation outcomes instead of pretending rollback. Admission-only backpr
 turning already admitted work into a new failure class. Numeric limits and actual execution remain
 separate so P04-009 and the host tasks can implement this contract without retrofitting semantics.
 
+P04-009 makes the remaining nondeterministic inputs explicit before any host exists. ABI 7.0 uses
+role-separated clock samples and purpose-separated random-byte requests with exact sequence
+consumption. This is stronger than a generic `now()`/`random()` import: fixtures can detect an
+extra read, reordered read, wrong purpose, wrong length, or replay-time regeneration. It also keeps
+UUIDv7/ObjectId entropy distinct from request IDs, nonces, and sampling while leaving actual
+identifier generation in its semantic owner.
+
+Memory pressure and device discovery become pinned values rather than ambient observations. A
+small portable ledger proves that scratch/result/total/allocation limits fail before state changes;
+a bounded redacted profile exposes only facts needed for deterministic backend eligibility. This
+prevents machine serials, driver paths, tenant content, or discovery timing from entering semantic
+decisions. The profile may select CPU versus an eligible GPU candidate only when both preserve the
+same result. Actual values and failures arrive from the mock/native/browser hosts in P04-010 onward,
+so this step establishes an executable oracle without claiming integration.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

@@ -1,0 +1,114 @@
+{
+  "schema": "helix.deterministic-injection-contract/1",
+  "plan_item": "P04-009",
+  "base": {
+    "package": "helix:core-abi@6.0.0",
+    "path": "wit/helix-core-abi-v6/world.wit",
+    "bytes": 10871,
+    "sha256": "fd9a2401ed4b3350ed8f24e128c96de8e313197e5acff82218256e95548b68d8",
+    "immutable": true
+  },
+  "current": {
+    "package": "helix:core-abi@7.0.0",
+    "path": "wit/helix-core-abi-v7/world.wit",
+    "bytes": 12413,
+    "sha256": "80b9e2de39338377aa8e71ca603ac75cbda801c3822ef948b5c0e86539dc79a0",
+    "world": "helix-core-v1",
+    "abi": { "major": 7, "minor": 0 },
+    "accepted": [{ "major": 7, "minor": 0 }]
+  },
+  "bounds": {
+    "maximum_clock_samples_per_operation": 1024,
+    "maximum_random_samples_per_operation": 1024,
+    "maximum_random_bytes_per_request": 65536,
+    "maximum_memory_budget_bytes": 4294967296,
+    "maximum_memory_allocations": 1048576,
+    "maximum_device_features": 64,
+    "maximum_input_name_bytes": 64,
+    "maximum_ordered_clock_token_bytes": 32
+  },
+  "clocks": {
+    "roles": ["wall-time-utc", "monotonic", "mvcc", "logical-expiry"],
+    "value_by_role": {
+      "wall-time-utc": "utc-microseconds",
+      "monotonic": "monotonic-tick",
+      "mvcc": "ordered-token",
+      "logical-expiry": "utc-microseconds"
+    },
+    "qualities": ["trusted", "degraded", "unsafe"],
+    "source_names_are_explicit": true,
+    "sequence_is_zero_based_contiguous": true,
+    "consumption_is_exact_and_ordered": true,
+    "mismatches_fail_without_consumption": true,
+    "statement_and_transaction_time_are_captured_once": true,
+    "replay_reuses_resolved_values": true,
+    "wall_monotonic_mvcc_and_expiry_are_not_interchangeable": true,
+    "unsafe_safety_clock_error": "CAP_CLOCK_UNSAFE"
+  },
+  "randomness": {
+    "purposes": ["request-id", "transaction-id", "uuid-v7", "object-id", "nonce", "sampling"],
+    "sequence_is_zero_based_contiguous": true,
+    "consumption_is_exact_purpose_order_and_length": true,
+    "mismatches_fail_without_consumption": true,
+    "cryptographic_source_required_in_production": true,
+    "weak_fallback_forbidden": true,
+    "generated_ids_resolve_once_before_canonical_command_publication": true,
+    "replay_retry_replication_restore_never_regenerate_ids": true,
+    "unavailable_error": "CAP_HOST_UNAVAILABLE"
+  },
+  "memory": {
+    "profile_is_pinned_before_admission": true,
+    "classes": ["scratch", "result"],
+    "class_limits_do_not_exceed_total": true,
+    "reservations_are_fail_before_mutation": true,
+    "failed_reservation_does_not_change_usage": true,
+    "release_requires_exact_live_accounting": true,
+    "exhaustion_error": "QUOTA_MEMORY",
+    "backpressure_is_admission_only": true
+  },
+  "device": {
+    "classes": ["cpu-only", "cpu-and-gpu"],
+    "profile_is_pinned_before_semantic_execution": true,
+    "profile_and_architecture_names_are_bounded": true,
+    "features_are_sorted_unique_and_bounded": true,
+    "host_unique_identifiers_forbidden": true,
+    "document_or_tenant_content_forbidden": true,
+    "may_change_backend_eligibility_only": true,
+    "may_not_change_semantic_results": true,
+    "fallback_decision_is_deterministic_from_profile_and_policy": true
+  },
+  "reference_model": {
+    "path": "crates/helix-core/src/deterministic_inputs.rs",
+    "ambient_discovery_present": false,
+    "clock_and_random_queues_executable": true,
+    "memory_ledger_executable": true,
+    "device_profile_validation_executable": true
+  },
+  "versioning": {
+    "change": "incompatible-clock-random-operations-and-execution-profile-shape",
+    "same_patch_rewrite_forbidden": true,
+    "package_semver_alone_is_not_compatibility": true,
+    "implicit_6_0_acceptance": false,
+    "unsupported_result": "CAP_UNSUPPORTED_VERSION"
+  },
+  "deferred": {
+    "mock_host_execution": "P04-010",
+    "native_host_execution": "P04-011",
+    "browser_host_execution": "P04-012",
+    "shared_host_conformance": "P04-013",
+    "capability_denial_proof": "P04-014",
+    "transport_benchmarks": "P04-016",
+    "transport_selection": "P04-017"
+  },
+  "claim_boundary": {
+    "deterministic_value_operations_defined": true,
+    "numeric_memory_budgets_defined": true,
+    "portable_reference_model_present": true,
+    "operation_bindings_present": false,
+    "host_implementations_present": false,
+    "gpu_execution_present": false,
+    "identifier_generation_implemented": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-010"
+  }
+}

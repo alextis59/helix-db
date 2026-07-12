@@ -152,7 +152,7 @@ const run = () => {
       scannedFiles += 1;
     }
   }
-  assert(scannedFiles === 13, `deterministic Rust source inventory: ${scannedFiles}`);
+  assert(scannedFiles === 14, `deterministic Rust source inventory: ${scannedFiles}`);
   const coreModule = readFileSync(path.join(repository, policy.core_module), 'utf8');
   assert(
     coreModule.includes('pub const INTERNAL_DEPENDENCIES'),

@@ -3,7 +3,7 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-12
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-017`, `P03-020`–`P03-021`, and `P04-001`–`P04-008`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-017`, `P03-020`–`P03-021`, and `P04-001`–`P04-009`
 - Governing gate: `G02`
 - Accepted gate evidence: [`G02` hosted toolchain review](../../evidence/phase-02/G02/README.md)
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
@@ -26,7 +26,7 @@ Runner labels are explicit rather than mutable `*-latest` aliases. The selected 
 | --- | --- | --- |
 | Node | 22.23.1 and 24.18.0 on `ubuntu-24.04` x64 | Clean script-suppressed install; formatting/dependency/types; deterministic dependency/license/duplicate inventory and fixtures; aggregate tests; Node 22 additionally records the live advisory/signature/provenance observation |
 | Native Rust | `ubuntu-24.04` x64, `windows-2025` x64, `macos-15` arm64 | Exact Rust toolchain; format, check, Clippy, all-feature tests, and locked/offline native boundary-example execution; docs and compiler-matched source-based coverage thresholds additionally on Linux x64 |
-| Portable Rust | `wasm32-unknown-unknown`, `wasm32-wasip2` on Linux x64 | Strict Clippy plus real core-module/component builds; the component lane checks immutable ABIs 1.0–5.0 and current completion ABI 6.0 with their canaries, then validates/classifies the still-unbound WASIp2 artifact |
+| Portable Rust | `wasm32-unknown-unknown`, `wasm32-wasip2` on Linux x64 | Strict Clippy plus real core-module/component builds; the component lane checks immutable ABIs 1.0–6.0 and current deterministic-injection ABI 7.0 with their canaries, then validates/classifies the still-unbound WASIp2 artifact |
 | Sanitizer | `x86_64-unknown-linux-gnuasan` on Linux x64 | Stable fully instrumented standard-library build profile; no non-Linux sanitizer claim |
 | Browser boundary example | Chromium, Firefox, WebKit on Linux x64 | Install only the Playwright-coupled engine/dependencies; all three build and execute the byte-identical core Wasm example with explicit non-database output; Chromium additionally validates and compiles hash-bound internal WGSL through Dawn/SwiftShader |
 
@@ -104,7 +104,7 @@ error, cancellation, capability, negotiation, and claim mutations. This defines 
 does not conceal that the compiled component remains empty until later binding/host tasks.
 
 P04-002 adds the deterministic-core checker and 30 rejection canaries to both Node policy lanes. It
-validates the live Cargo closure, scans 13 deterministic Rust files for ambient APIs, and builds
+validates the live Cargo closure, scans 14 deterministic Rust files for ambient APIs, and builds
 the real browser module to require zero imports. `wasm:validate` replays the same boundary before
 the ABI and artifact checks.
 
@@ -121,6 +121,9 @@ rechecking that required ABI 5.0 is byte-identical.
 
 P04-008 adds exact ABI 6.0 deadline/lifecycle parsing plus 43 completion-policy, resolution, and WIT
 rejection canaries.
+
+P04-009 adds exact ABI 7.0 clock/random/profile parsing, an executable deterministic input and
+memory-accounting model, and 64 policy/resolution/WIT/Rust rejection canaries.
 
 ## Workflow security and reproducibility
 

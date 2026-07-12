@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 workspace = true
 
 [package.metadata.helix]
-status = "async-completion-contract-v1"
+status = "deterministic-injection-contract-v1"
 database-functionality = false
 
 [dependencies]

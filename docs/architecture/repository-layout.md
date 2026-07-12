@@ -3,7 +3,7 @@
 - Status: Accepted layout baseline; most implementation areas remain empty
 - Last updated: 2026-07-12
 - Owner: Runtime architecture owner
-- Plan items: `P02-004`; examples activated by `P02-016`; WIT authority revised through `P04-008`
+- Plan items: `P02-004`; examples activated by `P02-016`; WIT authority revised through `P04-009`
 - Governing gate: `G02`
 - Design source: [Study section 24](../../Study.md#24-suggested-initial-repository-architecture)
 - Ownership source: [Ownership and review boundaries](../governance/ownership.md)
@@ -17,7 +17,7 @@ This document establishes stable, reviewable locations for source code, conforma
 | [`crates/`](../../crates/README.md) | Rust workspace source | Eight boundary crates from `P02-001` | Compilable boundary skeletons |
 | [`shaders/`](../../shaders/README.md) | Internal WGSL source and shader fixtures | `predicates/`, `bitmaps/`, `vectors/`, `fixtures/` | Compile-only validation fixtures; no product kernels |
 | [`packages/`](../../packages/README.md) | Private npm workspace packages | `sdk-typescript/`, `browser-host/` | Reserved directories; not npm packages yet |
-| [`wit/`](../../wit/README.md) | Versioned WebAssembly Interface Type packages | `helix-core-abi-v1/` through `helix-core-abi-v6/` | Immutable ABI 1.0–5.0 plus current completion ABI 6.0; transport alternatives remain internal and bindings/hosts absent |
+| [`wit/`](../../wit/README.md) | Versioned WebAssembly Interface Type packages | `helix-core-abi-v1/` through `helix-core-abi-v7/` | Immutable ABI 1.0–6.0 plus current deterministic-injection ABI 7.0; bindings/hosts remain absent |
 | [`conformance/`](../../conformance/README.md) | Cross-backend suite definitions and fixture bindings | `semantics/`, `formats/`, `host/`, `compatibility/` | Semantic corpus binding only |
 | [`benchmarks/`](../../benchmarks/README.md) | Reproducible datasets, workloads, schemas, runners, and report indexes | `datasets/`, `workloads/`, `schema/`, `cpu-columnar/`, `webgpu/`, `reports/` | One integrity-only harness calibration; no database performance claim |
 | [`tests/`](../../tests/README.md) | Toolchain and cross-crate/system tests | `toolchain/`, `integration/`, `fuzz/`, `crash/`, `differential/`, `browser/`, `distributed/` | Toolchain/unit/conformance commands plus explicit reserved system-test contracts |

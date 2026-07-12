@@ -397,6 +397,31 @@ and zero progress is `IO_NO_PROGRESS`. Errors return no success payload and retr
 idempotency key. Draining rejects new work but lets admitted work run until its shutdown deadline;
 stopped rejects all work. P04-008 defines no numeric budgets, bindings, hosts, or database behavior.
 
+P04-009 preserves ABI 6.0 and defines exact `helix:core-abi@7.0.0`. Clock input is separated into
+wall UTC microseconds, named monotonic ticks, bounded ordered MVCC tokens, and logical-expiry UTC
+microseconds. Every input carries an explicit source, quality, and zero-based sequence; consumption
+is exact and ordered, and a mismatch or exhaustion cannot consume the next value. Wall,
+monotonic, MVCC, and expiry roles are never interchangeable. Unsafe safety clocks fail with
+`CAP_CLOCK_UNSAFE`; replay reuses captured/resolved values rather than reading a receiver clock.
+
+Random input is purpose-separated for request IDs, transaction IDs, UUIDv7, ObjectId, nonces, and
+sampling. Production sources are cryptographic with no weak fallback. Generated identifiers
+consume their named clock/random input once before canonical command publication, after which
+retry, replay, replication, and restore reuse the resolved identifier. Identifier generation itself
+remains outside this step.
+
+Each operation pins a memory/device execution profile before admission. Total memory is bounded to
+4 GiB, scratch/result classes cannot exceed total, and the allocation-record limit is 1,048,576.
+All limits are validated before accounting changes, failed reservations return `QUOTA_MEMORY`
+without changing usage, and backpressure remains admission-only. Device profiles expose only a
+bounded policy name, coarse architecture/core count, CPU-only or CPU-and-GPU class, sorted feature
+names, and buffer maximum. Host-unique identifiers and document/tenant content are forbidden;
+profiles may affect backend eligibility but never semantic results.
+
+The safe Rust reference model executes exact clock/random queues, failure-atomic memory accounting,
+and redacted profile validation without ambient discovery. P04-009 defines no component operation
+bindings, host implementation, GPU execution, identifier generator, or database behavior.
+
 ### 6.2 `helix-host`
 
 Native host process.

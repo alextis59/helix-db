@@ -11,7 +11,7 @@
 
 This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
 unpublished at version `0.0.0`. The workspace carries machine-readable
-`async-completion-contract-v1` /
+`deterministic-injection-contract-v1` /
 `database-functionality = true` metadata now that `P03-008`–`P03-021` have implemented
 deterministic encoding, whole-envelope validation, borrowed/owned logical values, exact-name/path
 lookup, canonical lossless tagged JSON rendering with strict detached import, and canonical
@@ -20,7 +20,8 @@ resolution, recovery, immutable version pins, exact-1.0 closed-world negotiation
 migration assessment, immutable HDoc 1.0 golden-vector production/checking, pinned fuzz/browser
 replay, representative source-bound codec/lookup/size measurements, and the accepted
 self-contained-format/derived-only-dictionary experiment boundary. `helix-core` now carries the
-`async-completion-contract-v1` composition, required explicit copy, non-ABI alternatives, and completion semantics and still reports
+`deterministic-injection-contract-v1` composition, required explicit copy, non-ABI alternatives,
+completion semantics, and executable deterministic input/budget validation and still reports
 `database-functionality = false`; the other six
 crates remain `boundary-skeleton` components. Public names and package coordinates remain blocked by
 `P16-016`.
