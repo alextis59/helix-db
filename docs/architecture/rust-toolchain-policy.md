@@ -41,6 +41,22 @@ Rustdoc is shipped with `rustc`; repository documentation builds use `cargo doc`
 
 `rust-analyzer`, Miri, generic nightly sanitizer runtimes, dependency-policy tools, and external documentation generators are not P02-002 requirements. `P02-005` adds the stable Linux ASan standard-library target described below. `P02-013` selects only the `llvm-tools` binaries shipped for this exact toolchain and binds their versions/hashes in the [coverage report](../quality/code-coverage-policy.md); it does not add a floating Cargo plugin or ambient LLVM.
 
+P03-019 adds one narrow, non-product nightly exception solely for libFuzzer instrumentation. The
+machine authority is [`tests/fuzz/toolchain.json`](../../tests/fuzz/toolchain.json):
+
+```text
+nightly-2026-06-30
+rustc 1.98.0-nightly (096694416 2026-06-29)
+cargo-fuzz 0.13.2
+libfuzzer-sys 0.4.13
+```
+
+The dated nightly never builds release/product artifacts and does not change the workspace MSRV or
+stable compiler. `cargo fuzz` uses it only inside the excluded `fuzz/` workspace with a separate
+locked dependency graph. The stable test command performs no installation/network access; CI and
+local setup install the exact identities explicitly, fetch the locked graph, then switch back to
+offline execution. Floating `nightly`, ambient cargo-fuzz binaries, and version ranges are rejected.
+
 ## Formatter baseline
 
 [`rustfmt.toml`](../../rustfmt.toml) pins only stable options:
@@ -95,7 +111,7 @@ helix-core
 
 The toolchain also installs `x86_64-unknown-linux-gnuasan` for the bounded Linux AddressSanitizer lane. The [official target documentation](https://doc.rust-lang.org/nightly/rustc/platform-support/x86_64-unknown-linux-gnuasan.html) classifies it as Tier 2, describes a fully ASan-instrumented standard library distributed through rustup, and states that produced binaries run on Linux without external requirements.
 
-This target is diagnostic, not a supported deployment platform. It avoids an unpinned nightly and unstable `-Zbuild-std` path for the initial x86_64 Linux lane. The [P02-009 CI matrix](continuous-integration.md) now runs it only on Linux x64 and records native x64/arm64 coverage separately. ThreadSanitizer, MemorySanitizer, Windows/macOS sanitizers, and mixed-language instrumentation remain unsupported; absence of those lanes is never represented as a sanitizer pass.
+This target is diagnostic, not a supported deployment platform. It avoids an unpinned nightly and unstable `-Zbuild-std` path for the initial x86_64 Linux lane. The [P02-009 CI matrix](continuous-integration.md) now runs it only on Linux x64 and records native x64/arm64 coverage separately. P03-019 additionally executes libFuzzer's AddressSanitizer-instrumented Linux binaries through the exact nightly exception above. ThreadSanitizer, MemorySanitizer, Windows/macOS sanitizers, and mixed-language instrumentation remain unsupported; absence of those lanes is never represented as a sanitizer pass.
 
 The exact profile and invocation are defined in [Build Profiles](build-profiles.md). Updating or removing this target follows the same exact-toolchain and clean-replay rules as the Wasm targets.
 

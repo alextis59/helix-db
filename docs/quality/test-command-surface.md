@@ -3,7 +3,7 @@
 - Status: Accepted bootstrap command contract; feature suites remain maturity-labeled
 - Last updated: 2026-07-11
 - Owner: Quality and release owner
-- Plan item: `P02-007`; benchmark activation completed by `P02-014`; browser boundary activation completed by `P02-016`; integration activation completed by `P03-017`
+- Plan item: `P02-007`; benchmark activation completed by `P02-014`; browser boundary activation completed by `P02-016`; integration activation completed by `P03-017`; fuzz activation completed by `P03-019`
 - Governing gate: `G02`
 - Machine authority: [`helix.test-command-surface/1`](../../tests/suites.json)
 - Runner: [`tests/run-suite.mjs`](../../tests/run-suite.mjs)
@@ -21,8 +21,8 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 | `npm run test:unit` | Active | Runs 49 all-feature Rust library tests and inventories 0 JavaScript unit files; five deterministic P03-018 property/mutation tests cover 512-seed codec and tagged-JSON properties, 256 presentation permutations, every positive-fixture prefix, sampled stored-byte damage, and 2,656 checksum-repaired one-bit mutations | Counts change with reviewed implementation tests |
 | `npm run test:integration` | Active | Runs one five-case Vitest file: fixed inventory plus complete logical-value and independently recomputed typed-hash parity across all four immutable HDoc 1.0 positive vectors | Later cross-crate, language, and process boundaries extend the same command |
 | `npm run test:conformance` | Active | Replays semantic examples, canonical bytes, the 17-fixture/319-step corpus, 382 oracle assertions, the 265-row compatibility matrix, and offline MongoDB artifacts | Later format, host, engine, and adapter bindings extend the same command |
-| `npm run test:fuzz` | Reserved | Requires only the fuzz contract README; no property test is relabeled as fuzzing | First coverage-guided codec targets under `P03-019` |
-| `npm run test:browser` | Active | Rebuilds and validates the non-database browser example, then lists exactly one case expanded across Chromium, Firefox, and WebKit (3 tests in 1 file) without downloading or launching browsers | `P11-014` expands the same suite to product lifecycle/capability/storage behavior |
+| `npm run test:fuzz` | Active | Runs five pinned libFuzzer targets for decode, encode/decode invariants, path lookup, tagged render/import, and migration; the bounded gate executes 128 coverage-guided units each (640 total) from 57 assembled seeds | Longer campaigns and newly retained regression inputs extend the same targets |
+| `npm run test:browser` | Active | Rebuilds and validates the non-database browser example, then lists two cases expanded across Chromium, Firefox, and WebKit (6 tests in 2 files): bundle instantiation plus bounded replay of all 24 immutable HDoc fuzz seeds through a real-browser CRC/directory probe | `P11-014` expands the same suite to product lifecycle/capability/storage behavior |
 | `npm run test:crash` | Reserved | Requires only the crash-history contract README | Storage crash/reopen histories under `P05-021` |
 | `npm run test:benchmark` | Active | Compiles all eight crates through the fixed benchmark profile, requires 0 Cargo benchmark targets, then records and validates one 5-warm-up/20-measurement integrity-only baseline | Product workloads extend the versioned result contract without changing its claim boundary retroactively |
 | `npm run test:distributed` | Reserved | Requires only the distributed-history contract README | Deterministic replication simulations under `P17-016` |
@@ -40,6 +40,14 @@ fixed frozen/offline argument vector. The Rust oracle uses the production valida
 lossless tagged renderer. The TypeScript reader independently validates the envelope CRC, expands
 profile-1 LZ4 blocks, reconstructs every type/container, and recomputes the complete typed BLAKE3
 tree; it does not treat the manifest or footer digest as its expected answer.
+
+The active fuzz command requires exact `cargo-fuzz 0.13.2`, `libfuzzer-sys 0.4.13`, and
+`nightly-2026-06-30` identities. It never installs tools or accesses the network: local setup and CI
+perform that explicit mutable step first, then the common runner uses only the locked fuzz graph.
+Each smoke works in ignored target directories, binds the 24 immutable HDoc files plus committed
+entry-point seeds, requires libFuzzer coverage/final-stat markers, and fails on crashes, sanitizer
+findings, timeouts, missing corpora, or tool drift. Fixed run/input/time/RSS bounds keep the root
+suite deterministic in duration without relabeling P03-018 property loops as fuzzing.
 
 The [`P02-013` product coverage command](code-coverage-policy.md) is a quality gate over the same Rust library tests, not a ninth feature-suite alias. It recompiles with exact instrumentation, excludes test-only source ranges from the denominator, and enforces product/critical thresholds. `test:unit` remains the stable behavior command; `coverage:check` remains the bounded reporting command.
 
@@ -65,4 +73,8 @@ An active suite may not use an empty-suite option unless the empty component is 
 
 ## Claim boundary
 
-This command surface proves stable orchestration, exact bootstrap inventories, and the executable authorities named above. It does not prove integration behavior, browser support, fuzz coverage, crash safety, benchmark performance, distributed correctness, production readiness, or `G02` closure. Those claims remain blocked on their named implementation tasks and retained evidence.
+This command surface proves stable orchestration, exact inventories, cross-language golden parity,
+and bounded coverage-guided HDoc fuzz execution. It does not prove exhaustive fuzz coverage,
+browser product support, crash safety, benchmark performance, distributed correctness, production
+readiness, or `G02` closure. Those claims remain blocked on their named implementation tasks and
+retained evidence.

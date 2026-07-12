@@ -1,0 +1,47 @@
+[package]
+name = "helix-db-fuzz"
+version = "0.0.0"
+edition = "2024"
+publish = false
+
+[package.metadata]
+cargo-fuzz = true
+
+[dependencies]
+helix-doc = { path = "../crates/helix-doc" }
+libfuzzer-sys = "=0.4.13"
+
+[[bin]]
+name = "hdoc_decode"
+path = "fuzz_targets/hdoc_decode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "hdoc_encode"
+path = "fuzz_targets/hdoc_encode.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "hdoc_path_lookup"
+path = "fuzz_targets/hdoc_path_lookup.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "hdoc_tagged_render"
+path = "fuzz_targets/hdoc_tagged_render.rs"
+test = false
+doc = false
+bench = false
+
+[[bin]]
+name = "hdoc_migration"
+path = "fuzz_targets/hdoc_migration.rs"
+test = false
+doc = false
+bench = false

@@ -354,7 +354,11 @@ complete logical reconstruction, and recursive BLAKE3 calculation agree with pro
 all four positive files. P03-018 adds deterministic generated properties across both stored
 profiles and tagged conversion, presentation-permutation hash invariance, every positive-fixture
 truncation, trailing and sampled byte damage, plus every checksum-repaired single-bit mutation of
-the minimal envelope. `P03-019` still owns coverage-guided fuzzing and sanitizer/browser replay.
+the minimal envelope. P03-019 supplies five real libFuzzer targets using an exact dated nightly and locked fuzz
+dependency graph. Bounded local/CI campaigns execute 640 coverage-guided units across decode,
+encode, lookup, tagged conversion, and migration with AddressSanitizer enabled, while all 24
+immutable HDoc seeds replay in Chromium, Firefox, and WebKit through a bounded envelope probe.
+Long-running campaigns may grow retained regression corpora without changing the stable targets.
 
 ### 6.3 Field-path dictionaries
 

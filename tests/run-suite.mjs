@@ -21,6 +21,7 @@ const allowedSteps = new Set([
   'rust-unit',
   'rust-integration-inventory',
   'hdoc-cross-language',
+  'hdoc-coverage-guided-fuzz',
   'javascript-unit-inventory',
   'semantic-conformance',
   'browser-example-build',
@@ -223,6 +224,17 @@ const executeHDocCrossLanguage = (suite) => {
   );
 };
 
+const executeHDocCoverageGuidedFuzz = (suite) => {
+  const output = run(process.execPath, ['tests/toolchain/check-hdoc-fuzz.mjs', 'smoke']);
+  requireText(
+    output,
+    `PASS HDoc coverage-guided fuzz smoke: ${suite.expectations.fuzz_targets} targets, ${suite.expectations.bounded_executions} executions, no crashes`,
+    'HDoc coverage-guided fuzz smoke',
+  );
+  requireText(output, '"hdoc_decode":24', 'HDoc decoder fuzz seeds');
+  requireText(output, '"hdoc_migration":26', 'HDoc migration fuzz seeds');
+};
+
 const executeSemanticConformance = (suite) => {
   const examples = run(process.execPath, ['fixtures/semantic/schema/check-semantic-examples.mjs']);
   requireText(
@@ -371,6 +383,7 @@ const stepExecutors = {
   'rust-unit': executeRustUnit,
   'rust-integration-inventory': executeRustIntegrationInventory,
   'hdoc-cross-language': executeHDocCrossLanguage,
+  'hdoc-coverage-guided-fuzz': executeHDocCoverageGuidedFuzz,
   'javascript-unit-inventory': executeJavaScriptUnitInventory,
   'semantic-conformance': executeSemanticConformance,
   'browser-example-build': executeBrowserExampleBuild,

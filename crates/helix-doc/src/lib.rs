@@ -43,7 +43,7 @@ pub use tagged_json::{
 pub const COMPONENT_NAME: &str = "helix-doc";
 
 /// Current implementation maturity.
-pub const MATURITY: &str = "hdoc-properties-v1";
+pub const MATURITY: &str = "hdoc-fuzz-v1";
 
 /// Internal `HelixDB` crates this portable leaf is allowed to depend on.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[];
@@ -7575,7 +7575,7 @@ mod tests {
     #[test]
     fn metadata_error_codes_and_internal_guards_are_stable() -> Result<(), EncodeError> {
         assert_eq!(COMPONENT_NAME, "helix-doc");
-        assert_eq!(MATURITY, "hdoc-properties-v1");
+        assert_eq!(MATURITY, "hdoc-fuzz-v1");
         assert!(INTERNAL_DEPENDENCIES.is_empty());
         assert_eq!(CompressionMode::default(), CompressionMode::Canonical);
         assert_eq!(

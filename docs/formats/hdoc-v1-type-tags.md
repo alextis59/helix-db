@@ -340,7 +340,7 @@ this registry could be superseded without stored-data migration; after fixtures/
 | [`P03-006`](hdoc-v1-integrity.md) | Typed-hash framing including tag and payload | Tag identity or unknown-tag rule |
 | `P03-008`–`P03-012` (complete) | Encoder, decoder, owned/borrowed values, raw lookup, and tagged conversion | Closed-world registry semantics |
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; no extension tags registered | Existing assignments or no-reuse rule |
-| [`P03-016`](../../fixtures/hdoc/v1/README.md), `P03-017`, and `P03-018` complete; `P03-019` remains | Immutable vectors, independent readers, and broader deterministic malformed/properties complete; fuzzing remains | Historical registry bytes/expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md) through `P03-019` complete | Immutable vectors, independent readers, deterministic malformed/properties, and coverage-guided fuzz/browser replay complete | Historical registry bytes/expectations |
 
 ## Required validation cases
 

@@ -25,5 +25,6 @@ suite requires it to validate CRC-32C, expand the bounded LZ4 stream, reconstruc
 lossless logical tree, and recompute the recursive BLAKE3-256 identity independently; those values
 must equal the production Rust reader's output. `P03-018` now replays every prefix, trailing-byte
 case, sampled stored-byte corruption, and the minimal envelope's 2,656 checksum-repaired one-bit
-mutations, alongside 512-seed generated round-trip/canonicalization properties. `P03-019` adds
-coverage-guided fuzzing; neither task may rewrite v1 files.
+mutations, alongside 512-seed generated round-trip/canonicalization properties. `P03-019` feeds all
+24 immutable files into pinned decoder and migration libFuzzer targets and replays them through all
+three real browser engines; fuzzing may retain new regression inputs but never rewrite v1 files.

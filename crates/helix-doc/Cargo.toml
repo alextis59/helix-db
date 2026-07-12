@@ -12,7 +12,7 @@ publish.workspace = true
 workspace = true
 
 [package.metadata.helix]
-status = "hdoc-properties-v1"
+status = "hdoc-fuzz-v1"
 database-functionality = true
 
 [dependencies]

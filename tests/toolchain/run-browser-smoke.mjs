@@ -204,7 +204,7 @@ process.stdout.write(
   `REPORT ${path.relative(repository, reportPath)} ${sha256(readFileSync(reportPath))}\n`,
 );
 
-const expected = selected === 'all' ? 3 : 1;
+const expected = selected === 'all' ? 6 : 2;
 assert(result.status === 0, `Playwright exited ${result.status ?? `by signal ${result.signal}`}`);
 assert(
   report.stats.expected === expected,

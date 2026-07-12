@@ -146,6 +146,7 @@
             "examples/browser-toolchain/report.ts",
             "playwright.config.ts",
             "tests/browser/bundle-smoke.spec.ts",
+            "tests/browser/hdoc-fuzz-replay.spec.ts",
             "tests/toolchain/dependency-report-policy.json"
           ],
           "required_generated": [

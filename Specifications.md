@@ -614,7 +614,10 @@ recomputed typed hashes for all positive fixtures. P03-018 adds deterministic 51
 tagged-JSON properties, presentation-order canonicalization permutations, complete truncation and
 trailing-byte checks over every positive fixture, sampled stored-byte corruption, and exhaustive
 checksum-repaired single-bit mutations over the minimal supported envelope; formal lookup
-measurements remain `P03-020`.
+measurements remain `P03-020`. P03-019 adds pinned coverage-guided libFuzzer targets for decode,
+encode/decode invariants, path lookup, tagged render/import, and migration. Its bounded gate uses
+all immutable HDoc files plus committed entry-point seeds, executes under libFuzzer AddressSanitizer,
+and replays the immutable seed set through Chromium, Firefox, and WebKit envelope probes.
 
 ### 7.4 Field path dictionary
 
@@ -2541,7 +2544,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), [path-dictionary format/lifecycle](docs/formats/path-dictionary-v1.md), [closed-world compatibility/migration assessment](docs/formats/hdoc-v1-compatibility.md), [immutable golden vectors](fixtures/hdoc/v1/README.md), Rust/TypeScript cross-reader parity, and deterministic property/mutation hardening implemented by `P03-008`–`P03-018`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), [path-dictionary format/lifecycle](docs/formats/path-dictionary-v1.md), [closed-world compatibility/migration assessment](docs/formats/hdoc-v1-compatibility.md), [immutable golden vectors](fixtures/hdoc/v1/README.md), Rust/TypeScript cross-reader parity, deterministic property/mutation hardening, and coverage-guided fuzz/browser replay implemented by `P03-008`–`P03-019`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

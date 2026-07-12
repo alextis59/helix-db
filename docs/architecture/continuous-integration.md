@@ -82,6 +82,12 @@ stored-byte damage, checksum-repaired single-bit mutation, and tagged-JSON canon
 the Linux lane additionally retains threshold-enforced coverage and ASan compilation remains
 gating.
 
+P03-019 activates the stable fuzz suite on both exact Node lanes. Setup installs exact
+`nightly-2026-06-30` and `cargo-fuzz 0.13.2`, fetches the separate locked fuzz graph, validates 12
+tool/authority rejection canaries, then returns to offline execution. Five libFuzzer/AddressSanitizer
+targets execute 640 bounded units per aggregate run. The three browser jobs also replay all 24
+immutable HDoc seeds through a bounds-checked CRC/directory probe in Chromium, Firefox, and WebKit.
+
 ## Workflow security and reproducibility
 
 - Workflow permissions are `contents: read`; no job receives write, package, deployment, OIDC, or artifact-attestation permission.

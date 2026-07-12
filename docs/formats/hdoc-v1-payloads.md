@@ -596,7 +596,7 @@ boundary. Therefore:
 | `P03-011` (complete) | Exact-name and dotted-path borrowed lookup | Payload identity and Missing/null distinction |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Exact tagged rendering/import payload conversion | Exact bits, widths, decimal tuples, identifiers, and vector family |
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; no subtype extensions registered | Existing subtype/encoding assignments |
-| [`P03-016`](../../fixtures/hdoc/v1/README.md), `P03-017`, and `P03-018` complete; `P03-019` remains | Complete golden HDocs, independent readers, and malformed/property suites complete; fuzz remains | Payload vectors and rejection expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md) through `P03-019` complete | Complete golden HDocs, independent readers, malformed/property suites, and coverage-guided fuzz/browser replay complete | Payload vectors and rejection expectations |
 
 ## Required validation cases
 

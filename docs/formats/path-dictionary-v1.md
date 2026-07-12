@@ -214,7 +214,8 @@ The implementation tests deterministic empty/nonempty snapshots, multi-entry ver
 access, checksum/hash separation, every validation stage, invalid paths/IDs/version gaps,
 path/snapshot limits, and successor identity/version/prefix/backdating failures. P03-016 now freezes
 immutable HDoc golden bytes, `P03-017` owns an independent reader, `P03-018` adds deterministic
-property/mutation and malformed-corpus expansion, and `P03-019` owns coverage-guided fuzzing.
+property/mutation and malformed-corpus expansion, and `P03-019` adds coverage-guided decoder,
+lookup, conversion, and migration fuzzing over exact dictionary/HDoc boundaries.
 
 Lifecycle tests additionally prove request-order/duplicate registration, automatic and explicit
 `_id`, unchanged state before publish, stale-writer conflict, invalid-path rollback, exact no-op

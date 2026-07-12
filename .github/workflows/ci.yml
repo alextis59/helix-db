@@ -99,6 +99,15 @@ jobs:
         run: |
           corepack npm run fixtures:check
           corepack npm run wgsl:check
+      - name: Install the exact coverage-guided fuzz toolchain
+        env:
+          CARGO_NET_OFFLINE: "false"
+        run: |
+          rustup toolchain install nightly-2026-06-30 --profile minimal
+          cargo install cargo-fuzz --locked --version 0.13.2
+          cargo +nightly-2026-06-30 fetch --locked --manifest-path fuzz/Cargo.toml
+          corepack npm run fuzz:policy
+          corepack npm run fuzz:test
       - name: Run aggregate tests
         run: corepack npm test
       - name: Collect immutable HDoc golden formats

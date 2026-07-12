@@ -501,7 +501,7 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   overlap, truncation, padding, compression-bomb, and limit golden vectors under `P03-016`.
 - [x] Prove Rust and TypeScript readers produce identical logical values and hashes under
   `P03-017`.
-- [ ] Run property/mutation tests, coverage-guided fuzzing, ASan, and Wasm/browser replay under
+- [x] Run property/mutation tests, coverage-guided fuzzing, ASan, and Wasm/browser replay under
   `P03-018` and `P03-019`.
 - [ ] Publish raw encode/decode/lookup/size/alignment/compression results for `EXP-001` and
   `EXP-002` under `P03-020`/`P03-021`.
@@ -551,8 +551,9 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 - [x] `P03-017`: prove independent TypeScript and production Rust golden-reader parity.
 - [x] `P03-018`: complete deterministic round-trip, canonicalization, malformed-input, property,
   and checksum-repaired mutation evidence.
-- [ ] `P03-019`–`P03-021`: complete fuzz/corruption evidence and experiment conclusions before
-  `G03`.
+- [x] `P03-019`: add pinned coverage-guided encoder/decoder/lookup/render/migration fuzzing,
+  AddressSanitizer execution, and real-browser immutable-seed replay.
+- [ ] `P03-020`–`P03-021`: complete experiments and conclusions before `G03`.
 
 ## References
 

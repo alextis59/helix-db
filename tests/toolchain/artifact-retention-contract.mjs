@@ -308,6 +308,7 @@ const expectedProducers = {
       'examples/browser-toolchain/report.ts',
       'playwright.config.ts',
       'tests/browser/bundle-smoke.spec.ts',
+      'tests/browser/hdoc-fuzz-replay.spec.ts',
       'tests/toolchain/dependency-report-policy.json',
     ],
     required_generated: [
@@ -850,7 +851,12 @@ export const validateBrowserExecutionReport = (
       ],
       `browser test ${index}`,
     );
-    assert(test.file === 'tests/browser/bundle-smoke.spec.ts', `browser test ${index}: file`);
+    assert(
+      ['tests/browser/bundle-smoke.spec.ts', 'tests/browser/hdoc-fuzz-replay.spec.ts'].includes(
+        test.file,
+      ),
+      `browser test ${index}: file`,
+    );
     safeInteger(test.line, 1, 1000000, `browser test ${index} line`);
     safeInteger(test.column, 1, 1000000, `browser test ${index} column`);
     shortString(test.title, `browser test ${index} title`, 500);

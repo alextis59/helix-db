@@ -159,11 +159,12 @@ field-path dictionary snapshots plus successor/non-reuse validation, and `P03-01
 registration/resolution/recovery with immutable version pins, `P03-015` added exact-1.0
 closed-world negotiation/no-rewrite migration assessment, `P03-016` froze executable immutable
 golden vectors, `P03-017` added cross-language reader parity, and `P03-018` added deterministic
-round-trip/canonicalization/malformed/property/mutation suites. The active workspace
+round-trip/canonicalization/malformed/property/mutation suites, and `P03-019` added five pinned
+coverage-guided libFuzzer targets plus browser seed replay. The active workspace
 metadata is now:
 
 ```text
-status = "hdoc-properties-v1"
+status = "hdoc-fuzz-v1"
 database-functionality = true
 ```
 

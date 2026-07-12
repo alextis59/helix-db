@@ -65,14 +65,16 @@
     {
       "id": "fuzz",
       "npm_script": "test:fuzz",
-      "state": "reserved",
+      "state": "active",
       "root": "tests/fuzz",
       "description": "Coverage-guided fuzz targets and bounded local smoke invocations.",
-      "activation_tasks": ["P03-019"],
-      "allowed_files": ["README.md"],
-      "steps": [],
+      "activation_tasks": [],
+      "allowed_files": [],
+      "steps": ["hdoc-coverage-guided-fuzz"],
       "expectations": {
-        "fuzz_targets": 0
+        "bounded_executions": 640,
+        "fuzz_targets": 5,
+        "seed_files": 57
       }
     },
     {
@@ -85,8 +87,8 @@
       "allowed_files": [],
       "steps": ["browser-example-build", "browser-harness-inventory"],
       "expectations": {
-        "browser_tests": 3,
-        "browser_test_files": 1,
+        "browser_tests": 6,
+        "browser_test_files": 2,
         "example_source_files": 4,
         "bundle_files": 4
       }

@@ -1,0 +1,26 @@
+{
+  "schema": "helix.hdoc-fuzz-toolchain/1",
+  "plan_item": "P03-019",
+  "cargo_fuzz": "0.13.2",
+  "libfuzzer_sys": "0.4.13",
+  "rust_toolchain": "nightly-2026-06-30",
+  "rustc_release": "1.98.0-nightly",
+  "rustc_commit": "096694416a41840709140eb0fd0ca193d1a3e6ba",
+  "targets": [
+    "hdoc_decode",
+    "hdoc_encode",
+    "hdoc_path_lookup",
+    "hdoc_tagged_render",
+    "hdoc_migration"
+  ],
+  "bounded_smoke": {
+    "runs_per_target": 128,
+    "maximum_input_bytes": 1048576,
+    "timeout_seconds": 10,
+    "rss_limit_mb": 2048,
+    "seed": 1212436291,
+    "artifact_root": "target/fuzz-artifacts",
+    "working_corpus_root": "target/fuzz-corpus",
+    "report": "target/fuzz-report.json"
+  }
+}
