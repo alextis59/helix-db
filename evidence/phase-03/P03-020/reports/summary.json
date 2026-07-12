@@ -1,0 +1,543 @@
+{
+  "schema": "helix.hdoc-benchmark-summary/1",
+  "plan_item": "P03-020",
+  "recorded_at": "2026-07-12T08:26:27.130Z",
+  "raw_result": {
+    "path": "dist/benchmarks/hdoc-v1/raw.json",
+    "bytes": 24725,
+    "sha256": "d7e6ec4499ad2d3ba2e4b03119901b7c37c292e3570cde2a5ac0e2bd19ede2c9"
+  },
+  "source_control": {
+    "commit": "fc95bb38d08be185775f96112f7cd018096aad1b",
+    "dirty": false
+  },
+  "environment": {
+    "platform": "linux",
+    "architecture": "x64",
+    "os_release": "6.8.0-124-generic",
+    "cpu_model": "11th Gen Intel(R) Core(TM) i5-11300H @ 3.10GHz",
+    "logical_cpus": 8,
+    "memory_bytes": 16503111680,
+    "node": "v22.19.0",
+    "rustc": "rustc 1.96.1 (31fca3adb 2026-06-26)"
+  },
+  "claim_boundary": {
+    "timing_threshold": null,
+    "decision_owner": "P03-021",
+    "scope": "single-process production HDoc codec, validated warm-memory views, and an explicit dictionary byte model",
+    "excludes": "storage, WAL, query planning, concurrency, cross-machine comparison, and release performance claims"
+  },
+  "shapes": [
+    {
+      "id": "minimal",
+      "sizes": {
+        "base_bytes": 336,
+        "canonical_stored_bytes": 336,
+        "canonical_logical_bytes": 336,
+        "tagged_json_bytes": 74,
+        "compressed_sections": 0
+      },
+      "dictionary_model": {
+        "basis": "snapshot-plus-u32-path-id-per-reference",
+        "path_count": 1,
+        "documents": 10000,
+        "snapshot_bytes": 160,
+        "raw_name_reference_bytes": 30000,
+        "id_reference_bytes": 40000,
+        "amortized_dictionary_bytes": 40160,
+        "savings_bytes": -10160,
+        "savings_basis_points": -3386
+      },
+      "operations": [
+        {
+          "id": "encode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 19957,
+            "p50": 20034,
+            "p95": 23635,
+            "p99": 24454,
+            "max": 24454,
+            "mean": 20430
+          }
+        },
+        {
+          "id": "encode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 30161,
+            "p50": 33190,
+            "p95": 33319,
+            "p99": 33688,
+            "max": 33688,
+            "mean": 32638
+          }
+        },
+        {
+          "id": "decode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 43145,
+            "p50": 43325,
+            "p95": 47528,
+            "p99": 49119,
+            "max": 49119,
+            "mean": 44739
+          }
+        },
+        {
+          "id": "decode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 43185,
+            "p50": 47138,
+            "p95": 47281,
+            "p99": 51576,
+            "max": 51576,
+            "mean": 46777
+          }
+        },
+        {
+          "id": "field_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 481,
+            "p50": 483,
+            "p95": 504,
+            "p99": 536,
+            "max": 536,
+            "mean": 488
+          }
+        },
+        {
+          "id": "path_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 4821,
+            "p50": 4860,
+            "p95": 4893,
+            "p99": 5072,
+            "max": 5072,
+            "mean": 4868
+          }
+        }
+      ]
+    },
+    {
+      "id": "mixed_types",
+      "sizes": {
+        "base_bytes": 888,
+        "canonical_stored_bytes": 888,
+        "canonical_logical_bytes": 888,
+        "tagged_json_bytes": 942,
+        "compressed_sections": 0
+      },
+      "dictionary_model": {
+        "basis": "snapshot-plus-u32-path-id-per-reference",
+        "path_count": 12,
+        "documents": 10000,
+        "snapshot_bytes": 496,
+        "raw_name_reference_bytes": 780000,
+        "id_reference_bytes": 480000,
+        "amortized_dictionary_bytes": 480496,
+        "savings_bytes": 299504,
+        "savings_basis_points": 3839
+      },
+      "operations": [
+        {
+          "id": "encode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 85236,
+            "p50": 93643,
+            "p95": 95613,
+            "p99": 95867,
+            "max": 95867,
+            "mean": 92934
+          }
+        },
+        {
+          "id": "encode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 109508,
+            "p50": 115699,
+            "p95": 121058,
+            "p99": 134427,
+            "max": 134427,
+            "mean": 116210
+          }
+        },
+        {
+          "id": "decode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 126088,
+            "p50": 126637,
+            "p95": 137744,
+            "p99": 138122,
+            "max": 138122,
+            "mean": 129847
+          }
+        },
+        {
+          "id": "decode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 126134,
+            "p50": 127026,
+            "p95": 142641,
+            "p99": 146721,
+            "max": 146721,
+            "mean": 132612
+          }
+        },
+        {
+          "id": "field_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 460,
+            "p50": 463,
+            "p95": 494,
+            "p99": 497,
+            "max": 497,
+            "mean": 468
+          }
+        },
+        {
+          "id": "path_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 4622,
+            "p50": 4652,
+            "p95": 4695,
+            "p99": 4754,
+            "max": 4754,
+            "mean": 4654
+          }
+        }
+      ]
+    },
+    {
+      "id": "nested_fanout",
+      "sizes": {
+        "base_bytes": 3296,
+        "canonical_stored_bytes": 1496,
+        "canonical_logical_bytes": 3296,
+        "tagged_json_bytes": 3951,
+        "compressed_sections": 3
+      },
+      "dictionary_model": {
+        "basis": "snapshot-plus-u32-path-id-per-reference",
+        "path_count": 9,
+        "documents": 10000,
+        "snapshot_bytes": 440,
+        "raw_name_reference_bytes": 900000,
+        "id_reference_bytes": 360000,
+        "amortized_dictionary_bytes": 360440,
+        "savings_bytes": 539560,
+        "savings_basis_points": 5995
+      },
+      "operations": [
+        {
+          "id": "encode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 375667,
+            "p50": 377645,
+            "p95": 390896,
+            "p99": 394953,
+            "max": 394953,
+            "mean": 379861
+          }
+        },
+        {
+          "id": "encode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 368498,
+            "p50": 370197,
+            "p95": 372785,
+            "p99": 375248,
+            "max": 375248,
+            "mean": 370640
+          }
+        },
+        {
+          "id": "decode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 462221,
+            "p50": 463988,
+            "p95": 496331,
+            "p99": 508346,
+            "max": 508346,
+            "mean": 469741
+          }
+        },
+        {
+          "id": "decode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 369374,
+            "p50": 371594,
+            "p95": 383768,
+            "p99": 386003,
+            "max": 386003,
+            "mean": 373549
+          }
+        },
+        {
+          "id": "field_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 595,
+            "p50": 597,
+            "p95": 599,
+            "p99": 628,
+            "max": 628,
+            "mean": 599
+          }
+        },
+        {
+          "id": "path_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 61059,
+            "p50": 61196,
+            "p95": 61476,
+            "p99": 62349,
+            "max": 62349,
+            "mean": 61260
+          }
+        }
+      ]
+    },
+    {
+      "id": "wide_128",
+      "sizes": {
+        "base_bytes": 8464,
+        "canonical_stored_bytes": 4056,
+        "canonical_logical_bytes": 8464,
+        "tagged_json_bytes": 9108,
+        "compressed_sections": 3
+      },
+      "dictionary_model": {
+        "basis": "snapshot-plus-u32-path-id-per-reference",
+        "path_count": 128,
+        "documents": 10000,
+        "snapshot_bytes": 6256,
+        "raw_name_reference_bytes": 30510000,
+        "id_reference_bytes": 5120000,
+        "amortized_dictionary_bytes": 5126256,
+        "savings_bytes": 25383744,
+        "savings_basis_points": 8319
+      },
+      "operations": [
+        {
+          "id": "encode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 931308,
+            "p50": 997529,
+            "p95": 1039309,
+            "p99": 1046026,
+            "max": 1046026,
+            "mean": 990601
+          }
+        },
+        {
+          "id": "encode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 963771,
+            "p50": 979690,
+            "p95": 1121109,
+            "p99": 1323445,
+            "max": 1323445,
+            "mean": 1019609
+          }
+        },
+        {
+          "id": "decode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 1115074,
+            "p50": 1129255,
+            "p95": 1207559,
+            "p99": 1221468,
+            "max": 1221468,
+            "mean": 1146358
+          }
+        },
+        {
+          "id": "decode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 913769,
+            "p50": 927728,
+            "p95": 946239,
+            "p99": 979231,
+            "max": 979231,
+            "mean": 929571
+          }
+        },
+        {
+          "id": "field_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 902,
+            "p50": 915,
+            "p95": 961,
+            "p99": 969,
+            "max": 969,
+            "mean": 923
+          }
+        },
+        {
+          "id": "path_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 5883,
+            "p50": 5909,
+            "p95": 5961,
+            "p99": 6151,
+            "max": 6151,
+            "mean": 5925
+          }
+        }
+      ]
+    },
+    {
+      "id": "compressible_32k",
+      "sizes": {
+        "base_bytes": 34992,
+        "canonical_stored_bytes": 712,
+        "canonical_logical_bytes": 34992,
+        "tagged_json_bytes": 34753,
+        "compressed_sections": 1
+      },
+      "dictionary_model": {
+        "basis": "snapshot-plus-u32-path-id-per-reference",
+        "path_count": 3,
+        "documents": 10000,
+        "snapshot_bytes": 224,
+        "raw_name_reference_bytes": 180000,
+        "id_reference_bytes": 120000,
+        "amortized_dictionary_bytes": 120224,
+        "savings_bytes": 59776,
+        "savings_basis_points": 3320
+      },
+      "operations": [
+        {
+          "id": "encode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 1291989,
+            "p50": 1319239,
+            "p95": 1413211,
+            "p99": 1440407,
+            "max": 1440407,
+            "mean": 1333211
+          }
+        },
+        {
+          "id": "encode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 315346,
+            "p50": 316144,
+            "p95": 342253,
+            "p99": 351157,
+            "max": 351157,
+            "mean": 323957
+          }
+        },
+        {
+          "id": "decode_base",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 2374995,
+            "p50": 2389691,
+            "p95": 2465185,
+            "p99": 2570239,
+            "max": 2570239,
+            "mean": 2411563
+          }
+        },
+        {
+          "id": "decode_canonical",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 502605,
+            "p50": 503849,
+            "p95": 522659,
+            "p99": 582770,
+            "max": 582770,
+            "mean": 508645
+          }
+        },
+        {
+          "id": "field_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 11891,
+            "p50": 12304,
+            "p95": 13618,
+            "p99": 15261,
+            "max": 15261,
+            "mean": 12513
+          }
+        },
+        {
+          "id": "path_lookup",
+          "iterations_per_sample": 16,
+          "sample_count": 20,
+          "duration_ns": {
+            "min": 29399,
+            "p50": 30969,
+            "p95": 31316,
+            "p99": 31408,
+            "max": 31408,
+            "mean": 30648
+          }
+        }
+      ]
+    }
+  ],
+  "acceptance": {
+    "correctness_passed": true,
+    "timing_threshold": null,
+    "decision_owner": "P03-021"
+  },
+  "verdict": "pass"
+}
