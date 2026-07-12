@@ -45,6 +45,8 @@
     "benchmark:hdoc:test": "node tests/toolchain/test-hdoc-benchmark-contract.mjs",
     "benchmark:schemas": "node benchmarks/check-benchmark-artifacts.mjs schemas",
     "benchmark:test": "node tests/toolchain/test-benchmark-contract.mjs",
+    "buffers:copy:check": "node tests/toolchain/check-explicit-copy-buffer.mjs",
+    "buffers:copy:test": "node tests/toolchain/test-explicit-copy-buffer-contract.mjs",
     "bootstrap:check": "node tests/toolchain/check-bootstrap.mjs contract",
     "bootstrap:preflight": "node tests/toolchain/check-bootstrap.mjs preflight",
     "bootstrap:test": "node tests/toolchain/test-bootstrap-contract.mjs",
@@ -100,7 +102,7 @@
     "wasm:install-validator": "node tests/toolchain/install-wasm-tools.mjs",
     "wasm:abi:check": "node tests/toolchain/check-wasm-abi.mjs",
     "wasm:abi:test": "node tests/toolchain/test-wasm-abi-contract.mjs",
-    "wasm:validate": "node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-wasm-artifacts.mjs all",
+    "wasm:validate": "node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-explicit-copy-buffer.mjs && node tests/toolchain/check-wasm-artifacts.mjs all",
     "wgsl:check": "node tests/toolchain/check-wgsl-fixtures.mjs manifest",
     "wgsl:validate": "node tests/toolchain/check-wgsl-fixtures.mjs chromium"
   },

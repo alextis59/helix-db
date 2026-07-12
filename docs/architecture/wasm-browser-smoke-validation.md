@@ -32,8 +32,9 @@ world root {
 This remains the smallest honest component-validity proof for the current artifact. `P04-001` now
 defines immutable [`helix:core-abi@1.0.0`](../../wit/helix-core-abi-v1/world.wit) and capability
 [`2.0.0`](../../wit/helix-core-abi-v2/world.wit) sources plus current async-operation
-[`3.0.0`](../../wit/helix-core-abi-v3/world.wit) and resource-lifecycle
-[`4.0.0`](../../wit/helix-core-abi-v4/world.wit) sources,
+[`3.0.0`](../../wit/helix-core-abi-v3/world.wit), resource-lifecycle
+[`4.0.0`](../../wit/helix-core-abi-v4/world.wit), and current explicit-copy
+[`5.0.0`](../../wit/helix-core-abi-v5/world.wit) sources,
 including ownership, cancellation, buffer, handle, error, capability, and version rules. The
 machine contract deliberately records that bindings are not yet embedded, so the built artifact's
 WIT remains empty until later binding work. P04-002 separately proves the

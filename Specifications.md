@@ -304,10 +304,10 @@ public protocol/SDK support, and added database functionality remain false.
 P04-002 physically isolates the portable deterministic composition in
 `crates/helix-core/src/deterministic.rs`. Its only direct workspace dependencies are document,
 query, storage, and columnar deterministic crates. The full closure forbids host/server/GPU-device,
-random, async-runtime, socket, WASI, browser-binding, and shader/compiler packages. All Rust sources
-in the deterministic set are scanned for ambient file/network/time/random/thread/process/environment/
-device APIs, unsafe blocks, and native extern boundaries; the real browser Wasm must have exactly
-zero imports. Ambient results may enter only as bounded versioned values from later explicit
+random, async-runtime, socket, WASI, browser-binding, and shader/compiler packages. All 12 current
+Rust sources in the deterministic set are scanned for ambient file/network/time/random/thread/
+process/environment/device APIs, unsafe blocks, and native extern boundaries; the real browser Wasm
+must have exactly zero imports. Ambient results may enter only as bounded versioned values from later explicit
 capability interfaces, and host failures enter as structured errors plus mutation outcomes. This
 gate proves separation, not implemented capabilities, hosts, or database orchestration.
 
@@ -353,6 +353,20 @@ bytes. Uninitialized staging bytes are zeroed or unreadable. At most 4,096 resou
 instance. Opaque handles cannot be cloned; descriptors contain only a stable kind, a redacted name
 of at most 64 bytes, and a version. P04-005 defines no buffer read/write/copy binding, mapping,
 shared memory, budget enforcement, host implementation, or database execution.
+
+P04-006 preserves ABI 4.0 and defines explicit-copy access in exact `helix:core-abi@5.0.0`:
+`read-immutable`, `write-staging`, and `copy-immutable-to-staging`. Transfers use Canonical ABI
+`list<u8>` values and copy at every crossing. Reads return detached bytes, preserve the source
+offset, and shorten only at end-of-buffer. Writes may overwrite the initialized prefix or append at
+its exact end, cannot create holes, and report exact copied bytes plus the resulting initialized
+length. Direct immutable-to-staging copies require the complete source range and obey the same
+target rules.
+
+Each buffer and call is bounded to 16 MiB. All offset/range/capacity validation completes before
+mutation, making failures target-atomic and leaving immutable sources unchanged. The safe Rust
+reference model executes allocation, contiguous writes, reads, exact copies, duplication, and seal
+semantics for later cross-host conformance. P04-006 adds no pointer/alias crossing, mapping, shared
+memory, zero-copy claim, component binding, host implementation, or database execution.
 
 ### 6.2 `helix-host`
 

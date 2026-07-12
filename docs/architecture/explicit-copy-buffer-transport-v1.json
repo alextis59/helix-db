@@ -1,0 +1,88 @@
+{
+  "schema": "helix.explicit-copy-buffer-transport/1",
+  "plan_item": "P04-006",
+  "base": {
+    "package": "helix:core-abi@4.0.0",
+    "path": "wit/helix-core-abi-v4/world.wit",
+    "bytes": 9765,
+    "sha256": "5bd1312132c9edbede3d41e8223d95483a4a027d4ebf45c38440f44e2c53cfac",
+    "immutable": true
+  },
+  "current": {
+    "package": "helix:core-abi@5.0.0",
+    "path": "wit/helix-core-abi-v5/world.wit",
+    "bytes": 10490,
+    "sha256": "2d92cc7bf4e4b190af2dc96e7fbb4a5800303416982021a8c656c19a07977963",
+    "world": "helix-core-v1",
+    "abi": { "major": 5, "minor": 0 },
+    "accepted": [{ "major": 5, "minor": 0 }]
+  },
+  "implementation": {
+    "crate": "helix-core",
+    "path": "crates/helix-core/src/explicit_copy.rs",
+    "bytes": 12270,
+    "sha256": "b1c4c9b06b5ccda52a5d74f1019cd9f6e2768e59442fbc3b15e45a3e7c9de48c",
+    "model": "portable-host-conformance-reference"
+  },
+  "operations": ["read-immutable", "write-staging", "copy-immutable-to-staging"],
+  "bounds": {
+    "maximum_buffer_bytes": 16777216,
+    "maximum_transfer_bytes_per_call": 16777216,
+    "offset_width_bits": 64,
+    "length_width_bits": 32
+  },
+  "rules": {
+    "every_transfer_uses_canonical_abi_list_u8_copy": true,
+    "read_result_is_detached_from_source": true,
+    "read_preserves_requested_offset": true,
+    "read_shortens_only_at_end_of_buffer": true,
+    "read_past_end_fails": true,
+    "write_result_reports_exact_bytes_and_initialized_length": true,
+    "write_may_overwrite_initialized_bytes": true,
+    "write_may_append_only_at_initialized_end": true,
+    "write_cannot_create_uninitialized_gap": true,
+    "write_capacity_is_fixed": true,
+    "copy_source_range_is_exact": true,
+    "copy_target_obeys_write_rules": true,
+    "all_validation_precedes_mutation": true,
+    "failure_leaves_target_unchanged": true,
+    "immutable_source_never_mutates": true,
+    "seal_copies_only_initialized_prefix": true,
+    "no_alias_or_pointer_crosses_boundary": true,
+    "no_mapping_shared_memory_or_zero_copy_claim": true
+  },
+  "errors": {
+    "capacity_exceeded": "BUF_CAPACITY_EXCEEDED",
+    "initialized_length_mismatch": "BUF_INITIALIZED_LENGTH_MISMATCH",
+    "offset_out_of_bounds": "BUF_OFFSET_OUT_OF_BOUNDS",
+    "source_range_out_of_bounds": "BUF_SOURCE_RANGE_OUT_OF_BOUNDS",
+    "transfer_too_large": "BUF_TRANSFER_TOO_LARGE",
+    "uninitialized_gap": "BUF_UNINITIALIZED_GAP"
+  },
+  "versioning": {
+    "change": "incompatible-required-buffer-access-imports",
+    "same_patch_rewrite_forbidden": true,
+    "package_semver_alone_is_not_compatibility": true,
+    "implicit_4_0_acceptance": false,
+    "unsupported_result": "CAP_UNSUPPORTED_VERSION"
+  },
+  "deferred": {
+    "handle_and_shared_staging_alternatives": "P04-007",
+    "cancellation_deadlines_backpressure_partial_io_shutdown": "P04-008",
+    "resource_budgets": "P04-009",
+    "mock_host": "P04-010",
+    "native_host": "P04-011",
+    "browser_host": "P04-012",
+    "transport_benchmarks": "P04-016",
+    "transport_selection": "P04-017"
+  },
+  "claim_boundary": {
+    "buffer_access_operations_defined": true,
+    "portable_reference_implementation_present": true,
+    "component_binding_present": false,
+    "host_implementations_present": false,
+    "alternative_transport_implemented": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-007"
+  }
+}

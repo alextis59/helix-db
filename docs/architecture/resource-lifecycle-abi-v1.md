@@ -36,8 +36,8 @@ The initialized length never exceeds capacity.
 `seal-staging` consumes staging ownership on entry and returns either one immutable buffer or an
 error with no resource. Its requested length must equal the host-tracked initialized length.
 Immutable contents never change. `duplicate-immutable` borrows the source and returns a distinct
-owned resource identity with identical bytes. P04-006 owns the explicit read, write, and copy
-implementation that makes those transitions executable.
+owned resource identity with identical bytes. P04-006 implements the explicit read, write, and copy
+reference semantics in ABI 5.0.
 
 ## Claim boundary
 

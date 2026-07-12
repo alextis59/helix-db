@@ -92,6 +92,8 @@ jobs:
           corepack npm run storage:batch:test
           corepack npm run resources:lifecycle:check
           corepack npm run resources:lifecycle:test
+          corepack npm run buffers:copy:check
+          corepack npm run buffers:copy:test
           corepack npm run rust:dependencies:test
           corepack npm run rust:audit:test
           corepack npm run dependencies:check
@@ -247,6 +249,8 @@ jobs:
             corepack npm run storage:batch:test
             corepack npm run resources:lifecycle:check
             corepack npm run resources:lifecycle:test
+            corepack npm run buffers:copy:check
+            corepack npm run buffers:copy:test
           fi
           node tests/toolchain/check-wasm-artifacts.mjs ${{ matrix.artifact }}
 

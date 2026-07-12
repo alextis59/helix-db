@@ -1,10 +1,11 @@
 //! Portable deterministic orchestration boundary with a versioned component ABI contract.
 //!
-//! The current WIT source contract is `helix:core-abi@4.0.0`. Resource lifecycles and bounded
-//! asynchronous operations are defined, but bindings, host execution, and database orchestration
-//! remain absent.
+//! The current WIT source contract is `helix:core-abi@5.0.0`. Explicit-copy buffer semantics,
+//! resource lifecycles, and bounded asynchronous operations are defined, but bindings, host
+//! execution, and database orchestration remain absent.
 
 pub mod deterministic;
+pub mod explicit_copy;
 
 pub use deterministic::{
     COMPONENT_ABI_PACKAGE, COMPONENT_ABI_VERSION, COMPONENT_NAME, INTERNAL_DEPENDENCIES, MATURITY,
@@ -17,9 +18,9 @@ mod tests {
 
     #[test]
     fn excludes_host_gpu_and_server_boundaries() {
-        assert_eq!(MATURITY, "resource-lifecycle-abi-v1");
-        assert_eq!(COMPONENT_ABI_VERSION, (4, 0));
-        assert_eq!(COMPONENT_ABI_PACKAGE, "helix:core-abi@4.0.0");
+        assert_eq!(MATURITY, "explicit-copy-buffer-v1");
+        assert_eq!(COMPONENT_ABI_VERSION, (5, 0));
+        assert_eq!(COMPONENT_ABI_PACKAGE, "helix:core-abi@5.0.0");
         assert_eq!(
             INTERNAL_DEPENDENCIES,
             &[

@@ -21,7 +21,7 @@ const run = async () => {
     schema: 'helix.browser-toolchain-example/1',
     planItem: 'P02-016',
     example: 'browser-toolchain',
-    component: { name: 'helix-core', maturity: 'resource-lifecycle-abi-v1' },
+    component: { name: 'helix-core', maturity: 'explicit-copy-buffer-v1' },
     databaseFunctionality: false,
     demonstrates: [
       'rust-wasm-build',

@@ -110,5 +110,6 @@ enforces version, bounds, ownership, cancellation, capability, negotiation, and 
 - A new resource operation must name its owner task, lifecycle, error/outcome, cancellation, bounds,
   capability requirement, and rollback behavior.
 
-P04-003 owns concrete capability definitions, P04-004 owns operations, and P04-005 owns resource
-lifecycles. P04-006 onward own bindings and explicit-copy execution.
+P04-003 owns concrete capability definitions, P04-004 owns operations, P04-005 owns resource
+lifecycles, and P04-006 owns explicit-copy reference execution. P04-007 onward own alternatives,
+completion semantics, bindings, hosts, and transport selection.

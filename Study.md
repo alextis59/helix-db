@@ -191,7 +191,7 @@ accepted; package SemVer does not imply another compatibility window. Canonical 
 explicit copies, resource operations and zero-copy remain disabled until their owning tasks, and
 the current component artifact remains intentionally unbound. P04-003 defines capability identities
 while later tasks bind operations and hosts. P04-002 instead makes the deterministic/ambient separation executable: the five-crate
-core closure excludes host/GPU/runtime packages, 11 Rust source files reject ambient access
+core closure excludes host/GPU/runtime packages, 12 Rust source files reject ambient access
 patterns, and the browser core module must retain zero imports. This separates a parseable contract
 and physical source boundary from an unsupported execution claim.
 
@@ -221,6 +221,15 @@ use-after-transfer, uninitialized-byte disclosure, and cleanup errors from rewri
 results. The major bump is required because resource methods and a required host import change the
 ABI 3.0 world shape. Explicit copy remains the baseline for P04-006; mapping and shared-memory
 alternatives remain measurements rather than claims until P04-007 and P04-014.
+
+P04-006 turns the simple baseline into executable semantics before comparing faster transports.
+ABI 5.0 adds detached immutable reads, contiguous staging writes, and exact immutable-to-staging
+copies; all use copied `list<u8>` values. A safe Rust conformance model performs checked arithmetic,
+validates the complete operation before mutation, prevents uninitialized gaps, and proves that
+errors leave targets unchanged. This creates a portable correctness oracle for later mock, native,
+and browser hosts without pretending the component is already bound. The extra copy is deliberate:
+it makes ownership and failure behavior unambiguous, while P04-007/P04-016 can measure handles and
+shared staging against a working reference rather than an aspirational zero-copy design.
 
 ### 5.4 Portability test
 
