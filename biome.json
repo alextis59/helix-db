@@ -19,6 +19,7 @@
       "docs/development/*.json",
       "fixtures/generation/**/*.json",
       "fixtures/**/*.mjs",
+      "packages/**/*.ts",
       "reference/**/*.mjs",
       "shaders/**/*.json",
       "tests/**/*.mjs",

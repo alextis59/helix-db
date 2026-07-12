@@ -170,6 +170,8 @@ requires an accepted matrix proving older peers can ignore or reject every addit
   claiming component, native, browser, durability, or GPU integration.
 - [x] Build the exact bounded Wasmtime native skeleton and deny-by-default capability grants under
   P04-011 without claiming linked ABI calls, ambient adapters, or platform behavior.
+- [x] Build the bounded strict-TypeScript browser host and all 21 imported binding shapes under
+  P04-012, with real three-engine execution and no false Component Model or persistence claim.
 - [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
 - [ ] Benchmark explicit-copy and alternative buffer strategies under P04-014.

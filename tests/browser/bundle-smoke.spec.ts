@@ -43,6 +43,23 @@ test('shows its non-database boundary and instantiates the bundled core Wasm', a
       'gpu-execution',
       'network-server',
     ],
+    browserHost: {
+      schema: 'helix.browser-host-skeleton/1',
+      abi: { major: 7, minor: 0 },
+      bindingCalls: 21,
+      denyByDefault: true,
+      features: {
+        opfs: expect.any(Boolean),
+        indexedDb: expect.any(Boolean),
+        webGpu: expect.any(Boolean),
+        cryptographicRandom: expect.any(Boolean),
+        monotonicClock: expect.any(Boolean),
+        workers: expect.any(Boolean),
+      },
+      bufferRoundTrip: [1, 2, 3, 4],
+      rawModuleImports: 0,
+      componentModelLinked: false,
+    },
     wasm: {
       format: 'core-module-v1',
       valid: true,
@@ -60,6 +77,9 @@ test('shows its non-database boundary and instantiates the bundled core Wasm', a
     },
   });
   expect(example.wasm.byteLength).toBeGreaterThan(8);
+  expect(example.browserHost.features.indexedDb).toBe(true);
+  expect(example.browserHost.features.cryptographicRandom).toBe(true);
+  expect(example.browserHost.features.monotonicClock).toBe(true);
   await expect(page.locator('#report')).toContainText('"databaseFunctionality": false');
   expect(['chromium', 'firefox', 'webkit']).toContain(browserName);
   expect(failures).toEqual([]);

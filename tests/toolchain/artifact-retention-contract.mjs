@@ -306,7 +306,10 @@ const expectedProducers = {
       'examples/browser-toolchain/index.html',
       'examples/browser-toolchain/main.ts',
       'examples/browser-toolchain/report.ts',
+      'docs/architecture/browser-host-skeleton-v1.json',
+      'packages/browser-host/src/index.ts',
       'playwright.config.ts',
+      'tests/browser/browser-host.spec.ts',
       'tests/browser/bundle-smoke.spec.ts',
       'tests/browser/hdoc-fuzz-replay.spec.ts',
       'tests/toolchain/dependency-report-policy.json',
@@ -852,9 +855,11 @@ export const validateBrowserExecutionReport = (
       `browser test ${index}`,
     );
     assert(
-      ['tests/browser/bundle-smoke.spec.ts', 'tests/browser/hdoc-fuzz-replay.spec.ts'].includes(
-        test.file,
-      ),
+      [
+        'tests/browser/browser-host.spec.ts',
+        'tests/browser/bundle-smoke.spec.ts',
+        'tests/browser/hdoc-fuzz-replay.spec.ts',
+      ].includes(test.file),
       `browser test ${index}: file`,
     );
     safeInteger(test.line, 1, 1000000, `browser test ${index} line`);

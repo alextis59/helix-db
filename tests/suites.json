@@ -87,8 +87,8 @@
       "allowed_files": [],
       "steps": ["browser-example-build", "browser-harness-inventory"],
       "expectations": {
-        "browser_tests": 6,
-        "browser_test_files": 2,
+        "browser_tests": 9,
+        "browser_test_files": 3,
         "example_source_files": 4,
         "bundle_files": 4
       }

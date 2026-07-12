@@ -294,6 +294,15 @@ prepare bounded execution, but they do not by themselves prove cancellation or d
 that proof remains with linked calls and P04-013. The 108-package runtime/compiler closure is a
 real supply-chain cost and is therefore checksum-, feature-, license-, and RustSec-gated now.
 
+P04-012 establishes the corresponding browser boundary without treating a raw Wasm import object as
+a Component Model implementation. A strict-TypeScript host exposes all 21 ABI 7 imported call
+shapes, enforces exact deny-by-default grants, owns bounded explicit-copy buffers, snapshots the
+validated execution profile, and dispatches file, directory, durability, timer, and randomness work
+only through injected adapters. Feature detection observes six standards entry points without
+invoking them. Chromium, Firefox, and WebKit each execute the positive core-module path plus negative
+grant, profile, buffer, cancellation, adapter, and module-validation cases. Generated canonical ABI
+linkage, persistent browser adapters, and shared host conformance remain deliberately separate work.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

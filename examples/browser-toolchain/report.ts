@@ -13,6 +13,23 @@ export interface BrowserToolchainExampleReport {
     'gpu-execution',
     'network-server',
   ];
+  browserHost: {
+    schema: 'helix.browser-host-skeleton/1';
+    abi: { major: 7; minor: 0 };
+    bindingCalls: 21;
+    denyByDefault: true;
+    features: {
+      opfs: boolean;
+      indexedDb: boolean;
+      webGpu: boolean;
+      cryptographicRandom: boolean;
+      monotonicClock: boolean;
+      workers: boolean;
+    };
+    bufferRoundTrip: number[];
+    rawModuleImports: number;
+    componentModelLinked: false;
+  };
   wasm: {
     format: 'core-module-v1';
     valid: boolean;
@@ -29,5 +46,11 @@ export interface BrowserToolchainExampleReport {
 declare global {
   interface Window {
     __HELIX_BROWSER_TOOLCHAIN_EXAMPLE__?: BrowserToolchainExampleReport;
+    __HELIX_BROWSER_HOST_TEST__?: () => Promise<{
+      codes: string[];
+      syntheticFeatures: BrowserToolchainExampleReport['browserHost']['features'];
+      adapterResult: unknown[];
+      adapterDispatches: number;
+    }>;
   }
 }

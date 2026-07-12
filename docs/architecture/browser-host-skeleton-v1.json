@@ -1,0 +1,108 @@
+{
+  "schema": "helix.browser-host-skeleton/1",
+  "plan_item": "P04-012",
+  "abi": {
+    "package": "helix:core-abi@7.0.0",
+    "path": "wit/helix-core-abi-v7/world.wit",
+    "bytes": 12413,
+    "sha256": "80b9e2de39338377aa8e71ca603ac75cbda801c3822ef948b5c0e86539dc79a0"
+  },
+  "implementation": {
+    "path": "packages/browser-host/src/index.ts",
+    "bytes": 24287,
+    "sha256": "513194056b68c497731f6112f0d52f49386b6270116e27824cfebc14d6425453",
+    "language": "strict-typescript",
+    "installable_package": false,
+    "external_runtime_dependencies": 0
+  },
+  "capability_kinds": [
+    "files",
+    "directories",
+    "durability",
+    "locks",
+    "timers",
+    "randomness",
+    "scheduling",
+    "metrics",
+    "secrets",
+    "networking",
+    "object-storage",
+    "gpu"
+  ],
+  "calls": [
+    "immutable-buffer.length",
+    "mutable-staging-buffer.capacity",
+    "mutable-staging-buffer.initialized-length",
+    "opaque-handle.descriptor",
+    "host-resources.allocate-staging",
+    "host-resources.seal-staging",
+    "host-resources.duplicate-immutable",
+    "host-resources.read-immutable",
+    "host-resources.write-staging",
+    "host-resources.copy-immutable-to-staging",
+    "host-files.read-batch",
+    "host-files.write-batch",
+    "host-directories.rename-batch",
+    "host-directories.list-batch",
+    "host-directories.delete-batch",
+    "host-durability.sync-batch",
+    "host-timers.read-clock",
+    "host-randomness.read-random",
+    "host-control.poll-cancellation",
+    "host-control.lifecycle",
+    "host-control.capture-execution-profile"
+  ],
+  "bounds": {
+    "maximum_wasm_bytes": 16777216,
+    "maximum_capability_grants": 128,
+    "maximum_scope_bytes": 4096,
+    "maximum_buffer_bytes": 16777216
+  },
+  "allowlist": {
+    "exact_kind_and_scope": true,
+    "deny_by_default": true,
+    "wildcards_rejected": true,
+    "duplicates_rejected": true,
+    "control_text_rejected": true
+  },
+  "feature_detection": {
+    "opfs": "navigator.storage.getDirectory",
+    "indexed_db": "indexedDB.open",
+    "webgpu": "navigator.gpu",
+    "cryptographic_random": "crypto.getRandomValues",
+    "monotonic_clock": "performance.now",
+    "workers": "Worker",
+    "detection_invokes_capability": false
+  },
+  "bindings": {
+    "all_imported_call_shapes_present": true,
+    "host_owned_explicit_copy_buffers_present": true,
+    "io_time_and_random_adapters_injected": true,
+    "abi_value_types_explicit": true,
+    "adapter_shape_validated": true,
+    "cancellation_checked_before_adapter_dispatch": true,
+    "execution_profile_validated_and_snapshotted": true,
+    "feature_profile_validated": true,
+    "runtime_input_lengths_checked": true,
+    "raw_unknown_imports_rejected": true,
+    "raw_abi_imports_rejected_until_component_binding": true,
+    "zero_import_core_module_instantiation_present": true
+  },
+  "validation": {
+    "browser_engines": ["chromium", "firefox", "webkit"],
+    "browser_execution_count": 3,
+    "policy_mutation_canaries": 39,
+    "source_mutation_canaries": 12
+  },
+  "claim_boundary": {
+    "typescript_binding_shapes_present": true,
+    "bounded_core_module_instantiation_present": true,
+    "component_model_linked": false,
+    "opfs_adapter_present": false,
+    "indexed_db_adapter_present": false,
+    "durability_present": false,
+    "gpu_execution_present": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-013"
+  }
+}
