@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-016",
+  "verdict": "pass",
+  "commit": "e5d1711a143979699df205537ad4fb5512755be1",
+  "base_commit": "231010315810ad56e2a38a38eda9c532055053ef",
+  "source_tree": "516c7571f59008154c901bf4d485f662a33c2896",
+  "diff_sha256": "99d0f2d887359ac4adc2503bbbbfe6c5e4d685efd2d3d2cab664e00f08055889",
+  "recorded_on": "2026-07-12",
+  "requirements": [
+    "CORE-001",
+    "CORE-003",
+    "INV-004",
+    "INV-007",
+    "PLAT-001",
+    "QUAL-001"
+  ],
+  "accepted_adrs": [
+    "0013"
+  ],
+  "experiments": [
+    "EXP-003"
+  ],
+  "authorities": [
+    {
+      "path": "docs/architecture/host-boundary-benchmark-v1.json",
+      "bytes": 1691,
+      "sha256": "5dfa5ca79f9f065a4e9233cdd892951095451bf985194a40192b1292c6b8b80b"
+    },
+    {
+      "path": "docs/architecture/host-boundary-benchmark-v1.md",
+      "bytes": 1267,
+      "sha256": "64df8272bd90cc43ef3a08136e7f91464a6867b0fc2c3f115e5b48de56423faa"
+    },
+    {
+      "path": "benchmarks/reports/host-boundary-2026-07-12.json",
+      "bytes": 3089,
+      "sha256": "2f8c8bd3c102679aa7201ef8e49b9f1f962e2783e0fbd0727e53c9e4ca71397f"
+    },
+    {
+      "path": "benchmarks/run-host-boundary.mjs",
+      "bytes": 6739,
+      "sha256": "6f3f870beea26d26a356f61c0b4f3fcdc5248a3d9288deb489aa1ba3df16c485"
+    },
+    {
+      "path": "crates/helix-core/examples/host_boundary_benchmark.rs",
+      "bytes": 4743,
+      "sha256": "f14f628fb7d8d5418cd147720015004c2dedf1815cbd973620642c6c2f604a7c"
+    },
+    {
+      "path": "examples/browser-toolchain/main.ts",
+      "bytes": 14024,
+      "sha256": "7ab99087f236f923cc30b616a8ddcb777ab874a09c304040156ccb6672fdeaa7"
+    },
+    {
+      "path": "tests/toolchain/check-host-boundary-benchmark.mjs",
+      "bytes": 5418,
+      "sha256": "e796aba0a4c71589b35f88abf9a07de22f6139b98f7095d71621f27e77815ecb"
+    },
+    {
+      "path": "tests/toolchain/test-host-boundary-benchmark.mjs",
+      "bytes": 3397,
+      "sha256": "eabb2c9c9f923c8632c8fa5d1735afcc258cb0f967fadc8a2550a0961315a085"
+    },
+    {
+      "path": ".github/workflows/benchmark-baseline.yml",
+      "bytes": 2166,
+      "sha256": "0030db88f3b08e209c5bfadadbaf839fc35141cc888e5f9bc0d5f54ce2a78bc6"
+    },
+    {
+      "path": ".github/ci/matrix.json",
+      "bytes": 5769,
+      "sha256": "d09e45f6917ed4352e0582cb4364181d3ce4142c092972ffb1c4f9f20000a644"
+    }
+  ],
+  "verifier": {
+    "bytes": 3642,
+    "sha256": "06fb2a66e2568eafa283fcd479fa51900ab50f914d31b5392dc1ecf18db53a75"
+  },
+  "verification": {
+    "source_artifacts": 22,
+    "runtimes": 4,
+    "strategies": 4,
+    "total_samples": 400,
+    "measured_samples": 320,
+    "policy_mutation_canaries": 23,
+    "source_mutation_canaries": 8,
+    "workspace_tests": 70,
+    "browser_executions": 15,
+    "fuzz_executions": 640,
+    "workspace_product_lines_covered": 5270,
+    "workspace_product_lines_total": 5308
+  }
+}

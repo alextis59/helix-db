@@ -255,7 +255,7 @@ Dependencies: `G02`, enough of `G03` to expose the codec.
 - [x] **P04-013** Add ABI conformance tests shared by mock, native, and browser hosts.
 - [x] **P04-014** Add tests proving the core cannot reach ungranted files, sockets, clocks, or devices.
 - [x] **P04-015** Add tracing around boundary calls and buffer copies without logging document contents.
-- [ ] **P04-016** Benchmark chatty calls, batched copies, opaque handles, and staging strategies on native and browser hosts.
+- [x] **P04-016** Benchmark chatty calls, batched copies, opaque handles, and staging strategies on native and browser hosts.
 - [ ] **P04-017** Complete `EXP-003`, select the initial transport, and record thresholds for revisiting it.
 - [ ] **G04** Close the host-ABI gate after both hosts pass conformance, determinism and capability isolation are proven, and boundary costs are measured.
 
