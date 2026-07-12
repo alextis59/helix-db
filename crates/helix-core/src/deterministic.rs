@@ -9,13 +9,13 @@
 pub const COMPONENT_NAME: &str = "helix-core";
 
 /// Current implementation maturity; no host operation or database orchestration exists yet.
-pub const MATURITY: &str = "async-storage-batch-abi-v1";
+pub const MATURITY: &str = "resource-lifecycle-abi-v1";
 
 /// Exact internal component ABI accepted by the current contract.
-pub const COMPONENT_ABI_VERSION: (u16, u16) = (3, 0);
+pub const COMPONENT_ABI_VERSION: (u16, u16) = (4, 0);
 
 /// Canonical WIT package identity. Package `SemVer` never replaces ABI negotiation.
-pub const COMPONENT_ABI_PACKAGE: &str = "helix:core-abi@3.0.0";
+pub const COMPONENT_ABI_PACKAGE: &str = "helix:core-abi@4.0.0";
 
 /// Deterministic internal boundaries composed by the portable core.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[

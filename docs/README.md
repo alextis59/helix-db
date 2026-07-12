@@ -35,6 +35,7 @@ This directory is the entry point for HelixDB project documentation. HelixDB/`he
 | [Deterministic fixture generation](quality/deterministic-fixture-generation.md) | Generator registry, seed/PRNG contract, schemas, byte identities, and external-artifact boundary |
 | [Continuous integration matrix](architecture/continuous-integration.md) | Gating/nightly OS, architecture, target, Node, browser, action-pin, and trust boundaries |
 | [Wasm/component/browser smoke validation](architecture/wasm-browser-smoke-validation.md) | Pinned component validator, browser core module, Vite artifact, and real-engine execution boundaries |
+| [Wasm resource lifecycle ABI 4.0](architecture/resource-lifecycle-abi-v1.md) | Immutable, staging, and opaque-handle ownership, drop, bounds, and claim boundaries |
 | [WGSL fixture validation](architecture/wgsl-fixture-validation.md) | Hash-bound trusted shaders, Dawn/SwiftShader parsing, validation, compilation, and security boundaries |
 | [Dependency security reporting](architecture/dependency-security-reporting.md) | Deterministic lock/license/duplicate inventory plus dated vulnerability, signature, and provenance observations |
 | [Rust product code coverage policy](quality/code-coverage-policy.md) | Compiler-matched LLVM reporting, explicit product/test classification, and workspace/critical thresholds |

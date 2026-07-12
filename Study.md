@@ -211,6 +211,17 @@ ordering, mutation idempotency keys, and a single error outcome make the definit
 leaving resource ownership and hard partial-I/O/cancellation cases to their dedicated tasks. The
 major bump is intentional because new required imports are not backward-compatible with ABI 2.0.
 
+P04-005 separates ownership correctness from transport performance in `helix:core-abi@4.0.0`.
+Unique owned transfer, call-scoped borrowing, and exactly-once Canonical ABI drop give all hosts one
+lifecycle model before buffer access is implemented. Mutable staging has fixed capacity and a
+host-tracked initialized prefix; sealing consumes it and produces immutable ownership, while
+duplication produces equal bytes under a distinct identity. Opaque handles expose only stable,
+redacted descriptors and remain noncloneable. This design prevents integer-handle forgery,
+use-after-transfer, uninitialized-byte disclosure, and cleanup errors from rewriting completed
+results. The major bump is required because resource methods and a required host import change the
+ABI 3.0 world shape. Explicit copy remains the baseline for P04-006; mapping and shared-memory
+alternatives remain measurements rather than claims until P04-007 and P04-014.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

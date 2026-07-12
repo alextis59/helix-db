@@ -12,9 +12,11 @@ Versioned packages:
   interface/resource/policy identities without defining their operations.
 - [`helix:core-abi@3.0.0`](helix-core-abi-v3/world.wit) adds the six P04-004 bounded asynchronous
   storage batch operations without implementing or binding them.
+- [`helix:core-abi@4.0.0`](helix-core-abi-v4/world.wit) adds the P04-005 host-owned buffer and opaque
+  handle lifecycle methods and ownership transitions without implementing transport or hosts.
 
-The accepted sources are not yet embedded in the built component. P04-005 onward own lifecycles,
-bindings, transport implementation, and hosts. Parse and contract checks are stable commands:
+The accepted sources are not yet embedded in the built component. P04-006 onward own bindings,
+transport implementation, and hosts. Parse and contract checks are stable commands:
 
 ```bash
 corepack npm run wasm:abi:check
@@ -23,6 +25,8 @@ corepack npm run host:capabilities:check
 corepack npm run host:capabilities:test
 corepack npm run storage:batch:check
 corepack npm run storage:batch:test
+corepack npm run resources:lifecycle:check
+corepack npm run resources:lifecycle:test
 ```
 
 Every package must have an accepted ADR, a closed machine policy, exact-version negotiation rules,

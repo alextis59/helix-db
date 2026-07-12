@@ -47,9 +47,9 @@ boundary. Document byte lists must contain validated canonical HDoc 1.0; generic
 document-value route.
 
 The WIT declares `immutable-buffer` and `mutable-staging-buffer` resources so their nominal IDs are
-reserved. It deliberately exposes no constructor/read/map/write operation yet. P04-005 owns their
-lifecycle and P04-006 owns explicit-copy execution. Shared/mapped memory and zero-copy are not
-claimed.
+reserved. The immutable 1.0 package deliberately exposes no constructor/read/map/write operation;
+P04-005 defines lifecycle operations in ABI 4.0, while P04-006 owns buffer access and explicit-copy
+execution. Shared/mapped memory and zero-copy are not claimed.
 
 ## Handles
 
@@ -83,7 +83,8 @@ behavior. The declared kinds are files, directories, durability, timers, randomn
 metrics, secrets, networking, object storage, and GPU.
 
 Declaring a kind does not grant it. P04-003 defines concrete capability resource identities in ABI
-2.0; operations are defined by P04-004 in ABI 3.0 and remain unbound.
+2.0; operations are defined by P04-004 in ABI 3.0; resource lifecycles are defined by P04-005 in
+ABI 4.0. All remain unbound.
 There is no wildcard or ambient capability, and a missing required descriptor returns
 `CAP_HOST_UNAVAILABLE` before resource use.
 
@@ -109,5 +110,5 @@ enforces version, bounds, ownership, cancellation, capability, negotiation, and 
 - A new resource operation must name its owner task, lifecycle, error/outcome, cancellation, bounds,
   capability requirement, and rollback behavior.
 
-P04-003 owns concrete capability definitions. P04-004 onward own operations, bindings, resource
-lifecycles, and explicit-copy execution.
+P04-003 owns concrete capability definitions, P04-004 owns operations, and P04-005 owns resource
+lifecycles. P04-006 onward own bindings and explicit-copy execution.

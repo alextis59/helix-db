@@ -86,6 +86,7 @@ same(
     'P04-002',
     'P04-003',
     'P04-004',
+    'P04-005',
   ],
   'CI matrix task history',
 );
@@ -295,6 +296,8 @@ same(
     'host:capabilities:test': packageJson.scripts['host:capabilities:test'],
     'storage:batch:check': packageJson.scripts['storage:batch:check'],
     'storage:batch:test': packageJson.scripts['storage:batch:test'],
+    'resources:lifecycle:check': packageJson.scripts['resources:lifecycle:check'],
+    'resources:lifecycle:test': packageJson.scripts['resources:lifecycle:test'],
     'rust:audit:install': packageJson.scripts['rust:audit:install'],
     'rust:audit:test': packageJson.scripts['rust:audit:test'],
     'rust:dependencies:test': packageJson.scripts['rust:dependencies:test'],
@@ -344,6 +347,8 @@ same(
     'host:capabilities:test': 'node tests/toolchain/test-host-capabilities-contract.mjs',
     'storage:batch:check': 'node tests/toolchain/check-storage-batch-abi.mjs',
     'storage:batch:test': 'node tests/toolchain/test-storage-batch-abi-contract.mjs',
+    'resources:lifecycle:check': 'node tests/toolchain/check-resource-lifecycle-abi.mjs',
+    'resources:lifecycle:test': 'node tests/toolchain/test-resource-lifecycle-abi-contract.mjs',
     'rust:audit:install': 'node tests/toolchain/install-cargo-audit.mjs',
     'rust:audit:test': 'node tests/toolchain/test-cargo-audit-contract.mjs',
     'rust:dependencies:test': 'node tests/toolchain/test-rust-dependency-contract.mjs',
@@ -353,7 +358,7 @@ same(
     'wasm:abi:check': 'node tests/toolchain/check-wasm-abi.mjs',
     'wasm:abi:test': 'node tests/toolchain/test-wasm-abi-contract.mjs',
     'wasm:validate':
-      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
+      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
@@ -653,6 +658,8 @@ for (const marker of [
   'corepack npm run host:capabilities:test',
   'corepack npm run storage:batch:check',
   'corepack npm run storage:batch:test',
+  'corepack npm run resources:lifecycle:check',
+  'corepack npm run resources:lifecycle:test',
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }

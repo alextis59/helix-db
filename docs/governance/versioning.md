@@ -61,6 +61,10 @@ P04-004 similarly preserves ABI 2.0 and adds
 [`helix:core-abi@3.0.0`](../../wit/helix-core-abi-v3/world.wit). Six required async imports are an
 incompatible world-shape change, so the current matrix accepts only ABI 3.0.
 
+P04-005 preserves ABI 3.0 and adds
+[`helix:core-abi@4.0.0`](../../wit/helix-core-abi-v4/world.wit). Required resource methods and the
+`host-resources` import are incompatible, so the current matrix accepts only ABI 4.0.
+
 ### Packages and releases
 
 Published crates, npm packages, SDKs, binaries, containers, operators, and managed APIs follow semantic versioning once their public contract is declared stable. Pre-1.0 artifacts still carry independent format/protocol versions and do not receive permission to reinterpret them silently.

@@ -338,6 +338,22 @@ report every input byte, and directory entries are unique and sorted by UTF-8 na
 release no success payload and carry mutation ambiguity through `helix-error.outcome`. This step
 defines no bindings, lifecycle, host, partial-I/O/deadline behavior, or database execution.
 
+P04-005 preserves immutable ABI 3.0 and defines host-owned resource lifecycles in exact
+`helix:core-abi@4.0.0`. The `immutable-buffer`, `mutable-staging-buffer`, and `opaque-handle`
+resources are non-forgeable, non-serializable, non-persistent, and scoped to one component
+instance. Owned parameters transfer unique ownership, borrows last only for one call, and Canonical
+ABI drop is the only close path. Drop occurs exactly once and is ABI-infallible; cleanup reporting
+must never change an already returned command result.
+
+`allocate-staging` creates fixed capacity of at most 16 MiB with initialized length zero.
+`seal-staging` consumes staging ownership on entry, requires the declared initialized length to
+match host state, and returns either one immutable buffer or an error without a resource.
+`duplicate-immutable` borrows its source and returns a distinct owned identity with equal immutable
+bytes. Uninitialized staging bytes are zeroed or unreadable. At most 4,096 resources may be live per
+instance. Opaque handles cannot be cloned; descriptors contain only a stable kind, a redacted name
+of at most 64 bytes, and a version. P04-005 defines no buffer read/write/copy binding, mapping,
+shared memory, budget enforcement, host implementation, or database execution.
+
 ### 6.2 `helix-host`
 
 Native host process.

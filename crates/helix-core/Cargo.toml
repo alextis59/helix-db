@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 workspace = true
 
 [package.metadata.helix]
-status = "async-storage-batch-abi-v1"
+status = "resource-lifecycle-abi-v1"
 database-functionality = false
 
 [dependencies]

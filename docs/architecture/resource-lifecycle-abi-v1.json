@@ -1,0 +1,79 @@
+{
+  "schema": "helix.resource-lifecycle-abi/1",
+  "plan_item": "P04-005",
+  "base": {
+    "package": "helix:core-abi@3.0.0",
+    "path": "wit/helix-core-abi-v3/world.wit",
+    "bytes": 8795,
+    "sha256": "1b6935a9de4f5bdccbdd466dedb78e95d5114cc3a102f2c84c56cdf228103199",
+    "immutable": true
+  },
+  "current": {
+    "package": "helix:core-abi@4.0.0",
+    "path": "wit/helix-core-abi-v4/world.wit",
+    "bytes": 9765,
+    "sha256": "5bd1312132c9edbede3d41e8223d95483a4a027d4ebf45c38440f44e2c53cfac",
+    "world": "helix-core-v1",
+    "abi": { "major": 4, "minor": 0 },
+    "accepted": [{ "major": 4, "minor": 0 }]
+  },
+  "resources": ["immutable-buffer", "mutable-staging-buffer", "opaque-handle"],
+  "operations": ["allocate-staging", "seal-staging", "duplicate-immutable"],
+  "methods": [
+    "immutable-buffer.length",
+    "mutable-staging-buffer.capacity",
+    "mutable-staging-buffer.initialized-length",
+    "opaque-handle.descriptor"
+  ],
+  "bounds": {
+    "maximum_buffer_bytes": 16777216,
+    "maximum_live_resources_per_instance": 4096,
+    "maximum_handle_name_bytes": 64
+  },
+  "rules": {
+    "owned_resources_are_nonforgeable": true,
+    "owned_transfer_has_unique_owner": true,
+    "borrows_are_call_scoped": true,
+    "canonical_abi_drop_is_only_close_path": true,
+    "drop_occurs_exactly_once": true,
+    "drop_is_infallible_at_abi": true,
+    "cleanup_failure_never_changes_command_result": true,
+    "staging_starts_with_initialized_length_zero": true,
+    "staging_capacity_is_fixed": true,
+    "initialized_length_never_exceeds_capacity": true,
+    "seal_consumes_staging_on_entry": true,
+    "seal_failure_returns_no_resource": true,
+    "seal_length_matches_host_tracked_length": true,
+    "immutable_buffer_never_mutates": true,
+    "duplicate_has_distinct_identity_and_equal_bytes": true,
+    "opaque_handle_is_noncloneable": true,
+    "opaque_descriptor_kind_is_stable": true,
+    "opaque_descriptor_is_redacted": true,
+    "resources_are_nonserializable_nonpersistent_and_instance_scoped": true,
+    "new_staging_bytes_are_zero_initialized_or_unreadable": true
+  },
+  "versioning": {
+    "change": "incompatible-required-resource-imports-and-methods",
+    "same_patch_rewrite_forbidden": true,
+    "package_semver_alone_is_not_compatibility": true,
+    "implicit_3_0_acceptance": false,
+    "unsupported_result": "CAP_UNSUPPORTED_VERSION"
+  },
+  "deferred": {
+    "buffer_read_write_copy_implementation": "P04-006",
+    "buffer_transport_alternatives": "P04-007",
+    "cancellation_deadlines_drop_during_shutdown": "P04-008",
+    "resource_budgets": "P04-009",
+    "mock_host": "P04-010",
+    "native_host": "P04-011",
+    "browser_host": "P04-012"
+  },
+  "claim_boundary": {
+    "resource_lifecycles_defined": true,
+    "buffer_transport_implemented": false,
+    "mapping_or_shared_memory_defined": false,
+    "host_implementations_present": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-006"
+  }
+}

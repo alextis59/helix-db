@@ -95,7 +95,8 @@ cannot alter WIT shape or observable semantics. Package SemVer never substitutes
 The initial value baseline is Canonical ABI scalars, strings, and lists. Byte lists use explicit
 copying. Document bytes mean validated canonical HDoc 1.0, not generic JSON. Resource types are
 declared so bindings reserve stable identities, but buffer/handle acquisition, mapping, sharing,
-and lifecycle operations remain disabled until P04-005. There is no zero-copy claim.
+and lifecycle operations remain absent from immutable ABI 1.0; P04-005 defines them in ABI 4.0.
+There is no zero-copy claim.
 
 Errors carry the `helix.errors/v1` stable code, phase, mutation outcome, retry advice, bounded
 redacted detail pairs, and no human message. Cancellation is an explicit borrowed resource polled
@@ -155,6 +156,8 @@ requires an accepted matrix proving older peers can ignore or reject every addit
   1.0 or overclaiming bindings.
 - [x] Define the exact 3.0 bounded asynchronous storage operations under P04-004 without rewriting
   2.0 or overclaiming execution.
+- [x] Define exact 4.0 buffer and opaque-handle lifecycles under P04-005 without rewriting 3.0 or
+  overclaiming transport or host execution.
 - [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
 - [ ] Benchmark explicit-copy and alternative buffer strategies under P04-014.
@@ -174,7 +177,7 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] `P04-002`: enforce deterministic core separation from ambient services.
 - [x] `P04-003`: define concrete host capability interfaces.
 - [x] `P04-004`: define coarse asynchronous operations.
-- [ ] `P04-005`: freeze buffer/resource lifecycles.
+- [x] `P04-005`: freeze buffer/resource lifecycles.
 - [ ] `P04-008`: freeze cancellation, deadline, partial-I/O, and shutdown behavior.
 - [ ] `P04-014`: publish boundary-strategy measurements.
 

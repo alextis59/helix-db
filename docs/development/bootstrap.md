@@ -241,7 +241,7 @@ corepack npm run wgsl:validate
 ```
 
 - `wasm:validate` first checks the deterministic Cargo/source/zero-import boundary, then parses and
-  contract-checks immutable ABIs 1.0/2.0 plus current async-operation ABI 3.0 and builds both
+  contract-checks immutable ABIs 1.0–3.0 plus current resource-lifecycle ABI 4.0 and builds both
   portable forms.
   The core module uses the platform-independent built-in
   validator; the WASIp2 component uses the hash-pinned `wasm-tools` Linux x64 archive. The current
