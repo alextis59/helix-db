@@ -162,6 +162,16 @@ const run = async () => {
       performance: { now: () => 0 },
       Worker: class {},
     });
+    const limitedTraceHost = new BrowserHost({
+      grants: [],
+      features,
+      executionProfile: host.bindings.captureExecutionProfile(),
+      traceCapacity: 1,
+    });
+    const limitedTraceResults = [
+      limitedTraceHost.bindings.lifecycle().state,
+      limitedTraceHost.bindings.lifecycle().state,
+    ];
     const conformanceStaging = host.bindings.allocateStaging(BigInt(vectorNumber('capacity')));
     let gapRejected = false;
     try {
@@ -213,6 +223,15 @@ const run = async () => {
         endOfFile: result.endOfFile,
       })),
       adapterDispatches,
+      trace: {
+        records: [...host.traceRecords(), ...grantedHost.traceRecords()],
+        dropped: host.droppedTraceRecords() + grantedHost.droppedTraceRecords(),
+        limited: {
+          results: limitedTraceResults,
+          records: limitedTraceHost.traceRecords(),
+          dropped: limitedTraceHost.droppedTraceRecords(),
+        },
+      },
       conformance: {
         schema: sharedVectors.schema,
         abi: [vectorNumber('abi-major'), vectorNumber('abi-minor')],

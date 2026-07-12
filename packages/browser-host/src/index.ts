@@ -3,6 +3,7 @@ export const MAXIMUM_BROWSER_WASM_BYTES = 16 * 1024 * 1024;
 export const MAXIMUM_BROWSER_GRANTS = 128;
 export const MAXIMUM_BROWSER_SCOPE_BYTES = 4096;
 export const MAXIMUM_BROWSER_BUFFER_BYTES = 16 * 1024 * 1024;
+export const MAXIMUM_BROWSER_TRACE_RECORDS = 16_384;
 
 export const BROWSER_CAPABILITY_KINDS = [
   'files',
@@ -224,6 +225,19 @@ export interface BrowserHostOptions {
     readonly state: 'running' | 'draining' | 'stopped';
     readonly shutdownDeadline?: { readonly timerName: string; readonly tick: bigint };
   };
+  readonly traceCapacity?: number;
+}
+
+export type BrowserTraceResult =
+  | { readonly tag: 'success' }
+  | { readonly tag: 'error'; readonly code: string };
+
+export interface BrowserBoundaryTraceRecord {
+  readonly sequence: number;
+  readonly call: string;
+  readonly result: BrowserTraceResult;
+  readonly copiedBytes: number;
+  readonly batchItems: number;
 }
 
 const encoder = new TextEncoder();
@@ -430,6 +444,9 @@ export class BrowserHost {
   readonly #adapters: BrowserHostAdapters;
   readonly #executionProfile: ExecutionProfile;
   readonly #lifecycle: BrowserHostOptions['lifecycle'];
+  readonly #traceCapacity: number;
+  readonly #traceRecords: BrowserBoundaryTraceRecord[] = [];
+  #droppedTraceRecords = 0;
 
   constructor(options: BrowserHostOptions) {
     this.policy = new BrowserCapabilityPolicy(options.grants);
@@ -456,7 +473,71 @@ export class BrowserHost {
     }
     this.#adapters = Object.freeze({ ...adapters });
     this.#lifecycle = options.lifecycle;
+    this.#traceCapacity = safeU32(
+      options.traceCapacity ?? MAXIMUM_BROWSER_TRACE_RECORDS,
+      MAXIMUM_BROWSER_TRACE_RECORDS,
+      'trace capacity',
+    );
     this.bindings = this.#createBindings();
+  }
+
+  traceRecords(): readonly BrowserBoundaryTraceRecord[] {
+    return structuredClone(this.#traceRecords);
+  }
+
+  droppedTraceRecords(): number {
+    return this.#droppedTraceRecords;
+  }
+
+  #recordTrace(call: string, result: BrowserTraceResult, copiedBytes = 0, batchItems = 0): void {
+    if (this.#traceRecords.length >= this.#traceCapacity) {
+      this.#droppedTraceRecords = Math.min(Number.MAX_SAFE_INTEGER, this.#droppedTraceRecords + 1);
+      return;
+    }
+    this.#traceRecords.push({
+      sequence: this.#traceRecords.length,
+      call,
+      result,
+      copiedBytes,
+      batchItems,
+    });
+  }
+
+  #trace<T>(call: string, copiedBytes: number, batchItems: number, operation: () => T): T {
+    try {
+      const result = operation();
+      this.#recordTrace(call, { tag: 'success' }, copiedBytes, batchItems);
+      return result;
+    } catch (error) {
+      this.#recordTrace(
+        call,
+        { tag: 'error', code: error instanceof BrowserHostError ? error.code : 'HOST_UNEXPECTED' },
+        copiedBytes,
+        batchItems,
+      );
+      throw error;
+    }
+  }
+
+  async #traceAsync<T>(
+    call: string,
+    copiedBytes: number,
+    batchItems: number,
+    operation: () => Promise<T>,
+  ): Promise<T> {
+    try {
+      const result = await operation();
+      this.#recordTrace(call, { tag: 'success' }, copiedBytes, batchItems);
+      return result;
+    } catch (error) {
+      this.#recordTrace(
+        call,
+        { tag: 'error', code: error instanceof BrowserHostError ? error.code : 'HOST_UNEXPECTED' },
+        copiedBytes,
+        batchItems,
+      );
+      throw error;
+    }
   }
 
   async compileAndInstantiate(bytes: BufferSource): Promise<WebAssembly.Instance> {
@@ -505,61 +586,121 @@ export class BrowserHost {
       if (token.cancelled) throw new BrowserHostError('OP_CANCELLED', 'operation was cancelled');
     };
     const bindings: BrowserHostBindings = {
-      immutableBufferLength: (buffer) => buffer.length(),
-      mutableStagingBufferCapacity: (buffer) => buffer.capacity(),
-      mutableStagingBufferInitializedLength: (buffer) => buffer.initializedLength(),
-      opaqueHandleDescriptor: (handle) => handle.descriptor(),
+      immutableBufferLength: (buffer) =>
+        this.#trace('immutable-buffer.length', 0, 0, () => buffer.length()),
+      mutableStagingBufferCapacity: (buffer) =>
+        this.#trace('mutable-staging-buffer.capacity', 0, 0, () => buffer.capacity()),
+      mutableStagingBufferInitializedLength: (buffer) =>
+        this.#trace('mutable-staging-buffer.initialized-length', 0, 0, () =>
+          buffer.initializedLength(),
+        ),
+      opaqueHandleDescriptor: (handle) =>
+        this.#trace('opaque-handle.descriptor', 0, 0, () => handle.descriptor()),
       allocateStaging: (capacity) =>
-        new BrowserStagingBuffer(safeInteger(capacity, MAXIMUM_BROWSER_BUFFER_BYTES, 'capacity')),
-      sealStaging: (buffer, initializedLength) => buffer.seal(initializedLength),
-      duplicateImmutable: (buffer) => new BrowserImmutableBuffer(buffer.copy()),
+        this.#trace(
+          'host-resources.allocate-staging',
+          0,
+          0,
+          () =>
+            new BrowserStagingBuffer(
+              safeInteger(capacity, MAXIMUM_BROWSER_BUFFER_BYTES, 'capacity'),
+            ),
+        ),
+      sealStaging: (buffer, initializedLength) =>
+        this.#trace(
+          'host-resources.seal-staging',
+          safeInteger(initializedLength, MAXIMUM_BROWSER_BUFFER_BYTES, 'initialized length'),
+          0,
+          () => buffer.seal(initializedLength),
+        ),
+      duplicateImmutable: (buffer) =>
+        this.#trace(
+          'host-resources.duplicate-immutable',
+          Number(buffer.length()),
+          0,
+          () => new BrowserImmutableBuffer(buffer.copy()),
+        ),
       readImmutable: (buffer, offset, length) => {
-        const bytes = buffer.copy();
-        const start = safeInteger(offset, bytes.byteLength, 'read offset');
+        const bufferLength = Number(buffer.length());
+        const start = safeInteger(offset, bufferLength, 'read offset');
         const requested = safeU32(length, 0xffff_ffff, 'read length');
-        const end = Math.min(bytes.byteLength, start + requested);
-        return { offset, bytes: bytes.slice(start, end), endOfBuffer: end === bytes.byteLength };
+        const copiedBytes = Math.min(bufferLength - start, requested);
+        return this.#trace('host-resources.read-immutable', copiedBytes, 0, () => {
+          const bytes = buffer.copy();
+          const end = start + copiedBytes;
+          return { offset, bytes: bytes.slice(start, end), endOfBuffer: end === bytes.byteLength };
+        });
       },
-      writeStaging: (buffer, offset, bytes) => buffer.write(offset, bytes),
-      copyImmutableToStaging: (source, target, sourceOffset, targetOffset, length) => {
-        const sourceBytes = source.copy();
-        const start = safeInteger(sourceOffset, sourceBytes.byteLength, 'source offset');
-        const requested = safeU32(length, 0xffff_ffff, 'copy length');
-        if (requested > sourceBytes.byteLength - start) {
-          throw new BrowserHostError('BUF_OUT_OF_BOUNDS', 'copy exceeds the immutable source');
-        }
-        return target.write(targetOffset, sourceBytes.slice(start, start + requested));
-      },
-      readBatch: async (scope, context, requests, cancellation) => {
-        checkCancellation(cancellation);
-        return requireAdapter('files', scope, 'readBatch')(context, requests);
-      },
-      writeBatch: async (scope, context, requests, cancellation) => {
-        checkCancellation(cancellation);
-        return requireAdapter('files', scope, 'writeBatch')(context, requests);
-      },
-      renameBatch: async (scope, context, requests, cancellation) => {
-        checkCancellation(cancellation);
-        return requireAdapter('directories', scope, 'renameBatch')(context, requests);
-      },
-      listBatch: async (scope, context, requests, cancellation) => {
-        checkCancellation(cancellation);
-        return requireAdapter('directories', scope, 'listBatch')(context, requests);
-      },
-      deleteBatch: async (scope, context, requests, cancellation) => {
-        checkCancellation(cancellation);
-        return requireAdapter('directories', scope, 'deleteBatch')(context, requests);
-      },
-      syncBatch: async (scope, context, requests, cancellation) => {
-        checkCancellation(cancellation);
-        return requireAdapter('durability', scope, 'syncBatch')(context, requests);
-      },
-      readClock: async (scope, request) => requireAdapter('timers', scope, 'readClock')(request),
-      readRandom: async (scope, request) =>
-        requireAdapter('randomness', scope, 'readRandom')(request),
-      pollCancellation: (token) => token.cancelled,
-      lifecycle: () => this.#lifecycle?.() ?? { state: 'running' },
-      captureExecutionProfile: () => structuredClone(this.#executionProfile),
+      writeStaging: (buffer, offset, bytes) =>
+        this.#trace('host-resources.write-staging', bytes.byteLength, 0, () =>
+          buffer.write(offset, bytes),
+        ),
+      copyImmutableToStaging: (source, target, sourceOffset, targetOffset, length) =>
+        this.#trace(
+          'host-resources.copy-immutable-to-staging',
+          safeU32(length, 0xffff_ffff, 'copy length'),
+          0,
+          () => {
+            const sourceBytes = source.copy();
+            const start = safeInteger(sourceOffset, sourceBytes.byteLength, 'source offset');
+            const requested = safeU32(length, 0xffff_ffff, 'copy length');
+            if (requested > sourceBytes.byteLength - start) {
+              throw new BrowserHostError('BUF_OUT_OF_BOUNDS', 'copy exceeds the immutable source');
+            }
+            return target.write(targetOffset, sourceBytes.slice(start, start + requested));
+          },
+        ),
+      readBatch: (scope, context, requests, cancellation) =>
+        this.#traceAsync('host-files.read-batch', 0, requests.length, async () => {
+          checkCancellation(cancellation);
+          return requireAdapter('files', scope, 'readBatch')(context, requests);
+        }),
+      writeBatch: (scope, context, requests, cancellation) =>
+        this.#traceAsync('host-files.write-batch', 0, requests.length, async () => {
+          checkCancellation(cancellation);
+          return requireAdapter('files', scope, 'writeBatch')(context, requests);
+        }),
+      renameBatch: (scope, context, requests, cancellation) =>
+        this.#traceAsync('host-directories.rename-batch', 0, requests.length, async () => {
+          checkCancellation(cancellation);
+          return requireAdapter('directories', scope, 'renameBatch')(context, requests);
+        }),
+      listBatch: (scope, context, requests, cancellation) =>
+        this.#traceAsync('host-directories.list-batch', 0, requests.length, async () => {
+          checkCancellation(cancellation);
+          return requireAdapter('directories', scope, 'listBatch')(context, requests);
+        }),
+      deleteBatch: (scope, context, requests, cancellation) =>
+        this.#traceAsync('host-directories.delete-batch', 0, requests.length, async () => {
+          checkCancellation(cancellation);
+          return requireAdapter('directories', scope, 'deleteBatch')(context, requests);
+        }),
+      syncBatch: (scope, context, requests, cancellation) =>
+        this.#traceAsync('host-durability.sync-batch', 0, requests.length, async () => {
+          checkCancellation(cancellation);
+          return requireAdapter('durability', scope, 'syncBatch')(context, requests);
+        }),
+      readClock: (scope, request) =>
+        this.#traceAsync('host-timers.read-clock', 0, 0, () =>
+          requireAdapter('timers', scope, 'readClock')(request),
+        ),
+      readRandom: (scope, request) =>
+        this.#traceAsync('host-randomness.read-random', 0, 0, () =>
+          requireAdapter('randomness', scope, 'readRandom')(request),
+        ),
+      pollCancellation: (token) =>
+        this.#trace('host-control.poll-cancellation', 0, 0, () => token.cancelled),
+      lifecycle: () =>
+        this.#trace(
+          'host-control.lifecycle',
+          0,
+          0,
+          () => this.#lifecycle?.() ?? { state: 'running' },
+        ),
+      captureExecutionProfile: () =>
+        this.#trace('host-control.capture-execution-profile', 0, 0, () =>
+          structuredClone(this.#executionProfile),
+        ),
     };
     return Object.freeze(bindings);
   }

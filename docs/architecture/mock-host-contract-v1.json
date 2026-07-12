@@ -11,8 +11,8 @@
   "implementation": {
     "crate": "helix-host-mock",
     "path": "crates/helix-host-mock/src/lib.rs",
-    "bytes": 43824,
-    "sha256": "bd52813faf45df6f7d75cf9478cb205f3df6da58150a1bb70a86eed701375a2d",
+    "bytes": 47080,
+    "sha256": "26ba073ac50e9601b47771de8c733794131e875b27997a94050891662c59378e",
     "workspace_dependency": "helix-core",
     "external_dependencies": 0
   },
@@ -83,7 +83,7 @@
     "running_executes_normally": true
   },
   "validation": {
-    "unit_tests": 6,
+    "unit_tests": 7,
     "every_call_has_success_coverage": true,
     "every_call_has_injected_failure_coverage": true,
     "foreign_ambient_apis_forbidden": true,

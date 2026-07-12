@@ -321,6 +321,14 @@ ABI 7, so the core has neither ambient access nor a descriptor-mediated route to
 This proves current reachability isolation; it does not claim that later filesystem, socket, GPU,
 or platform-storage adapters are implemented, nor that the component is linked into a database.
 
+P04-015 adds bounded structural observability without creating a content-exfiltration surface. Each
+mock and browser boundary record contains only a per-host sequence, stable call identity, success or
+stable error code, explicit-copy byte count, and batch-item count. It has no representational slot
+for scopes, paths, request IDs, document bytes, secrets, clock/random values, device identifiers, or
+error messages. Browser overflow drops and counts trace records without changing call behavior; the
+mock retains its existing 16,384-call bound. This is local diagnostic structure, not a telemetry
+exporter, wall-clock profiler, distributed trace context, or linked native-call claim.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

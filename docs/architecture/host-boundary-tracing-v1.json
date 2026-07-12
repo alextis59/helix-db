@@ -1,0 +1,66 @@
+{
+  "schema": "helix.host-boundary-tracing/1",
+  "plan_item": "P04-015",
+  "abi": {
+    "package": "helix:core-abi@7.0.0",
+    "calls": 21,
+    "capability_kinds": 12
+  },
+  "record": {
+    "fields": ["sequence", "call", "result", "copied_bytes", "batch_items"],
+    "result_fields": ["tag", "error_code"],
+    "sequence_scope": "per-host-instance",
+    "copy_count_semantics": "exact-explicit-copy-boundary-bytes",
+    "batch_count_semantics": "admitted-request-count",
+    "content_values_present": false
+  },
+  "forbidden_fields": [
+    "scope",
+    "path",
+    "request_id",
+    "idempotency_key",
+    "document_bytes",
+    "secret_value",
+    "clock_value",
+    "random_value",
+    "device_identifier",
+    "error_message"
+  ],
+  "bounds": {
+    "maximum_records_per_host": 16384,
+    "overflow_behavior": "drop-and-count-without-changing-call-result"
+  },
+  "implementations": {
+    "mock_rust": {
+      "path": "crates/helix-host-mock/src/lib.rs",
+      "all_calls_traced": true,
+      "copy_counts_traced": true,
+      "batch_counts_traced": true,
+      "bounded_drop_counter": true
+    },
+    "browser_typescript": {
+      "path": "packages/browser-host/src/index.ts",
+      "all_calls_traced": true,
+      "copy_counts_traced": true,
+      "batch_counts_traced": true,
+      "bounded_drop_counter": true
+    }
+  },
+  "validation": {
+    "rust_content_redaction_test": "boundary_trace_records_structure_without_content",
+    "browser_content_redaction_test": "tests/browser/browser-host.spec.ts",
+    "browser_engines": ["chromium", "firefox", "webkit"],
+    "policy_mutation_canaries": 32,
+    "source_mutation_canaries": 13
+  },
+  "claim_boundary": {
+    "structural_boundary_tracing_present": true,
+    "document_content_logged": false,
+    "native_linked_call_tracing_present": false,
+    "telemetry_exporter_present": false,
+    "distributed_trace_context_present": false,
+    "wall_clock_timing_present": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-016"
+  }
+}

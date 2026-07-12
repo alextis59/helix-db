@@ -110,6 +110,8 @@ jobs:
           corepack npm run host:conformance:test
           corepack npm run host:isolation:check
           corepack npm run host:isolation:test
+          corepack npm run host:tracing:check
+          corepack npm run host:tracing:test
           corepack npm run rust:dependencies:test
           corepack npm run rust:audit:test
           corepack npm run dependencies:check

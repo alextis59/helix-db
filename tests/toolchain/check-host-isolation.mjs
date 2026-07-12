@@ -137,7 +137,7 @@ assert(
   'portable core proof',
 );
 const matrix = JSON.parse(readFileSync(path.join(root, '.github/ci/matrix.json')));
-assert(matrix.plan_items.at(-1) === 'P04-014', 'CI implementation history');
+assert(matrix.plan_items.includes('P04-014'), 'CI implementation history');
 process.stdout.write(
   'PASS host capability isolation: zero-import core; ungranted files, sockets, clocks, and devices unreachable\n',
 );

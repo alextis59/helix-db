@@ -195,6 +195,10 @@ pub struct CallRecord {
     pub occurrence: u64,
     /// Observable result class.
     pub result: RecordedResult,
+    /// Structural byte count copied at the explicit-copy boundary; never content.
+    pub copied_bytes: u64,
+    /// Number of requests admitted by a batch call; never paths or request data.
+    pub batch_items: u32,
 }
 
 #[derive(Clone, Copy, Debug, Eq, PartialEq)]
@@ -202,6 +206,9 @@ struct CallTicket {
     sequence: u64,
     call: CapabilityCall,
     occurrence: u64,
+    copied_bytes: u64,
+    batch_items: u32,
+    record_trace: bool,
 }
 
 /// Redacted opaque-handle descriptor used by the mock resource method.
@@ -293,6 +300,7 @@ pub struct MockHost {
     occurrences: BTreeMap<CapabilityCall, u64>,
     records: Vec<CallRecord>,
     next_sequence: u64,
+    dropped_trace_records: u64,
     files: BTreeMap<String, Vec<u8>>,
     inputs: DeterministicInputs,
     profile: ExecutionProfile,
@@ -300,6 +308,14 @@ pub struct MockHost {
 }
 
 impl MockHost {
+    fn trace_bytes(value: usize) -> u64 {
+        u64::try_from(value).unwrap_or(u64::MAX)
+    }
+
+    fn trace_batch_items(value: usize) -> u32 {
+        u32::try_from(value).unwrap_or(u32::MAX)
+    }
+
     /// Creates a bounded mock host after validating unique nonzero failure occurrences.
     ///
     /// # Errors
@@ -329,6 +345,7 @@ impl MockHost {
             occurrences: BTreeMap::new(),
             records: Vec::new(),
             next_sequence: 0,
+            dropped_trace_records: 0,
             files: BTreeMap::new(),
             inputs,
             profile,
@@ -340,6 +357,12 @@ impl MockHost {
     #[must_use]
     pub fn records(&self) -> &[CallRecord] {
         &self.records
+    }
+
+    /// Returns the number of trace records dropped without changing call behavior.
+    #[must_use]
+    pub const fn dropped_trace_records(&self) -> u64 {
+        self.dropped_trace_records
     }
 
     /// Replaces the explicit lifecycle state used by the next control query.
@@ -362,11 +385,18 @@ impl MockHost {
     }
 
     fn begin(&mut self, call: CapabilityCall) -> Result<CallTicket, MockError> {
-        if self.records.len() >= MAXIMUM_CALL_RECORDS {
-            return Err(MockError::new(
-                "MOCK_CALL_LOG_LIMIT",
-                MockMutationOutcome::NotApplicable,
-            ));
+        self.begin_traced(call, 0, 0)
+    }
+
+    fn begin_traced(
+        &mut self,
+        call: CapabilityCall,
+        copied_bytes: u64,
+        batch_items: u32,
+    ) -> Result<CallTicket, MockError> {
+        let record_trace = self.records.len() < MAXIMUM_CALL_RECORDS;
+        if !record_trace {
+            self.dropped_trace_records = self.dropped_trace_records.saturating_add(1);
         }
         let occurrence = self.occurrences.entry(call).or_default();
         *occurrence = occurrence.saturating_add(1);
@@ -374,6 +404,9 @@ impl MockHost {
             sequence: self.next_sequence,
             call,
             occurrence: *occurrence,
+            copied_bytes,
+            batch_items,
+            record_trace,
         };
         self.next_sequence = self.next_sequence.saturating_add(1);
         let lifecycle_error = match self.lifecycle {
@@ -388,12 +421,7 @@ impl MockHost {
             _ => None,
         };
         if let Some(error) = lifecycle_error {
-            self.records.push(CallRecord {
-                sequence: ticket.sequence,
-                call,
-                occurrence: ticket.occurrence,
-                result: RecordedResult::Error(error.code),
-            });
+            self.record(ticket, RecordedResult::Error(error.code));
             return Err(error);
         }
         if let Some(index) = self
@@ -403,12 +431,7 @@ impl MockHost {
         {
             let rule = self.rules.remove(index);
             let error = MockError::new(rule.fault.code(), rule.outcome);
-            self.records.push(CallRecord {
-                sequence: ticket.sequence,
-                call,
-                occurrence: ticket.occurrence,
-                result: RecordedResult::Error(error.code),
-            });
+            self.record(ticket, RecordedResult::Error(error.code));
             return Err(error);
         }
         Ok(ticket)
@@ -435,13 +458,22 @@ impl MockHost {
             Ok(_) => RecordedResult::Success,
             Err(error) => RecordedResult::Error(error.code),
         };
+        self.record(ticket, recorded);
+        result
+    }
+
+    fn record(&mut self, ticket: CallTicket, result: RecordedResult) {
+        if !ticket.record_trace {
+            return;
+        }
         self.records.push(CallRecord {
             sequence: ticket.sequence,
             call: ticket.call,
             occurrence: ticket.occurrence,
-            result: recorded,
+            result,
+            copied_bytes: ticket.copied_bytes,
+            batch_items: ticket.batch_items,
         });
-        result
     }
 
     fn input_error(error: InjectionError) -> MockError {
@@ -539,7 +571,7 @@ impl MockHost {
         buffer: MutableStagingBuffer,
         initialized_length: u64,
     ) -> Result<ImmutableBuffer, MockError> {
-        let ticket = self.begin(CapabilityCall::SealStaging)?;
+        let ticket = self.begin_traced(CapabilityCall::SealStaging, initialized_length, 0)?;
         let result = buffer.seal(initialized_length).map_err(Self::buffer_error);
         self.finish(ticket, result)
     }
@@ -549,7 +581,7 @@ impl MockHost {
         &mut self,
         buffer: &ImmutableBuffer,
     ) -> Result<ImmutableBuffer, MockError> {
-        let ticket = self.begin(CapabilityCall::DuplicateImmutable)?;
+        let ticket = self.begin_traced(CapabilityCall::DuplicateImmutable, buffer.length(), 0)?;
         self.finish(ticket, Ok(buffer.duplicate()))
     }
 
@@ -560,7 +592,11 @@ impl MockHost {
         offset: u64,
         length: u32,
     ) -> Result<ImmutableReadResult, MockError> {
-        let ticket = self.begin(CapabilityCall::ReadImmutable)?;
+        let copied_bytes = buffer
+            .length()
+            .saturating_sub(offset)
+            .min(u64::from(length));
+        let ticket = self.begin_traced(CapabilityCall::ReadImmutable, copied_bytes, 0)?;
         let result = buffer.read(offset, length).map_err(Self::buffer_error);
         self.finish(ticket, result)
     }
@@ -572,7 +608,11 @@ impl MockHost {
         offset: u64,
         bytes: &[u8],
     ) -> Result<StagingWriteResult, MockError> {
-        let ticket = self.begin(CapabilityCall::WriteStaging)?;
+        let ticket = self.begin_traced(
+            CapabilityCall::WriteStaging,
+            Self::trace_bytes(bytes.len()),
+            0,
+        )?;
         let result = buffer.write(offset, bytes).map_err(Self::buffer_error);
         self.finish(ticket, result)
     }
@@ -586,7 +626,8 @@ impl MockHost {
         target_offset: u64,
         length: u32,
     ) -> Result<StagingWriteResult, MockError> {
-        let ticket = self.begin(CapabilityCall::CopyImmutableToStaging)?;
+        let ticket =
+            self.begin_traced(CapabilityCall::CopyImmutableToStaging, u64::from(length), 0)?;
         let result = target
             .copy_from(source, source_offset, target_offset, length)
             .map_err(Self::buffer_error);
@@ -595,7 +636,11 @@ impl MockHost {
 
     /// Implements deterministic bounded `host-files.read-batch`.
     pub fn read_batch(&mut self, requests: &[ReadRequest]) -> Result<Vec<ReadResult>, MockError> {
-        let ticket = self.begin(CapabilityCall::ReadBatch)?;
+        let ticket = self.begin_traced(
+            CapabilityCall::ReadBatch,
+            0,
+            Self::trace_batch_items(requests.len()),
+        )?;
         let result = (|| {
             Self::validate_batch(requests.len())?;
             requests
@@ -630,7 +675,11 @@ impl MockHost {
         &mut self,
         requests: &[WriteRequest],
     ) -> Result<Vec<WriteResult>, MockError> {
-        let ticket = self.begin(CapabilityCall::WriteBatch)?;
+        let ticket = self.begin_traced(
+            CapabilityCall::WriteBatch,
+            0,
+            Self::trace_batch_items(requests.len()),
+        )?;
         let result = (|| {
             Self::validate_batch(requests.len())?;
             let mut candidate = self.files.clone();
@@ -667,7 +716,11 @@ impl MockHost {
 
     /// Implements failure-atomic bounded `host-directories.rename-batch`.
     pub fn rename_batch(&mut self, requests: &[RenameRequest]) -> Result<Vec<bool>, MockError> {
-        let ticket = self.begin(CapabilityCall::RenameBatch)?;
+        let ticket = self.begin_traced(
+            CapabilityCall::RenameBatch,
+            0,
+            Self::trace_batch_items(requests.len()),
+        )?;
         let result = (|| {
             Self::validate_batch(requests.len())?;
             let mut candidate = self.files.clone();
@@ -697,7 +750,11 @@ impl MockHost {
 
     /// Implements sorted bounded `host-directories.list-batch`.
     pub fn list_batch(&mut self, paths: &[String]) -> Result<Vec<Vec<String>>, MockError> {
-        let ticket = self.begin(CapabilityCall::ListBatch)?;
+        let ticket = self.begin_traced(
+            CapabilityCall::ListBatch,
+            0,
+            Self::trace_batch_items(paths.len()),
+        )?;
         let result = (|| {
             Self::validate_batch(paths.len())?;
             paths
@@ -719,7 +776,11 @@ impl MockHost {
 
     /// Implements failure-atomic bounded `host-directories.delete-batch`.
     pub fn delete_batch(&mut self, requests: &[DeleteRequest]) -> Result<Vec<bool>, MockError> {
-        let ticket = self.begin(CapabilityCall::DeleteBatch)?;
+        let ticket = self.begin_traced(
+            CapabilityCall::DeleteBatch,
+            0,
+            Self::trace_batch_items(requests.len()),
+        )?;
         let result = (|| {
             Self::validate_batch(requests.len())?;
             let mut candidate = self.files.clone();
@@ -736,7 +797,11 @@ impl MockHost {
 
     /// Implements bounded deterministic `host-durability.sync-batch`.
     pub fn sync_batch(&mut self, paths: &[String]) -> Result<Vec<String>, MockError> {
-        let ticket = self.begin(CapabilityCall::SyncBatch)?;
+        let ticket = self.begin_traced(
+            CapabilityCall::SyncBatch,
+            0,
+            Self::trace_batch_items(paths.len()),
+        )?;
         let result = (|| {
             Self::validate_batch(paths.len())?;
             for path in paths {
@@ -958,6 +1023,38 @@ mod tests {
             mock.records().first().map(|record| record.sequence),
             Some(0)
         );
+        assert!(mock.records().iter().any(|record| {
+            record.call == CapabilityCall::WriteStaging && record.copied_bytes == 4
+        }));
+        assert!(mock.records().iter().any(|record| {
+            record.call == CapabilityCall::CopyImmutableToStaging && record.copied_bytes == 4
+        }));
+    }
+
+    #[test]
+    fn boundary_trace_records_structure_without_content() {
+        let mock = host(vec![]);
+        assert!(mock.is_ok());
+        let Ok(mut mock) = mock else { return };
+        let secret_path = "private/document-tenant-42";
+        let secret_bytes = b"document-secret-value";
+        let write = WriteRequest {
+            path: secret_path.to_owned(),
+            offset: 0,
+            bytes: secret_bytes.to_vec(),
+        };
+        assert!(mock.write_batch(&[write]).is_ok());
+        let trace = format!("{:?}", mock.records());
+        assert!(!trace.contains(secret_path));
+        assert!(!trace.contains("document-secret-value"));
+        assert_eq!(mock.records().len(), 1);
+        assert_eq!(mock.records()[0].batch_items, 1);
+        assert_eq!(mock.records()[0].copied_bytes, 0);
+        for _ in 1..=MAXIMUM_CALL_RECORDS {
+            assert_eq!(mock.lifecycle(), Ok(MockLifecycle::Running));
+        }
+        assert_eq!(mock.records().len(), MAXIMUM_CALL_RECORDS);
+        assert_eq!(mock.dropped_trace_records(), 1);
     }
 
     #[test]

@@ -51,6 +51,15 @@ declare global {
       syntheticFeatures: BrowserToolchainExampleReport['browserHost']['features'];
       adapterResult: unknown[];
       adapterDispatches: number;
+      trace: {
+        records: import('../../packages/browser-host/src/index').BrowserBoundaryTraceRecord[];
+        dropped: number;
+        limited: {
+          results: string[];
+          records: readonly import('../../packages/browser-host/src/index').BrowserBoundaryTraceRecord[];
+          dropped: number;
+        };
+      };
       conformance: {
         schema: string | undefined;
         abi: number[];

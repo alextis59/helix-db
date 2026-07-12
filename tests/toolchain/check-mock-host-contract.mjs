@@ -81,8 +81,8 @@ export const validateMockHostPolicy = (candidate = policy) => {
     {
       crate: 'helix-host-mock',
       path: 'crates/helix-host-mock/src/lib.rs',
-      bytes: 43824,
-      sha256: 'bd52813faf45df6f7d75cf9478cb205f3df6da58150a1bb70a86eed701375a2d',
+      bytes: 47080,
+      sha256: '26ba073ac50e9601b47771de8c733794131e875b27997a94050891662c59378e',
       workspace_dependency: 'helix-core',
       external_dependencies: 0,
     },
@@ -140,7 +140,7 @@ export const validateMockHostPolicy = (candidate = policy) => {
     Object.values(candidate.lifecycle).every((value) => value === true),
     'lifecycle rules',
   );
-  assert(candidate.validation.unit_tests === 6, 'unit-test count');
+  assert(candidate.validation.unit_tests === 7, 'unit-test count');
   assert(
     Object.entries(candidate.validation)
       .filter(([key]) => key !== 'unit_tests')

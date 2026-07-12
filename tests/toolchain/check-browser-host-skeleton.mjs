@@ -88,8 +88,8 @@ export const validateBrowserHostPolicy = (candidate = policy) => {
     candidate.implementation,
     {
       path: 'packages/browser-host/src/index.ts',
-      bytes: 24287,
-      sha256: '513194056b68c497731f6112f0d52f49386b6270116e27824cfebc14d6425453',
+      bytes: 28837,
+      sha256: '3d5002d4b00f1eff322a6bcf81a28eae46c3609b0a3638f5bb5e4470193fdd4f',
       language: 'strict-typescript',
       installable_package: false,
       external_runtime_dependencies: 0,

@@ -176,6 +176,8 @@ requires an accepted matrix proving older peers can ignore or reject every addit
   engines under P04-013 while inventorying all 21 calls and all 12 capability kinds.
 - [x] Prove the zero-import core and exact native/browser policies cannot reach ungranted files,
   sockets, clocks, or devices under P04-014.
+- [x] Trace all executable mock/browser ABI calls and explicit copies with bounded structural,
+  content-free records under P04-015.
 - [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
 - [ ] Benchmark explicit-copy and alternative buffer strategies under P04-016.
@@ -205,7 +207,7 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] `P04-012`: implement the bounded strict-TypeScript browser host skeleton.
 - [x] `P04-013`: replay the shared explicit-copy transcript across all host boundaries.
 - [x] `P04-014`: prove ungranted file, socket, clock, and device scopes are unreachable.
-- [ ] `P04-015`: add content-safe boundary tracing.
+- [x] `P04-015`: add content-safe boundary tracing.
 - [ ] `P04-016`: publish boundary-strategy measurements.
 
 ## References

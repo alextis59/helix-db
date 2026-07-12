@@ -447,10 +447,24 @@ accepts at most 16 MiB of component bytes, and rejects core modules as component
 ambient adapter is linked.
 
 Native capability configuration is immutable and deny-by-default. At most 128 grants name one of
-the eleven ABI capability kinds plus an exact scope of at most 4,096 UTF-8 bytes. Empty scopes,
+the twelve ABI capability kinds plus an exact scope of at most 4,096 UTF-8 bytes. Empty scopes,
 wildcards, control text, duplicates, and absent grants reject. This step compiles components but
 does not instantiate the Helix world or link ABI calls; filesystem, durability, networking,
 entropy, clocks, GPU execution, and database behavior remain unimplemented.
+
+P04-012 provides the strict-TypeScript browser skeleton for all 21 ABI 7 call shapes with exact
+grants, bounded explicit-copy buffers, injected adapters, validated profiles, and real execution in
+Chromium, Firefox, and WebKit. P04-013 binds mock, native, and browser tests to one shared
+language-neutral explicit-copy transcript and the exact 21-call/12-capability inventory. P04-014
+requires the zero-import core plus native and three-engine browser tests to deny ungranted file,
+socket, clock, and device scopes.
+
+P04-015 traces every executable mock/browser boundary call using only a per-host sequence, stable
+call identity, success or stable error code, explicit-copy byte count, and batch-item count. Trace
+records **MUST NOT** contain scopes, paths, request or idempotency IDs, document bytes, secrets,
+clock/random values, device identifiers, or error messages. Each host retains at most 16,384
+records; overflow **MUST NOT** change call behavior. This does not claim a telemetry exporter,
+distributed trace context, wall-clock timing, or linked native ABI-call tracing.
 
 ### 6.2 `helix-host`
 

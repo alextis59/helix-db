@@ -96,6 +96,7 @@ same(
     'P04-012',
     'P04-013',
     'P04-014',
+    'P04-015',
   ],
   'CI matrix task history',
 );
@@ -317,6 +318,8 @@ same(
     'host:conformance:test': packageJson.scripts['host:conformance:test'],
     'host:isolation:check': packageJson.scripts['host:isolation:check'],
     'host:isolation:test': packageJson.scripts['host:isolation:test'],
+    'host:tracing:check': packageJson.scripts['host:tracing:check'],
+    'host:tracing:test': packageJson.scripts['host:tracing:test'],
     'host:mock:check': packageJson.scripts['host:mock:check'],
     'host:mock:test': packageJson.scripts['host:mock:test'],
     'host:native:check': packageJson.scripts['host:native:check'],
@@ -387,6 +390,8 @@ same(
     'host:conformance:test': 'node tests/toolchain/test-host-conformance.mjs',
     'host:isolation:check': 'node tests/toolchain/check-host-isolation.mjs',
     'host:isolation:test': 'node tests/toolchain/test-host-isolation.mjs',
+    'host:tracing:check': 'node tests/toolchain/check-host-boundary-tracing.mjs',
+    'host:tracing:test': 'node tests/toolchain/test-host-boundary-tracing.mjs',
     'host:mock:check': 'node tests/toolchain/check-mock-host-contract.mjs',
     'host:mock:test': 'node tests/toolchain/test-mock-host-contract.mjs',
     'host:native:check': 'node tests/toolchain/check-native-host-skeleton.mjs',
@@ -404,7 +409,7 @@ same(
     'wasm:abi:check': 'node tests/toolchain/check-wasm-abi.mjs',
     'wasm:abi:test': 'node tests/toolchain/test-wasm-abi-contract.mjs',
     'wasm:validate':
-      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-explicit-copy-buffer.mjs && node tests/toolchain/check-buffer-transport-alternatives.mjs && node tests/toolchain/check-async-completion-contract.mjs && node tests/toolchain/check-deterministic-injection-contract.mjs && node tests/toolchain/check-mock-host-contract.mjs && node tests/toolchain/check-native-host-skeleton.mjs && node tests/toolchain/check-browser-host-skeleton.mjs && node tests/toolchain/check-host-conformance.mjs && node tests/toolchain/check-host-isolation.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
+      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-storage-batch-abi.mjs && node tests/toolchain/check-resource-lifecycle-abi.mjs && node tests/toolchain/check-explicit-copy-buffer.mjs && node tests/toolchain/check-buffer-transport-alternatives.mjs && node tests/toolchain/check-async-completion-contract.mjs && node tests/toolchain/check-deterministic-injection-contract.mjs && node tests/toolchain/check-mock-host-contract.mjs && node tests/toolchain/check-native-host-skeleton.mjs && node tests/toolchain/check-browser-host-skeleton.mjs && node tests/toolchain/check-host-conformance.mjs && node tests/toolchain/check-host-isolation.mjs && node tests/toolchain/check-host-boundary-tracing.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
@@ -724,6 +729,8 @@ for (const marker of [
   'corepack npm run host:conformance:test',
   'corepack npm run host:isolation:check',
   'corepack npm run host:isolation:test',
+  'corepack npm run host:tracing:check',
+  'corepack npm run host:tracing:test',
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }
