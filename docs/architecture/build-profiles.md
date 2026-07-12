@@ -1,9 +1,9 @@
 # Native, Wasm, Browser, Diagnostic, and Benchmark Build Profiles
 
 - Status: Accepted and executable toolchain profiles; no database/browser release claim
-- Last updated: 2026-07-11
+- Last updated: 2026-07-12
 - Owner: Runtime architecture owner
-- Plan items: `P02-005`; coverage reporting completed by `P02-013`; benchmark reporting completed by `P02-014`; boundary examples completed by `P02-016`
+- Plan items: `P02-005`; coverage reporting completed by `P02-013`; benchmark reporting completed by `P02-014`; boundary examples completed by `P02-016`; sanitizer closure revised by `P04-011`
 - Governing requirements: `INV-003`, `INV-004`, `INV-007`, `PLAT-001`, `PLAT-002`, `PLAT-003`, `CORE-001`, `CORE-003`, `QUAL-001`
 - Governing gate: `G02`
 - Rust toolchain: [Rust toolchain policy](rust-toolchain-policy.md)
@@ -22,7 +22,7 @@ The [Cargo profile reference](https://doc.rust-lang.org/cargo/reference/profiles
 | Component Wasm | Cargo `wasm` | `wasm32-wasip2`; portable `helix-core` closure | Size optimization, fat LTO, abort panic, stripped symbols; P02-010 validates the Component Model binary | Not WASIp3/server-edge support or a production ABI claim |
 | Browser Wasm | Cargo `browser` | `wasm32-unknown-unknown`; portable `helix-core` closure | Size-first optimization, fat LTO, abort panic, stripped symbols; P02-010 validates/instantiates the core module | Not a JavaScript binding or database behavior claim |
 | Browser JavaScript | Vite production config | Standards-based boundary example | Relative base, `custom` app, ES2022, assets kept external, hidden maps, Oxc minification, public-env allow-prefix | Toolchain example only; not database behavior or browser support |
-| AddressSanitizer | Cargo `sanitizer` | `x86_64-unknown-linux-gnuasan`; workspace libraries/all features | Optimization 1, full debug/assertions/overflow checks, one codegen unit, fully instrumented distributed standard library | Not portable to unlisted hosts; not Thread/MemorySanitizer |
+| AddressSanitizer | Cargo `sanitizer` | `x86_64-unknown-linux-gnuasan`; seven compatible first-party library crates/all features | Optimization 1, full debug/assertions/overflow checks, one codegen unit, fully instrumented distributed standard library | Wasmtime's `target-lexicon` rejects the custom target name; native host/server are tested in native lanes, not claimed as ASan-covered |
 | Coverage | Cargo `coverage` plus exact stable rustflag and compiler-matched LLVM reporting | Linux x64; workspace libraries/all features | No optimization, full debug/assertions/overflow checks, one codegen unit, `-C instrument-coverage`, unique raw profiles, explicit product/test classification, semantic/recovery thresholds | Coverage is reachability evidence, not semantic or recovery correctness proof |
 | Benchmark | Cargo `bench` plus versioned result harness | Host; workspace/all targets/features, then Node host-memory calibration | Same optimization/LTO/codegen/overflow posture as native release, with line tables; strict workload/raw/summary schemas and integrity-only result | Calibration proves reporting plumbing, not database or release performance |
 
@@ -42,9 +42,16 @@ node tests/toolchain/run-build-profile.mjs coverage
 node tests/toolchain/run-build-profile.mjs benchmark
 ```
 
-All Cargo invocations are frozen and offline. The runner accepts no passthrough arguments, so evidence cannot silently weaken features, targets, or workspace scope.
+All Cargo invocations are frozen and offline. The runner accepts no passthrough arguments, so evidence cannot silently weaken features, targets, or the profile's declared scope.
 
 The sanitizer lane deliberately supports only x86_64 Linux. Rust's [ASan target documentation](https://doc.rust-lang.org/nightly/rustc/platform-support/x86_64-unknown-linux-gnuasan.html) says this target ships an instrumented standard library through rustup and avoids nightly `build-std`. The more general [unstable sanitizer documentation](https://doc.rust-lang.org/beta/unstable-book/compiler-flags/sanitizer.html) remains relevant to future targets and explains why partial instrumentation can miss defects; no unpinned `+nightly` fallback is permitted.
+
+P04-011 narrows the ASan target closure—not the native release/test closure—because Wasmtime's
+exact `target-lexicon` build script rejects the Rust-provided `x86_64-unknown-linux-gnuasan` target
+name before compilation. The lane names all seven admitted first-party packages explicitly and
+therefore still covers the portable semantic/storage/core crates, GPU boundary, and mock host. It
+excludes only `helix-host-native` and its `helix-server` consumer; the three native OS lanes compile,
+lint, test, and document both. Adding any first-party crate requires an explicit sanitizer decision.
 
 The raw coverage runner rejects ambient `RUSTFLAGS`/`CARGO_ENCODED_RUSTFLAGS`, sets exactly `-C instrument-coverage`, gives every test process a `%p`/`%m` raw-profile path, and fails if no `.profraw` file appears. The [rustc coverage documentation](https://doc.rust-lang.org/beta/rustc/instrument-coverage.html) defines the stable compiler flag, raw profile behavior, unique filename patterns, and compiler-matched LLVM report flow.
 

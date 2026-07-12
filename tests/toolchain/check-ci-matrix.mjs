@@ -706,6 +706,34 @@ for (const marker of [
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }
+const buildProfileRunner = readText('tests/toolchain/run-build-profile.mjs');
+const sanitizerPackageBlock = buildProfileRunner.match(
+  /const sanitizerPackages = \[([\s\S]*?)\];/,
+)?.[1];
+assert(sanitizerPackageBlock, 'sanitizer package block absent');
+for (const marker of [
+  "'helix-columnar'",
+  "'helix-core'",
+  "'helix-doc'",
+  "'helix-gpu'",
+  "'helix-host-mock'",
+  "'helix-query'",
+  "'helix-storage'",
+  '...sanitizerPackages.flatMap',
+]) {
+  assert(
+    marker.startsWith("'helix-")
+      ? sanitizerPackageBlock.includes(marker)
+      : buildProfileRunner.includes(marker),
+    `sanitizer package marker absent: ${marker}`,
+  );
+}
+for (const forbidden of ["'helix-host-native'", "'helix-server'"]) {
+  assert(
+    !sanitizerPackageBlock.includes(forbidden),
+    `sanitizer-incompatible package present: ${forbidden}`,
+  );
+}
 const nightly = readText('.github/workflows/ci-nightly.yml');
 for (const marker of [
   'schedule:',

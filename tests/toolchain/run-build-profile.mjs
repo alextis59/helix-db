@@ -22,6 +22,15 @@ if (!selected || !supported.includes(selected) || process.argv.length !== 3) {
 }
 
 const commonBuild = ['build', '--frozen', '--workspace', '--all-targets', '--all-features'];
+const sanitizerPackages = [
+  'helix-columnar',
+  'helix-core',
+  'helix-doc',
+  'helix-gpu',
+  'helix-host-mock',
+  'helix-query',
+  'helix-storage',
+];
 const definitions = {
   'native-debug': {
     args: [...commonBuild, '--profile', 'dev'],
@@ -61,7 +70,7 @@ const definitions = {
       'sanitizer',
       '--target',
       'x86_64-unknown-linux-gnuasan',
-      '--workspace',
+      ...sanitizerPackages.flatMap((name) => ['--package', name]),
       '--all-features',
       '--lib',
     ],
