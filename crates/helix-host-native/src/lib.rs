@@ -42,6 +42,8 @@ pub enum NativeCapability {
     Directories,
     /// Durability barriers.
     Durability,
+    /// Advisory/exclusive lock namespaces.
+    Locks,
     /// Named clocks and monotonic timers.
     Timers,
     /// Purpose-separated cryptographic randomness.
@@ -59,6 +61,47 @@ pub enum NativeCapability {
     /// Explicit device profiles and GPU access.
     Gpu,
 }
+
+/// All ABI 7 capability kinds in WIT declaration order.
+pub const ALL_NATIVE_CAPABILITIES: [NativeCapability; 12] = [
+    NativeCapability::Files,
+    NativeCapability::Directories,
+    NativeCapability::Durability,
+    NativeCapability::Locks,
+    NativeCapability::Timers,
+    NativeCapability::Randomness,
+    NativeCapability::Scheduling,
+    NativeCapability::Metrics,
+    NativeCapability::Secrets,
+    NativeCapability::Networking,
+    NativeCapability::ObjectStorage,
+    NativeCapability::Gpu,
+];
+
+/// All ABI 7 imported host calls in WIT declaration order.
+pub const NATIVE_ABI_CALLS: [&str; 21] = [
+    "immutable-buffer.length",
+    "mutable-staging-buffer.capacity",
+    "mutable-staging-buffer.initialized-length",
+    "opaque-handle.descriptor",
+    "host-resources.allocate-staging",
+    "host-resources.seal-staging",
+    "host-resources.duplicate-immutable",
+    "host-resources.read-immutable",
+    "host-resources.write-staging",
+    "host-resources.copy-immutable-to-staging",
+    "host-files.read-batch",
+    "host-files.write-batch",
+    "host-directories.rename-batch",
+    "host-directories.list-batch",
+    "host-directories.delete-batch",
+    "host-durability.sync-batch",
+    "host-timers.read-clock",
+    "host-randomness.read-random",
+    "host-control.poll-cancellation",
+    "host-control.lifecycle",
+    "host-control.capture-execution-profile",
+];
 
 /// One exact capability grant.
 #[derive(Clone, Debug, Eq, PartialEq)]
@@ -206,9 +249,34 @@ impl NativeHost {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use helix_core::explicit_copy::MutableStagingBuffer;
 
     const EMPTY_COMPONENT: &[u8] = b"\0asm\x0d\0\x01\0";
     const EMPTY_CORE_MODULE: &[u8] = b"\0asm\x01\0\0\0";
+    const SHARED_VECTORS: &str =
+        include_str!("../../../conformance/host/abi-v7-explicit-copy.vectors");
+
+    fn vector(key: &str) -> &str {
+        SHARED_VECTORS
+            .lines()
+            .find_map(|line| line.split_once('=').filter(|(name, _)| *name == key))
+            .map_or("", |(_, value)| value)
+    }
+
+    fn vector_u64(key: &str) -> u64 {
+        vector(key).parse().unwrap_or(u64::MAX)
+    }
+
+    fn vector_bytes(key: &str) -> Vec<u8> {
+        vector(key)
+            .as_bytes()
+            .chunks_exact(2)
+            .map(|pair| {
+                let text = std::str::from_utf8(pair).unwrap_or("");
+                u8::from_str_radix(text, 16).unwrap_or_default()
+            })
+            .collect()
+    }
 
     fn grant(kind: NativeCapability, scope: &str) -> CapabilityGrant {
         CapabilityGrant {
@@ -283,6 +351,61 @@ mod tests {
         assert_eq!(INTERNAL_DEPENDENCIES, &["helix-core"]);
         #[cfg(feature = "gpu")]
         assert_eq!(OPTIONAL_GPU_DEPENDENCY, "helix-gpu");
+    }
+
+    #[test]
+    fn shared_abi_v7_explicit_copy_vectors_match_native_boundary() {
+        assert_eq!(vector("schema"), "helix.host-abi-v7-conformance/1");
+        assert_eq!(vector_u64("abi-major"), 7);
+        assert_eq!(vector_u64("imported-calls"), NATIVE_ABI_CALLS.len() as u64);
+        assert_eq!(vector_u64("capability-kinds"), 12);
+        assert_eq!(ALL_NATIVE_CAPABILITIES.len(), 12);
+        assert!(ALL_NATIVE_CAPABILITIES.contains(&NativeCapability::Locks));
+
+        let staging = MutableStagingBuffer::allocate(vector_u64("capacity"));
+        assert!(staging.is_ok());
+        let Ok(mut staging) = staging else { return };
+        assert!(
+            staging
+                .write(vector_u64("gap-offset"), &vector_bytes("gap-hex"))
+                .is_err()
+        );
+        assert!(
+            staging
+                .write(vector_u64("write-offset"), &vector_bytes("write-hex"))
+                .is_ok()
+        );
+        let source = staging.seal(vector_bytes("write-hex").len() as u64);
+        assert!(source.is_ok());
+        let Ok(source) = source else { return };
+        let read = source.read(vector_u64("read-offset"), vector_u64("read-length") as u32);
+        assert!(read.is_ok());
+        let Ok(read) = read else { return };
+        assert_eq!(read.bytes, vector_bytes("expected-read-hex"));
+        assert_eq!(read.end_of_buffer.to_string(), vector("expected-read-end"));
+
+        let target = MutableStagingBuffer::allocate(vector_u64("capacity"));
+        assert!(target.is_ok());
+        let Ok(mut target) = target else { return };
+        assert!(
+            target
+                .copy_from(
+                    &source,
+                    vector_u64("copy-source-offset"),
+                    vector_u64("copy-target-offset"),
+                    vector_u64("copy-length") as u32,
+                )
+                .is_ok()
+        );
+        let copied = target.seal(vector_u64("copy-length"));
+        assert!(copied.is_ok());
+        let Ok(copied) = copied else { return };
+        assert_eq!(
+            copied
+                .read(0, vector_u64("copy-length") as u32)
+                .map(|value| value.bytes),
+            Ok(vector_bytes("expected-copy-hex"))
+        );
     }
 }
 // helix-coverage: exclude-end unit-tests

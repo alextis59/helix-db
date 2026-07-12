@@ -36,8 +36,8 @@ lifecycle query, and lifecycle state outranks a configured fault at the same cal
 
 This is a deterministic in-process conformance oracle. It performs no filesystem, sync, wall-clock,
 random-device, network, thread, process, GPU, native runtime, browser, or component-binding work.
-Its `sync-batch` is observable mock success, not durability. Shared conformance begins at P04-013;
-native and browser hosts remain P04-011/P04-012.
+Its `sync-batch` is observable mock success, not durability. P04-013 adds a shared explicit-copy
+transcript across mock, native, and browser boundaries, but not linked all-call conformance.
 
 ```bash
 corepack npm run host:mock:check

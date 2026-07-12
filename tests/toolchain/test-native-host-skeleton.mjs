@@ -57,6 +57,19 @@ const sm = [
   ['component', (v) => v.replace('Component::new(&self.engine, bytes)', 'Ok(())')],
   ['filesystem', (v) => `${v}\nconst X:&str="std::fs";`],
   ['WASI', (v) => `${v}\nconst X:&str="wasmtime_wasi";`],
+  [
+    'capability inventory',
+    (v) =>
+      v.replace(
+        'ALL_NATIVE_CAPABILITIES: [NativeCapability; 12]',
+        'ALL_NATIVE_CAPABILITIES: [NativeCapability; 11]',
+      ),
+  ],
+  ['shared vectors', (v) => v.replace('abi-v7-explicit-copy.vectors', 'missing.vectors')],
+  [
+    'call inventory',
+    (v) => v.replace('NATIVE_ABI_CALLS: [&str; 21]', 'NATIVE_ABI_CALLS: [&str; 20]'),
+  ],
 ];
 for (const [l, m] of sm) {
   try {

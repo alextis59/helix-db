@@ -106,6 +106,8 @@ jobs:
           corepack npm run host:native:test
           corepack npm run host:browser:check
           corepack npm run host:browser:test
+          corepack npm run host:conformance:check
+          corepack npm run host:conformance:test
           corepack npm run rust:dependencies:test
           corepack npm run rust:audit:test
           corepack npm run dependencies:check

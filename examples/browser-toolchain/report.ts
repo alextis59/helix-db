@@ -51,6 +51,16 @@ declare global {
       syntheticFeatures: BrowserToolchainExampleReport['browserHost']['features'];
       adapterResult: unknown[];
       adapterDispatches: number;
+      conformance: {
+        schema: string | undefined;
+        abi: number[];
+        importedCalls: number;
+        capabilityKinds: number;
+        gapRejected: boolean;
+        readHex: string;
+        readEnd: boolean;
+        copyHex: string;
+      };
     }>;
   }
 }

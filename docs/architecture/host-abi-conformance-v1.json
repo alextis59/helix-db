@@ -1,0 +1,59 @@
+{
+  "schema": "helix.host-abi-conformance/1",
+  "plan_item": "P04-013",
+  "abi": {
+    "package": "helix:core-abi@7.0.0",
+    "path": "wit/helix-core-abi-v7/world.wit",
+    "bytes": 12413,
+    "sha256": "80b9e2de39338377aa8e71ca603ac75cbda801c3822ef948b5c0e86539dc79a0",
+    "imported_calls": 21,
+    "capability_kinds": 12
+  },
+  "vector": {
+    "path": "conformance/host/abi-v7-explicit-copy.vectors",
+    "bytes": 357,
+    "sha256": "aee7b9e4fd29c562d929497daecf1ba068e1f8722a78610dd51019be68de067f",
+    "case": "explicit-copy-round-trip"
+  },
+  "hosts": {
+    "mock": {
+      "implementation": "crates/helix-host-mock/src/lib.rs",
+      "test": "shared_abi_v7_explicit_copy_vectors_match_mock_host",
+      "language": "rust"
+    },
+    "native": {
+      "implementation": "crates/helix-host-native/src/lib.rs",
+      "test": "shared_abi_v7_explicit_copy_vectors_match_native_boundary",
+      "language": "rust"
+    },
+    "browser": {
+      "implementation": "packages/browser-host/src/index.ts",
+      "test": "tests/browser/host-conformance.spec.ts",
+      "language": "typescript",
+      "engines": ["chromium", "firefox", "webkit"]
+    }
+  },
+  "observations": [
+    "noncontiguous-write-rejected",
+    "detached-short-read-bytes",
+    "end-of-buffer",
+    "exact-immutable-to-staging-copy"
+  ],
+  "validation": {
+    "shared_vector_cases": 1,
+    "host_executions": 5,
+    "policy_mutation_canaries": 25,
+    "vector_mutation_canaries": 17,
+    "source_mutation_canaries": 6
+  },
+  "claim_boundary": {
+    "shared_explicit_copy_conformance_present": true,
+    "all_call_shapes_inventoried": true,
+    "all_imported_calls_executed_cross_host": false,
+    "component_model_linked": false,
+    "platform_storage_adapters_present": false,
+    "capability_isolation_complete": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-014"
+  }
+}

@@ -59,6 +59,7 @@ const policyMutations = [
   ['success coverage', (v) => (v.validation.every_call_has_success_coverage = false)],
   ['failure coverage', (v) => (v.validation.every_call_has_injected_failure_coverage = false)],
   ['ambient acceptance', (v) => (v.validation.foreign_ambient_apis_forbidden = false)],
+  ['shared vectors', (v) => (v.validation.shared_conformance_vectors_present = false)],
   ['native overclaim', (v) => (v.claim_boundary.native_host_present = true)],
   ['browser overclaim', (v) => (v.claim_boundary.browser_host_present = true)],
   ['binding overclaim', (v) => (v.claim_boundary.component_binding_present = true)],
@@ -148,6 +149,7 @@ const rustMutations = [
   ['ambient filesystem', (v) => `${v}\nconst X: &str = "std::fs";`],
   ['ambient time', (v) => `${v}\nconst X: &str = "std::time";`],
   ['unsafe', (v) => `${v}\nunsafe { core::hint::unreachable_unchecked() }`],
+  ['shared vectors', (v) => v.replace('abi-v7-explicit-copy.vectors', 'missing.vectors')],
 ];
 for (const [label, mutate] of rustMutations) {
   try {

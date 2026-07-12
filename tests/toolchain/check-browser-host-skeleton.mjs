@@ -200,7 +200,7 @@ for (const marker of [
 ])
   assert(browserExample.includes(marker), `browser execution marker ${marker}`);
 const matrix = JSON.parse(readFileSync(path.join(root, '.github/ci/matrix.json')));
-assert(matrix.plan_items.at(-1) === 'P04-012', 'CI implementation history');
+assert(matrix.plan_items.includes('P04-012'), 'CI implementation history');
 process.stdout.write(
   'PASS browser host skeleton: 21 ABI call shapes, exact grants, six feature probes, bounded real-browser module execution\n',
 );

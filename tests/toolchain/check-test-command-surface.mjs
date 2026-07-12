@@ -43,7 +43,7 @@ const expectedActivationTasks = {
 const expectedSteps = {
   benchmark: ['benchmark-profile', 'benchmark-baseline', 'hdoc-benchmark', 'hdoc-decisions'],
   browser: ['browser-example-build', 'browser-harness-inventory'],
-  conformance: ['semantic-conformance'],
+  conformance: ['semantic-conformance', 'host-abi-conformance'],
   crash: [],
   distributed: [],
   fuzz: ['hdoc-coverage-guided-fuzz'],

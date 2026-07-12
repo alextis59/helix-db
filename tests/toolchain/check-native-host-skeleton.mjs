@@ -34,8 +34,8 @@ export const validateNativePolicy = (v = policy) => {
     v.implementation,
     {
       path: 'crates/helix-host-native/src/lib.rs',
-      bytes: 9881,
-      sha256: '19a4775f991a45c1a9bacec33c3f4e0c020d873bde49fd0b14343fc1f36c4e65',
+      bytes: 14357,
+      sha256: '040145386b5ed6518dee432e1906db078bbdac7116c2149c3ffd42c47efd8a45',
     },
     'implementation',
   );
@@ -64,6 +64,7 @@ export const validateNativePolicy = (v = policy) => {
       'files',
       'directories',
       'durability',
+      'locks',
       'timers',
       'randomness',
       'scheduling',
@@ -108,7 +109,7 @@ export const validateNativePolicy = (v = policy) => {
   );
   same(
     v.validation,
-    { unit_tests: 4, dependency_mutation_canaries: 13, native_host_mutation_canaries: 41 },
+    { unit_tests: 5, dependency_mutation_canaries: 13, native_host_mutation_canaries: 44 },
     'validation',
   );
   same(
@@ -139,6 +140,9 @@ export const validateNativeSource = (s) => {
     'config.epoch_interruption(true);',
     'Component::new(&self.engine, bytes)',
     'grant.scope == "*"',
+    'pub const ALL_NATIVE_CAPABILITIES: [NativeCapability; 12]',
+    'pub const NATIVE_ABI_CALLS: [&str; 21]',
+    'abi-v7-explicit-copy.vectors',
   ])
     assert(s.includes(m), `source marker ${m}`);
   for (const m of ['wasmtime_wasi', 'std::fs', 'std::net', 'getrandom', 'unsafe {'])
@@ -157,5 +161,5 @@ const manifest = readFileSync(path.join(root, 'crates/helix-host-native/Cargo.to
 for (const m of ['wasmtime.workspace = true', 'status = "wasmtime-host-skeleton-v1"'])
   assert(manifest.includes(m), `manifest ${m}`);
 process.stdout.write(
-  'PASS native host skeleton: Wasmtime 46.0.1, 11 exact capability kinds, no ambient adapters\n',
+  'PASS native host skeleton: Wasmtime 46.0.1, 12 exact capability kinds, no ambient adapters\n',
 );

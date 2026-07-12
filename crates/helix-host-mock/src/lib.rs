@@ -806,6 +806,31 @@ impl MockHost {
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    const SHARED_VECTORS: &str =
+        include_str!("../../../conformance/host/abi-v7-explicit-copy.vectors");
+
+    fn vector(key: &str) -> &str {
+        SHARED_VECTORS
+            .lines()
+            .find_map(|line| line.split_once('=').filter(|(name, _)| *name == key))
+            .map_or("", |(_, value)| value)
+    }
+
+    fn vector_u64(key: &str) -> u64 {
+        vector(key).parse().unwrap_or(u64::MAX)
+    }
+
+    fn vector_bytes(key: &str) -> Vec<u8> {
+        vector(key)
+            .as_bytes()
+            .chunks_exact(2)
+            .map(|pair| {
+                let text = std::str::from_utf8(pair).unwrap_or("");
+                u8::from_str_radix(text, 16).unwrap_or_default()
+            })
+            .collect()
+    }
     use helix_core::deterministic_inputs::{
         ClockQuality, ClockValue, DeviceClass, DeviceProfile, MemoryBudget, RandomSample,
     };
@@ -1123,6 +1148,72 @@ mod tests {
             );
             assert_eq!(mock.records().len(), 1, "{call:?}");
         }
+    }
+
+    #[test]
+    fn shared_abi_v7_explicit_copy_vectors_match_mock_host() {
+        assert_eq!(vector("schema"), "helix.host-abi-v7-conformance/1");
+        assert_eq!(vector_u64("abi-major"), 7);
+        assert_eq!(
+            vector_u64("imported-calls"),
+            ALL_CAPABILITY_CALLS.len() as u64
+        );
+        assert_eq!(vector_u64("capability-kinds"), 12);
+        let mock = host(vec![]);
+        assert!(mock.is_ok());
+        let Ok(mut mock) = mock else { return };
+        let staging = mock.allocate_staging(vector_u64("capacity"));
+        assert!(staging.is_ok());
+        let Ok(mut staging) = staging else { return };
+        assert!(
+            mock.write_staging(
+                &mut staging,
+                vector_u64("gap-offset"),
+                &vector_bytes("gap-hex"),
+            )
+            .is_err()
+        );
+        assert!(
+            mock.write_staging(
+                &mut staging,
+                vector_u64("write-offset"),
+                &vector_bytes("write-hex"),
+            )
+            .is_ok()
+        );
+        let source = mock.seal_staging(staging, vector_bytes("write-hex").len() as u64);
+        assert!(source.is_ok());
+        let Ok(source) = source else { return };
+        let read = mock.read_immutable(
+            &source,
+            vector_u64("read-offset"),
+            vector_u64("read-length") as u32,
+        );
+        assert!(read.is_ok());
+        let Ok(read) = read else { return };
+        assert_eq!(read.bytes, vector_bytes("expected-read-hex"));
+        assert_eq!(read.end_of_buffer.to_string(), vector("expected-read-end"));
+        let target = mock.allocate_staging(vector_u64("capacity"));
+        assert!(target.is_ok());
+        let Ok(mut target) = target else { return };
+        assert!(
+            mock.copy_immutable_to_staging(
+                &source,
+                &mut target,
+                vector_u64("copy-source-offset"),
+                vector_u64("copy-target-offset"),
+                vector_u64("copy-length") as u32,
+            )
+            .is_ok()
+        );
+        let copied = mock.seal_staging(target, vector_u64("copy-length"));
+        assert!(copied.is_ok());
+        let Ok(copied) = copied else { return };
+        assert_eq!(
+            mock.read_immutable(&copied, 0, vector_u64("copy-length") as u32)
+                .map(|value| value.bytes),
+            Ok(vector_bytes("expected-copy-hex"))
+        );
     }
 }
 // helix-coverage: exclude-end unit-tests

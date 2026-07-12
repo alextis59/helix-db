@@ -9,12 +9,13 @@ The native host uses exact Wasmtime 46.0.1 with only async Component Model, Cran
 standard-library features. Default features are disabled. No WASI, cache, profiler, pooling,
 threads, WAT, filesystem, socket, clock, entropy, or GPU adapter is installed.
 
-An immutable policy admits at most 128 exact kind/scope grants across the eleven ABI capability
+An immutable policy admits at most 128 exact kind/scope grants across all 12 ABI capability
 kinds. Empty, wildcard, control-bearing, oversized, and duplicate scopes reject. Missing grants
 deny. The engine compiles at most 16 MiB of Component Model bytes with fuel accounting and epoch
 interruption configured; a core Wasm module is not accepted as a component.
 
 This step proves runtime selection, bounded component validation, and capability-policy shape. It
 does not link ABI calls, instantiate the Helix component, perform I/O, or claim durability,
-conformance, GPU execution, or database functionality. P04-012 owns the browser skeleton and
-P04-013 owns shared call conformance.
+conformance, GPU execution, or database functionality. P04-012 adds the browser skeleton; P04-013
+adds a shared explicit-copy transcript and corrects the native capability inventory to all 12 WIT
+kinds without claiming linked all-call execution.

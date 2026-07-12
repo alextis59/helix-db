@@ -303,6 +303,15 @@ invoking them. Chromium, Firefox, and WebKit each execute the positive core-modu
 grant, profile, buffer, cancellation, adapter, and module-validation cases. Generated canonical ABI
 linkage, persistent browser adapters, and shared host conformance remain deliberately separate work.
 
+P04-013 adds the first language-neutral executable transcript shared by all three host boundaries.
+The 357-byte authority pins ABI 7.0, 21 imported call shapes, 12 capability kinds, and one
+explicit-copy scenario: noncontiguous write rejection, contiguous write/seal, detached short read
+with end-of-buffer, and exact immutable-to-staging copy. The mock and native Rust suites parse that
+same file, while Chromium, Firefox, and WebKit replay it through the TypeScript host. Building this
+inventory caught a real omission in the earlier native skeleton—the `locks` capability kind—and the
+native inventory is now aligned with WIT. This establishes a shared portable test mechanism without
+claiming that every platform adapter or Component Model call is already linked and executable.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

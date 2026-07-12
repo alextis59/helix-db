@@ -24,6 +24,7 @@ const allowedSteps = new Set([
   'hdoc-coverage-guided-fuzz',
   'javascript-unit-inventory',
   'semantic-conformance',
+  'host-abi-conformance',
   'browser-example-build',
   'browser-harness-inventory',
   'benchmark-profile',
@@ -319,6 +320,20 @@ const executeBrowserInventory = (suite) => {
   );
 };
 
+const executeHostAbiConformance = (suite) => {
+  const output = run(process.execPath, ['tests/toolchain/test-host-conformance.mjs']);
+  requireText(
+    output,
+    `ABI 7.0, ${suite.expectations.host_imported_calls} calls, ${suite.expectations.host_capability_kinds} capabilities, ${suite.expectations.host_vector_cases} vector`,
+    'host ABI conformance',
+  );
+  requireText(
+    output,
+    `${suite.expectations.host_conformance_mutations} mutations rejected`,
+    'host ABI conformance canaries',
+  );
+};
+
 const executeBrowserExampleBuild = (suite) => {
   const output = run(process.execPath, ['tests/toolchain/check-examples.mjs', 'browser']);
   requireText(
@@ -431,6 +446,7 @@ const stepExecutors = {
   'hdoc-coverage-guided-fuzz': executeHDocCoverageGuidedFuzz,
   'javascript-unit-inventory': executeJavaScriptUnitInventory,
   'semantic-conformance': executeSemanticConformance,
+  'host-abi-conformance': executeHostAbiConformance,
   'browser-example-build': executeBrowserExampleBuild,
   'browser-harness-inventory': executeBrowserInventory,
   'benchmark-profile': executeBenchmarkProfile,

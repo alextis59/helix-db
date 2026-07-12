@@ -1,4 +1,5 @@
 import wasmUrl from '../../target/wasm32-unknown-unknown/browser/helix_core.wasm?url';
+import sharedVectorsText from '../../conformance/host/abi-v7-explicit-copy.vectors?raw';
 import {
   BrowserHost,
   BrowserHostError,
@@ -13,6 +14,28 @@ if (!status || !reportOutput) throw new Error('example status/report output is a
 
 const toHex = (bytes: ArrayBuffer) =>
   Array.from(new Uint8Array(bytes), (value) => value.toString(16).padStart(2, '0')).join('');
+const sharedVectors: Record<string, string> = Object.fromEntries(
+  sharedVectorsText
+    .trim()
+    .split('\n')
+    .map((line) => {
+      const [key, value] = line.split('=', 2);
+      if (!key || value === undefined) throw new Error('invalid shared host vector line');
+      return [key, value] as const;
+    }),
+);
+const vectorNumber = (key: string) => {
+  const value = Number(sharedVectors[key]);
+  if (!Number.isSafeInteger(value) || value < 0) throw new Error(`invalid vector ${key}`);
+  return value;
+};
+const vectorBytes = (key: string) => {
+  const value = sharedVectors[key] ?? '';
+  if (value.length % 2 !== 0 || !/^[0-9a-f]*$/u.test(value)) {
+    throw new Error(`invalid hex vector ${key}`);
+  }
+  return Uint8Array.from(value.match(/../gu) ?? [], (pair) => Number.parseInt(pair, 16));
+};
 
 const run = async () => {
   const response = await fetch(wasmUrl, { cache: 'no-store' });
@@ -139,6 +162,48 @@ const run = async () => {
       performance: { now: () => 0 },
       Worker: class {},
     });
+    const conformanceStaging = host.bindings.allocateStaging(BigInt(vectorNumber('capacity')));
+    let gapRejected = false;
+    try {
+      host.bindings.writeStaging(
+        conformanceStaging,
+        BigInt(vectorNumber('gap-offset')),
+        vectorBytes('gap-hex'),
+      );
+    } catch (error) {
+      gapRejected = error instanceof BrowserHostError && error.code === 'BUF_OUT_OF_BOUNDS';
+    }
+    host.bindings.writeStaging(
+      conformanceStaging,
+      BigInt(vectorNumber('write-offset')),
+      vectorBytes('write-hex'),
+    );
+    const conformanceSource = host.bindings.sealStaging(
+      conformanceStaging,
+      BigInt(vectorBytes('write-hex').byteLength),
+    );
+    const conformanceRead = host.bindings.readImmutable(
+      conformanceSource,
+      BigInt(vectorNumber('read-offset')),
+      vectorNumber('read-length'),
+    );
+    const conformanceTarget = host.bindings.allocateStaging(BigInt(vectorNumber('capacity')));
+    host.bindings.copyImmutableToStaging(
+      conformanceSource,
+      conformanceTarget,
+      BigInt(vectorNumber('copy-source-offset')),
+      BigInt(vectorNumber('copy-target-offset')),
+      vectorNumber('copy-length'),
+    );
+    const conformanceCopied = host.bindings.sealStaging(
+      conformanceTarget,
+      BigInt(vectorNumber('copy-length')),
+    );
+    const copiedRead = host.bindings.readImmutable(
+      conformanceCopied,
+      0n,
+      vectorNumber('copy-length'),
+    );
     return {
       codes,
       syntheticFeatures,
@@ -148,6 +213,20 @@ const run = async () => {
         endOfFile: result.endOfFile,
       })),
       adapterDispatches,
+      conformance: {
+        schema: sharedVectors.schema,
+        abi: [vectorNumber('abi-major'), vectorNumber('abi-minor')],
+        importedCalls: vectorNumber('imported-calls'),
+        capabilityKinds: vectorNumber('capability-kinds'),
+        gapRejected,
+        readHex: Array.from(conformanceRead.bytes, (value) =>
+          value.toString(16).padStart(2, '0'),
+        ).join(''),
+        readEnd: conformanceRead.endOfBuffer,
+        copyHex: Array.from(copiedRead.bytes, (value) =>
+          value.toString(16).padStart(2, '0'),
+        ).join(''),
+      },
     };
   };
   const report: BrowserToolchainExampleReport = {

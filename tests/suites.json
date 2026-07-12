@@ -23,7 +23,7 @@
       "allowed_files": [],
       "steps": ["rust-unit", "javascript-unit-inventory"],
       "expectations": {
-        "rust_tests": 66,
+        "rust_tests": 68,
         "javascript_test_files": 0
       }
     },
@@ -48,10 +48,10 @@
       "npm_script": "test:conformance",
       "state": "active",
       "root": "conformance",
-      "description": "Frozen semantic corpus, independent oracle, compatibility matrix, and offline differential artifacts.",
+      "description": "Frozen semantics, compatibility differentials, and shared host ABI vectors.",
       "activation_tasks": [],
       "allowed_files": [],
-      "steps": ["semantic-conformance"],
+      "steps": ["semantic-conformance", "host-abi-conformance"],
       "expectations": {
         "accepted_examples": 4,
         "rejected_examples": 3,
@@ -59,7 +59,11 @@
         "semantic_steps": 319,
         "oracle_assertions": 382,
         "compatibility_rows": 265,
-        "mongodb_cases": 16
+        "mongodb_cases": 16,
+        "host_imported_calls": 21,
+        "host_capability_kinds": 12,
+        "host_vector_cases": 1,
+        "host_conformance_mutations": 48
       }
     },
     {
@@ -87,8 +91,8 @@
       "allowed_files": [],
       "steps": ["browser-example-build", "browser-harness-inventory"],
       "expectations": {
-        "browser_tests": 9,
-        "browser_test_files": 3,
+        "browser_tests": 12,
+        "browser_test_files": 4,
         "example_source_files": 4,
         "bundle_files": 4
       }

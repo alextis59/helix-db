@@ -81,8 +81,8 @@ export const validateMockHostPolicy = (candidate = policy) => {
     {
       crate: 'helix-host-mock',
       path: 'crates/helix-host-mock/src/lib.rs',
-      bytes: 40551,
-      sha256: '2cf3bc70846eacbce3822a0cec70e0f07f781d9837b24a11c4590257adac0763',
+      bytes: 43741,
+      sha256: 'd5c6a68e589b2bb8ba213d50947bdfaa64a9a70f3ef2b12d6648dd5f3d89205a',
       workspace_dependency: 'helix-core',
       external_dependencies: 0,
     },
@@ -140,7 +140,7 @@ export const validateMockHostPolicy = (candidate = policy) => {
     Object.values(candidate.lifecycle).every((value) => value === true),
     'lifecycle rules',
   );
-  assert(candidate.validation.unit_tests === 5, 'unit-test count');
+  assert(candidate.validation.unit_tests === 6, 'unit-test count');
   assert(
     Object.entries(candidate.validation)
       .filter(([key]) => key !== 'unit_tests')
@@ -197,6 +197,7 @@ export const validateMockHostRust = (source) => {
     'pub fn read_clock(',
     'pub fn read_random(',
     'every_imported_call_kind_accepts_failure_injection',
+    'abi-v7-explicit-copy.vectors',
   ])
     assert(source.includes(marker), `Rust marker ${marker}`);
   for (const forbidden of [
