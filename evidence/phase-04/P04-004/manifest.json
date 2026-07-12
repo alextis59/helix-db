@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-004",
+  "verdict": "pass",
+  "commit": "cf95fc8f025c4988ca3021ea89c91fae3015b2f4",
+  "base_commit": "4767d1725dc808790e593f2644b17860c1ce9f6c",
+  "source_tree": "57d00900709877d04764f57ae859e114663fc543",
+  "diff_sha256": "b01545de0947fabde676906fc590cc113c0bdd4f97fff156479af86130c3fc18",
+  "recorded_on": "2026-07-12",
+  "requirements": [
+    "CORE-001",
+    "CORE-002",
+    "CORE-003",
+    "INV-004",
+    "INV-007",
+    "STORE-001",
+    "STORE-002",
+    "SEC-001",
+    "SEC-002"
+  ],
+  "accepted_adrs": ["0013"],
+  "source_commits": ["cf95fc8f025c4988ca3021ea89c91fae3015b2f4"],
+  "authorities": [
+    {
+      "path": "wit/helix-core-abi-v3/world.wit",
+      "bytes": 8795,
+      "sha256": "1b6935a9de4f5bdccbdd466dedb78e95d5114cc3a102f2c84c56cdf228103199"
+    },
+    {
+      "path": "docs/architecture/async-storage-batch-abi-v1.json",
+      "bytes": 2663,
+      "sha256": "33de6e74fcb90fff66cba9b524c5759a27cfdd7e1df9bc4261d28c9661327c54"
+    },
+    {
+      "path": "docs/architecture/async-storage-batch-abi-v1.md",
+      "bytes": 3469,
+      "sha256": "9a8feb5b5fbe44dab3946f0bb7eb0e440f66382ba5c98b25e5af1a0fbe3be2e8"
+    },
+    {
+      "path": "tests/toolchain/check-storage-batch-abi.mjs",
+      "bytes": 6546,
+      "sha256": "8f20458f8c69d1af9ff992a9c88e4e16f497effa3b10ca43247a86681dba2b69"
+    },
+    {
+      "path": "tests/toolchain/test-storage-batch-abi-contract.mjs",
+      "bytes": 4152,
+      "sha256": "8b4fe4e940c5f67a8ffa6c3560019fe3ec9557d6a8c573198c51f5bbc67bcaa3"
+    }
+  ],
+  "verifier": {
+    "bytes": 6740,
+    "sha256": "d5650048d852a1b13f2d3bb5bd2c1f2832ede541170d937d99d419e6b9bfd9f0"
+  },
+  "verification": {
+    "source_artifacts": 37,
+    "wit_versions": 2,
+    "interfaces": 12,
+    "resolved_types": 80,
+    "total_functions": 9,
+    "async_storage_functions": 6,
+    "world_imports": 11,
+    "world_exports": 1,
+    "maximum_batch_items": 1024,
+    "maximum_transfer_bytes": 16777216,
+    "maximum_list_entries": 4096,
+    "mutation_canaries": 30,
+    "workspace_tests": 49,
+    "fuzz_executions": 640,
+    "browser_executions": 6,
+    "product_lines_covered": 4565,
+    "product_lines_total": 4565
+  }
+}
