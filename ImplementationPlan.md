@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 85
-- Open checklist items: 437
+- Completed checklist items: 91
+- Open checklist items: 431
 - Total checklist items: 522
 - Current phase: Phase 4 — Portable Wasm core and host capability ABI
 - Next release gate: `G04`
@@ -249,7 +249,7 @@ Dependencies: `G02`, enough of `G03` to expose the codec.
 - [x] **P04-007** Prototype host-owned handle and shared-staging alternatives without making them required ABI features.
 - [x] **P04-008** Define cancellation, deadline, backpressure, partial-I/O, and host-shutdown behavior.
 - [x] **P04-009** Define deterministic injection of clocks, random IDs, memory budgets, and device profiles.
-- [ ] **P04-010** Implement a mock host supporting deterministic failure injection for every capability call.
+- [x] **P04-010** Implement a mock host supporting deterministic failure injection for every capability call.
 - [ ] **P04-011** Implement the native Wasmtime host skeleton and capability allowlist.
 - [ ] **P04-012** Implement the browser host skeleton and JavaScript/TypeScript binding layer.
 - [ ] **P04-013** Add ABI conformance tests shared by mock, native, and browser hosts.

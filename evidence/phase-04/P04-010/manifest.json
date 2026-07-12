@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-010",
+  "verdict": "pass",
+  "commit": "7a075554df29eb2435d89b80d960969d6af35c1a",
+  "base_commit": "a7fd9529d5b48beec234996a22d747ae6ddfbe79",
+  "source_tree": "513fafae585541021f9010dbc437274f2ef2a3ed",
+  "diff_sha256": "1f1ebb548443413844ac2a22918be99d441799b1766cd1a007c49f744665ba16",
+  "recorded_on": "2026-07-12",
+  "requirements": ["CORE-001", "CORE-002", "CORE-003", "INV-004", "INV-007", "PLAT-001", "PLAT-002", "QUAL-001", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0003", "0006", "0013"],
+  "source_commits": ["7a075554df29eb2435d89b80d960969d6af35c1a"],
+  "authorities": [
+    {"path": "wit/helix-core-abi-v7/world.wit", "bytes": 12413, "sha256": "80b9e2de39338377aa8e71ca603ac75cbda801c3822ef948b5c0e86539dc79a0"},
+    {"path": "crates/helix-host-mock/src/lib.rs", "bytes": 40551, "sha256": "2cf3bc70846eacbce3822a0cec70e0f07f781d9837b24a11c4590257adac0763"},
+    {"path": "docs/architecture/mock-host-contract-v1.json", "bytes": 3756, "sha256": "de792d951a12f62ef2fbeb22c046e46c75d0853b87772435388ad47d825f4ffc"},
+    {"path": "docs/architecture/mock-host-contract-v1.md", "bytes": 2376, "sha256": "b559ad78bd09b707b2a0c0638f0645ca93a98a270ed60e28fce45dd242027424"},
+    {"path": "tests/toolchain/check-mock-host-contract.mjs", "bytes": 9746, "sha256": "203fcae212af4d61456f6a2c6899707e58b1598e20a9c34102c26b25a7e13ae8"},
+    {"path": "tests/toolchain/test-mock-host-contract.mjs", "bytes": 6446, "sha256": "d76670f86d38c51f430a3ee16a9a51bfc797b781a8d877f09dd3927dededf265"}
+  ],
+  "verifier": {"bytes": 6388, "sha256": "3b0992528127d80a00daf26965e43e643e56690112eb81ecf16a6242ad5ac0c3"},
+  "verification": {
+    "source_artifacts": 36,
+    "imported_calls": 21,
+    "resource_methods": 4,
+    "resource_operations": 6,
+    "storage_batches": 6,
+    "control_calls": 3,
+    "mutation_canaries": 60,
+    "workspace_packages": 9,
+    "workspace_tests": 64,
+    "fuzz_executions": 640,
+    "browser_executions": 6,
+    "workspace_product_lines_covered": 5175,
+    "workspace_product_lines_total": 5206,
+    "semantic_lines_covered": 4891,
+    "semantic_lines_total": 4891,
+    "recovery_lines_covered": 326,
+    "recovery_lines_total": 326
+  }
+}
