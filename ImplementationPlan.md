@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 81
-- Open checklist items: 441
+- Completed checklist items: 82
+- Open checklist items: 440
 - Total checklist items: 522
 - Current phase: Phase 4 — Portable Wasm core and host capability ABI
 - Next release gate: `G04`
@@ -240,7 +240,7 @@ Objective: implement the deterministic core boundary and coarse-grained native/b
 
 Dependencies: `G02`, enough of `G03` to expose the codec.
 
-- [ ] **P04-001** Define the Wasm component interface and ABI versioning rules for values, buffers, handles, errors, cancellation, and capabilities.
+- [x] **P04-001** Define the Wasm component interface and ABI versioning rules for values, buffers, handles, errors, cancellation, and capabilities.
 - [ ] **P04-002** Separate deterministic core modules from all ambient file, network, time, randomness, thread, and device access.
 - [ ] **P04-003** Define host capability interfaces for files, directory operations, durability, locks, timers, randomness, scheduling, metrics, and secrets.
 - [ ] **P04-004** Define coarse-grained asynchronous read, write, sync, rename, list, and delete operations suitable for storage batches.

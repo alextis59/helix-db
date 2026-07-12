@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-001",
+  "verdict": "pass",
+  "commit": "514a926084a02d29d04f5c13532b07018fcb33d2",
+  "base_commit": "00325c353207ef15c70f63678c9db595276d3961",
+  "source_tree": "5516f532c07dd43305b31111ea219b39efe7dcc1",
+  "diff_sha256": "eea758e335df67f4ab1397d96e621c3843b993cf839127744b6ac75627e291b3",
+  "recorded_on": "2026-07-12",
+  "requirements": [
+    "CORE-001",
+    "CORE-003",
+    "INV-003",
+    "INV-004",
+    "INV-007",
+    "PLAT-001",
+    "PLAT-002",
+    "SEC-001",
+    "SEC-002"
+  ],
+  "accepted_adrs": ["0013"],
+  "source_commits": ["514a926084a02d29d04f5c13532b07018fcb33d2"],
+  "authorities": [
+    {
+      "path": "wit/helix-core-abi-v1/world.wit",
+      "bytes": 2867,
+      "sha256": "14db9898827f1e6cc84038100257d30fdf69654e9501390f1836b041f79ff5a9"
+    },
+    {
+      "path": "docs/architecture/wasm-component-abi-v1.json",
+      "bytes": 3746,
+      "sha256": "6fd1e9f38794e6e186d212c146f3292f1e7efc2e8b500554cf83afdb7828e92c"
+    },
+    {
+      "path": "docs/architecture/wasm-component-abi-v1.md",
+      "bytes": 5377,
+      "sha256": "7802e439d5f0d76df01eab6c636a617576da269c3fa6eb6ad75acdc340e38de7"
+    },
+    {
+      "path": "docs/adr/0013-use-versioned-wit-component-abi.md",
+      "bytes": 8617,
+      "sha256": "2e85281bea535349f04d06b6627af4e670ac899493b2edc6ec9da58ede4aa531"
+    },
+    {
+      "path": "tests/toolchain/check-wasm-abi.mjs",
+      "bytes": 9136,
+      "sha256": "fde291d7ce93d861aa3c2b8846a0da9dc88bacad826b2aee627c651f6899e55d"
+    },
+    {
+      "path": "tests/toolchain/test-wasm-abi-contract.mjs",
+      "bytes": 2326,
+      "sha256": "bc8b8ce8df9c442d50dd0c23789af052b811d15a181894760b1ec36f4e91751e"
+    }
+  ],
+  "verifier": {
+    "bytes": 7292,
+    "sha256": "8df53bddbe2a4240d47d49082d7a79de171db7f9e4bbed9e1c1535950c836282"
+  },
+  "verification": {
+    "source_artifacts": 36,
+    "wit_packages": 1,
+    "wit_worlds": 1,
+    "wit_interfaces": 3,
+    "wit_types": 17,
+    "wit_functions": 3,
+    "buffer_resources": 2,
+    "handle_resources": 3,
+    "capability_kinds": 11,
+    "accepted_abi_versions": 1,
+    "mutation_canaries": 20,
+    "browser_executions": 6,
+    "workspace_tests": 49,
+    "product_lines_covered": 4565,
+    "product_lines_total": 4565
+  }
+}

@@ -92,6 +92,12 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | `QUAL-002` | Distributed consistency requires fault injection and Jepsen-style validation. | `P02-007`, `P17-016`–`P17-018`, `P18-019`–`P18-020`, `P19-013`–`P19-014`, `P24-006` | [Reserved distributed simulation command](../../evidence/phase-02/P02-007/README.md), simulation, process chaos, movement histories, Jepsen reports, `G17`–`G19` | Planned |
 | `COMPAT-001` | Every compatibility claim is versioned and backed by executable tests. | `P01-021`–`P01-022`, `P02-007`–`P02-008`, `P07-022`, `P22-*`, `P24-003`, `P24-012` | Initial versioned MongoDB differential capture, v1 closed-world matrix, [versioned offline compatibility-conformance command](../../evidence/phase-02/P02-007/README.md), [hash-bound compatibility generator and independent checker](../../evidence/phase-02/P02-008/README.md), MongoDB/Redis adapter matrices, protocol captures, migration hashes, claim review, `G22` | In progress |
 
+## Current task evidence additions
+
+| Task evidence | Accepted requirement foundations | Remaining boundary |
+| --- | --- | --- |
+| [`P04-001`](../../evidence/phase-04/P04-001/README.md) | `CORE-001`, `CORE-003`, `INV-003`, `INV-004`, `INV-007`, `PLAT-001`, `PLAT-002`, `SEC-001`, `SEC-002` | Defines exact-versioned WIT values/resources/errors/cancellation/capabilities and an ambient-free negotiation boundary; bindings, concrete hosts, capability denial, native/browser conformance, storage fallback, and security isolation remain open. |
+
 ## Accepted phase-gate evidence
 
 | Gate | Accepted foundation | Requirements with accepted evidence | Remaining boundary |
