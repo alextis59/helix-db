@@ -1,0 +1,40 @@
+{
+  "schema": "helix.host-capability-isolation/1",
+  "plan_item": "P04-014",
+  "abi": {
+    "package": "helix:core-abi@7.0.0",
+    "path": "wit/helix-core-abi-v7/world.wit",
+    "bytes": 12413,
+    "sha256": "80b9e2de39338377aa8e71ca603ac75cbda801c3822ef948b5c0e86539dc79a0"
+  },
+  "resource_classes": ["files", "sockets", "clocks", "devices"],
+  "proofs": {
+    "portable_core_has_zero_wasm_imports": true,
+    "portable_core_forbids_ambient_source_apis": true,
+    "native_exact_grants_deny_ungranted_scopes": true,
+    "browser_exact_grants_deny_ungranted_scopes": true,
+    "socket_operations_absent_from_core_abi": true,
+    "device_operations_absent_from_core_abi": true
+  },
+  "tests": {
+    "native": "ungranted_file_socket_clock_and_device_scopes_are_unreachable",
+    "browser": "tests/browser/capability-isolation.spec.ts",
+    "browser_engines": ["chromium", "firefox", "webkit"]
+  },
+  "validation": {
+    "resource_classes": 4,
+    "host_executions": 4,
+    "policy_mutation_canaries": 22,
+    "source_mutation_canaries": 8
+  },
+  "claim_boundary": {
+    "ungranted_classes_unreachable": true,
+    "ambient_authority_added": false,
+    "socket_adapter_present": false,
+    "gpu_device_adapter_present": false,
+    "platform_storage_adapter_present": false,
+    "component_model_linked": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-015"
+  }
+}

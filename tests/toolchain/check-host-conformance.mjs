@@ -274,7 +274,7 @@ same(browserPolicy.calls, abiCalls, 'browser call names');
 same(nativePolicy.capabilities, capabilityKinds, 'native capability names');
 same(browserPolicy.capability_kinds, capabilityKinds, 'browser capability names');
 const matrix = JSON.parse(readFileSync(path.join(root, '.github/ci/matrix.json')));
-assert(matrix.plan_items.at(-1) === 'P04-013', 'CI implementation history');
+assert(matrix.plan_items.includes('P04-013'), 'CI implementation history');
 process.stdout.write(
   'PASS shared host conformance: ABI 7.0, 21 calls, 12 capabilities, 1 vector across mock/native/3 browsers\n',
 );

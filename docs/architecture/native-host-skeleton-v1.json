@@ -1,12 +1,12 @@
 {
   "schema": "helix.native-host-skeleton/1",
   "plan_item": "P04-011",
-  "implementation": {"path":"crates/helix-host-native/src/lib.rs","bytes":14440,"sha256":"2ca57cb67308dcb2cbb7cecb72c86266079285b443a3b46a944943f4ec85d9ff"},
+  "implementation": {"path":"crates/helix-host-native/src/lib.rs","bytes":15025,"sha256":"7ca7412fee667c7e2a3b2b10cf43ee25dca2d6b6f665afbdc0aef1d5f5ad38e1"},
   "runtime": {"crate":"wasmtime","version":"46.0.1","minimum_rust":"1.94.0","default_features":false,"features":["async","component-model","component-model-async","cranelift","runtime","std"],"wasi_adapters_installed":false},
   "capabilities": ["files","directories","durability","locks","timers","randomness","scheduling","metrics","secrets","networking","object-storage","gpu"],
   "bounds": {"maximum_component_bytes":16777216,"maximum_capability_grants":128,"maximum_scope_bytes":4096},
   "allowlist": {"exact_kind_and_scope":true,"deny_by_default":true,"wildcards_rejected":true,"duplicates_rejected":true,"control_text_rejected":true},
   "engine": {"component_model":true,"async_component_model":true,"fuel_accounting":true,"epoch_interruption":true,"core_modules_rejected_as_components":true},
-  "validation": {"unit_tests":5,"dependency_mutation_canaries":13,"native_host_mutation_canaries":44},
+  "validation": {"unit_tests":6,"dependency_mutation_canaries":13,"native_host_mutation_canaries":45},
   "claim_boundary": {"bounded_component_compilation_present":true,"abi_calls_linked":false,"component_instantiation_present":false,"filesystem_present":false,"durability_present":false,"network_present":false,"entropy_present":false,"gpu_execution_present":false,"database_functionality_added":false,"next_implementation_owner":"P04-012"}
 }

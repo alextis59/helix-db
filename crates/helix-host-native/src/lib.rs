@@ -411,5 +411,16 @@ mod tests {
             Ok(vector_bytes("expected-copy-hex"))
         );
     }
+
+    #[test]
+    fn ungranted_file_socket_clock_and_device_scopes_are_unreachable() {
+        let policy = CapabilityPolicy::new(vec![grant(NativeCapability::Files, "granted/file")]);
+        assert!(policy.is_ok());
+        let Ok(policy) = policy else { return };
+        assert!(!policy.allows(NativeCapability::Files, "ungranted/file"));
+        assert!(!policy.allows(NativeCapability::Networking, "ungranted/socket"));
+        assert!(!policy.allows(NativeCapability::Timers, "ungranted/clock"));
+        assert!(!policy.allows(NativeCapability::Gpu, "ungranted/device"));
+    }
 }
 // helix-coverage: exclude-end unit-tests

@@ -227,6 +227,15 @@ const run = async () => {
           value.toString(16).padStart(2, '0'),
         ).join(''),
       },
+      isolation: {
+        coreImports: WebAssembly.Module.imports(module),
+        denied: {
+          file: !host.policy.permits('files', 'ungranted/file'),
+          socket: !host.policy.permits('networking', 'ungranted/socket'),
+          clock: !host.policy.permits('timers', 'ungranted/clock'),
+          device: !host.policy.permits('gpu', 'ungranted/device'),
+        },
+      },
     };
   };
   const report: BrowserToolchainExampleReport = {

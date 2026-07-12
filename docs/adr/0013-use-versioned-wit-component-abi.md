@@ -174,9 +174,11 @@ requires an accepted matrix proving older peers can ignore or reject every addit
   P04-012, with real three-engine execution and no false Component Model or persistence claim.
 - [x] Replay one language-neutral explicit-copy transcript through mock, native, and three browser
   engines under P04-013 while inventorying all 21 calls and all 12 capability kinds.
+- [x] Prove the zero-import core and exact native/browser policies cannot reach ungranted files,
+  sockets, clocks, or devices under P04-014.
 - [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
-- [ ] Benchmark explicit-copy and alternative buffer strategies under P04-014.
+- [ ] Benchmark explicit-copy and alternative buffer strategies under P04-016.
 
 ## Implementation impact
 
@@ -200,7 +202,11 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] `P04-009`: freeze deterministic injected values, numeric memory budgets, and device profiles.
 - [x] `P04-010`: implement the deterministic all-call mock and exact failure injection.
 - [x] `P04-011`: configure the bounded native Wasmtime skeleton and exact capability grants.
-- [ ] `P04-014`: publish boundary-strategy measurements.
+- [x] `P04-012`: implement the bounded strict-TypeScript browser host skeleton.
+- [x] `P04-013`: replay the shared explicit-copy transcript across all host boundaries.
+- [x] `P04-014`: prove ungranted file, socket, clock, and device scopes are unreachable.
+- [ ] `P04-015`: add content-safe boundary tracing.
+- [ ] `P04-016`: publish boundary-strategy measurements.
 
 ## References
 

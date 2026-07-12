@@ -61,6 +61,10 @@ declare global {
         readEnd: boolean;
         copyHex: string;
       };
+      isolation: {
+        coreImports: WebAssembly.ModuleImportDescriptor[];
+        denied: { file: boolean; socket: boolean; clock: boolean; device: boolean };
+      };
     }>;
   }
 }

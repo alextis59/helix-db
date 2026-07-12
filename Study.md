@@ -312,6 +312,15 @@ inventory caught a real omission in the earlier native skeleton—the `locks` ca
 native inventory is now aligned with WIT. This establishes a shared portable test mechanism without
 claiming that every platform adapter or Component Model call is already linked and executable.
 
+P04-014 turns capability isolation into an executable cross-host claim. The portable core module
+has zero WebAssembly imports and remains statically barred from ambient filesystem, socket, clock,
+and device APIs. Native and browser policies then deny exact ungranted scopes for the corresponding
+file, networking, timer, and GPU capability kinds. Chromium, Firefox, WebKit, and the native Rust
+host all execute the denial proof. Socket and GPU-device operations are additionally absent from
+ABI 7, so the core has neither ambient access nor a descriptor-mediated route to those operations.
+This proves current reachability isolation; it does not claim that later filesystem, socket, GPU,
+or platform-storage adapters are implemented, nor that the component is linked into a database.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

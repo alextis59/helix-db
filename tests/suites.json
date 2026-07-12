@@ -23,7 +23,7 @@
       "allowed_files": [],
       "steps": ["rust-unit", "javascript-unit-inventory"],
       "expectations": {
-        "rust_tests": 68,
+        "rust_tests": 69,
         "javascript_test_files": 0
       }
     },
@@ -91,8 +91,8 @@
       "allowed_files": [],
       "steps": ["browser-example-build", "browser-harness-inventory"],
       "expectations": {
-        "browser_tests": 12,
-        "browser_test_files": 4,
+        "browser_tests": 15,
+        "browser_test_files": 5,
         "example_source_files": 4,
         "bundle_files": 4
       }

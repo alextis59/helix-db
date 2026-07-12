@@ -70,6 +70,14 @@ const sm = [
     'call inventory',
     (v) => v.replace('NATIVE_ABI_CALLS: [&str; 21]', 'NATIVE_ABI_CALLS: [&str; 20]'),
   ],
+  [
+    'ungranted isolation',
+    (v) =>
+      v.replace(
+        'ungranted_file_socket_clock_and_device_scopes_are_unreachable',
+        'missing_isolation_test',
+      ),
+  ],
 ];
 for (const [l, m] of sm) {
   try {

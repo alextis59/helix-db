@@ -34,8 +34,8 @@ export const validateNativePolicy = (v = policy) => {
     v.implementation,
     {
       path: 'crates/helix-host-native/src/lib.rs',
-      bytes: 14440,
-      sha256: '2ca57cb67308dcb2cbb7cecb72c86266079285b443a3b46a944943f4ec85d9ff',
+      bytes: 15025,
+      sha256: '7ca7412fee667c7e2a3b2b10cf43ee25dca2d6b6f665afbdc0aef1d5f5ad38e1',
     },
     'implementation',
   );
@@ -109,7 +109,7 @@ export const validateNativePolicy = (v = policy) => {
   );
   same(
     v.validation,
-    { unit_tests: 5, dependency_mutation_canaries: 13, native_host_mutation_canaries: 44 },
+    { unit_tests: 6, dependency_mutation_canaries: 13, native_host_mutation_canaries: 45 },
     'validation',
   );
   same(
@@ -143,6 +143,7 @@ export const validateNativeSource = (s) => {
     'pub const ALL_NATIVE_CAPABILITIES: [NativeCapability; 12]',
     'pub const NATIVE_ABI_CALLS: [&str; 21]',
     'abi-v7-explicit-copy.vectors',
+    'ungranted_file_socket_clock_and_device_scopes_are_unreachable',
   ])
     assert(s.includes(m), `source marker ${m}`);
   for (const m of ['wasmtime_wasi', 'std::fs', 'std::net', 'getrandom', 'unsafe {'])

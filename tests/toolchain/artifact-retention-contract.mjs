@@ -308,10 +308,12 @@ const expectedProducers = {
       'examples/browser-toolchain/report.ts',
       'conformance/host/abi-v7-explicit-copy.vectors',
       'docs/architecture/browser-host-skeleton-v1.json',
+      'docs/architecture/host-capability-isolation-v1.json',
       'docs/architecture/host-abi-conformance-v1.json',
       'packages/browser-host/src/index.ts',
       'playwright.config.ts',
       'tests/browser/browser-host.spec.ts',
+      'tests/browser/capability-isolation.spec.ts',
       'tests/browser/bundle-smoke.spec.ts',
       'tests/browser/hdoc-fuzz-replay.spec.ts',
       'tests/browser/host-conformance.spec.ts',
@@ -860,6 +862,7 @@ export const validateBrowserExecutionReport = (
     assert(
       [
         'tests/browser/browser-host.spec.ts',
+        'tests/browser/capability-isolation.spec.ts',
         'tests/browser/bundle-smoke.spec.ts',
         'tests/browser/hdoc-fuzz-replay.spec.ts',
         'tests/browser/host-conformance.spec.ts',
