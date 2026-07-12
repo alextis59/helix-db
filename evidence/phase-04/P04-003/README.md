@@ -1,10 +1,11 @@
-# P04-003 Evidence — Host Capability ABI 1.1
+# P04-003 Evidence — Host Capability ABI 2.0
 
 - Task: `P04-003`
 - Verdict: **PASS**
-- Source commit: `bb4cbb48558dcc0df948d45518882e4af591a3b1`
-- Source base: `f763170f12e9978e91f0181466096d5533690dc4`
-- Final source tree: `e1d6da72dae5755db83afa1edef428bb2ef03c1a`
+- Source commits: `bb4cbb48558dcc0df948d45518882e4af591a3b1`, corrected by
+  `66d6e9a610a36fb2edcb7aed9a7171e1f5c84897`
+- Correction base: `af07bb041e9faf303ea2af1964943e0367beed42`
+- Final source tree: `89ba40bd3c883537450ad565c709446cb6655f09`
 - Accepted ADR: `0013`
 - Requirements: `CORE-001`, `CORE-002`, `CORE-003`, `INV-004`, `INV-007`, `SEC-001`, `SEC-002`
 - Governing gate: `G04`
@@ -13,13 +14,14 @@
 ## Outcome
 
 P04-003 preserves byte-identical `helix:core-abi@1.0.0` and introduces exact
-`helix:core-abi@1.1.0` for nine required host capability interfaces: files, directories,
+`helix:core-abi@2.0.0` for nine required host capability interfaces: files, directories,
 durability, locks, timers, randomness, scheduling, metrics, and secrets. Each interface owns one
 nominal host resource and bounded policy types. The common descriptor enum adds locks while keeping
 networking, object storage, and GPU reserved without concrete interfaces.
 
-The current matrix accepts only ABI 1.1. It never rewrites 1.0 or infers compatibility from package
-SemVer. Paths remain relative to granted namespaces, clocks and random purposes are explicit,
+The current matrix accepts only ABI 2.0. Required imports are an incompatible world-shape change,
+so the major version advances. It never rewrites 1.0 or infers compatibility from package SemVer.
+Paths remain relative to granted namespaces, clocks and random purposes are explicit,
 scheduling grants no threads, metrics exclude document contents, secrets cannot leak into
 descriptors/errors/metrics/logs, and revocation fails closed.
 
@@ -54,5 +56,5 @@ corepack npm run fixtures:check
 corepack npm test
 corepack npm run coverage:check
 corepack npm run browser:smoke
-node evidence/phase-04/P04-003/verify.mjs bb4cbb48558dcc0df948d45518882e4af591a3b1
+node evidence/phase-04/P04-003/verify.mjs 66d6e9a610a36fb2edcb7aed9a7171e1f5c84897
 ```

@@ -61,9 +61,9 @@ const policy = showJson('docs/architecture/host-capability-abi-v1.json');
 assert(policy.schema === 'helix.host-capability-abi/1', 'policy schema');
 assert(policy.plan_item === 'P04-003', 'policy owner');
 assert(policy.base.package === 'helix:core-abi@1.0.0' && policy.base.immutable, 'base ABI');
-assert(policy.current.package === 'helix:core-abi@1.1.0', 'current ABI package');
-same(policy.current.abi, { major: 1, minor: 1 }, 'current ABI');
-same(policy.current.accepted, [{ major: 1, minor: 1 }], 'accepted ABI');
+assert(policy.current.package === 'helix:core-abi@2.0.0', 'current ABI package');
+same(policy.current.abi, { major: 2, minor: 0 }, 'current ABI');
+same(policy.current.accepted, [{ major: 2, minor: 0 }], 'accepted ABI');
 assert(policy.interfaces.length === 12, 'interface count');
 assert(Object.keys(policy.capability_interfaces).length === 9, 'capability interface count');
 assert(policy.capability_kinds.length === 12, 'capability kind count');
@@ -77,9 +77,9 @@ assert(policy.claim_boundary.wit_bound_into_component === false, 'binding claim'
 assert(policy.claim_boundary.host_implementations_present === false, 'host claim');
 assert(policy.claim_boundary.database_functionality_added === false, 'database claim');
 
-const wit = showText('wit/helix-core-abi-v1_1/world.wit');
+const wit = showText('wit/helix-core-abi-v2/world.wit');
 for (const marker of [
-  'package helix:core-abi@1.1.0;',
+  'package helix:core-abi@2.0.0;',
   'interface host-files {',
   'interface host-directories {',
   'interface host-durability {',
@@ -101,8 +101,8 @@ assert(
   root.includes('plan-item = "P04-003"') && root.includes('status = "host-capability-abi-v1"'),
   'workspace maturity',
 );
-assert(core.includes('COMPONENT_ABI_VERSION: (u16, u16) = (1, 1)'), 'Rust ABI version');
-assert(core.includes('COMPONENT_ABI_PACKAGE: &str = "helix:core-abi@1.1.0"'), 'Rust package');
+assert(core.includes('COMPONENT_ABI_VERSION: (u16, u16) = (2, 0)'), 'Rust ABI version');
+assert(core.includes('COMPONENT_ABI_PACKAGE: &str = "helix:core-abi@2.0.0"'), 'Rust package');
 assert(matrix.plan_items.at(-1) === 'P04-003', 'CI task history');
 assert(workflow.includes('corepack npm run host:capabilities:check'), 'hosted capability check');
 assert(workflow.includes('corepack npm run host:capabilities:test'), 'hosted capability canaries');
@@ -127,8 +127,8 @@ const component = spawnSync('node', ['tests/toolchain/check-wasm-artifacts.mjs',
 assert(component.status === 0, `component validation\n${component.stderr}`);
 assert(component.stdout.includes('component-model-0x1000d'), 'component validation output');
 
-process.stdout.write('PASS P04-003 source: 37 artifacts define host capability ABI 1.1\n');
-process.stdout.write('PASS P04-003 WIT: immutable 1.0 plus exact 1.1, 12 interfaces, 56 types\n');
+process.stdout.write('PASS P04-003 correction: 21 paths normalize capability ABI 2.0\n');
+process.stdout.write('PASS P04-003 WIT: immutable 1.0 plus exact 2.0, 12 interfaces, 56 types\n');
 process.stdout.write('PASS P04-003 capabilities: 9 resources, 12 kinds, 11 imports\n');
 process.stdout.write('PASS P04-003 boundary: 0 capability operations/hosts/bindings/database claims\n');
 process.stdout.write('PASS P04-003 canaries: 27 intended mutations rejected\n');

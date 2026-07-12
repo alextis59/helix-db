@@ -2,10 +2,10 @@
   "schema_version": 1,
   "task_id": "P04-003",
   "verdict": "pass",
-  "commit": "bb4cbb48558dcc0df948d45518882e4af591a3b1",
-  "base_commit": "f763170f12e9978e91f0181466096d5533690dc4",
-  "source_tree": "e1d6da72dae5755db83afa1edef428bb2ef03c1a",
-  "diff_sha256": "40fed28a3082c0abf89e52e0776876c35d640a3039f95c69c220db501a5f852f",
+  "commit": "66d6e9a610a36fb2edcb7aed9a7171e1f5c84897",
+  "base_commit": "af07bb041e9faf303ea2af1964943e0367beed42",
+  "source_tree": "89ba40bd3c883537450ad565c709446cb6655f09",
+  "diff_sha256": "7c9a497bafabf4b7957cd9b41d1cdf68c6af07ead267e6e0a55a680c5a642825",
   "recorded_on": "2026-07-12",
   "requirements": [
     "CORE-001",
@@ -17,40 +17,43 @@
     "SEC-002"
   ],
   "accepted_adrs": ["0013"],
-  "source_commits": ["bb4cbb48558dcc0df948d45518882e4af591a3b1"],
+  "source_commits": [
+    "bb4cbb48558dcc0df948d45518882e4af591a3b1",
+    "66d6e9a610a36fb2edcb7aed9a7171e1f5c84897"
+  ],
   "authorities": [
     {
-      "path": "wit/helix-core-abi-v1_1/world.wit",
+      "path": "wit/helix-core-abi-v2/world.wit",
       "bytes": 6076,
-      "sha256": "cdffa3263bbaed6bc9c19d3859c3ed5cb5235996c169eb5a6c53a334b85865b8"
+      "sha256": "ffb2d309cb7d03cd69da4fbad8bcfbc2ae7508ba302a53585dde48bec3553030"
     },
     {
       "path": "docs/architecture/host-capability-abi-v1.json",
-      "bytes": 3403,
-      "sha256": "d9c8187d02b341409870c1426d1e29c793d105e0faf250bf6e59bcbc0e8e8bc2"
+      "bytes": 3410,
+      "sha256": "9a9498ebf49ddb706be7e7e6605a1145b8b58526e5a163d60d5e1bec5bedf169"
     },
     {
       "path": "docs/architecture/host-capability-abi-v1.md",
-      "bytes": 3565,
-      "sha256": "674e5e6b031ab58ccbf21ac1bac6a4f48aba1815ef9ba3585a3ba42baaeebfe9"
+      "bytes": 3576,
+      "sha256": "666b6383b76afd8591d829978ee2001ac1cface6e5aa2e032b825a8383fc3455"
     },
     {
       "path": "tests/toolchain/check-host-capabilities.mjs",
       "bytes": 8075,
-      "sha256": "ce0d29801eb32e188b7970b2b2ca5be2f4e143255f7f2cbd66fe5215216c5927"
+      "sha256": "19d9d071ea931662bc394aeb481c715920ea698d73f7cfc1c6a51093b5f52fda"
     },
     {
       "path": "tests/toolchain/test-host-capabilities-contract.mjs",
       "bytes": 3795,
-      "sha256": "2f970440456002643ddf3d5a0cdf43103e0b31ba80ee75800ba4d0254b158851"
+      "sha256": "a9c15a0f5eb69d0e7c3343419a521989359af8a4588fba7947ef4bac2c97aa17"
     }
   ],
   "verifier": {
-    "bytes": 7013,
-    "sha256": "a9a6032b786fe0eb83baaa3cb23cbf3308e4e1b5a0a88d5cdaf6fc4a14b7cc12"
+    "bytes": 7009,
+    "sha256": "427f516725a5b42ce3deca9e13017ccefad8500a2776a57aeb860061465f1f3c"
   },
   "verification": {
-    "source_artifacts": 37,
+    "source_artifacts": 21,
     "wit_versions": 2,
     "interfaces": 12,
     "capability_interfaces": 9,
