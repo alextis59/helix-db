@@ -1,0 +1,81 @@
+{
+  "schema": "helix.async-storage-batch-abi/1",
+  "plan_item": "P04-004",
+  "base": {
+    "package": "helix:core-abi@2.0.0",
+    "path": "wit/helix-core-abi-v2/world.wit",
+    "bytes": 6076,
+    "sha256": "ffb2d309cb7d03cd69da4fbad8bcfbc2ae7508ba302a53585dde48bec3553030",
+    "immutable": true
+  },
+  "current": {
+    "package": "helix:core-abi@3.0.0",
+    "path": "wit/helix-core-abi-v3/world.wit",
+    "bytes": 8795,
+    "sha256": "1b6935a9de4f5bdccbdd466dedb78e95d5114cc3a102f2c84c56cdf228103199",
+    "world": "helix-core-v1",
+    "abi": { "major": 3, "minor": 0 },
+    "accepted": [{ "major": 3, "minor": 0 }]
+  },
+  "operations": [
+    "read-batch",
+    "write-batch",
+    "sync-batch",
+    "rename-batch",
+    "list-batch",
+    "delete-batch"
+  ],
+  "operation_interfaces": {
+    "read-batch": "host-files",
+    "write-batch": "host-files",
+    "sync-batch": "host-durability",
+    "rename-batch": "host-directories",
+    "list-batch": "host-directories",
+    "delete-batch": "host-directories"
+  },
+  "bounds": {
+    "maximum_batch_items": 1024,
+    "maximum_transfer_bytes": 16777216,
+    "maximum_list_entries": 4096,
+    "maximum_request_id_bytes": 32,
+    "maximum_idempotency_key_bytes": 64
+  },
+  "rules": {
+    "all_operations_are_async": true,
+    "one_crossing_per_batch": true,
+    "results_preserve_request_order": true,
+    "paths_are_relative_to_granted_namespace": true,
+    "explicit_copy_baseline": true,
+    "success_covers_every_request": true,
+    "successful_read_short_only_at_eof": true,
+    "successful_write_lengths_equal_requests": true,
+    "list_entries_sorted_unique_by_utf8_name": true,
+    "mutating_batches_require_idempotency_key": true,
+    "error_releases_no_success_payload": true,
+    "mutation_ambiguity_uses_helix_error_outcome": true,
+    "partial_io_semantics_deferred_to_P04_008": true
+  },
+  "versioning": {
+    "change": "incompatible-required-async-operation-imports",
+    "same_patch_rewrite_forbidden": true,
+    "package_semver_alone_is_not_compatibility": true,
+    "implicit_2_0_acceptance": false,
+    "unsupported_result": "CAP_UNSUPPORTED_VERSION"
+  },
+  "deferred": {
+    "resource_lifecycles": "P04-005",
+    "buffer_transport_implementation": "P04-006",
+    "cancellation_deadlines_backpressure_partial_io_shutdown": "P04-008",
+    "mock_host": "P04-010",
+    "native_host": "P04-011",
+    "browser_host": "P04-012"
+  },
+  "claim_boundary": {
+    "operations_defined": true,
+    "operations_bound_or_implemented": false,
+    "resource_lifecycles_defined": false,
+    "host_implementations_present": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-005"
+  }
+}

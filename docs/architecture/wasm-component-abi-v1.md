@@ -83,7 +83,7 @@ behavior. The declared kinds are files, directories, durability, timers, randomn
 metrics, secrets, networking, object storage, and GPU.
 
 Declaring a kind does not grant it. P04-003 defines concrete capability resource identities in ABI
-1.1; operations remain P04-004 onward.
+2.0; operations are defined by P04-004 in ABI 3.0 and remain unbound.
 There is no wildcard or ambient capability, and a missing required descriptor returns
 `CAP_HOST_UNAVAILABLE` before resource use.
 

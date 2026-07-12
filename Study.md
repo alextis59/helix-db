@@ -204,6 +204,13 @@ semantics from this step. This is preferable to a single host wildcard because l
 deny, revoke, and fault each authority independently. It also leaves P04-004/P04-005 free to freeze
 batching and ownership together without retrofitting a chatty ABI.
 
+P04-004 then makes the call granularity explicit in `helix:core-abi@3.0.0`. Six asynchronous batch
+functions cover read, write, sync, rename, list, and delete without introducing per-byte or
+per-entry crossings. Fixed count/byte bounds, request-order alignment, deterministic directory
+ordering, mutation idempotency keys, and a single error outcome make the definitions testable while
+leaving resource ownership and hard partial-I/O/cancellation cases to their dedicated tasks. The
+major bump is intentional because new required imports are not backward-compatible with ABI 2.0.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

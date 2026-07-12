@@ -17,7 +17,7 @@ This document establishes stable, reviewable locations for source code, conforma
 | [`crates/`](../../crates/README.md) | Rust workspace source | Eight boundary crates from `P02-001` | Compilable boundary skeletons |
 | [`shaders/`](../../shaders/README.md) | Internal WGSL source and shader fixtures | `predicates/`, `bitmaps/`, `vectors/`, `fixtures/` | Compile-only validation fixtures; no product kernels |
 | [`packages/`](../../packages/README.md) | Private npm workspace packages | `sdk-typescript/`, `browser-host/` | Reserved directories; not npm packages yet |
-| [`wit/`](../../wit/README.md) | Versioned WebAssembly Interface Type packages | `helix-core-abi-v1/`, `helix-core-abi-v2/` | Immutable ABI 1.0 plus current capability ABI 2.0; bindings and host operations absent |
+| [`wit/`](../../wit/README.md) | Versioned WebAssembly Interface Type packages | `helix-core-abi-v1/`, `helix-core-abi-v2/`, `helix-core-abi-v3/` | Immutable ABI 1.0/2.0 plus current async-operation ABI 3.0; bindings and hosts absent |
 | [`conformance/`](../../conformance/README.md) | Cross-backend suite definitions and fixture bindings | `semantics/`, `formats/`, `host/`, `compatibility/` | Semantic corpus binding only |
 | [`benchmarks/`](../../benchmarks/README.md) | Reproducible datasets, workloads, schemas, runners, and report indexes | `datasets/`, `workloads/`, `schema/`, `cpu-columnar/`, `webgpu/`, `reports/` | One integrity-only harness calibration; no database performance claim |
 | [`tests/`](../../tests/README.md) | Toolchain and cross-crate/system tests | `toolchain/`, `integration/`, `fuzz/`, `crash/`, `differential/`, `browser/`, `distributed/` | Toolchain/unit/conformance commands plus explicit reserved system-test contracts |

@@ -326,6 +326,18 @@ semantics, deterministic injected values, and mock/native/browser implementation
 through P04-013. Networking, object storage, and GPU remain reserved descriptor kinds without
 concrete interfaces in this task.
 
+P04-004 preserves ABI 2.0 and defines the six required storage operations in exact
+`helix:core-abi@3.0.0`: `read-batch`, `write-batch`, `sync-batch`, `rename-batch`, `list-batch`, and
+`delete-batch`. Every operation is a WIT `async func`, borrows explicit capability/cancellation
+resources, and crosses the boundary once per bounded batch. A batch contains at most 1,024 requests,
+16 MiB of copied transfer bytes, 4,096 total listed entries, a 32-byte request ID, and a 64-byte
+optional idempotency key; write/rename/delete require that key.
+
+Success returns exactly one ordered result per request. Reads may be short only at EOF, writes must
+report every input byte, and directory entries are unique and sorted by UTF-8 name bytes. Errors
+release no success payload and carry mutation ambiguity through `helix-error.outcome`. This step
+defines no bindings, lifecycle, host, partial-I/O/deadline behavior, or database execution.
+
 ### 6.2 `helix-host`
 
 Native host process.

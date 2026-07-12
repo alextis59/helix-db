@@ -11,7 +11,7 @@
 
 This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
 unpublished at version `0.0.0`. The workspace carries machine-readable
-`host-capability-abi-v1` /
+`async-storage-batch-abi-v1` /
 `database-functionality = true` metadata now that `P03-008`–`P03-021` have implemented
 deterministic encoding, whole-envelope validation, borrowed/owned logical values, exact-name/path
 lookup, canonical lossless tagged JSON rendering with strict detached import, and canonical
@@ -20,7 +20,7 @@ resolution, recovery, immutable version pins, exact-1.0 closed-world negotiation
 migration assessment, immutable HDoc 1.0 golden-vector production/checking, pinned fuzz/browser
 replay, representative source-bound codec/lookup/size measurements, and the accepted
 self-contained-format/derived-only-dictionary experiment boundary. `helix-core` now carries the
-`host-capability-abi-v1` composition and versioned capability definitions and still reports
+`async-storage-batch-abi-v1` composition and versioned async operation definitions and still reports
 `database-functionality = false`; the other six
 crates remain `boundary-skeleton` components. Public names and package coordinates remain blocked by
 `P16-016`.
@@ -33,7 +33,7 @@ crates remain `boundary-skeleton` components. Public names and package coordinat
 | `helix-query` | Query syntax, normalization, logical plans, CPU reference behavior | `helix-doc` | Boundary skeleton |
 | `helix-storage` | Deterministic WAL/MVCC/manifest/memtable/immutable-file algorithms; no ambient I/O | `helix-doc` | Boundary skeleton |
 | `helix-columnar` | Rebuildable field dictionaries, typed sidecars, and CPU column operators | `helix-doc`, `helix-query` | Boundary skeleton |
-| `helix-core` | Portable deterministic orchestration and versioned capability ABI | `helix-columnar`, `helix-doc`, `helix-query`, `helix-storage` | Deterministic gate and nine capability definitions active; bindings/operations absent |
+| `helix-core` | Portable deterministic orchestration and versioned capability ABI | `helix-columnar`, `helix-doc`, `helix-query`, `helix-storage` | Deterministic gate, nine capabilities, and six async operations defined; bindings absent |
 | `helix-gpu` | Optional GPU profiles, buffers, plans, dispatch, candidates, and CPU verification integration | `helix-columnar`, `helix-doc`, `helix-query` | Boundary skeleton |
 | `helix-host-native` | Native files, clocks, randomness, scheduling, networking, devices, and runtime integration | `helix-core`; optional `helix-gpu` feature | Boundary skeleton |
 | `helix-server` | Native process lifecycle and future public/server protocol surface | `helix-host-native`; forwards optional GPU feature | Boundary skeleton |

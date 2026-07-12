@@ -1,0 +1,424 @@
+package helix:core-abi@3.0.0;
+
+/// Common value, resource, error, cancellation, and capability identities.
+interface types {
+  record abi-version {
+    major: u16,
+    minor: u16,
+  }
+
+  enum capability-kind {
+    files,
+    directories,
+    durability,
+    locks,
+    timers,
+    randomness,
+    scheduling,
+    metrics,
+    secrets,
+    networking,
+    object-storage,
+    gpu,
+  }
+
+  flags capability-flags {
+    required,
+    deterministic-input,
+    asynchronous,
+    revocable,
+  }
+
+  record capability-descriptor {
+    kind: capability-kind,
+    name: string,
+    version: abi-version,
+    attributes: capability-flags,
+  }
+
+  enum mutation-outcome {
+    not-applicable,
+    not-committed,
+    committed,
+    unknown,
+  }
+
+  enum retry-scope {
+    never,
+    same-request,
+    same-idempotency-key,
+    new-snapshot,
+    after-delay,
+    after-capability-change,
+    after-operator-action,
+  }
+
+  record retry-advice {
+    retryable: bool,
+    scope: retry-scope,
+    min-delay-ms: option<u64>,
+    max-attempts-hint: option<u32>,
+    retry-token: option<list<u8>>,
+  }
+
+  record error-detail {
+    key: string,
+    value: string,
+  }
+
+  record helix-error {
+    contract: abi-version,
+    code: string,
+    phase: string,
+    outcome: mutation-outcome,
+    retry: retry-advice,
+    details: list<error-detail>,
+  }
+
+  resource immutable-buffer;
+  resource mutable-staging-buffer;
+  resource opaque-handle;
+  resource cancellation-token;
+  resource capability-set;
+
+  record component-descriptor {
+    abi: abi-version,
+    semantic-profile: string,
+    error-profile: string,
+    hdoc-profile: string,
+    required-capabilities: list<capability-descriptor>,
+  }
+
+  record host-descriptor {
+    abi: abi-version,
+    capabilities: list<capability-descriptor>,
+  }
+
+  record negotiated-abi {
+    version: abi-version,
+    capabilities: list<capability-descriptor>,
+  }
+}
+
+/// Host-owned file namespace and access-policy identity. Operations begin at P04-004.
+interface host-files {
+  use types.{abi-version, cancellation-token, helix-error};
+
+  flags file-rights {
+    read,
+    write,
+    create,
+    truncate,
+  }
+
+  record file-policy {
+    version: abi-version,
+    namespace: string,
+    rights: file-rights,
+    max-open-files: u32,
+    max-file-bytes: u64,
+  }
+
+  resource file-capability;
+
+  record operation-context {
+    request-id: list<u8>,
+    idempotency-key: option<list<u8>>,
+  }
+
+  record read-request {
+    path: string,
+    offset: u64,
+    length: u32,
+  }
+
+  record read-result {
+    offset: u64,
+    bytes: list<u8>,
+    end-of-file: bool,
+  }
+
+  record write-request {
+    path: string,
+    offset: u64,
+    bytes: list<u8>,
+  }
+
+  record write-result {
+    offset: u64,
+    bytes-written: u32,
+  }
+
+  read-batch: async func(
+    capability: borrow<file-capability>,
+    context: operation-context,
+    requests: list<read-request>,
+    cancellation: borrow<cancellation-token>,
+  ) -> result<list<read-result>, helix-error>;
+
+  write-batch: async func(
+    capability: borrow<file-capability>,
+    context: operation-context,
+    requests: list<write-request>,
+    cancellation: borrow<cancellation-token>,
+  ) -> result<list<write-result>, helix-error>;
+}
+
+/// Host-owned directory namespace identity. Paths are always relative to a granted root.
+interface host-directories {
+  use types.{abi-version, cancellation-token, helix-error};
+  use host-files.{operation-context};
+
+  flags directory-rights {
+    enumerate,
+    create,
+    rename,
+    remove,
+  }
+
+  record directory-policy {
+    version: abi-version,
+    namespace: string,
+    rights: directory-rights,
+    max-depth: u32,
+    max-entries-per-list: u32,
+  }
+
+  resource directory-capability;
+
+  enum path-kind {
+    file,
+    directory,
+  }
+
+  record directory-entry {
+    name: string,
+    kind: path-kind,
+    byte-length: option<u64>,
+  }
+
+  record list-request {
+    path: string,
+  }
+
+  record list-result {
+    entries: list<directory-entry>,
+  }
+
+  record rename-request {
+    source-path: string,
+    destination-path: string,
+    replace: bool,
+  }
+
+  record rename-result {
+    replaced: bool,
+  }
+
+  record delete-request {
+    path: string,
+    kind: path-kind,
+  }
+
+  record delete-result {
+    deleted: bool,
+  }
+
+  rename-batch: async func(
+    capability: borrow<directory-capability>,
+    context: operation-context,
+    requests: list<rename-request>,
+    cancellation: borrow<cancellation-token>,
+  ) -> result<list<rename-result>, helix-error>;
+
+  list-batch: async func(
+    capability: borrow<directory-capability>,
+    context: operation-context,
+    requests: list<list-request>,
+    cancellation: borrow<cancellation-token>,
+  ) -> result<list<list-result>, helix-error>;
+
+  delete-batch: async func(
+    capability: borrow<directory-capability>,
+    context: operation-context,
+    requests: list<delete-request>,
+    cancellation: borrow<cancellation-token>,
+  ) -> result<list<delete-result>, helix-error>;
+}
+
+/// Durability promises available to later storage-batch operations.
+interface host-durability {
+  use types.{abi-version, cancellation-token, helix-error};
+  use host-files.{file-capability, operation-context};
+
+  enum durability-level {
+    memory,
+    data,
+    data-and-metadata,
+    data-metadata-and-directory,
+  }
+
+  record durability-policy {
+    version: abi-version,
+    supported-levels: list<durability-level>,
+    atomic-replace: bool,
+  }
+
+  resource durability-capability;
+
+  record sync-request {
+    path: string,
+    level: durability-level,
+  }
+
+  record sync-result {
+    level: durability-level,
+  }
+
+  sync-batch: async func(
+    files: borrow<file-capability>,
+    durability: borrow<durability-capability>,
+    context: operation-context,
+    requests: list<sync-request>,
+    cancellation: borrow<cancellation-token>,
+  ) -> result<list<sync-result>, helix-error>;
+}
+
+/// Advisory/exclusive lock namespace. Acquisition and release semantics begin at P04-004/P04-005.
+interface host-locks {
+  use types.{abi-version};
+
+  enum lock-mode {
+    shared,
+    exclusive,
+  }
+
+  enum lock-scope {
+    process,
+    machine,
+    storage-backend,
+  }
+
+  record lock-policy {
+    version: abi-version,
+    modes: list<lock-mode>,
+    scope: lock-scope,
+    fencing-tokens: bool,
+  }
+
+  resource lock-capability;
+}
+
+/// Explicit wall/monotonic time source identity. The core never reads a clock ambiently.
+interface host-timers {
+  use types.{abi-version};
+
+  record timer-policy {
+    version: abi-version,
+    wall-clock: bool,
+    monotonic-clock: bool,
+    minimum-resolution-ns: u64,
+    maximum-delay-ms: u64,
+  }
+
+  resource timer-capability;
+}
+
+/// Explicit random-byte source identity with purpose separation.
+interface host-randomness {
+  use types.{abi-version};
+
+  enum random-purpose {
+    request-id,
+    transaction-id,
+    nonce,
+    sampling,
+  }
+
+  record randomness-policy {
+    version: abi-version,
+    purposes: list<random-purpose>,
+    max-bytes-per-request: u32,
+  }
+
+  resource randomness-capability;
+}
+
+/// Bounded host scheduling identity. It grants no ambient threads to the core.
+interface host-scheduling {
+  use types.{abi-version};
+
+  record scheduling-policy {
+    version: abi-version,
+    max-in-flight: u32,
+    max-queue-depth: u32,
+    cooperative-yield: bool,
+  }
+
+  resource scheduling-capability;
+}
+
+/// Bounded redacted metrics sink identity.
+interface host-metrics {
+  use types.{abi-version};
+
+  enum metric-kind {
+    counter,
+    gauge,
+    histogram,
+  }
+
+  record metrics-policy {
+    version: abi-version,
+    kinds: list<metric-kind>,
+    max-name-bytes: u32,
+    max-labels: u32,
+    document-content-permitted: bool,
+  }
+
+  resource metrics-capability;
+}
+
+/// Named secret namespace identity. Secret values are never descriptors or error details.
+interface host-secrets {
+  use types.{abi-version};
+
+  record secrets-policy {
+    version: abi-version,
+    namespace: string,
+    max-secret-bytes: u32,
+    enumerable: bool,
+    exportable: bool,
+  }
+
+  resource secrets-capability;
+}
+
+/// Minimal host control surface. Bounded operation semantics are introduced by P04-004/P04-008.
+interface host-control {
+  use types.{cancellation-token};
+
+  poll-cancellation: func(token: borrow<cancellation-token>) -> bool;
+}
+
+/// Stable component identity and fail-closed ABI negotiation.
+interface core-control {
+  use types.{component-descriptor, helix-error, host-descriptor, negotiated-abi};
+
+  describe: func() -> component-descriptor;
+  negotiate: func(host: host-descriptor) -> result<negotiated-abi, helix-error>;
+}
+
+world helix-core-v1 {
+  import host-files;
+  import host-directories;
+  import host-durability;
+  import host-locks;
+  import host-timers;
+  import host-randomness;
+  import host-scheduling;
+  import host-metrics;
+  import host-secrets;
+  import host-control;
+  export core-control;
+}
