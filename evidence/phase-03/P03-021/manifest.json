@@ -7,6 +7,29 @@
   "source_tree": "3a9b090c679e0afb8aa62d1445b89accf3fb9a97",
   "diff_sha256": "8e27918aac82342963f0a0d235ed7d8b2cb9bb8ad4ea2780d9fa31dffb9e058d",
   "recorded_on": "2026-07-12",
+  "requirements": [
+    "CORE-001",
+    "DATA-001",
+    "DATA-003",
+    "INV-001",
+    "INV-007",
+    "QUAL-001"
+  ],
+  "accepted_adrs": ["0012"],
+  "source_commits": ["82c83f7b972410bb77553484f260bb2ff09883cc"],
+  "environment": {
+    "os": "Linux 6.8.0-124-generic",
+    "architecture": "x86_64",
+    "tool_versions": {
+      "git": "2.34.1",
+      "node": "22.19.0",
+      "rustc": "1.96.1",
+      "cargo": "1.96.1",
+      "python_jsonschema": "4.23.0"
+    },
+    "network_required_for_replay": false,
+    "hosted_workflow_execution": false
+  },
   "authorities": [
     {
       "path": "benchmarks/reports/hdoc-v1-decisions.json",
@@ -35,8 +58,8 @@
     }
   ],
   "verifier": {
-    "bytes": 6780,
-    "sha256": "b56e684081a2d4314a3cb00b7b0cd0fff6861ce1254acc549feb66b2849a9987"
+    "bytes": 7160,
+    "sha256": "68415e4034f62b6f86a3a54360613796ae195055e9088ebc0babdb65a1a7e631"
   },
   "verification": {
     "source_artifacts": 34,

@@ -28,6 +28,16 @@ assert(/^[0-9a-f]{40}$/.test(argument), 'commit must be a full lowercase SHA-1')
 assert(argument === manifest.commit, 'argument does not match manifest commit');
 assert(manifest.schema_version === 1, 'evidence schema mismatch');
 assert(manifest.task_id === 'P03-021' && manifest.verdict === 'pass', 'evidence verdict');
+assert(
+  JSON.stringify(manifest.requirements) ===
+    JSON.stringify(['CORE-001', 'DATA-001', 'DATA-003', 'INV-001', 'INV-007', 'QUAL-001']),
+  'evidence requirements',
+);
+assert(JSON.stringify(manifest.accepted_adrs) === JSON.stringify(['0012']), 'accepted ADRs');
+assert(
+  JSON.stringify(manifest.source_commits) === JSON.stringify([manifest.commit]),
+  'source commits',
+);
 assert(gitText(['rev-parse', `${argument}^{commit}`]).trim() === argument, 'source commit');
 assert(gitText(['rev-parse', `${argument}^`]).trim() === manifest.base_commit, 'source parent');
 assert(gitText(['rev-parse', `${argument}^{tree}`]).trim() === manifest.source_tree, 'source tree');
