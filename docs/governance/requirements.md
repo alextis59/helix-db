@@ -97,6 +97,7 @@ Only `Verified` satisfies a release gate. A pull request, code path, or passing 
 | Task evidence | Accepted requirement foundations | Remaining boundary |
 | --- | --- | --- |
 | [`P04-001`](../../evidence/phase-04/P04-001/README.md) | `CORE-001`, `CORE-003`, `INV-003`, `INV-004`, `INV-007`, `PLAT-001`, `PLAT-002`, `SEC-001`, `SEC-002` | Defines exact-versioned WIT values/resources/errors/cancellation/capabilities and an ambient-free negotiation boundary; bindings, concrete hosts, capability denial, native/browser conformance, storage fallback, and security isolation remain open. |
+| [`P04-002`](../../evidence/phase-04/P04-002/README.md) | `CORE-001`, `CORE-002`, `INV-004`, `SEC-001`, `SEC-002` | Physically separates the five-crate deterministic core, denies ambient APIs and dependencies, and proves zero browser-Wasm imports; concrete capability interfaces, hosts, denial conformance, and database orchestration remain open. |
 
 ## Accepted phase-gate evidence
 

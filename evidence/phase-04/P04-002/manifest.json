@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-002",
+  "verdict": "pass",
+  "commit": "6cdad16f444c26930d86cadc3928418b44ecd2ce",
+  "base_commit": "b6f9d3b80318a27526663304a366b618fd73e569",
+  "source_tree": "adaed2709688b66b304109e38a6db0db1c1b4e84",
+  "diff_sha256": "ddcb158843fae39e8a96140fdc135f1d9b022f50faf67901b63ce7595fa6abbe",
+  "recorded_on": "2026-07-12",
+  "requirements": ["CORE-001", "CORE-002", "INV-004", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0013"],
+  "source_commits": ["6cdad16f444c26930d86cadc3928418b44ecd2ce"],
+  "authorities": [
+    {
+      "path": "docs/architecture/deterministic-core-boundary-v1.json",
+      "bytes": 2170,
+      "sha256": "6ec79cd6b47f88d61299359af4910d298168ae9b90ec52da47097d62254b948b"
+    },
+    {
+      "path": "docs/architecture/deterministic-core-boundary-v1.md",
+      "bytes": 2904,
+      "sha256": "c74efc797acd7d55bb0e2a206d8125ef51772bc04bb0c727d793e7378b5bd945"
+    },
+    {
+      "path": "crates/helix-core/src/deterministic.rs",
+      "bytes": 1186,
+      "sha256": "4afaacf1b4ec056acdf324bb011eb380e0c7474ce5a41cf08bebc07f13f56851"
+    },
+    {
+      "path": "tests/toolchain/check-deterministic-core.mjs",
+      "bytes": 7193,
+      "sha256": "d98216a67ea95816622ce5c5bdbde069669ea24a373f40ea8c9f17116dababf1"
+    },
+    {
+      "path": "tests/toolchain/test-deterministic-core-contract.mjs",
+      "bytes": 2466,
+      "sha256": "a989e2367c7ebee8de6c32465da80ddcc4359c9afe2168c18176b12232433507"
+    }
+  ],
+  "verifier": {
+    "bytes": 7013,
+    "sha256": "8705404bb4fb4181d7a1cd69dafe84747f0733a0deda5bae706e2bf9c95114d4"
+  },
+  "verification": {
+    "source_artifacts": 35,
+    "deterministic_crates": 5,
+    "allowed_direct_dependencies": 4,
+    "dependency_packages": 18,
+    "rust_source_files": 11,
+    "forbidden_dependency_names": 12,
+    "forbidden_source_patterns": 14,
+    "ambient_categories": 12,
+    "browser_wasm_imports": 0,
+    "mutation_canaries": 30,
+    "browser_executions": 6,
+    "workspace_tests": 49,
+    "fuzz_executions": 640,
+    "product_lines_covered": 4565,
+    "product_lines_total": 4565
+  }
+}
