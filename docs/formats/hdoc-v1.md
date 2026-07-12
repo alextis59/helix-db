@@ -680,8 +680,10 @@ or an existing ID.
 
 ## Required validation fixtures
 
-P03-002 evidence validates the layout document and machine companion. P03-016 now supplies the
-first immutable complete golden HDoc bytes; P03-018 expands malformed/property breadth. Together
+P03-002 evidence validates the layout document and machine companion. P03-016 supplies the first
+immutable complete golden HDoc bytes; P03-018 adds deterministic generated round-trip and
+canonicalization properties plus truncation, trailing, byte-damage, and checksum-repaired
+single-bit mutation breadth. Together
 the validation program covers:
 
 - exact header/footer magic and every fixed field boundary;

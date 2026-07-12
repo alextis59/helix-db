@@ -160,13 +160,21 @@ const validatePolicy = () => {
     },
     'coverage toolchain',
   );
-  assert(policy.source.include_regex === '^crates/[^/]+/src/.+\\.rs$', 'source inclusion');
+  assert(
+    policy.source.include_regex ===
+      '^crates/(?!helix-doc/src/property_tests\\.rs$)[^/]+/src/.+\\.rs$',
+    'source inclusion',
+  );
   same(
     policy.source.excluded_path_rules,
     [
       {
         reason: 'test-benchmark-example-code',
         regex: '^crates/[^/]+/(?:tests|benches|examples)/.+\\.rs$',
+      },
+      {
+        reason: 'cfg-test-only-deterministic-property-module',
+        regex: '^crates/helix-doc/src/property_tests\\.rs$',
       },
     ],
     'path exclusions',
@@ -190,7 +198,7 @@ const validatePolicy = () => {
     'empty product-scope exception',
   );
   assert(
-    policy.active_product_scope.allowed_status === 'hdoc-cross-language-v1' &&
+    policy.active_product_scope.allowed_status === 'hdoc-properties-v1' &&
       policy.active_product_scope.requires_database_functionality === true &&
       policy.active_product_scope.activated_by === 'P03-008' &&
       policy.active_product_scope.reason.length >= 150,

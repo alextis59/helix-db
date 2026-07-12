@@ -396,7 +396,7 @@ Reading never silently recompresses, repairs, or rewrites an HDoc.
 | `P03-011` (complete) | Exact-name lookup and bounded dotted traversal over retained sections | Whole-document validation and logical offsets |
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Canonical lossless tagged rendering and strict detached import | Whole-document validation and logical offsets |
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; extension-area compression remains unsupported | Four-base-section profile and existing IDs |
-| [`P03-016`](../../fixtures/hdoc/v1/README.md) complete; `P03-017`–`P03-019` | Immutable fixtures complete; independent reader, properties, and fuzz/sanitizer replay remain | Registry vectors and rejection expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md), `P03-017`, and `P03-018` complete; `P03-019` remains | Immutable fixtures, independent reader, and deterministic properties/mutations complete; fuzz/sanitizer replay remains | Registry vectors and rejection expectations |
 | `P03-020`–`P03-021` | Formal format/compression/dictionary benchmarks | Correctness, canonicality, limits, or security rules |
 
 ## References

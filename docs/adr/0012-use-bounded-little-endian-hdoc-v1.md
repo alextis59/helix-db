@@ -549,8 +549,10 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   fail-closed no-rewrite migration assessment.
 - [x] `P03-016`: freeze immutable positive/boundary and exact rejection HDoc 1.0 fixtures.
 - [x] `P03-017`: prove independent TypeScript and production Rust golden-reader parity.
-- [ ] `P03-018`–`P03-021`: complete property/fuzz/corruption evidence and experiment conclusions
-  before `G03`.
+- [x] `P03-018`: complete deterministic round-trip, canonicalization, malformed-input, property,
+  and checksum-repaired mutation evidence.
+- [ ] `P03-019`–`P03-021`: complete fuzz/corruption evidence and experiment conclusions before
+  `G03`.
 
 ## References
 

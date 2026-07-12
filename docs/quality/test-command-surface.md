@@ -18,7 +18,7 @@ A zero-target class is never presented as implemented coverage. A reserved comma
 
 | Command | Bootstrap state | Current behavior | Activation or expansion |
 | --- | --- | --- | --- |
-| `npm run test:unit` | Active | Runs all-feature Rust library tests and inventories JavaScript unit files; currently 18 Rust tests and 0 JavaScript files | Counts change with reviewed implementation tests |
+| `npm run test:unit` | Active | Runs 49 all-feature Rust library tests and inventories 0 JavaScript unit files; five deterministic P03-018 property/mutation tests cover 512-seed codec and tagged-JSON properties, 256 presentation permutations, every positive-fixture prefix, sampled stored-byte damage, and 2,656 checksum-repaired one-bit mutations | Counts change with reviewed implementation tests |
 | `npm run test:integration` | Active | Runs one five-case Vitest file: fixed inventory plus complete logical-value and independently recomputed typed-hash parity across all four immutable HDoc 1.0 positive vectors | Later cross-crate, language, and process boundaries extend the same command |
 | `npm run test:conformance` | Active | Replays semantic examples, canonical bytes, the 17-fixture/319-step corpus, 382 oracle assertions, the 265-row compatibility matrix, and offline MongoDB artifacts | Later format, host, engine, and adapter bindings extend the same command |
 | `npm run test:fuzz` | Reserved | Requires only the fuzz contract README; no property test is relabeled as fuzzing | First coverage-guided codec targets under `P03-019` |

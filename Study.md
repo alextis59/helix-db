@@ -351,7 +351,10 @@ negotiate or adapt it, but cannot silently call ordinary JSON lossless. P03-016 
 immutable supported HDoc 1.0 positive/rejection files with SHA-256 identities and exact outcomes.
 P03-017 adds a genuinely independent TypeScript byte reader: its CRC, bounded LZ4 expansion,
 complete logical reconstruction, and recursive BLAKE3 calculation agree with production Rust on
-all four positive files. `P03-018`–`P03-019` still own broader property/mutation/fuzz evidence.
+all four positive files. P03-018 adds deterministic generated properties across both stored
+profiles and tagged conversion, presentation-permutation hash invariance, every positive-fixture
+truncation, trailing and sampled byte damage, plus every checksum-repaired single-bit mutation of
+the minimal envelope. `P03-019` still owns coverage-guided fuzzing and sanitizer/browser replay.
 
 ### 6.3 Field-path dictionaries
 

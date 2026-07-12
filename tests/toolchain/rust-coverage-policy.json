@@ -30,11 +30,15 @@
     "rustup_component": "llvm-tools"
   },
   "source": {
-    "include_regex": "^crates/[^/]+/src/.+\\.rs$",
+    "include_regex": "^crates/(?!helix-doc/src/property_tests\\.rs$)[^/]+/src/.+\\.rs$",
     "excluded_path_rules": [
       {
         "regex": "^crates/[^/]+/(?:tests|benches|examples)/.+\\.rs$",
         "reason": "test-benchmark-example-code"
+      },
+      {
+        "regex": "^crates/helix-doc/src/property_tests\\.rs$",
+        "reason": "cfg-test-only-deterministic-property-module"
       }
     ],
     "inline_exclusion": {
@@ -52,7 +56,7 @@
     "reason": "Phase 2 has crate-boundary constants and test harnesses but no executable database product logic; the first instrumented product region activates every applicable threshold"
   },
   "active_product_scope": {
-    "allowed_status": "hdoc-cross-language-v1",
+    "allowed_status": "hdoc-properties-v1",
     "requires_database_functionality": true,
     "activated_by": "P03-008",
     "reason": "The safe deterministic HDoc codec, logical values, raw lookup, tagged conversion, path-dictionary format/lifecycle, exact-1.0 negotiation, and immutable HDoc 1.0 golden-vector checks are executable semantic-critical product logic, so an empty denominator is forbidden and every applicable aggregate and per-file threshold must pass"

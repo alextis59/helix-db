@@ -23,5 +23,7 @@ cargo run --frozen -p helix-doc --example hdoc_v1_golden -- --check
 `P03-017` adds an independent TypeScript reader over every positive file. The active integration
 suite requires it to validate CRC-32C, expand the bounded LZ4 stream, reconstruct the complete
 lossless logical tree, and recompute the recursive BLAKE3-256 identity independently; those values
-must equal the production Rust reader's output. `P03-018` expands property/mutation breadth, and
-`P03-019` adds coverage-guided fuzzing; neither may rewrite v1 files.
+must equal the production Rust reader's output. `P03-018` now replays every prefix, trailing-byte
+case, sampled stored-byte corruption, and the minimal envelope's 2,656 checksum-repaired one-bit
+mutations, alongside 512-seed generated round-trip/canonicalization properties. `P03-019` adds
+coverage-guided fuzzing; neither task may rewrite v1 files.

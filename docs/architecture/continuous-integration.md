@@ -76,6 +76,12 @@ P03-017 activates the integration suite on every Node/native lane through the st
 command. Its dedicated Vitest configuration drives the production Rust fixture reader and the
 independent TypeScript CRC/LZ4/logical-tree/hash reader over the four positive immutable vectors.
 
+P03-018 expands the all-feature Rust unit inventory from 44 to 49. Every native lane runs the
+deterministic generated round-trip, presentation-canonicalization, malformed-prefix/suffix,
+stored-byte damage, checksum-repaired single-bit mutation, and tagged-JSON canonicalization suites;
+the Linux lane additionally retains threshold-enforced coverage and ASan compilation remains
+gating.
+
 ## Workflow security and reproducibility
 
 - Workflow permissions are `contents: read`; no job receives write, package, deployment, OIDC, or artifact-attestation permission.

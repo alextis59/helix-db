@@ -646,7 +646,7 @@ Reading never silently renumbers, canonicalizes, repairs, or rewrites an old HDo
 | [`P03-012`](hdoc-v1-tagged-json.md) (complete) | Ordered tagged object/array conversion and exact-size import validation | Base field IDs, presentation semantics, and canonical layout |
 | [`P03-013`–`P03-014`](path-dictionary-v1.md) (complete) | Collection dictionary format/lifecycle; HDoc reference profile remains unsupported | Base document-local field IDs and self-containment |
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Exact-1.0 feature/version negotiation and no-rewrite migration assessment | Existing IDs/flags/record meanings |
-| [`P03-016`](../../fixtures/hdoc/v1/README.md) complete; `P03-017`–`P03-019` | Complete golden/rejection files frozen; independent readers and broader property/fuzz suites remain | Structural vectors and rejection expectations |
+| [`P03-016`](../../fixtures/hdoc/v1/README.md), `P03-017`, and `P03-018` complete; `P03-019` remains | Complete golden/rejection files, independent readers, and broader deterministic properties complete; fuzz remains | Structural vectors and rejection expectations |
 | `P03-020`–`P03-021` | Lookup/size/alignment/compression experiments | Correctness rules or portable limits |
 
 ## Required later fixtures

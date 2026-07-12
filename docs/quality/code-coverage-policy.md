@@ -72,15 +72,17 @@ that mode.
 Product coverage includes every Rust file matching:
 
 ```text
-^crates/[^/]+/src/.+\.rs$
+^crates/(?!helix-doc/src/property_tests\.rs$)[^/]+/src/.+\.rs$
 ```
 
-New source files under a crate's `src/` tree enter the denominator automatically. Coverage data for
-another repository-owned path must match an explicit path rule or the runner fails it as
-unclassified. The only path rule currently excludes Rust sources under crate `tests/`, `benches/`,
-or `examples/` directories because those are harnesses/workloads, not product implementation.
-There is no generic generated-code, difficult-code, platform-code, unsafe-code, or low-value-code
-exclusion.
+New source files under a crate's `src/` tree enter the denominator automatically except the exact
+`crates/helix-doc/src/property_tests.rs` module. That file is compiled only behind `cfg(test)` and
+contains the deterministic P03-018 generators/mutation harness rather than product behavior; its
+specific path is classified by an explicit exclusion rule. Coverage data for another
+repository-owned path must match an explicit path rule or the runner fails it as unclassified. The
+other path rule excludes Rust sources under crate `tests/`, `benches/`, or `examples/` directories
+because those are harnesses/workloads, not product implementation. There is no generic
+generated-code, difficult-code, platform-code, unsafe-code, or low-value-code exclusion.
 
 The current unit tests remain inline in `src/lib.rs`. Each is enclosed by the exact markers:
 
@@ -155,12 +157,13 @@ validating decoder, `P03-010` added borrowed/owned logical values, `P03-011` add
 lookup, `P03-012` added strict lossless tagged JSON rendering/import, and `P03-013` added canonical
 field-path dictionary snapshots plus successor/non-reuse validation, and `P03-014` added atomic
 registration/resolution/recovery with immutable version pins, `P03-015` added exact-1.0
-closed-world negotiation/no-rewrite migration assessment, and `P03-016` froze executable immutable
-golden vectors. The active workspace
+closed-world negotiation/no-rewrite migration assessment, `P03-016` froze executable immutable
+golden vectors, `P03-017` added cross-language reader parity, and `P03-018` added deterministic
+round-trip/canonicalization/malformed/property/mutation suites. The active workspace
 metadata is now:
 
 ```text
-status = "hdoc-cross-language-v1"
+status = "hdoc-properties-v1"
 database-functionality = true
 ```
 

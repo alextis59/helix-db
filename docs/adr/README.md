@@ -28,7 +28,7 @@ The process is governed by [Specification and Change Control](../governance/chan
 | [0009](0009-use-versioned-error-codes-and-outcomes.md) | Use versioned error codes, mutation outcomes, and retry scopes | Accepted | Query semantics owner | `P01-016`, `G01` |
 | [0010](0010-use-id-order-as-the-native-default.md) | Use ascending semantic `_id` order as the native default | Accepted | Query semantics owner | `P01-017`, `G01` |
 | [0011](0011-use-tagged-json-semantic-fixtures.md) | Use tagged JSON semantic fixtures with schema and canonical hashes | Accepted | Query semantics owner | `P01-018`, `G01` |
-| [0012](0012-use-bounded-little-endian-hdoc-v1.md) | Use a bounded little-endian HDoc v1 envelope with separate integrity and content hashes | Accepted | Storage architecture owner | `P03-002`–`P03-017`, `G03` |
+| [0012](0012-use-bounded-little-endian-hdoc-v1.md) | Use a bounded little-endian HDoc v1 envelope with separate integrity and content hashes | Accepted | Storage architecture owner | `P03-002`–`P03-018`, `G03` |
 
 ## Naming and file rules
 

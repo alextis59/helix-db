@@ -10,8 +10,8 @@
 - Development identity: [ADR 0001](../adr/0001-public-product-identity.md)
 
 This document fixes the Rust workspace boundaries and dependency direction. Every crate remains
-unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-cross-language-v1` /
-`database-functionality = true` metadata now that `P03-008`–`P03-017` have implemented
+unpublished at version `0.0.0`. `helix-doc` carries machine-readable `hdoc-properties-v1` /
+`database-functionality = true` metadata now that `P03-008`–`P03-018` have implemented
 deterministic encoding, whole-envelope validation, borrowed/owned logical values, exact-name/path
 lookup, canonical lossless tagged JSON rendering with strict detached import, and canonical
 collection path-dictionary snapshots with non-reuse lineage validation plus atomic registration,

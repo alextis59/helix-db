@@ -168,8 +168,10 @@ and functions and at least 95% regions for this implementation on the compiler-m
 
 P03-016 freezes immutable supported HDoc byte fixtures. `P03-017` implements an independent
 TypeScript reader and proves its complete tagged logical values equal the production Rust renderer
-for every positive fixture. `P03-018` and `P03-019` still own broader property, mutation, fuzz,
-sanitizer, and browser replay. This profile's implementation does not pre-claim those gates.
+for every positive fixture. `P03-018` now proves 512 generated documents survive canonical render,
+whitespace-tolerant strict import, and owned-value equality, while its codec properties cover both
+stored profiles. `P03-019` still owns fuzz, sanitizer, and browser replay. This profile's
+implementation does not pre-claim those gates.
 
 ## Change and compatibility rule
 
