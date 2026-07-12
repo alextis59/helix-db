@@ -1,0 +1,129 @@
+package helix:core-abi@1.0.0;
+
+/// Common value, resource, error, cancellation, and capability identities.
+interface types {
+  record abi-version {
+    major: u16,
+    minor: u16,
+  }
+
+  enum capability-kind {
+    files,
+    directories,
+    durability,
+    timers,
+    randomness,
+    scheduling,
+    metrics,
+    secrets,
+    networking,
+    object-storage,
+    gpu,
+  }
+
+  flags capability-flags {
+    required,
+    deterministic-input,
+    asynchronous,
+    revocable,
+  }
+
+  record capability-descriptor {
+    kind: capability-kind,
+    name: string,
+    version: abi-version,
+    attributes: capability-flags,
+  }
+
+  enum mutation-outcome {
+    not-applicable,
+    not-committed,
+    committed,
+    unknown,
+  }
+
+  enum retry-scope {
+    never,
+    same-request,
+    same-idempotency-key,
+    new-snapshot,
+    after-delay,
+    after-capability-change,
+    after-operator-action,
+  }
+
+  record retry-advice {
+    retryable: bool,
+    scope: retry-scope,
+    min-delay-ms: option<u64>,
+    max-attempts-hint: option<u32>,
+    retry-token: option<list<u8>>,
+  }
+
+  record error-detail {
+    key: string,
+    value: string,
+  }
+
+  record helix-error {
+    contract: abi-version,
+    code: string,
+    phase: string,
+    outcome: mutation-outcome,
+    retry: retry-advice,
+    details: list<error-detail>,
+  }
+
+  /// Host-owned, immutable bytes. No acquisition operations exist until P04-005.
+  resource immutable-buffer;
+
+  /// Host-owned mutable staging. No mapping operations exist until P04-005.
+  resource mutable-staging-buffer;
+
+  /// Non-serializable host resource identity. Concrete kinds are added by later ABI minors.
+  resource opaque-handle;
+
+  /// Cooperative cancellation signal; cancellation does not imply rollback.
+  resource cancellation-token;
+
+  /// Explicit set of capabilities granted to one component instance.
+  resource capability-set;
+
+  record component-descriptor {
+    abi: abi-version,
+    semantic-profile: string,
+    error-profile: string,
+    hdoc-profile: string,
+    required-capabilities: list<capability-descriptor>,
+  }
+
+  record host-descriptor {
+    abi: abi-version,
+    capabilities: list<capability-descriptor>,
+  }
+
+  record negotiated-abi {
+    version: abi-version,
+    capabilities: list<capability-descriptor>,
+  }
+}
+
+/// Minimal host control surface. Concrete I/O capabilities are introduced by P04-003/P04-004.
+interface host-control {
+  use types.{cancellation-token};
+
+  poll-cancellation: func(token: borrow<cancellation-token>) -> bool;
+}
+
+/// Stable component identity and fail-closed ABI negotiation.
+interface core-control {
+  use types.{component-descriptor, helix-error, host-descriptor, negotiated-abi};
+
+  describe: func() -> component-descriptor;
+  negotiate: func(host: host-descriptor) -> result<negotiated-abi, helix-error>;
+}
+
+world helix-core-v1 {
+  import host-control;
+  export core-control;
+}

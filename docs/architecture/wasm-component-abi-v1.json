@@ -1,0 +1,109 @@
+{
+  "schema": "helix.wasm-component-abi/1",
+  "plan_item": "P04-001",
+  "package": "helix:core-abi@1.0.0",
+  "world": "helix-core-v1",
+  "wit": {
+    "path": "wit/helix-core-abi-v1/world.wit",
+    "validator": "wasm-tools 1.253.0",
+    "interfaces": ["types", "host-control", "core-control"],
+    "imports": ["host-control"],
+    "exports": ["core-control"]
+  },
+  "versioning": {
+    "current": { "major": 1, "minor": 0 },
+    "accepted": [{ "major": 1, "minor": 0 }],
+    "unknown_major": "reject-CAP_UNSUPPORTED_VERSION-before-resource-use",
+    "unknown_minor": "reject-unless-published-compatibility-matrix-allows-it",
+    "patch_meaning": "documentation-bindings-or-bugfix-only-no-WIT-shape-or-observable-semantic-change",
+    "package_semver_does_not_imply_abi_compatibility": true,
+    "no_implicit_previous_version_window": true
+  },
+  "profiles": {
+    "semantic": "helix.semantic-profile/v1",
+    "errors": "helix.errors/v1",
+    "hdoc": "helix.hdoc/1.0"
+  },
+  "values": {
+    "canonical_abi_scalars": true,
+    "lists_and_strings": "canonical-ABI-copy-at-call-boundary",
+    "document_bytes": "canonical-validated-HDoc-1.0-only",
+    "generic_json_document_values": false,
+    "maximum_string_bytes": 1024,
+    "maximum_error_details": 16,
+    "maximum_error_detail_key_bytes": 64,
+    "maximum_error_detail_value_bytes": 256,
+    "maximum_retry_token_bytes": 256
+  },
+  "buffers": {
+    "enabled_baseline": "list-u8-explicit-copy",
+    "declared_resources": ["immutable-buffer", "mutable-staging-buffer"],
+    "resource_operations_enabled": false,
+    "resource_lifecycle_owner": "P04-005",
+    "shared_or_mapped_memory_enabled": false,
+    "zero_copy_claim": false
+  },
+  "handles": {
+    "declared_resources": ["opaque-handle", "cancellation-token", "capability-set"],
+    "forgeable": false,
+    "serializable": false,
+    "persistent": false,
+    "cross_instance": false,
+    "lifecycle_owner": "P04-005"
+  },
+  "errors": {
+    "authority": "docs/architecture/error-semantics.md",
+    "stable_identity": "code",
+    "human_message_in_abi": false,
+    "details": "bounded-redacted-allowlisted-key-value-pairs",
+    "outcomes": ["not-applicable", "not-committed", "committed", "unknown"],
+    "unknown_write_retry_as_fresh_command": false
+  },
+  "cancellation": {
+    "model": "explicit-resource-cooperative-polling",
+    "import": "host-control.poll-cancellation",
+    "result_code": "DEADLINE_CANCELLED",
+    "implies_rollback": false,
+    "implies_no_commit": false,
+    "deadline_owner": "P04-008",
+    "bounded_operation_owner": "P04-004"
+  },
+  "capabilities": {
+    "ambient_authority": false,
+    "maximum_descriptors": 128,
+    "maximum_name_bytes": 64,
+    "kinds": [
+      "files",
+      "directories",
+      "durability",
+      "timers",
+      "randomness",
+      "scheduling",
+      "metrics",
+      "secrets",
+      "networking",
+      "object-storage",
+      "gpu"
+    ],
+    "flags": ["required", "deterministic-input", "asynchronous", "revocable"],
+    "missing_required_result": "CAP_HOST_UNAVAILABLE",
+    "concrete_interface_owner": "P04-003"
+  },
+  "negotiation": {
+    "component_export": "core-control.negotiate",
+    "precondition": "validate-bounds-versions-and-required-capabilities-before-resource-use",
+    "success": "exact-1.0-and-every-required-capability-present",
+    "failure_mutates_state": false,
+    "failure_creates_resources": false,
+    "failure_releases_partial_output": false
+  },
+  "claim_boundary": {
+    "wit_contract_defined": true,
+    "wit_bound_into_component": false,
+    "host_operations_implemented": false,
+    "component_execution_proven": false,
+    "public_sdk_or_protocol": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-002"
+  }
+}

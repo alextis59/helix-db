@@ -290,7 +290,7 @@ export const validateBrowserExampleReport = (report) => {
   assert(report.example === 'browser-toolchain', 'browser example ID');
   same(
     report.component,
-    { name: 'helix-core', maturity: 'boundary-skeleton' },
+    { name: 'helix-core', maturity: 'component-abi-v1' },
     'browser example component',
   );
   assert(report.databaseFunctionality === false, 'browser database functionality claim');

@@ -1,6 +1,6 @@
 [package]
 name = "helix-core"
-description = "Boundary skeleton for portable deterministic HelixDB orchestration"
+description = "Portable deterministic HelixDB orchestration and versioned component ABI"
 version.workspace = true
 edition.workspace = true
 rust-version.workspace = true
@@ -15,7 +15,7 @@ crate-type = ["cdylib", "rlib"]
 workspace = true
 
 [package.metadata.helix]
-status = "boundary-skeleton"
+status = "component-abi-v1"
 database-functionality = false
 
 [dependencies]

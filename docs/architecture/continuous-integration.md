@@ -1,9 +1,9 @@
 # Continuous Integration Matrix and Trust Boundary
 
 - Status: Accepted foundation CI contract; hosted results are not release support claims
-- Last updated: 2026-07-11
+- Last updated: 2026-07-12
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-017` and `P03-020`–`P03-021`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-017`, `P03-020`–`P03-021`, and `P04-001`
 - Governing gate: `G02`
 - Accepted gate evidence: [`G02` hosted toolchain review](../../evidence/phase-02/G02/README.md)
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
@@ -26,7 +26,7 @@ Runner labels are explicit rather than mutable `*-latest` aliases. The selected 
 | --- | --- | --- |
 | Node | 22.23.1 and 24.18.0 on `ubuntu-24.04` x64 | Clean script-suppressed install; formatting/dependency/types; deterministic dependency/license/duplicate inventory and fixtures; aggregate tests; Node 22 additionally records the live advisory/signature/provenance observation |
 | Native Rust | `ubuntu-24.04` x64, `windows-2025` x64, `macos-15` arm64 | Exact Rust toolchain; format, check, Clippy, all-feature tests, and locked/offline native boundary-example execution; docs and compiler-matched source-based coverage thresholds additionally on Linux x64 |
-| Portable Rust | `wasm32-unknown-unknown`, `wasm32-wasip2` on Linux x64 | Strict Clippy plus real core-module/component builds; Node validates the browser module and pinned `wasm-tools` validates/classifies the WASIp2 component |
+| Portable Rust | `wasm32-unknown-unknown`, `wasm32-wasip2` on Linux x64 | Strict Clippy plus real core-module/component builds; the component lane parses/checks exact `helix:core-abi@1.0.0` and 20 rejection canaries before pinned `wasm-tools` validates/classifies the still-unbound WASIp2 artifact |
 | Sanitizer | `x86_64-unknown-linux-gnuasan` on Linux x64 | Stable fully instrumented standard-library build profile; no non-Linux sanitizer claim |
 | Browser boundary example | Chromium, Firefox, WebKit on Linux x64 | Install only the Playwright-coupled engine/dependencies; all three build and execute the byte-identical core Wasm example with explicit non-database output; Chromium additionally validates and compiles hash-bound internal WGSL through Dawn/SwiftShader |
 
@@ -97,6 +97,11 @@ The root suite gates only shape, operation, sample, correctness, size, dictionar
 and report integrity. The 600 retained timings have a null threshold. P03-021 adds a checked,
 source-bound decision authority selecting self-contained HDoc base/canonical compression and
 derived-only dictionary IDs; its mutation canaries prevent result drift or claim expansion.
+
+P04-001 adds the accepted versioned WIT source and closed ABI policy to the component lane. The gate
+requires the exact package/world/interface/type/function inventory plus 20 version, ownership,
+error, cancellation, capability, negotiation, and claim mutations. This defines the contract but
+does not conceal that the compiled component remains empty until later binding/host tasks.
 
 ## Workflow security and reproducibility
 

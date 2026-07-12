@@ -183,6 +183,15 @@ The main hazards are copying, chatty calls, and mismatched lifecycle rules. A Wa
 
 The study recommends beginning with explicit copies and excellent measurement. Optimizing the boundary before its cost is measured risks locking in unsafe or host-specific behavior. Once profiling identifies material copies, handles or shared staging can be introduced behind a versioned capability interface.
 
+P04-001 selects that interface boundary as the WIT package `helix:core-abi@1.0.0`, world
+`helix-core-v1`. The package defines exact 1.0 negotiation, stable semantic/error/HDoc profile
+identities, bounded values and structured errors, declared-but-inactive buffer/opaque resources,
+cooperative cancellation polling, and explicit capability descriptors. Only exact ABI 1.0 is
+accepted; package SemVer does not imply another compatibility window. Canonical ABI byte lists use
+explicit copies, resource operations and zero-copy remain disabled until their owning tasks, and
+the current component artifact remains intentionally unbound until P04-002/P04-003 implement guest
+and host sides. This separates a parseable contract decision from an unsupported execution claim.
+
 ### 5.4 Portability test
 
 A feature is portable only when the same semantic test corpus passes through at least a native host and a browser host. Successful compilation to Wasm is not sufficient. File durability, cancellation, memory pressure, and GPU capability differences must be part of the test.

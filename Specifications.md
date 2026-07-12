@@ -280,6 +280,27 @@ Responsibilities:
 
 Must not directly access files, sockets, GPUs, clocks, or random numbers. Those must be imported capabilities supplied by the host.
 
+The P04-001 component ABI authority is `helix:core-abi@1.0.0`, world `helix-core-v1`. It defines
+shared `types`, imported `host-control`, and exported `core-control` interfaces. Only ABI major 1,
+minor 0 is currently accepted. Unknown majors reject with `CAP_UNSUPPORTED_VERSION`; unknown minors
+also reject unless a committed compatibility matrix explicitly allows them. Package SemVer never
+substitutes for ABI negotiation, and patches cannot alter WIT shape or observable semantics.
+
+Canonical ABI scalars, strings, and lists are the value baseline. Byte lists copy at the call
+boundary and document bytes must be validated canonical HDoc 1.0, not generic JSON. The WIT reserves
+nominal immutable-buffer, mutable-staging-buffer, opaque-handle, cancellation-token, and
+capability-set resources, but exposes no resource acquisition/mapping operations and makes no
+zero-copy claim. P04-005/P04-006 own those lifecycles and execution strategies.
+
+Errors carry the versioned stable code, phase, mutation outcome, retry advice, and bounded redacted
+details from `helix.errors/v1`; human messages are not ABI fields. Cancellation is explicit,
+borrowed, and cooperatively polled. It does not imply rollback or non-commit. Capability descriptors
+are explicit and bounded; no wildcard or ambient authority exists. Negotiation validates versions,
+profiles, bounds, and required capabilities before resource use, state mutation, or partial output.
+P04-003/P04-004/P04-008 own concrete host operations, asynchronous batching, and deadline/partial-I/O
+semantics. P04-001 defines the contract source only: bindings, component execution, host operations,
+public protocol/SDK support, and added database functionality remain false.
+
 ### 6.2 `helix-host`
 
 Native host process.
@@ -2553,7 +2574,7 @@ items remain open.
 | Decision | Required before | Decision criteria |
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
-| Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
+| [Server runtime and WIT component boundary](docs/adr/0013-use-versioned-wit-component-abi.md) ([exact ABI 1.0 source and policy](docs/architecture/wasm-component-abi-v1.md) defined at `P04-001`; bindings/hosts/conformance remain open) | Before `G04` | Async support, capability isolation, startup cost, debugging, stable host ABI |
 | [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), [path-dictionary format/lifecycle](docs/formats/path-dictionary-v1.md), [closed-world compatibility/migration assessment](docs/formats/hdoc-v1-compatibility.md), [immutable golden vectors](fixtures/hdoc/v1/README.md), Rust/TypeScript cross-reader parity, deterministic property/mutation hardening, coverage-guided fuzz/browser replay, versioned measurements, and [self-contained-format/derived-only-dictionary decisions](benchmarks/reports/hdoc-v1-experiments.md) implemented by `P03-008`–`P03-021`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |

@@ -1,9 +1,9 @@
 # Repository Layout and Artifact Boundaries
 
 - Status: Accepted layout baseline; most implementation areas remain empty
-- Last updated: 2026-07-11
+- Last updated: 2026-07-12
 - Owner: Runtime architecture owner
-- Plan items: `P02-004`; examples activated by `P02-016`
+- Plan items: `P02-004`; examples activated by `P02-016`; WIT authority activated by `P04-001`
 - Governing gate: `G02`
 - Design source: [Study section 24](../../Study.md#24-suggested-initial-repository-architecture)
 - Ownership source: [Ownership and review boundaries](../governance/ownership.md)
@@ -17,6 +17,7 @@ This document establishes stable, reviewable locations for source code, conforma
 | [`crates/`](../../crates/README.md) | Rust workspace source | Eight boundary crates from `P02-001` | Compilable boundary skeletons |
 | [`shaders/`](../../shaders/README.md) | Internal WGSL source and shader fixtures | `predicates/`, `bitmaps/`, `vectors/`, `fixtures/` | Compile-only validation fixtures; no product kernels |
 | [`packages/`](../../packages/README.md) | Private npm workspace packages | `sdk-typescript/`, `browser-host/` | Reserved directories; not npm packages yet |
+| [`wit/`](../../wit/README.md) | Versioned WebAssembly Interface Type packages | `helix-core-abi-v1/` | ABI 1.0 source accepted; bindings and host operations absent |
 | [`conformance/`](../../conformance/README.md) | Cross-backend suite definitions and fixture bindings | `semantics/`, `formats/`, `host/`, `compatibility/` | Semantic corpus binding only |
 | [`benchmarks/`](../../benchmarks/README.md) | Reproducible datasets, workloads, schemas, runners, and report indexes | `datasets/`, `workloads/`, `schema/`, `cpu-columnar/`, `webgpu/`, `reports/` | One integrity-only harness calibration; no database performance claim |
 | [`tests/`](../../tests/README.md) | Toolchain and cross-crate/system tests | `toolchain/`, `integration/`, `fuzz/`, `crash/`, `differential/`, `browser/`, `distributed/` | Toolchain/unit/conformance commands plus explicit reserved system-test contracts |
@@ -36,6 +37,8 @@ The existing [`fixtures/`](../../fixtures/README.md), [`reference/`](../../refer
 6. **Benchmarks do not create claims.** The [foundation result contract](../quality/benchmark-results.md) is explicitly ineligible for a database claim. A later benchmark result supports a claim only through the environment, dataset, raw-result, and review requirements in the [evidence guide](../../evidence/README.md#benchmark-specific-rules).
 7. **Tests are organized by failure boundary.** Unit tests stay beside their implementation where idiomatic; the top-level `tests/` tree is for cross-component, process, browser, and cluster behavior.
 8. **Examples disclose maturity.** [`examples.json`](../../examples/examples.json) binds commands, sources, outputs, and the shared non-claim. An example may prove a toolchain or API slice but must not imply durability, compatibility, security, or production readiness beyond its linked evidence.
+9. **WIT packages are ABI authorities.** Existing package versions are immutable in meaning;
+   incompatible changes add a version, compatibility matrix, bindings, conformance, and evidence.
 
 ## Change rule
 

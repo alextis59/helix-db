@@ -29,7 +29,12 @@ world root {
 }
 ```
 
-This is the smallest honest component-validity proof for the current boundary-only crate. `P04-001` owns the real versioned host ABI; adding placeholder operations here would freeze an interface before its semantics, ownership, cancellation, buffer, handle, error, and capability rules exist. WASIp2 remains a tooling bridge and is not relabeled WASI 0.3 support.
+This remains the smallest honest component-validity proof for the current artifact. `P04-001` now
+defines the real versioned [`helix:core-abi@1.0.0`](../../wit/helix-core-abi-v1/world.wit) source,
+including ownership, cancellation, buffer, handle, error, capability, and version rules. The
+machine contract deliberately records that bindings are not yet embedded, so the built artifact's
+WIT remains empty until P04-002/P04-003 implement the boundary. WASIp2 remains a tooling bridge and
+is not relabeled WASI 0.3 support.
 
 ## Validator supply-chain boundary
 

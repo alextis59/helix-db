@@ -82,6 +82,7 @@ same(
     'P03-019',
     'P03-020',
     'P03-021',
+    'P04-001',
   ],
   'CI matrix task history',
 );
@@ -291,6 +292,8 @@ same(
     'rust:audit:test': packageJson.scripts['rust:audit:test'],
     'rust:dependencies:test': packageJson.scripts['rust:dependencies:test'],
     'wasm:install-validator': packageJson.scripts['wasm:install-validator'],
+    'wasm:abi:check': packageJson.scripts['wasm:abi:check'],
+    'wasm:abi:test': packageJson.scripts['wasm:abi:test'],
     'wasm:validate': packageJson.scripts['wasm:validate'],
     'wgsl:check': packageJson.scripts['wgsl:check'],
     'wgsl:validate': packageJson.scripts['wgsl:validate'],
@@ -332,7 +335,10 @@ same(
     'rust:audit:test': 'node tests/toolchain/test-cargo-audit-contract.mjs',
     'rust:dependencies:test': 'node tests/toolchain/test-rust-dependency-contract.mjs',
     'wasm:install-validator': 'node tests/toolchain/install-wasm-tools.mjs',
-    'wasm:validate': 'node tests/toolchain/check-wasm-artifacts.mjs all',
+    'wasm:abi:check': 'node tests/toolchain/check-wasm-abi.mjs',
+    'wasm:abi:test': 'node tests/toolchain/test-wasm-abi-contract.mjs',
+    'wasm:validate':
+      'node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
@@ -624,6 +630,8 @@ for (const marker of [
   `corepack npm run artifacts:browser-report -- ${githubExpression('matrix.engine')}`,
   `name: browser-reports-${githubExpression('matrix.engine')}-${githubExpression('github.run_id')}-${githubExpression('github.run_attempt')}`,
   `path: dist/retention/browser-reports/${githubExpression('matrix.engine')}/`,
+  'corepack npm run wasm:abi:check',
+  'corepack npm run wasm:abi:test',
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }

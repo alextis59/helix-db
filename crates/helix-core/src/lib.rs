@@ -1,13 +1,19 @@
-//! Boundary-only skeleton for portable deterministic orchestration.
+//! Portable deterministic orchestration boundary with a versioned component ABI contract.
 //!
-//! Host capabilities are injected across a later ABI. No ambient host access or database
-//! orchestration is implemented in Phase 2.
+//! The canonical WIT contract is `helix:core-abi@1.0.0`. Host capabilities remain explicit and no
+//! ambient host access or database orchestration is implemented by P04-001.
 
 /// Stable development name used by workspace-boundary checks.
 pub const COMPONENT_NAME: &str = "helix-core";
 
 /// Current implementation maturity; this crate is not a database feature.
-pub const MATURITY: &str = "boundary-skeleton";
+pub const MATURITY: &str = "component-abi-v1";
+
+/// Exact internal component ABI accepted by the current contract.
+pub const COMPONENT_ABI_VERSION: (u16, u16) = (1, 0);
+
+/// Canonical WIT package identity. Package `SemVer` never replaces ABI negotiation.
+pub const COMPONENT_ABI_PACKAGE: &str = "helix:core-abi@1.0.0";
 
 /// Deterministic internal boundaries composed by the portable core.
 pub const INTERNAL_DEPENDENCIES: &[&str] = &[
@@ -24,7 +30,9 @@ mod tests {
 
     #[test]
     fn excludes_host_gpu_and_server_boundaries() {
-        assert_eq!(MATURITY, "boundary-skeleton");
+        assert_eq!(MATURITY, "component-abi-v1");
+        assert_eq!(COMPONENT_ABI_VERSION, (1, 0));
+        assert_eq!(COMPONENT_ABI_PACKAGE, "helix:core-abi@1.0.0");
         assert_eq!(
             INTERNAL_DEPENDENCIES,
             &[

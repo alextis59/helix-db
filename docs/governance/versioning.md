@@ -47,6 +47,11 @@ Protocols expose a negotiated major/minor contract or an equivalent explicit ver
 - Required unknown fields/features cause a typed incompatible-version error.
 - Peers never infer compatibility only from package or binary version.
 
+The first concrete component authority is
+[`helix:core-abi@1.0.0`](../../wit/helix-core-abi-v1/world.wit). Its current matrix accepts only ABI
+1.0; package SemVer does not authorize another major/minor, and negotiation fails before resource
+use when version or required capabilities are unsupported.
+
 ### Packages and releases
 
 Published crates, npm packages, SDKs, binaries, containers, operators, and managed APIs follow semantic versioning once their public contract is declared stable. Pre-1.0 artifacts still carry independent format/protocol versions and do not receive permission to reinterpret them silently.

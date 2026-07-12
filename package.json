@@ -90,7 +90,9 @@
     "toolchain:browser-harness": "playwright test --list",
     "toolchain:browser-profile": "node tests/toolchain/check-browser-profile.mjs",
     "wasm:install-validator": "node tests/toolchain/install-wasm-tools.mjs",
-    "wasm:validate": "node tests/toolchain/check-wasm-artifacts.mjs all",
+    "wasm:abi:check": "node tests/toolchain/check-wasm-abi.mjs",
+    "wasm:abi:test": "node tests/toolchain/test-wasm-abi-contract.mjs",
+    "wasm:validate": "node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-wasm-artifacts.mjs all",
     "wgsl:check": "node tests/toolchain/check-wgsl-fixtures.mjs manifest",
     "wgsl:validate": "node tests/toolchain/check-wgsl-fixtures.mjs chromium"
   },

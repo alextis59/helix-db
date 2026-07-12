@@ -164,7 +164,7 @@ const browser = {
   schema: 'helix.browser-toolchain-example/1',
   planItem: 'P02-016',
   example: 'browser-toolchain',
-  component: { name: 'helix-core', maturity: 'boundary-skeleton' },
+  component: { name: 'helix-core', maturity: 'component-abi-v1' },
   databaseFunctionality: false,
   demonstrates: ['rust-wasm-build', 'vite-bundle', 'wasm-validation', 'wasm-instantiation'],
   notImplemented: [
