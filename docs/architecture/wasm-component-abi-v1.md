@@ -82,7 +82,8 @@ major/minor version, and flags for required, deterministic input, asynchronous, 
 behavior. The declared kinds are files, directories, durability, timers, randomness, scheduling,
 metrics, secrets, networking, object storage, and GPU.
 
-Declaring a kind does not grant it. Concrete capability resources and operations remain P04-003.
+Declaring a kind does not grant it. P04-003 defines concrete capability resource identities in ABI
+1.1; operations remain P04-004 onward.
 There is no wildcard or ambient capability, and a missing required descriptor returns
 `CAP_HOST_UNAVAILABLE` before resource use.
 
@@ -108,5 +109,5 @@ enforces version, bounds, ownership, cancellation, capability, negotiation, and 
 - A new resource operation must name its owner task, lifecycle, error/outcome, cancellation, bounds,
   capability requirement, and rollback behavior.
 
-P04-003 owns generated bindings and concrete capability interfaces. P04-005 owns resource
-lifecycle semantics and P04-006 owns the explicit-copy implementation.
+P04-003 owns concrete capability definitions. P04-004 onward own operations, bindings, resource
+lifecycles, and explicit-copy execution.

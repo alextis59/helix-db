@@ -1,8 +1,7 @@
 //! Portable deterministic orchestration boundary with a versioned component ABI contract.
 //!
-//! The canonical WIT contract is `helix:core-abi@1.0.0`. Host capabilities remain explicit and no
-//! ambient host access or database orchestration is implemented. P04-002 enforces the portable
-//! source, dependency, and zero-import boundary.
+//! The current WIT source contract is `helix:core-abi@1.1.0`. Host capability identities are
+//! explicit, but operations, bindings, ambient access, and database orchestration remain absent.
 
 pub mod deterministic;
 
@@ -17,9 +16,9 @@ mod tests {
 
     #[test]
     fn excludes_host_gpu_and_server_boundaries() {
-        assert_eq!(MATURITY, "deterministic-core-boundary-v1");
-        assert_eq!(COMPONENT_ABI_VERSION, (1, 0));
-        assert_eq!(COMPONENT_ABI_PACKAGE, "helix:core-abi@1.0.0");
+        assert_eq!(MATURITY, "host-capability-abi-v1");
+        assert_eq!(COMPONENT_ABI_VERSION, (1, 1));
+        assert_eq!(COMPONENT_ABI_PACKAGE, "helix:core-abi@1.1.0");
         assert_eq!(
             INTERNAL_DEPENDENCIES,
             &[

@@ -189,11 +189,20 @@ identities, bounded values and structured errors, declared-but-inactive buffer/o
 cooperative cancellation polling, and explicit capability descriptors. Only exact ABI 1.0 is
 accepted; package SemVer does not imply another compatibility window. Canonical ABI byte lists use
 explicit copies, resource operations and zero-copy remain disabled until their owning tasks, and
-the current component artifact remains intentionally unbound until P04-003 implements guest and
-host sides. P04-002 instead makes the deterministic/ambient separation executable: the five-crate
+the current component artifact remains intentionally unbound. P04-003 defines capability identities
+while later tasks bind operations and hosts. P04-002 instead makes the deterministic/ambient separation executable: the five-crate
 core closure excludes host/GPU/runtime packages, 11 Rust source files reject ambient access
 patterns, and the browser core module must retain zero imports. This separates a parseable contract
 and physical source boundary from an unsupported execution claim.
+
+P04-003 demonstrates the versioning rule instead of rewriting the accepted 1.0 package: required
+capability imports live in `helix:core-abi@1.1.0`, with exact 1.1 negotiation and no inferred 1.0
+window. Nine narrow interfaces separate file, directory, durability, lock, timer, randomness,
+scheduling, metrics, and secret authority. Their nominal resources and bounded policy records make
+the intended host boundary parseable while deliberately withholding operations and lifecycle
+semantics from this step. This is preferable to a single host wildcard because later tests can
+deny, revoke, and fault each authority independently. It also leaves P04-004/P04-005 free to freeze
+batching and ownership together without retrofitting a chatty ABI.
 
 ### 5.4 Portability test
 

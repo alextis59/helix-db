@@ -23,6 +23,9 @@ This directory contains bounded verification entry points for foundation build p
   imports; `test-deterministic-core-contract.mjs` rejects 30 policy/source mutations.
 - `check-wasm-abi.mjs` validates the exact versioned WIT package and its explicit-copy,
   opaque-resource, cancellation, and capability boundary; its contract tests reject ABI drift.
+- `check-host-capabilities.mjs` preserves immutable ABI 1.0 and validates exact ABI 1.1's nine
+  capability resources/policies and operation non-claim; its contract tests reject policy and
+  parsed-WIT drift.
 - `build-browser-smoke.mjs` checks the exact four-file example output, visible non-database boundary, and byte identity of its Wasm asset.
 - `run-browser-smoke.mjs` executes the built bundle in one selected engine or all three pinned engines and writes a sanitized, strict execution report with launcher-entrypoint identity.
 - `check-wgsl-fixtures.mjs` validates the strict trusted-source manifest without a browser or parses, validates, and creates compute pipelines for every fixture through pinned Chromium Dawn/SwiftShader.

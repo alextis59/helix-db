@@ -165,7 +165,7 @@ production-code example without changing the product denominator. The active wor
 is now:
 
 ```text
-status = "deterministic-core-boundary-v1"
+status = "host-capability-abi-v1"
 database-functionality = true
 ```
 

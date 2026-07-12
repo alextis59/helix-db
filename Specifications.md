@@ -297,8 +297,8 @@ details from `helix.errors/v1`; human messages are not ABI fields. Cancellation 
 borrowed, and cooperatively polled. It does not imply rollback or non-commit. Capability descriptors
 are explicit and bounded; no wildcard or ambient authority exists. Negotiation validates versions,
 profiles, bounds, and required capabilities before resource use, state mutation, or partial output.
-P04-003/P04-004/P04-008 own concrete host operations, asynchronous batching, and deadline/partial-I/O
-semantics. P04-001 defines the contract source only: bindings, component execution, host operations,
+P04-004/P04-008 own concrete host operations, asynchronous batching, and deadline/partial-I/O
+semantics. P04-001 defines the baseline contract source only: bindings, component execution, host operations,
 public protocol/SDK support, and added database functionality remain false.
 
 P04-002 physically isolates the portable deterministic composition in
@@ -310,6 +310,21 @@ device APIs, unsafe blocks, and native extern boundaries; the real browser Wasm 
 zero imports. Ambient results may enter only as bounded versioned values from later explicit
 capability interfaces, and host failures enter as structured errors plus mutation outcomes. This
 gate proves separation, not implemented capabilities, hosts, or database orchestration.
+
+P04-003 preserves immutable `helix:core-abi@1.0.0` and defines the required imported capability
+identities in `helix:core-abi@1.1.0`. Exact ABI 1.1 is the only current negotiation success; 1.0 is
+not accepted implicitly. Nine interfaces cover file and directory namespaces, durability levels,
+advisory/scoped locks, distinct wall/monotonic timers, purpose-separated randomness, bounded
+cooperative scheduling, redacted metrics, and named secrets. Each exposes a host-owned nominal
+resource and bounded policy types, never an ambient root or forgeable integer handle.
+
+Paths are relative to a granted namespace and reject parent traversal. Durability is explicit,
+scheduling grants no thread access, metrics exclude document contents, secret values cannot appear
+in descriptors/errors/metrics/logs, and revocation fails closed. P04-003 defines no capability
+operations and binds no component or host: coarse calls, resource lifecycles, deadline/partial-I/O
+semantics, deterministic injected values, and mock/native/browser implementations remain P04-004
+through P04-013. Networking, object storage, and GPU remain reserved descriptor kinds without
+concrete interfaces in this task.
 
 ### 6.2 `helix-host`
 

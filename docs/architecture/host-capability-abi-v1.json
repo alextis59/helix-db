@@ -1,0 +1,109 @@
+{
+  "schema": "helix.host-capability-abi/1",
+  "plan_item": "P04-003",
+  "base": {
+    "package": "helix:core-abi@1.0.0",
+    "path": "wit/helix-core-abi-v1/world.wit",
+    "bytes": 2867,
+    "sha256": "14db9898827f1e6cc84038100257d30fdf69654e9501390f1836b041f79ff5a9",
+    "immutable": true
+  },
+  "current": {
+    "package": "helix:core-abi@1.1.0",
+    "path": "wit/helix-core-abi-v1_1/world.wit",
+    "bytes": 6076,
+    "sha256": "cdffa3263bbaed6bc9c19d3859c3ed5cb5235996c169eb5a6c53a334b85865b8",
+    "world": "helix-core-v1",
+    "abi": { "major": 1, "minor": 1 },
+    "accepted": [{ "major": 1, "minor": 1 }]
+  },
+  "interfaces": [
+    "types",
+    "host-files",
+    "host-directories",
+    "host-durability",
+    "host-locks",
+    "host-timers",
+    "host-randomness",
+    "host-scheduling",
+    "host-metrics",
+    "host-secrets",
+    "host-control",
+    "core-control"
+  ],
+  "capability_kinds": [
+    "files",
+    "directories",
+    "durability",
+    "locks",
+    "timers",
+    "randomness",
+    "scheduling",
+    "metrics",
+    "secrets",
+    "networking",
+    "object-storage",
+    "gpu"
+  ],
+  "capability_interfaces": {
+    "host-files": "file-capability",
+    "host-directories": "directory-capability",
+    "host-durability": "durability-capability",
+    "host-locks": "lock-capability",
+    "host-timers": "timer-capability",
+    "host-randomness": "randomness-capability",
+    "host-scheduling": "scheduling-capability",
+    "host-metrics": "metrics-capability",
+    "host-secrets": "secrets-capability"
+  },
+  "bounds": {
+    "maximum_capability_descriptors": 128,
+    "maximum_namespace_bytes": 64,
+    "maximum_path_bytes": 4096,
+    "maximum_path_component_bytes": 255,
+    "maximum_metric_name_bytes": 128,
+    "maximum_metric_labels": 16,
+    "maximum_secret_bytes": 65536,
+    "maximum_random_bytes_per_request": 65536
+  },
+  "rules": {
+    "paths_are_relative_to_granted_namespace": true,
+    "parent_traversal_rejected": true,
+    "durability_is_explicit_per_operation": true,
+    "locks_are_advisory_and_policy_scoped": true,
+    "wall_and_monotonic_time_are_distinct": true,
+    "randomness_is_purpose_separated": true,
+    "scheduling_does_not_grant_threads": true,
+    "metrics_forbid_document_content": true,
+    "secret_values_forbidden_in_descriptors_errors_metrics_and_logs": true,
+    "wildcards_and_ambient_roots_forbidden": true,
+    "revocation_fails_closed": true
+  },
+  "versioning": {
+    "change": "add-required-imported-capability-interfaces",
+    "same_patch_rewrite_forbidden": true,
+    "package_semver_alone_is_not_compatibility": true,
+    "implicit_1_0_acceptance": false,
+    "unsupported_result": "CAP_UNSUPPORTED_VERSION"
+  },
+  "deferred": {
+    "coarse_io_operations": "P04-004",
+    "resource_lifecycles": "P04-005",
+    "cancellation_deadlines_partial_io_shutdown": "P04-008",
+    "deterministic_value_injection": "P04-009",
+    "mock_host": "P04-010",
+    "native_host": "P04-011",
+    "browser_host": "P04-012",
+    "shared_conformance": "P04-013"
+  },
+  "claim_boundary": {
+    "capability_types_and_imports_defined": true,
+    "capability_operations_defined": false,
+    "wit_bound_into_component": false,
+    "host_implementations_present": false,
+    "component_execution_proven": false,
+    "network_object_storage_gpu_interfaces_defined": false,
+    "database_functionality_added": false,
+    "next_implementation_owner": "P04-004"
+  }
+}

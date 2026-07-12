@@ -84,6 +84,7 @@ same(
     'P03-021',
     'P04-001',
     'P04-002',
+    'P04-003',
   ],
   'CI matrix task history',
 );
@@ -289,6 +290,8 @@ same(
     'fuzz:policy': packageJson.scripts['fuzz:policy'],
     'fuzz:smoke': packageJson.scripts['fuzz:smoke'],
     'fuzz:test': packageJson.scripts['fuzz:test'],
+    'host:capabilities:check': packageJson.scripts['host:capabilities:check'],
+    'host:capabilities:test': packageJson.scripts['host:capabilities:test'],
     'rust:audit:install': packageJson.scripts['rust:audit:install'],
     'rust:audit:test': packageJson.scripts['rust:audit:test'],
     'rust:dependencies:test': packageJson.scripts['rust:dependencies:test'],
@@ -334,6 +337,8 @@ same(
     'fuzz:policy': 'node tests/toolchain/check-hdoc-fuzz.mjs policy',
     'fuzz:smoke': 'node tests/toolchain/check-hdoc-fuzz.mjs smoke',
     'fuzz:test': 'node tests/toolchain/test-hdoc-fuzz-contract.mjs',
+    'host:capabilities:check': 'node tests/toolchain/check-host-capabilities.mjs',
+    'host:capabilities:test': 'node tests/toolchain/test-host-capabilities-contract.mjs',
     'rust:audit:install': 'node tests/toolchain/install-cargo-audit.mjs',
     'rust:audit:test': 'node tests/toolchain/test-cargo-audit-contract.mjs',
     'rust:dependencies:test': 'node tests/toolchain/test-rust-dependency-contract.mjs',
@@ -343,7 +348,7 @@ same(
     'wasm:abi:check': 'node tests/toolchain/check-wasm-abi.mjs',
     'wasm:abi:test': 'node tests/toolchain/test-wasm-abi-contract.mjs',
     'wasm:validate':
-      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
+      'node tests/toolchain/check-deterministic-core.mjs && node tests/toolchain/check-wasm-abi.mjs && node tests/toolchain/check-host-capabilities.mjs && node tests/toolchain/check-wasm-artifacts.mjs all',
     'wgsl:check': 'node tests/toolchain/check-wgsl-fixtures.mjs manifest',
     'wgsl:validate': 'node tests/toolchain/check-wgsl-fixtures.mjs chromium',
   },
@@ -639,6 +644,8 @@ for (const marker of [
   'corepack npm run wasm:abi:test',
   'corepack npm run core:boundary:check',
   'corepack npm run core:boundary:test',
+  'corepack npm run host:capabilities:check',
+  'corepack npm run host:capabilities:test',
 ]) {
   assert(ci.includes(marker), `gating workflow marker absent: ${marker}`);
 }

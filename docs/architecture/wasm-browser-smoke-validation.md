@@ -30,10 +30,11 @@ world root {
 ```
 
 This remains the smallest honest component-validity proof for the current artifact. `P04-001` now
-defines the real versioned [`helix:core-abi@1.0.0`](../../wit/helix-core-abi-v1/world.wit) source,
+defines immutable [`helix:core-abi@1.0.0`](../../wit/helix-core-abi-v1/world.wit) and current
+capability [`1.1.0`](../../wit/helix-core-abi-v1_1/world.wit) sources,
 including ownership, cancellation, buffer, handle, error, capability, and version rules. The
 machine contract deliberately records that bindings are not yet embedded, so the built artifact's
-WIT remains empty until P04-003 implements the capability boundary. P04-002 separately proves the
+WIT remains empty until later binding work. P04-002 separately proves the
 deterministic core has no ambient dependencies/imports. WASIp2 remains a tooling bridge and
 is not relabeled WASI 0.3 support.
 

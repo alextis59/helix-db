@@ -48,9 +48,14 @@ Protocols expose a negotiated major/minor contract or an equivalent explicit ver
 - Peers never infer compatibility only from package or binary version.
 
 The first concrete component authority is
-[`helix:core-abi@1.0.0`](../../wit/helix-core-abi-v1/world.wit). Its current matrix accepts only ABI
-1.0; package SemVer does not authorize another major/minor, and negotiation fails before resource
+[`helix:core-abi@1.0.0`](../../wit/helix-core-abi-v1/world.wit). Its P04-001 matrix accepted only ABI
+1.0; package SemVer did not authorize another major/minor, and negotiation fails before resource
 use when version or required capabilities are unsupported.
+
+P04-003 preserves that source and adds
+[`helix:core-abi@1.1.0`](../../wit/helix-core-abi-v1_1/world.wit) for the required capability
+interface identities. The current matrix accepts only ABI 1.1; the minor package number alone does
+not make a 1.0 peer compatible.
 
 ### Packages and releases
 

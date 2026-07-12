@@ -86,6 +86,8 @@ jobs:
           corepack npm run policy:dependencies
           corepack npm run core:boundary:check
           corepack npm run core:boundary:test
+          corepack npm run host:capabilities:check
+          corepack npm run host:capabilities:test
           corepack npm run rust:dependencies:test
           corepack npm run rust:audit:test
           corepack npm run dependencies:check
@@ -235,6 +237,8 @@ jobs:
           if [ "${{ matrix.artifact }}" = "component" ]; then
             corepack npm run wasm:abi:check
             corepack npm run wasm:abi:test
+            corepack npm run host:capabilities:check
+            corepack npm run host:capabilities:test
           fi
           node tests/toolchain/check-wasm-artifacts.mjs ${{ matrix.artifact }}
 

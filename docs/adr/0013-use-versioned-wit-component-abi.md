@@ -151,7 +151,9 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 - [x] Check the closed machine policy and 20 mutation canaries.
 - [x] Bind the contract into the stable local and hosted Wasm validation commands.
 - [x] Enforce the deterministic core source/dependency/import boundary under P04-002.
-- [ ] Bind generated guest/host capability interfaces into the component under P04-003.
+- [x] Define exact 1.1 guest/host capability interface identities under P04-003 without rewriting
+  1.0 or overclaiming bindings.
+- [ ] Bind generated guest/host operations into the component with their owning P04 tasks.
 - [ ] Execute native/browser host conformance, cancellation, and resource lifecycle tests by G04.
 - [ ] Benchmark explicit-copy and alternative buffer strategies under P04-014.
 
@@ -168,7 +170,7 @@ requires an accepted matrix proving older peers can ignore or reject every addit
 ## Follow-up work
 
 - [x] `P04-002`: enforce deterministic core separation from ambient services.
-- [ ] `P04-003`: define concrete host capability interfaces.
+- [x] `P04-003`: define concrete host capability interfaces.
 - [ ] `P04-004`: define coarse asynchronous operations.
 - [ ] `P04-005`: freeze buffer/resource lifecycles.
 - [ ] `P04-008`: freeze cancellation, deadline, partial-I/O, and shutdown behavior.
