@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-009",
+  "verdict": "pass",
+  "commit": "6e8b88c180815a3b06e2b417795b2c45922c9b34",
+  "base_commit": "27c7539cd260cc14dccfc31bebcb9638d3b78a7c",
+  "source_tree": "d2dbc93da6d3b517072b70bba50d1abe332bbcc1",
+  "diff_sha256": "08f58d438732430b5675668df942ba430c8ed4d47d81a8f55eaebb3da880f525",
+  "recorded_on": "2026-07-12",
+  "requirements": ["CORE-001", "CORE-002", "CORE-003", "INV-004", "INV-007", "PLAT-001", "PLAT-002", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0003", "0006", "0013"],
+  "source_commits": ["6e8b88c180815a3b06e2b417795b2c45922c9b34"],
+  "authorities": [
+    {
+      "path": "wit/helix-core-abi-v7/world.wit",
+      "bytes": 12413,
+      "sha256": "80b9e2de39338377aa8e71ca603ac75cbda801c3822ef948b5c0e86539dc79a0"
+    },
+    {
+      "path": "docs/architecture/deterministic-injection-contract-v1.json",
+      "bytes": 4455,
+      "sha256": "f1ba60f9f492b761308621ac20b6369098272e770a82c309982b150875db4b3c"
+    },
+    {
+      "path": "docs/architecture/deterministic-injection-contract-v1.md",
+      "bytes": 3105,
+      "sha256": "c1c79d08432406ee53f0c3dfa971652a1bbe237502be99d69f417d04e31528a5"
+    },
+    {
+      "path": "crates/helix-core/src/deterministic_inputs.rs",
+      "bytes": 26862,
+      "sha256": "6d54fd8958ffc24620e3339142fa37f9a5c0f12814ef35fb6462aa2bb7fd17dd"
+    },
+    {
+      "path": "tests/toolchain/check-deterministic-injection-contract.mjs",
+      "bytes": 9939,
+      "sha256": "50e158930f00ce3652981cd0e6394e09abb2632aed4a3e4f5bb15dcb22f30eca"
+    },
+    {
+      "path": "tests/toolchain/test-deterministic-injection-contract.mjs",
+      "bytes": 8081,
+      "sha256": "10b825998b71e85e2d6f27db2ac7241e23af9ff623de01170426aea14687dfc6"
+    }
+  ],
+  "verifier": {
+    "bytes": 7779,
+    "sha256": "f8520379b3b8af51cf6e79b0b523c910ccff985348f2e6ab50cfbe8e19085af7"
+  },
+  "verification": {
+    "source_artifacts": 42,
+    "required_abi_major": 7,
+    "interfaces": 13,
+    "resolved_types": 106,
+    "functions": 23,
+    "async_functions": 8,
+    "imports": 12,
+    "exports": 1,
+    "clock_roles": 4,
+    "random_purposes": 6,
+    "memory_classes": 2,
+    "device_classes": 2,
+    "mutation_canaries": 64,
+    "workspace_tests": 59,
+    "fuzz_executions": 640,
+    "browser_executions": 6,
+    "product_lines_covered": 4891,
+    "product_lines_total": 4891
+  }
+}
