@@ -1,7 +1,7 @@
 {
   "schema": "helix.native-host-skeleton/1",
   "plan_item": "P04-011",
-  "implementation": {"path":"crates/helix-host-native/src/lib.rs","bytes":14357,"sha256":"040145386b5ed6518dee432e1906db078bbdac7116c2149c3ffd42c47efd8a45"},
+  "implementation": {"path":"crates/helix-host-native/src/lib.rs","bytes":14440,"sha256":"2ca57cb67308dcb2cbb7cecb72c86266079285b443a3b46a944943f4ec85d9ff"},
   "runtime": {"crate":"wasmtime","version":"46.0.1","minimum_rust":"1.94.0","default_features":false,"features":["async","component-model","component-model-async","cranelift","runtime","std"],"wasi_adapters_installed":false},
   "capabilities": ["files","directories","durability","locks","timers","randomness","scheduling","metrics","secrets","networking","object-storage","gpu"],
   "bounds": {"maximum_component_bytes":16777216,"maximum_capability_grants":128,"maximum_scope_bytes":4096},

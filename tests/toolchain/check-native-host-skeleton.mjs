@@ -34,8 +34,8 @@ export const validateNativePolicy = (v = policy) => {
     v.implementation,
     {
       path: 'crates/helix-host-native/src/lib.rs',
-      bytes: 14357,
-      sha256: '040145386b5ed6518dee432e1906db078bbdac7116c2149c3ffd42c47efd8a45',
+      bytes: 14440,
+      sha256: '2ca57cb67308dcb2cbb7cecb72c86266079285b443a3b46a944943f4ec85d9ff',
     },
     'implementation',
   );

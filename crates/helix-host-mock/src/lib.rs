@@ -821,6 +821,10 @@ mod tests {
         vector(key).parse().unwrap_or(u64::MAX)
     }
 
+    fn vector_u32(key: &str) -> u32 {
+        u32::try_from(vector_u64(key)).unwrap_or(u32::MAX)
+    }
+
     fn vector_bytes(key: &str) -> Vec<u8> {
         vector(key)
             .as_bytes()
@@ -1187,7 +1191,7 @@ mod tests {
         let read = mock.read_immutable(
             &source,
             vector_u64("read-offset"),
-            vector_u64("read-length") as u32,
+            vector_u32("read-length"),
         );
         assert!(read.is_ok());
         let Ok(read) = read else { return };
@@ -1202,7 +1206,7 @@ mod tests {
                 &mut target,
                 vector_u64("copy-source-offset"),
                 vector_u64("copy-target-offset"),
-                vector_u64("copy-length") as u32,
+                vector_u32("copy-length"),
             )
             .is_ok()
         );
@@ -1210,7 +1214,7 @@ mod tests {
         assert!(copied.is_ok());
         let Ok(copied) = copied else { return };
         assert_eq!(
-            mock.read_immutable(&copied, 0, vector_u64("copy-length") as u32)
+            mock.read_immutable(&copied, 0, vector_u32("copy-length"))
                 .map(|value| value.bytes),
             Ok(vector_bytes("expected-copy-hex"))
         );
