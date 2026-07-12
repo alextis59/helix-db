@@ -66,14 +66,14 @@
           "format": "json",
           "schema_path": "compatibility/v1/schema/matrix-v1.schema.json",
           "bytes": 218324,
-          "sha256": "67819e1eb592d6450995e7b6a68ef01e19b216ddf7a9ca3f54dc68635fe4f0bd"
+          "sha256": "1135c1e6a799288f39b74f3621dcd92039c95904bb3a550a73efda009b76b7c1"
         },
         {
           "path": "docs/compatibility/v1-semantic-compatibility-matrix.md",
           "format": "markdown",
           "schema_path": null,
           "bytes": 103739,
-          "sha256": "780481104447e2a4b6cdcb1493f0b44acff37b29a65cdcdcac942c2579bce00c"
+          "sha256": "ce19b268c17f6e975ee2bb622ce4ca18d17bd2a07ab0780f36382f78cafac4c3"
         }
       ]
     },

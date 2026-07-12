@@ -446,7 +446,7 @@ and typed hash before deriving a new artifact and retains the source until its r
 | [`P03-016`](../../fixtures/hdoc/v1/README.md) complete | Immutable complete positive/rejection HDoc files | Existing registry vectors/expectations |
 | `P03-017`–`P03-019` complete | Independent codec, deterministic properties/corruption tests, and coverage-guided fuzz/browser replay complete | Exact outputs and fail-closed behavior |
 | `P03-020` (complete) | Integrity-inclusive raw format/compression/lookup/size measurements | Correctness, coverage, or authentication boundary |
-| `P03-021` | Interpret `EXP-001`/`EXP-002` and record decisions | Retroactively alter retained measurements |
+| `P03-021` (complete) | Selected self-contained format and derived-only dictionary boundary | Retroactively alter retained measurements |
 
 ## Required later fixtures
 

@@ -621,9 +621,13 @@ and replays the immutable seed set through Chromium, Firefox, and WebKit envelop
 P03-020 now executes the production codec/view implementation over minimal, mixed-type,
 nested-fanout, 128-field, and 32-KiB-compressible documents. The versioned raw report retains 600
 measurements spanning base/canonical encode/decode, exact field lookup, and dotted-path lookup,
-plus exact HDoc/tagged sizes and a 10,000-document path-dictionary byte model. This is measurement
-evidence only: no timing threshold or dictionary-reference storage profile is introduced, and
-P03-021 remains responsible for the `EXP-001`/`EXP-002` decisions.
+plus exact HDoc/tagged sizes and a 10,000-document path-dictionary byte model. P03-021 accepts the
+self-contained `helix.hdoc/1.0` base profile plus optional canonical compression profile 1 for
+`EXP-001`; no timing observation becomes an SLO. For `EXP-002`, the modeled benefit is explicitly
+shape-dependent: HDoc 1.0 rows remain self-contained, while `helix.path-dictionary/1.0` is retained
+for derived sidecars, indexes, and planner metadata. A future row-reference profile requires new
+negotiation, real path-frequency data, atomic row/dictionary pins, amplification measurements,
+migration/rollback proof, and raw-name fallback when net benefit is absent.
 
 ### 7.4 Field path dictionary
 
@@ -2550,7 +2554,7 @@ items remain open.
 | --- | --- | --- |
 | Native GPU integration: wgpu, Dawn, or a host abstraction supporting both | Phase 0 exit | Wasm boundary cost, feature parity, device recovery, maintainability, platform coverage |
 | Server runtime and WASI component boundary | Phase 0 exit | Async support, capability isolation, startup cost, debugging, stable host ABI |
-| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), [path-dictionary format/lifecycle](docs/formats/path-dictionary-v1.md), [closed-world compatibility/migration assessment](docs/formats/hdoc-v1-compatibility.md), [immutable golden vectors](fixtures/hdoc/v1/README.md), Rust/TypeScript cross-reader parity, deterministic property/mutation hardening, coverage-guided fuzz/browser replay, and versioned representative measurements implemented by `P03-008`–`P03-020`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
+| [HDoc checksum, compression, endianness, alignment, offsets, canonical hash, dictionary, and extension rules](docs/adr/0012-use-bounded-little-endian-hdoc-v1.md) ([exact HDoc 1.0 subordinate encodings complete](docs/formats/hdoc-v1.md); writer, validating reader, values, lookup, [lossless tagged conversion](docs/formats/hdoc-v1-tagged-json.md), [path-dictionary format/lifecycle](docs/formats/path-dictionary-v1.md), [closed-world compatibility/migration assessment](docs/formats/hdoc-v1-compatibility.md), [immutable golden vectors](fixtures/hdoc/v1/README.md), Rust/TypeScript cross-reader parity, deterministic property/mutation hardening, coverage-guided fuzz/browser replay, versioned measurements, and [self-contained-format/derived-only-dictionary decisions](benchmarks/reports/hdoc-v1-experiments.md) implemented by `P03-008`–`P03-021`) | Before first HDoc writer/fixture; no later than `P03-008` | Determinism, corruption detection, partial reads, GPU/CPU decode cost, future evolution |
 | WAL/SST/VLOG/CSEG physical encodings | Phase 1 exit | Recovery guarantees, write amplification, random reads, compaction, rebuild cost |
 | Primary native protocol: HTTP/JSON, CBOR, gRPC, or custom framing | Phase 3 exit | Streaming, backpressure, browser support, SDK generation, observability, compatibility |
 | Timestamp and transaction oracle for single-node and distributed snapshots | Phase 3/4 | Monotonicity, failover behavior, clock assumptions, restore, causality |

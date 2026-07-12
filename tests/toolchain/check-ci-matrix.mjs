@@ -81,6 +81,7 @@ same(
     'P03-018',
     'P03-019',
     'P03-020',
+    'P03-021',
   ],
   'CI matrix task history',
 );

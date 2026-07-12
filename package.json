@@ -39,6 +39,8 @@
     "benchmark:check": "node benchmarks/check-benchmark-artifacts.mjs report",
     "benchmark:hdoc": "node benchmarks/run-hdoc.mjs",
     "benchmark:hdoc:check": "node benchmarks/check-hdoc.mjs report",
+    "benchmark:hdoc:decisions": "node benchmarks/check-hdoc-decisions.mjs",
+    "benchmark:hdoc:decisions:test": "node tests/toolchain/test-hdoc-decisions-contract.mjs",
     "benchmark:hdoc:policy": "node benchmarks/check-hdoc.mjs policy",
     "benchmark:hdoc:test": "node tests/toolchain/test-hdoc-benchmark-contract.mjs",
     "benchmark:schemas": "node benchmarks/check-benchmark-artifacts.mjs schemas",

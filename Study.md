@@ -364,8 +364,12 @@ P03-020 adds the first representative measurement corpus without pre-deciding `E
 retain 600 raw timing samples (9,600 timed iterations), record exact stored/logical/tagged sizes,
 and compare repeated raw path-name bytes with a real versioned dictionary snapshot plus u32
 references over 10,000 modeled documents. The smallest shape is deliberately allowed to show
-negative savings. All timing thresholds remain null; P03-021 owns interpretation and the selected
-format/dictionary conclusions.
+negative savings. All timing thresholds remain null. P03-021 therefore accepts the existing
+self-contained HDoc 1.0 base and canonical-compression profiles, but rejects dictionary references
+inside authoritative HDoc 1.0 rows. The collection dictionary remains useful for derived sidecars,
+indexes, and planner metadata. Any future row-reference profile needs real path-frequency data,
+atomic version pins, read/write/recovery amplification measurements, migration/rollback proof, and
+a raw-name fallback policy.
 
 ### 6.3 Field-path dictionaries
 

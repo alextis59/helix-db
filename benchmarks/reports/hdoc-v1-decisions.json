@@ -1,0 +1,77 @@
+{
+  "schema": "helix.hdoc-experiment-decisions/1",
+  "plan_item": "P03-021",
+  "recorded_on": "2026-07-12",
+  "inputs": {
+    "raw": {
+      "path": "evidence/phase-03/P03-020/reports/raw.json",
+      "bytes": 24725,
+      "sha256": "d7e6ec4499ad2d3ba2e4b03119901b7c37c292e3570cde2a5ac0e2bd19ede2c9"
+    },
+    "summary": {
+      "path": "evidence/phase-03/P03-020/reports/summary.json",
+      "bytes": 14033,
+      "sha256": "240f53567b427dfc8eb680a732ff2c24789c5c8ab691dd6c9653ab7918d8b99c"
+    },
+    "source_commit": "fc95bb38d08be185775f96112f7cd018096aad1b"
+  },
+  "experiments": [
+    {
+      "id": "EXP-001",
+      "hypothesis": "HDoc can preserve required types with fast field lookup.",
+      "verdict": "accepted-without-performance-slo",
+      "observations": {
+        "representative_shapes": 5,
+        "codec_lookup_operations": 30,
+        "measurement_samples": 600,
+        "timed_iterations": 9600,
+        "semantic_and_corruption_gates": "pass",
+        "cross_language_property_fuzz_browser_gates": "pass",
+        "timing_threshold": null
+      },
+      "decision": {
+        "selected_format": "helix.hdoc/1.0",
+        "selected_stored_profiles": ["base", "canonical-compression-1"],
+        "direct_field_lookup": "validated-name-and-object-table-binary-search",
+        "nested_path_lookup": "validated-bounded-borrowed-traversal",
+        "reason": "The selected layout preserves every required type and canonical identity, fails closed under corruption, agrees across independent readers, survives property/fuzz/browser replay, and has complete representative raw measurements. Timing observations are diagnostic and do not create an SLO."
+      }
+    },
+    {
+      "id": "EXP-002",
+      "hypothesis": "Field IDs materially reduce row or sidecar overhead.",
+      "verdict": "partially-supported-shape-dependent",
+      "observations": {
+        "modeled_documents_per_shape": 10000,
+        "negative_shapes": 1,
+        "positive_shapes": 4,
+        "minimum_savings_basis_points": -3386,
+        "maximum_savings_basis_points": 8319,
+        "minimal_savings_bytes": -10160,
+        "wide_128_savings_bytes": 25383744
+      },
+      "decision": {
+        "retain_collection_path_dictionary": true,
+        "use_for_derived_sidecars_and_metadata": true,
+        "use_dictionary_references_in_hdoc_1_0": false,
+        "authoritative_hdoc_remains_self_contained": true,
+        "future_reference_profile": "conditional-new-negotiated-profile",
+        "future_prerequisites": [
+          "real-workload-path-frequency-corpus",
+          "atomic-row-dictionary-version-pin-integration",
+          "read-write-amplification-and-recovery-benchmarks",
+          "cross-version-migration-and-rollback-proof",
+          "net-benefit-policy-that-allows-raw-name-fallback"
+        ],
+        "reason": "A real snapshot plus u32-reference model saves substantial bytes for repeated, nested, and wide shapes but increases bytes for the minimal shape. The gain supports stable IDs in derived structures, not mandatory coordination or loss of self-containment in the HDoc 1.0 base profile."
+      }
+    }
+  ],
+  "claim_boundary": {
+    "performance_slo": null,
+    "cross_machine_comparison": false,
+    "dictionary_reference_profile_implemented": false,
+    "storage_or_query_performance_claim": false
+  },
+  "verdict": "pass"
+}

@@ -1,9 +1,9 @@
 # Benchmark Result, Baseline, and Retention Contract
 
 - Status: Accepted foundation and HDoc v1 benchmark contracts; no release performance claim
-- Last updated: 2026-07-11
+- Last updated: 2026-07-12
 - Owner: Performance owner with quality and release review
-- Plan items: `P02-014`, extended by `P03-020`
+- Plan items: `P02-014`, extended by `P03-020` and `P03-021`
 - Governing requirements: `INV-007`, `QUAL-001`
 - Governing gate: `G02`
 - Workload authority: [`helix.benchmark-workload/1`](../../benchmarks/workloads/harness-calibration-v1.json)
@@ -20,10 +20,13 @@ Exact base/canonical/tagged sizes and real path-dictionary snapshot overhead are
 The dictionary comparison models 10,000 documents with one u32 ID per registered path reference;
 it is explicitly not an implemented dictionary-reference HDoc profile.
 
-P03-020 records facts but makes no format decision. Every raw result binds seven source files, the
+P03-020 records facts without a retroactive threshold. Every raw result binds seven source files, the
 Git commit/dirty state, allowlisted host facts, every timing, verification checksum, compression
 count, and dictionary equation. The summary links exact raw bytes and recomputes nearest-rank
-p50/p95/p99 plus min/max/mean. Its timing threshold is always null and `P03-021` owns interpretation.
+p50/p95/p99 plus min/max/mean. Its timing threshold is always null. The source-bound
+[`P03-021` decision record](../../benchmarks/reports/hdoc-v1-experiments.md) selects self-contained
+HDoc 1.0 base/canonical compression and confines collection dictionary IDs to derived structures;
+it cannot rewrite the raw report or turn its machine-specific timings into product claims.
 
 ## Purpose and claim boundary
 

@@ -613,9 +613,10 @@ the raw name table and object spans, then performs fixed-storage dotted traversa
 indices, immediate-object fan-out, ordered array provenance, and complete error/candidate preflight.
 `P03-012` renders those same validated spans into ordered tagged field arrays and validates an
 imported detached tree against this exact canonical table/name/value/container layout before return.
-P03-020 now measures production direct-field and dotted-path lookup, base/canonical encoding and
+P03-020 measures production direct-field and dotted-path lookup, base/canonical encoding and
 decoding, and exact document sizes across five fixed shapes. Its raw 600-sample report has no
-timing threshold; P03-021 owns interpretation.
+timing threshold. P03-021 accepts the self-contained layout and excludes collection dictionary
+references from authoritative HDoc 1.0 rows.
 
 ## Version, migration, and rollback
 
@@ -650,7 +651,7 @@ Reading never silently renumbers, canonicalizes, repairs, or rewrites an old HDo
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Exact-1.0 feature/version negotiation and no-rewrite migration assessment | Existing IDs/flags/record meanings |
 | [`P03-016`](../../fixtures/hdoc/v1/README.md) through `P03-019` complete | Complete golden/rejection files, independent readers, broader deterministic properties, and coverage-guided fuzz/browser replay complete | Structural vectors and rejection expectations |
 | `P03-020` (complete) | Raw lookup/size/alignment/compression measurements | Correctness rules or portable limits |
-| `P03-021` | `EXP-001`/`EXP-002` interpretation and decision record | Alter retained raw observations |
+| `P03-021` (complete) | Self-contained format and derived-only dictionary decision record | Alter retained raw observations |
 
 ## Required later fixtures
 

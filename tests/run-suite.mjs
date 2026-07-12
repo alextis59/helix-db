@@ -29,6 +29,7 @@ const allowedSteps = new Set([
   'benchmark-profile',
   'benchmark-baseline',
   'hdoc-benchmark',
+  'hdoc-decisions',
 ]);
 
 const assert = (condition, message) => {
@@ -405,6 +406,24 @@ const executeHDocBenchmark = (suite) => {
   requireText(canaries, '13 report/authority mutations rejected', 'HDoc benchmark canaries');
 };
 
+const executeHDocDecisions = (suite) => {
+  assert(suite.expectations.hdoc_decision_reports === 1, 'HDoc decision report count mismatch');
+  assert(suite.expectations.hdoc_experiments === 2, 'HDoc experiment count mismatch');
+  const decisions = run(process.execPath, ['benchmarks/check-hdoc-decisions.mjs']);
+  requireText(
+    decisions,
+    'PASS HDoc experiment decisions: EXP-001 accepted, EXP-002 shape-dependent',
+    'HDoc experiment decisions',
+  );
+  requireText(
+    decisions,
+    'dictionary references excluded from 1.0',
+    'HDoc selected dictionary boundary',
+  );
+  const canaries = run(process.execPath, ['tests/toolchain/test-hdoc-decisions-contract.mjs']);
+  requireText(canaries, '13 mutations rejected', 'HDoc decision canaries');
+};
+
 const stepExecutors = {
   'rust-unit': executeRustUnit,
   'rust-integration-inventory': executeRustIntegrationInventory,
@@ -417,6 +436,7 @@ const stepExecutors = {
   'benchmark-profile': executeBenchmarkProfile,
   'benchmark-baseline': executeBenchmarkBaseline,
   'hdoc-benchmark': executeHDocBenchmark,
+  'hdoc-decisions': executeHDocDecisions,
 };
 
 const runSuite = (suite) => {

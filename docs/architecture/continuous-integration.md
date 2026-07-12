@@ -3,7 +3,7 @@
 - Status: Accepted foundation CI contract; hosted results are not release support claims
 - Last updated: 2026-07-11
 - Owner: Runtime architecture owner with quality and release review
-- Plan items: `P02-009`, revised by `P02-010` through `P02-017` and `P03-020`
+- Plan items: `P02-009`, revised by `P02-010` through `P02-017` and `P03-020`–`P03-021`
 - Governing gate: `G02`
 - Accepted gate evidence: [`G02` hosted toolchain review](../../evidence/phase-02/G02/README.md)
 - Machine authority: [`helix.ci-matrix/3`](../../.github/ci/matrix.json)
@@ -94,8 +94,9 @@ immutable HDoc seeds through a bounds-checked CRC/directory probe in Chromium, F
 
 P03-020 adds a five-shape HDoc workload to the stable benchmark suite and observational workflow.
 The root suite gates only shape, operation, sample, correctness, size, dictionary-arithmetic, source,
-and report integrity. The 600 retained timings have a null threshold; `P03-021` alone may interpret
-them for the format/dictionary experiments.
+and report integrity. The 600 retained timings have a null threshold. P03-021 adds a checked,
+source-bound decision authority selecting self-contained HDoc base/canonical compression and
+derived-only dictionary IDs; its mutation canaries prevent result drift or claim expansion.
 
 ## Workflow security and reproducibility
 

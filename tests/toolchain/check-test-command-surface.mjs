@@ -41,7 +41,7 @@ const expectedActivationTasks = {
   unit: [],
 };
 const expectedSteps = {
-  benchmark: ['benchmark-profile', 'benchmark-baseline', 'hdoc-benchmark'],
+  benchmark: ['benchmark-profile', 'benchmark-baseline', 'hdoc-benchmark', 'hdoc-decisions'],
   browser: ['browser-example-build', 'browser-harness-inventory'],
   conformance: ['semantic-conformance'],
   crash: [],

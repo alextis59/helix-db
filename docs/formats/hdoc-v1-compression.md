@@ -356,9 +356,9 @@ offset is `352`; the logical footer is `4408` while the stored footer is `384`. 
 envelope in the registry makes the coordinate distinction executable.
 
 The registry's timing numbers are non-gating selection smoke data from one development machine.
-P03-020 now supplies the representative raw corpus: five shapes, base/canonical encode/decode,
-exact size/compression counts, and 600 unfiltered samples under a null timing threshold. P03-021
-owns any format/compression conclusion based on those retained facts.
+P03-020 supplies the representative raw corpus: five shapes, base/canonical encode/decode, exact
+size/compression counts, and 600 unfiltered samples under a null timing threshold. P03-021 accepts
+base plus optional canonical compression profile 1 without promoting any retained timing to an SLO.
 
 ## Dependency, security, and license boundary
 
@@ -399,7 +399,7 @@ Reading never silently recompresses, repairs, or rewrites an HDoc.
 | [`P03-015`](hdoc-v1-compatibility.md) (complete) | Closed-world negotiation; extension-area compression remains unsupported | Four-base-section profile and existing IDs |
 | [`P03-016`](../../fixtures/hdoc/v1/README.md) through `P03-019` complete | Immutable fixtures, independent reader, deterministic properties/mutations, and fuzz/sanitizer/browser replay complete | Registry vectors and rejection expectations |
 | `P03-020` (complete) | Formal raw format/compression/dictionary measurements | Correctness, canonicality, limits, or security rules |
-| `P03-021` | Interpret `EXP-001`/`EXP-002` and record decisions | Rewrite raw results or add retroactive thresholds |
+| `P03-021` (complete) | Selected self-contained base/canonical compression and derived-only dictionary use | Rewrite raw results or add retroactive thresholds |
 
 ## References
 

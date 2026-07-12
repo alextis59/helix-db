@@ -17,6 +17,9 @@ SHA-256 calibration proves the reporting path. The P03-020 workload executes the
 encoder, validating decoder, direct-field lookup, and dotted-path lookup across five fixed shapes;
 it also records exact base/compressed/tagged sizes and a real-snapshot-plus-u32-ID dictionary byte
 model. Both retain five warm-ups and twenty raw measurement samples without a timing threshold.
+The P03-021 decision checker binds those immutable inputs, selects the self-contained HDoc 1.0
+base/canonical-compression profiles, and retains collection dictionary IDs only for derived data.
+Its contract test rejects 13 kinds of decision, input, or claim-boundary drift.
 
 Focused commands:
 
@@ -29,4 +32,6 @@ corepack npm run benchmark:hdoc:policy
 corepack npm run benchmark:hdoc
 corepack npm run benchmark:hdoc:check
 corepack npm run benchmark:hdoc:test
+corepack npm run benchmark:hdoc:decisions
+corepack npm run benchmark:hdoc:decisions:test
 ```

@@ -165,7 +165,7 @@ production-code example without changing the product denominator. The active wor
 is now:
 
 ```text
-status = "hdoc-benchmark-v1"
+status = "hdoc-experiments-v1"
 database-functionality = true
 ```
 

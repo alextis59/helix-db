@@ -505,8 +505,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   `P03-018` and `P03-019`.
 - [x] Publish versioned raw encode/decode/lookup/size/compression/dictionary-model measurements
   under `P03-020`, with 600 samples across five representative shapes and no timing threshold.
-- [ ] Complete `EXP-001`/`EXP-002` interpretation and record the selected format/dictionary
-  conclusions under `P03-021`.
+- [x] Complete `EXP-001`/`EXP-002` interpretation under `P03-021`: retain self-contained HDoc 1.0
+  base/canonical-compression profiles and keep collection dictionary IDs out of authoritative rows.
 - [ ] Complete independent format/security review and close `G03` only with no open critical
   parser, corruption, migration, or portability issue.
 
@@ -514,9 +514,10 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
 
 - Format, codec, and dictionary lifecycle work: `P03-002`–`P03-014`, `helix-doc`, format fixtures,
   and fuzz targets.
-- Dictionary reference/extension evolution remains unsupported; independent reading, hardening,
-  and representative raw measurement continue at `P03-017`–`P03-020` after P03-016 froze the
-  first supported fixtures.
+- Dictionary reference/extension evolution remains unsupported. P03-021 retains the dictionary for
+  derived sidecars/indexes/planner metadata and requires a separately negotiated profile plus real
+  workload, atomic pinning, amplification, migration, rollback, and raw-name-fallback proof before
+  authoritative rows may reference it.
 - Experiments/gate: `P03-020`, `P03-021`, `EXP-001`, `EXP-002`, and `G03`.
 - Later authoritative consumers: storage, WAL/value-log/SST, replication, backup/restore,
   migration, browser persistence, SDK/protocols, and compatibility adapters.
@@ -558,7 +559,8 @@ cannot safely carry, but they do not reinterpret HDoc bytes.
   AddressSanitizer execution, and real-browser immutable-seed replay.
 - [x] `P03-020`: publish source-bound raw codec/lookup/size/dictionary-model measurements over five
   representative shapes.
-- [ ] `P03-021`: complete experiment conclusions before `G03`.
+- [x] `P03-021`: accept the self-contained format/compression profiles and the derived-only
+  dictionary boundary before `G03`.
 
 ## References
 
