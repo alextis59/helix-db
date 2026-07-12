@@ -9,7 +9,14 @@
   "recorded_on": "2026-07-12",
   "requirements": ["CORE-001", "CORE-003", "INV-004", "INV-007", "PLAT-001", "QUAL-001", "SEC-001", "SEC-002"],
   "accepted_adrs": ["0013"],
-  "source_commits": ["6c2bb1bfc20745959e2d3e393e40c2000f189393"],
+  "source_commits": ["6c2bb1bfc20745959e2d3e393e40c2000f189393", "308b33c4f87f5ff4637609b21fa679d5523be774"],
+  "remediation": {
+    "commit":"308b33c4f87f5ff4637609b21fa679d5523be774",
+    "parent":"c23426c09976666b2cd25bece6cb896600910b72",
+    "tree":"8aeeec8e22536fc7dc380e1670cdcdb79b0539e0",
+    "changed_artifacts":3,
+    "diff_sha256":"6f806b733a4d84f9805646949a8024cb7b4dde7ab7dc18198d57992114f89e28"
+  },
   "authorities": [
     {"path":"crates/helix-host-native/src/lib.rs","bytes":9881,"sha256":"19a4775f991a45c1a9bacec33c3f4e0c020d873bde49fd0b14343fc1f36c4e65"},
     {"path":"crates/helix-host-native/Cargo.toml","bytes":569,"sha256":"0e19364215acc98180be912da75186b25ab38b346eebcc392b4c5310960eace0"},
@@ -21,7 +28,7 @@
     {"path":".github/ci/rust-license-inventory.json","bytes":46700,"sha256":"695c2e20ae2befcf5fcea0a1818bba74178b4a8ce6e1d7a8e2b3832a6247bfae"},
     {"path":"Cargo.lock","bytes":30999,"sha256":"15f0da60191cb00400b14b7255fb8a48784610ece5ff53d2e0033c8f51c522d4"}
   ],
-  "verifier": {"bytes":5485,"sha256":"efbdd53af47c9a6d10bfe1cd94bbdc99a57175d1c008788288ea0fc16b4420a3"},
+  "verifier": {"bytes":6576,"sha256":"a18100588d2cafca35f058a35edf2bd373cd24cccec3f33b470bf3e7e667d318"},
   "verification": {
     "source_artifacts":44,
     "capability_kinds":11,

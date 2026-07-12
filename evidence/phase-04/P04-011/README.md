@@ -3,6 +3,7 @@
 - Task: `P04-011`
 - Verdict: **PASS**
 - Source commit: `6c2bb1bfc20745959e2d3e393e40c2000f189393`
+- CI remediation commit: `308b33c4f87f5ff4637609b21fa679d5523be774`
 - Source base: `eb08c464dd11081120b8682e2be36fb9ba32611f`
 - Final source tree: `aad1700bb560693d1c3e66799b1f5551895dc143`
 - Accepted ADR: `0013`
@@ -34,6 +35,12 @@ dependency/license mutations reject. The exact 121-package registry closure has 
 license files, 14 reviewed missing-text exceptions, and a live zero-advisory result. Full local
 gates pass with 66 Rust tests, all eight stable suites, 640 fuzz executions, six browser executions,
 5,221/5,263 workspace-product lines, and 100% semantic/recovery-critical line coverage.
+
+The first hosted run exposed that Wasmtime's `target-lexicon` rejects Rust's custom
+`x86_64-unknown-linux-gnuasan` target name before Helix compilation. The remediation keeps ASan on
+the seven compatible first-party crates, explicitly excludes only the native host/server closure,
+and retains full native checks on Linux, macOS ARM64, and Windows x64. The exact package list is
+machine-checked and the revised sanitizer command passes locally.
 
 ```bash
 corepack npm run host:native:check
