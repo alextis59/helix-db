@@ -1,0 +1,63 @@
+{
+  "schema": "helix.hdoc-fuzz-report/1",
+  "toolchain": {
+    "cargo_fuzz": "0.13.2",
+    "libfuzzer_sys": "0.4.13",
+    "rust_toolchain": "nightly-2026-06-30",
+    "rustc_commit": "096694416a41840709140eb0fd0ca193d1a3e6ba"
+  },
+  "bounds": {
+    "runs_per_target": 128,
+    "maximum_input_bytes": 1048576,
+    "timeout_seconds": 10,
+    "rss_limit_mb": 2048,
+    "seed": 1212436291,
+    "artifact_root": "target/fuzz-artifacts",
+    "working_corpus_root": "target/fuzz-corpus",
+    "report": "target/fuzz-report.json"
+  },
+  "targets": [
+    {
+      "coverage_edges": 1752,
+      "feature_edges": 2820,
+      "peak_rss_mb": 38,
+      "seed_files": 24,
+      "target": "hdoc_decode",
+      "units": 128
+    },
+    {
+      "coverage_edges": 1176,
+      "feature_edges": 1294,
+      "peak_rss_mb": 53,
+      "seed_files": 2,
+      "target": "hdoc_encode",
+      "units": 128
+    },
+    {
+      "coverage_edges": 872,
+      "feature_edges": 923,
+      "peak_rss_mb": 48,
+      "seed_files": 3,
+      "target": "hdoc_path_lookup",
+      "units": 128
+    },
+    {
+      "coverage_edges": 460,
+      "feature_edges": 887,
+      "peak_rss_mb": 35,
+      "seed_files": 2,
+      "target": "hdoc_tagged_render",
+      "units": 128
+    },
+    {
+      "coverage_edges": 1196,
+      "feature_edges": 1862,
+      "peak_rss_mb": 37,
+      "seed_files": 26,
+      "target": "hdoc_migration",
+      "units": 128
+    }
+  ],
+  "total_executions": 640,
+  "verdict": "pass"
+}
