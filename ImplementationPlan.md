@@ -252,7 +252,7 @@ Dependencies: `G02`, enough of `G03` to expose the codec.
 - [x] **P04-010** Implement a mock host supporting deterministic failure injection for every capability call.
 - [x] **P04-011** Implement the native Wasmtime host skeleton and capability allowlist.
 - [x] **P04-012** Implement the browser host skeleton and JavaScript/TypeScript binding layer.
-- [ ] **P04-013** Add ABI conformance tests shared by mock, native, and browser hosts.
+- [x] **P04-013** Add ABI conformance tests shared by mock, native, and browser hosts.
 - [ ] **P04-014** Add tests proving the core cannot reach ungranted files, sockets, clocks, or devices.
 - [ ] **P04-015** Add tracing around boundary calls and buffer copies without logging document contents.
 - [ ] **P04-016** Benchmark chatty calls, batched copies, opaque handles, and staging strategies on native and browser hosts.

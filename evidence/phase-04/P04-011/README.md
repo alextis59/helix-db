@@ -42,6 +42,14 @@ the seven compatible first-party crates, explicitly excludes only the native hos
 and retains full native checks on Linux, macOS ARM64, and Windows x64. The exact package list is
 machine-checked and the revised sanitizer command passes locally.
 
+## Later conformance correction
+
+P04-013 found that ABI 7 declares 12 capability kinds while this historical source snapshot
+implemented and described only 11; `locks` was omitted. Source commit
+`703b20d2ce9d17c9ad41ebf0b1c1e17f8c817212` restores `Locks`, adds exact 12-kind and 21-call
+inventories, and makes the shared conformance suite enforce them. The P04-011 snapshot and hashes
+remain unchanged so the original proof stays reproducible.
+
 ```bash
 corepack npm run host:native:check
 corepack npm run host:native:test
