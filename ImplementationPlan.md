@@ -1,7 +1,7 @@
 # HelixDB Complete Implementation Plan
 
 - Status: Active planning baseline
-- Last updated: 2026-07-11
+- Last updated: 2026-07-12
 - Scope: Complete implementation from repository bootstrap through production distributed release
 - Normative source: [Specifications.md](Specifications.md)
 - Design analysis: [Study.md](Study.md)
@@ -33,8 +33,8 @@ rg -n '^\s*- \[[ x]\] \*\*[GP][0-9]{2}' ImplementationPlan.md
 
 ## Progress snapshot
 
-- Completed checklist items: 69
-- Open checklist items: 453
+- Completed checklist items: 80
+- Open checklist items: 442
 - Total checklist items: 522
 - Current phase: Phase 3 — HDoc format, codec, and path dictionary
 - Next release gate: `G03`
@@ -229,7 +229,7 @@ Dependencies: `G01`, `G02`.
 - [x] **P03-018** Add round-trip, canonicalization, malformed-input, property, and mutation tests.
 - [x] **P03-019** Add coverage-guided fuzzing for encoder, decoder, path lookup, rendering, and migration entry points.
 - [x] **P03-020** Benchmark encoding, decoding, field lookup, document size, and dictionary savings across representative shapes.
-- [ ] **P03-021** Complete `EXP-001` and `EXP-002`, publish raw results, and record the selected format/dictionary decisions.
+- [x] **P03-021** Complete `EXP-001` and `EXP-002`, publish raw results, and record the selected format/dictionary decisions.
 - [ ] **G03** Close the HDoc gate after golden vectors freeze HDoc v1, independent readers agree, fuzzing finds no open critical issue, and migration rejection is tested.
 
 Evidence required for `G03`: format document, ADR, golden vector hashes, cross-language results, fuzz corpus, benchmark report, and corruption diagnostics.

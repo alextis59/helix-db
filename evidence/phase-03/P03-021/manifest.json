@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "task_id": "P03-021",
+  "verdict": "pass",
+  "commit": "82c83f7b972410bb77553484f260bb2ff09883cc",
+  "base_commit": "e7bd0d7374ec07023ee995e59b46da91bcfc8c9d",
+  "source_tree": "3a9b090c679e0afb8aa62d1445b89accf3fb9a97",
+  "diff_sha256": "8e27918aac82342963f0a0d235ed7d8b2cb9bb8ad4ea2780d9fa31dffb9e058d",
+  "recorded_on": "2026-07-12",
+  "authorities": [
+    {
+      "path": "benchmarks/reports/hdoc-v1-decisions.json",
+      "bytes": 3351,
+      "sha256": "493a0ff128e994b04e52df79ef3ba48f04477fb1f9eea9c8a9eb3320440f555d"
+    },
+    {
+      "path": "benchmarks/schema/hdoc-decisions-v1.schema.json",
+      "bytes": 6843,
+      "sha256": "81f24441faa316ce62eb040448213bc84cea5ab463032602575aeb507dfb9809"
+    },
+    {
+      "path": "benchmarks/reports/hdoc-v1-experiments.md",
+      "bytes": 2394,
+      "sha256": "7c9f0e9bc128633ad4d7ebd25752e01da7c75053eec375f762d17c76c1c0a050"
+    },
+    {
+      "path": "benchmarks/check-hdoc-decisions.mjs",
+      "bytes": 4932,
+      "sha256": "fa407f256f89f5a59c649b146d6ea113023a618f896547358669e225a878ebaf"
+    },
+    {
+      "path": "tests/toolchain/test-hdoc-decisions-contract.mjs",
+      "bytes": 1631,
+      "sha256": "859beecafe5eb0318e598fd9389eb27854572356791349f23036e622e7b32ada"
+    }
+  ],
+  "verifier": {
+    "bytes": 6780,
+    "sha256": "b56e684081a2d4314a3cb00b7b0cd0fff6861ce1254acc549feb66b2849a9987"
+  },
+  "verification": {
+    "source_artifacts": 34,
+    "experiments": 2,
+    "representative_shapes": 5,
+    "measurement_samples": 600,
+    "timed_iterations": 9600,
+    "mutation_canaries": 13,
+    "future_profile_prerequisites": 5
+  }
+}
