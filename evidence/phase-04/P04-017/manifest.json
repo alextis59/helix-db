@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-017",
+  "verdict": "pass",
+  "commit": "9341b049af4867229159769d98d16594197c712c",
+  "base_commit": "4353ee2467704b1e9a3eb8f2bea5ba0d13910e49",
+  "source_tree": "354d783c24e4918afff4db938beda88335051711",
+  "diff_sha256": "e33f2e928e09fbaa00649c7dd4fa146738d5e2e120240b3044721d84b2dd040c",
+  "recorded_on": "2026-07-12",
+  "requirements": [
+    "CORE-001",
+    "CORE-003",
+    "INV-004",
+    "INV-007",
+    "PLAT-001",
+    "QUAL-001",
+    "QUAL-002"
+  ],
+  "accepted_adrs": ["0013"],
+  "experiments": ["EXP-003"],
+  "authorities": [
+    {
+      "path": "docs/architecture/host-transport-selection-v1.json",
+      "bytes": 1984,
+      "sha256": "f4dc115de8f6008da9ead0f1b3867f0324416b060282794d1789eb0f9d922603"
+    },
+    {
+      "path": "docs/architecture/host-transport-selection-v1.md",
+      "bytes": 1417,
+      "sha256": "67db8f032ac463008cc9c5a4bd907d97b555ad041778621d5fcfa18b744780b3"
+    },
+    {
+      "path": "benchmarks/reports/host-boundary-2026-07-12.json",
+      "bytes": 3089,
+      "sha256": "2f8c8bd3c102679aa7201ef8e49b9f1f962e2783e0fbd0727e53c9e4ca71397f"
+    },
+    {
+      "path": "docs/adr/0013-use-versioned-wit-component-abi.md",
+      "bytes": 12501,
+      "sha256": "1a800c2d19eecf7a1f68ca67086678e9cfc670ad47681262cf209ae6adb5a6cd"
+    },
+    {
+      "path": "tests/toolchain/check-host-transport-selection.mjs",
+      "bytes": 3906,
+      "sha256": "7df60305f4e8d2062dba70ee6328749380be1bc068a44ecda60fa12c6e0a2fcd"
+    },
+    {
+      "path": "tests/toolchain/test-host-transport-selection.mjs",
+      "bytes": 3497,
+      "sha256": "843db5609ab73b41d494c6787e4135a183932b8bdf19898ac7e343181b4609c4"
+    },
+    {
+      "path": ".github/ci/matrix.json",
+      "bytes": 5784,
+      "sha256": "cb7685ba81061b6445b99c6c826e430fc1b017b3c282c131154ecd3140df1f2e"
+    },
+    {
+      "path": ".github/workflows/ci.yml",
+      "bytes": 14573,
+      "sha256": "fd716f9ef51a59c02ab888747367ae90e3840989af991c4165cde9c1f37bddb7"
+    }
+  ],
+  "verifier": {
+    "bytes": 6017,
+    "sha256": "ce56bbde3fcc167fcfe9d38bf2344f2f48af8c120b2bf89cd97fb1f984a3bbf8"
+  },
+  "verification": {
+    "source_artifacts": 16,
+    "runtimes": 4,
+    "strategies": 4,
+    "measured_samples": 320,
+    "quantitative_thresholds": 9,
+    "policy_mutation_canaries": 34,
+    "workspace_tests": 70,
+    "browser_executions": 15,
+    "fuzz_executions": 640,
+    "workspace_product_lines_covered": 5270,
+    "workspace_product_lines_total": 5308
+  }
+}
