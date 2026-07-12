@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "task_id": "P04-007",
+  "verdict": "pass",
+  "commit": "d2efedc841cc7f8f5226f47c308cf150f8899d04",
+  "base_commit": "8ea7dbaad7bc1375b68db02c64425ac2c0473107",
+  "source_tree": "7827fdc5df6b4c89ef9511a37c8750fac324f41f",
+  "diff_sha256": "6b78f0c04507db21dd3ed2a73fa1a44ef5b802a4a02a84b3abe24e974594ec2d",
+  "recorded_on": "2026-07-12",
+  "requirements": ["CORE-001", "CORE-002", "CORE-003", "INV-004", "INV-007", "SEC-001", "SEC-002"],
+  "accepted_adrs": ["0013"],
+  "source_commits": ["d2efedc841cc7f8f5226f47c308cf150f8899d04"],
+  "authorities": [
+    {
+      "path": "docs/architecture/buffer-transport-alternatives-v1.json",
+      "bytes": 2727,
+      "sha256": "c6c100e1652e36c72d73eec92088c0872e078df15d6f37f85a6f3f152f0bdbcb"
+    },
+    {
+      "path": "docs/architecture/buffer-transport-alternatives-v1.md",
+      "bytes": 2248,
+      "sha256": "f83d88b50c9278a62987047b630fddadeda44cb3a968de874b8f45b95db9985c"
+    },
+    {
+      "path": "crates/helix-core/src/transport_alternatives.rs",
+      "bytes": 11906,
+      "sha256": "f5b61f3d2cd5d1566ae38e8013fdcb12113a897572ea727920b453d4b12d5a23"
+    },
+    {
+      "path": "tests/toolchain/check-buffer-transport-alternatives.mjs",
+      "bytes": 5555,
+      "sha256": "5bda0ff3dd9e6da89647a300d175698dad012ce53a47d1dbdc6db09d5f78cea2"
+    },
+    {
+      "path": "tests/toolchain/test-buffer-transport-alternatives-contract.mjs",
+      "bytes": 4109,
+      "sha256": "9edb0e503766edcf288a1503157d491db6fcd24512379c044fbd5b81aa1a3d84"
+    },
+    {
+      "path": "wit/helix-core-abi-v5/world.wit",
+      "bytes": 10490,
+      "sha256": "2d92cc7bf4e4b190af2dc96e7fbb4a5800303416982021a8c656c19a07977963"
+    }
+  ],
+  "verifier": {
+    "bytes": 6357,
+    "sha256": "ade01c848d4208b70395b6ef660bd6af624c77996e04fa5ec43f50a3136c8af4"
+  },
+  "verification": {
+    "source_artifacts": 36,
+    "prototypes": 2,
+    "required_abi_major": 5,
+    "required_abi_changed": false,
+    "maximum_live_handles": 4096,
+    "maximum_shared_staging_bytes": 16777216,
+    "maximum_active_leases": 1,
+    "mutation_canaries": 32,
+    "workspace_tests": 55,
+    "fuzz_executions": 640,
+    "browser_executions": 6,
+    "product_lines_covered": 4738,
+    "product_lines_total": 4738
+  }
+}
